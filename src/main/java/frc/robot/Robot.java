@@ -4,22 +4,54 @@
 
 package frc.robot;
 
+import choreo.auto.AutoFactory;
+import dev.doglog.DogLog;
+import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Tracer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.Superstructure;
 
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+  private final CommandScheduler scheduler = CommandScheduler.getInstance();
 
-  private final RobotContainer m_robotContainer;
+  final CommandXboxController m_driverController =
+      new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
+  final CommandXboxController operator = new CommandXboxController(Constants.ControllerConstants.kOperatorControllerPort);
+  // final Superstructure superstructure = new Superstructure();
+
+  // final AutoFactory autoFactory;
+
+@Override
+  protected void loopFunc() {
+    super.loopFunc();
+  }
 
   public Robot() {
-    m_robotContainer = new RobotContainer();
+    DogLog.setOptions(
+        new DogLogOptions()
+            .withCaptureDs(true)
+            .withCaptureNt(true)
+            .withNtPublish(true)
+            .withCaptureConsole(true));
+
+            switch (Constants.currentMode) {
+              case REAL:
+              break;
+              default:
+              break;
+            }
+
+            
   }
+
+  private void configureBindings() {}
 
   @Override
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
+    scheduler.run();
   }
 
   @Override
@@ -29,44 +61,40 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
 
   @Override
-  public void disabledExit() {}
+  public void disabledExit() {
+    scheduler.cancelAll();
+  }
 
   @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
-  }
+  public void autonomousInit() {}
 
   @Override
   public void autonomousPeriodic() {}
 
   @Override
-  public void autonomousExit() {}
+  public void autonomousExit() {
+    scheduler.cancelAll();
+  }
 
   @Override
-  public void teleopInit() {
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
-  }
+  public void teleopInit() {}
 
   @Override
   public void teleopPeriodic() {}
 
   @Override
-  public void teleopExit() {}
+  public void teleopExit() {
+    scheduler.cancelAll();
+  }
 
   @Override
-  public void testInit() {
-    CommandScheduler.getInstance().cancelAll();
-  }
+  public void testInit() {}
 
   @Override
   public void testPeriodic() {}
 
   @Override
-  public void testExit() {}
+  public void testExit() {
+    scheduler.cancelAll();
+  }
 }
