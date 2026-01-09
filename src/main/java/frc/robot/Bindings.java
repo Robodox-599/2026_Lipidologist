@@ -7,7 +7,7 @@ import frc.robot.subsystems.Superstructure;
 public class Bindings extends SubsystemBase {
     
   public Bindings(
-      CommandXboxController driver, CommandXboxController operator, Superstructure superstructure) {
-        
+      CommandXboxController driver, CommandXboxController operatorXboxController) {
+
       }
 }
