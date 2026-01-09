@@ -17,10 +17,10 @@ import frc.robot.subsystems.Superstructure;
 public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
 
-  final CommandXboxController m_driverController =
+  final CommandXboxController driver =
       new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
   final CommandXboxController operator = new CommandXboxController(Constants.ControllerConstants.kOperatorControllerPort);
-  // final Superstructure superstructure = new Superstructure();
+  final Superstructure superstructure = new Superstructure();
 
   // final AutoFactory autoFactory;
 
@@ -37,17 +37,15 @@ public class Robot extends TimedRobot {
             .withNtPublish(true)
             .withCaptureConsole(true));
 
-            switch (Constants.currentMode) {
-              case REAL:
-              break;
-              default:
-              break;
-            }
+    switch (Constants.currentMode) {
+      case REAL:
+        break;
+      default:
+        break;
+    }
 
-            
+    new Bindings(driver, operator, superstructure);
   }
-
-  private void configureBindings() {}
 
   @Override
   public void robotPeriodic() {
