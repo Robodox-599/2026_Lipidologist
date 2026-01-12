@@ -6,6 +6,7 @@ import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.shooter.hood.Hood;
+import frc.robot.util.CalculateShot;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 
 public class Superstructure extends SubsystemBase {
@@ -15,13 +16,14 @@ public class Superstructure extends SubsystemBase {
     private final Indexer indexer;
     private final Hood hood;
     private final Flywheels flywheels;
+    private final CalculateShot shotCalculator = new CalculateShot();
 
     public enum WantedSuperState {
         PREPARE_HUB_SHOT,
         SHOOT_HUB,
         PREPARE_ALLIANCE_ZONE_SHOT,
         SHOOT_ALLIANCE_ZONE,
-        STOPPED,
+        STOP,
     }
 
     public enum CurrentSuperState {
@@ -38,7 +40,7 @@ public class Superstructure extends SubsystemBase {
         MANUAL;
     }
 
-    private WantedSuperState wantedSuperState = WantedSuperState.STOPPED;
+    private WantedSuperState wantedSuperState = WantedSuperState.STOP;
     private CurrentSuperState currentSuperState = CurrentSuperState.STOPPED;
     private AutomationLevel automationLevel = AutomationLevel.AUTO_SHOOT;
 
@@ -64,6 +66,7 @@ public class Superstructure extends SubsystemBase {
 
     private void handleStateTransitions() {
         switch (wantedSuperState) {
+            default:
             case PREPARE_HUB_SHOT:
                 if (automationLevel == AutomationLevel.AUTO_SHOOT) {
                     if (areSystemsReadyForShot()) {
@@ -79,10 +82,13 @@ public class Superstructure extends SubsystemBase {
             case SHOOT_HUB:
             case PREPARE_ALLIANCE_ZONE_SHOT:
             case SHOOT_ALLIANCE_ZONE:
-            case STOPPED:
-            default:
+            case STOP:
 
         }
+    }
+
+    public void preparingHubShot() {
+        
     }
 
     private boolean areSystemsReadyForShot() {
