@@ -13,14 +13,12 @@ public class Indexer extends SubsystemBase {
   private CurrentState currentState = CurrentState.STOPPED;
 
   public enum WantedState{
-    RECIEVE,
     TRANSFER_FUEL,
     PULSE_FUEL,
     STOPPED,
   }
 
   public enum CurrentState{
-    RECIEVE,
     TRANSFER_FUEL,
     PULSE_FUEL,
     STOPPED,
@@ -47,12 +45,12 @@ public class Indexer extends SubsystemBase {
         case STOPPED:
             currentState = CurrentState.STOPPED;
             break;
-        case RECIEVE:
-            currentState = CurrentState.RECIEVE;
         case TRANSFER_FUEL:
             currentState = CurrentState.TRANSFER_FUEL;
+            break;
         case PULSE_FUEL:
-            currentState = CurrentState.PULSE_FUEL;
+            currentState = CurrentState.PULSE_FUEL; // use time wpilib func
+            break;
         default:
             currentState = CurrentState.STOPPED;
             break;
@@ -61,15 +59,19 @@ public class Indexer extends SubsystemBase {
 
   public void applyStates(){
     switch(currentState){
-      
+      case STOPPED:
+        stop();
+        break;
+      case TRANSFER_FUEL:
+        setVoltage(3);
+        break;
+      case PULSE_FUEL:
+        pulseFuel(1);;
+        break;
       default:
         stop();
         break;
     }
-  }
-
-  public void setVelocity(double velocity){
-    io.setVelocity(velocity);
   }
 
   public void setVoltage(double volts){
@@ -82,6 +84,10 @@ public class Indexer extends SubsystemBase {
 
   public void setWantedState(WantedState wantedState){
     this.wantedState = wantedState;
+  }
+
+  public void pulseFuel(double volts){
+    io.pulseFuel(volts);
   }
 
 }

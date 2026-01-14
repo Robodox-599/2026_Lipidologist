@@ -4,14 +4,17 @@
 
 package frc.robot.subsystems.indexer;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+public class IndexerConstants {
+  public static final int indexerMotorID = 67;
+  public static final String indexerCANBus = "rio";
+  public static final double indexerGearRatio = 2;
 
-public class IndexerConstants extends SubsystemBase {
-  /** Creates a new IndexerConstants. */
-  public IndexerConstants() {}
+  public static final double kP = 0.45;
+  public static final double kI = 0;
+  public static final double kD = 0;
+  public static final double kS = 0.03;
+  public static final double kV = 0.124 * indexerGearRatio;
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+  public static final double supplyCurrentLimit = 40;
+  public static final double pulseTimeInterval = 0.4;
 }

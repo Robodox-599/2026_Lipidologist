@@ -10,7 +10,7 @@ public abstract class IndexerIO {
 
     public void updateInputs() {}
 
-    public void setVelocity(double velocity) {}
+    public void pulseFuel(double velocity) {}
 
     public void setVoltage(double volts) {}
 
