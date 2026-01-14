@@ -74,7 +74,6 @@ public class IndexerIOTalonFX extends IndexerIO {
         DogLog.log("Indexer/Position", super.position);
         DogLog.log("Indexer/SupplyCurrent", super.supplyCurrent);
         DogLog.log("Indexer/StatorCurrent", super.statorCurrent);
-
         DogLog.log("Indexer/AppliedVolts", super.appliedVolts);
         DogLog.log("Indexer/Temperature", super.tempCelsius);
     }
