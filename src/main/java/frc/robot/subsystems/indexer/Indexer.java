@@ -9,19 +9,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Indexer extends SubsystemBase {
   private final IndexerIO io;
-  private WantedState wantedState = WantedState.STOPPED;
-  private CurrentState currentState = CurrentState.STOPPED;
+  private IndexerWantedState indexerWantedState = IndexerWantedState.STOPPED;
+  private IndexerCurrentState indexerCurrentState = IndexerCurrentState.STOPPING;
 
-  public enum WantedState{
+  public enum IndexerWantedState{
     TRANSFER_FUEL,
     PULSE_FUEL,
+    REVERSE,
     STOPPED,
   }
 
-  public enum CurrentState{
-    TRANSFER_FUEL,
-    PULSE_FUEL,
-    STOPPED,
+  public enum IndexerCurrentState{
+    TRANSFERING_FUEL,
+    PULSING_FUEL,
+    REVERSING,
+    STOPPING,
   }
 
   /** Creates a new indexer. */
@@ -29,65 +31,71 @@ public class Indexer extends SubsystemBase {
     this.io = io;
   }
 
-  public void updateInputs() {
-    io.updateInputs();
+  public void updateIndexerInputs() {
+    io.updateIndexerInputs();
     
     handleStateTransitions();
     applyStates();
 
-    DogLog.log("Indexer/wantedState", wantedState);
-    DogLog.log("Indexer/currentState", currentState);
+    DogLog.log("Indexer/wantedState", indexerWantedState);
+    DogLog.log("Indexer/currentState", indexerCurrentState);
 
   }
 
   public void handleStateTransitions(){
-    switch (currentState) {
-        case STOPPED:
-            currentState = CurrentState.STOPPED;
+    switch (indexerCurrentState) {
+        case STOPPING:
+            indexerCurrentState = IndexerCurrentState.STOPPING;
             break;
-        case TRANSFER_FUEL:
-            currentState = CurrentState.TRANSFER_FUEL;
+        case TRANSFERING_FUEL:
+            indexerCurrentState = IndexerCurrentState.TRANSFERING_FUEL;
             break;
-        case PULSE_FUEL:
-            currentState = CurrentState.PULSE_FUEL; // use time wpilib func
+        case PULSING_FUEL:
+            indexerCurrentState = IndexerCurrentState.PULSING_FUEL; // use time wpilib func
+            break;
+        case REVERSING:
+            indexerCurrentState = IndexerCurrentState.REVERSING;
             break;
         default:
-            currentState = CurrentState.STOPPED;
+            indexerCurrentState = IndexerCurrentState.STOPPING;
             break;
     }
   }
 
   public void applyStates(){
-    switch(currentState){
-      case STOPPED:
-        stop();
+    switch(indexerCurrentState){
+      case STOPPING:
+        stopIndexer();
         break;
-      case TRANSFER_FUEL:
-        setVoltage(3);
+      case TRANSFERING_FUEL:
+        setIndexerVoltage(3);
         break;
-      case PULSE_FUEL:
-        pulseFuel(1);;
+      case PULSING_FUEL:
+        indexerPulseFuel(1);;
+        break;
+      case REVERSING:
+        setIndexerVoltage(-3);
         break;
       default:
-        stop();
+        stopIndexer();
         break;
     }
   }
 
-  public void setVoltage(double volts){
-    io.setVoltage(volts);
+  public void setIndexerVoltage(double volts){
+    io.setIndexerVoltage(volts);
   }
 
-  public void stop(){
-    io.stop();
+  public void stopIndexer(){
+    io.stopIndexer();
   }
 
-  public void setWantedState(WantedState wantedState){
-    this.wantedState = wantedState;
+  public void setIndexerWantedState(IndexerWantedState indexerWantedState){
+    this.indexerWantedState = indexerWantedState;
   }
 
-  public void pulseFuel(double volts){
-    io.pulseFuel(volts);
+  public void indexerPulseFuel(double volts){
+    io.indexerPulseFuel(volts);
   }
 
 }

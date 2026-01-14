@@ -59,7 +59,7 @@ public class IndexerIOTalonFX extends IndexerIO {
     }
     
     @Override
-    public void updateInputs() {
+    public void updateIndexerInputs() {
         BaseStatusSignal.refreshAll(indexerVelocityRad, indexerTemperature, 
             indexerAppliedVolts, indexerPosition, indexerStatorCurrent, indexerSupplyCurrent);
 
@@ -80,17 +80,17 @@ public class IndexerIOTalonFX extends IndexerIO {
     }
 
     @Override
-    public void stop() {
+    public void stopIndexer() {
       indexerMotor.stopMotor();
     }
 
     @Override
-    public void setVoltage(double volts) {
+    public void setIndexerVoltage(double volts) {
       indexerMotor.setVoltage(volts);
     }
 
     @Override
-    public void pulseFuel(double volts) {
+    public void indexerPulseFuel(double volts) {
       if(!pulseTimer.isRunning()){
         pulseTimer.start();
       }
