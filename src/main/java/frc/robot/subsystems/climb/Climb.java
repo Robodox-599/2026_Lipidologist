@@ -50,12 +50,20 @@ public class Climb extends SubsystemBase {
     }
   }
 
-  public void setClimbVoltage(double volts){
-    io.setClimbVoltage(volts);
+  public void setLeftClimbVoltage(double volts){
+    io.setLeftClimbVoltage(volts);
   }
 
-  public void setClimbHeight(double height){
-    io.setClimbHeight(height);
+  public void setRightClimbVoltage(double volts){
+    io.setRightClimbVoltage(volts);
+  }
+
+  public void setLeftClimbHeight(double height){
+    io.setLeftClimbHeight(height);
+  }
+
+  public void setRightClimbHeight(double height){
+    io.setRightClimbHeight(height);
   }
 
   public void stopClimb(){
