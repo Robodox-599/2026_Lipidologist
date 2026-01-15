@@ -7,7 +7,7 @@ public class FlywheelsIO {
     protected boolean isFlywheelAtSetpoint = false;
 
     public void updateInputs() {}
-    public void setVelocity(double velocity) {}
+    public void setRPM(double rpm) {}
     public void setVoltage(double voltage) {}
     public void stop() {}
 }

@@ -46,7 +46,7 @@ public class Flywheels extends FlywheelsIO{
     private void applyStates() {
         switch (flywheelCurrentState) {
             case SETTING_VELOCITY:
-            setVelocity(0);
+            setRPM(0);
             break;
             case STOPPED:
             stop();
@@ -57,8 +57,8 @@ public class Flywheels extends FlywheelsIO{
         }
     }
 
-    public void setVelocity(double position) {
-        io.setVelocity(position);
+    public void setRPM(double rpm) {
+        io.setRPM(rpm);
     }
     
     public void stop() {
@@ -68,5 +68,14 @@ public class Flywheels extends FlywheelsIO{
     
     public boolean flywheelsAtSetpoint() {
         return io.isFlywheelAtSetpoint;
+    }
+    
+    public void setFlywheelWantedState(FlywheelWantedState flywheelWantedState){
+      this.flywheelWantedState = flywheelWantedState;
+    }
+
+    public void setFlywheelWantedState(FlywheelWantedState flywheelWantedState, double rpm){
+      this.flywheelWantedState = flywheelWantedState;
+      io.setRPM(rpm);
     }
 }
