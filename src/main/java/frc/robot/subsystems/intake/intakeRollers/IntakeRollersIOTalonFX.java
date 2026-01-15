@@ -7,7 +7,6 @@ package frc.robot.subsystems.intake.intakeRollers;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import dev.doglog.DogLog;
@@ -15,7 +14,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
-import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.units.measure.Voltage;
 
 /** Add your docs here. */
@@ -34,11 +32,11 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         intakeRollersMotor = new TalonFX(IntakeRollersConstants.IntakeRollersMotorID, IntakeRollersConstants.IntakeRollersCanBus);
         intakeRollersConfig = new TalonFXConfiguration();
 
-        intakeRollersConfig.Slot0.kP = IntakeRollersConstants.kP;
-        intakeRollersConfig.Slot0.kI = IntakeRollersConstants.kI;
-        intakeRollersConfig.Slot0.kD = IntakeRollersConstants.kD;
-        intakeRollersConfig.Slot0.kS = IntakeRollersConstants.kS;
-        intakeRollersConfig.Slot0.kV = IntakeRollersConstants.kV;
+        // intakeRollersConfig.Slot0.kP = IntakeRollersConstants.kP;
+        // intakeRollersConfig.Slot0.kI = IntakeRollersConstants.kI;
+        // intakeRollersConfig.Slot0.kD = IntakeRollersConstants.kD;
+        // intakeRollersConfig.Slot0.kS = IntakeRollersConstants.kS;
+        // intakeRollersConfig.Slot0.kV = IntakeRollersConstants.kV;
 
         intakeRollersConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         intakeRollersConfig.CurrentLimits.StatorCurrentLimit = IntakeRollersConstants.supplyCurrentLimit;
