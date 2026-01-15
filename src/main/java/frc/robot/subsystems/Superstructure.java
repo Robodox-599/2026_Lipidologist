@@ -3,15 +3,15 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.feeder.Feeder;
-import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.util.CalculateShot;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 
 public class Superstructure extends SubsystemBase {
     private final CommandSwerveDrivetrain drivetrain;
-    private final Intake intake;
+    private final IntakeRollers intake;
     private final Feeder feeder;
     private final Indexer indexer;
     private final Hood hood;
@@ -46,7 +46,7 @@ public class Superstructure extends SubsystemBase {
 
     public Superstructure(
         CommandSwerveDrivetrain drivetrain,
-        Intake intake,
+        IntakeRollers intake,
         Feeder feeder, 
         Indexer indexer,
         Hood hood,
