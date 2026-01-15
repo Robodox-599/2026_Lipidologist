@@ -14,7 +14,6 @@ public class HoodConstants {
     public static final double hoodRealkV = 0;
     public static final double hoodRealkG = 0;
 
-  
     //sim PID
     public static final double hoodSimkP = 0;
     public static final double hoodSimkI = 0;
@@ -22,7 +21,6 @@ public class HoodConstants {
     public static final double hoodSimkS = 0;
     public static final double hoodSimkV = 0;
     public static final double hoodSimkG = 0;
-
 
     //current limits 
     public static final double supplyCurrentLimit = 50;

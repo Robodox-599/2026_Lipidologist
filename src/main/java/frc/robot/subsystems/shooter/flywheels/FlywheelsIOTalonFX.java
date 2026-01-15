@@ -8,7 +8,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import dev.doglog.DogLog;
 
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -32,8 +32,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
     public FlywheelsIOTalonFX(){
         //motors + configuration
         flywheelMotor = new TalonFX(FlywheelsConstants.flywheelMotorID, FlywheelsConstants.flywheelCANBus);
-        flywheelConfiguration = new TalonFXConfiguration();
-
+        flywheelConfiguration = new TalonFXConfiguration();  
+        
         //applying PID to configuration
         flywheelConfiguration.Slot0.kP = FlywheelsConstants.flywheelRealkP;
         flywheelConfiguration.Slot0.kI = FlywheelsConstants.flywheelRealkI;
@@ -44,6 +44,9 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
         //current limits
         flywheelConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
         flywheelConfiguration.CurrentLimits.SupplyCurrentLimit = FlywheelsConstants.supplyCurrentLimit;
+
+        //other configuration stuff
+        flywheelMotor.setNeutralMode(NeutralModeValue.Brake);
 
         //Applying configuration
         flywheelMotor.getConfigurator().apply(flywheelConfiguration);
@@ -81,7 +84,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
     @Override
     public void setVelocity(double velocity){
         super.velocitySetpoint = velocity;
-        flywheelMotor.setControl(new VelocityDutyCycle(velocity));
+        flywheelMotor.setControl(new VelocityVoltage(velocity));
     }
 
     @Override

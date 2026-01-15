@@ -4,7 +4,6 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -32,7 +31,7 @@ public class HoodIOTalonFX extends HoodIO {
     private final StatusSignal<Current> hoodStatorCurrent;
     private final StatusSignal<Current> hoodSupplyCurrent;
 
-    public HoodIOTalonFX(){
+    public HoodIOTalonFX() {
         //motors + configuration
         hoodMotor = new TalonFX(HoodConstants.hoodMotorID, HoodConstants.hoodCANBus);
         hoodConfiguration = new TalonFXConfiguration();
@@ -48,6 +47,9 @@ public class HoodIOTalonFX extends HoodIO {
         //current limits
         hoodConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
         hoodConfiguration.CurrentLimits.SupplyCurrentLimit = HoodConstants.supplyCurrentLimit;
+
+        //other configuration stuff
+        hoodMotor.setNeutralMode(NeutralModeValue.Brake);
 
         //applying configuration
         hoodMotor.getConfigurator().apply(hoodConfiguration);
@@ -88,6 +90,7 @@ public class HoodIOTalonFX extends HoodIO {
        wantedPosition = MathUtil.clamp(position, HoodConstants.hoodMinAngle, HoodConstants.hoodMaxAngle);
 
         super.wantedPosition = wantedPosition;
+
         motionMagic = new MotionMagicVoltage(position).withSlot(0).withEnableFOC(true);
         
         hoodMotor.setControl(motionMagic);
