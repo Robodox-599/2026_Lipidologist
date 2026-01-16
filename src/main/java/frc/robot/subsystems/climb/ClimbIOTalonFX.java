@@ -94,7 +94,7 @@ public class ClimbIOTalonFX extends ClimbIO {
     leftMotor.optimizeBusUtilization();
     rightMotor.optimizeBusUtilization();
 
-    zeroClimbEncoder();
+    zeroClimbPosition();
   }
 
   @Override
@@ -155,7 +155,7 @@ public class ClimbIOTalonFX extends ClimbIO {
   }
 
   @Override
-  public void zeroClimbEncoder() {
+  public void zeroClimbPosition() {
     leftMotor.setPosition(0);
     rightMotor.setPosition(0);
   }

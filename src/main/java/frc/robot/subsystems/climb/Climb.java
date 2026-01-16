@@ -13,11 +13,17 @@ public class Climb extends SubsystemBase {
   private ClimbCurrentState climbCurrentState = ClimbCurrentState.STOPPING;
 
   public enum ClimbWantedState{
-    STOPPED
+    STOPPED,
+    MOVE_LEFT_TO_POSITION,
+    MOVE_RIGHT_TO_POSITION,
+    MOVE_BOTH_TO_POSITION,
   }
 
   public enum ClimbCurrentState{
-    STOPPING
+    STOPPING,
+    MOVING_LEFT_TO_POSITION,
+    MOVING_RIGHT_TO_POSITION,
+    MOVING_BOTH_TO_POSITION,
   }
 
   public Climb(ClimbIO io) {
@@ -37,15 +43,41 @@ public class Climb extends SubsystemBase {
 
   public void handleStateTransitions(){
     switch (climbCurrentState) {
+        case STOPPING:
+            climbCurrentState = ClimbCurrentState.STOPPING;
+            break;
+        case MOVING_LEFT_TO_POSITION:
+            climbCurrentState = ClimbCurrentState.MOVING_LEFT_TO_POSITION;
+            break;
+        case MOVING_RIGHT_TO_POSITION:
+            climbCurrentState = ClimbCurrentState.MOVING_RIGHT_TO_POSITION;
+            break;
+        case MOVING_BOTH_TO_POSITION:
+            climbCurrentState = ClimbCurrentState.MOVING_BOTH_TO_POSITION;
+            break;
         default:
-            
+            climbCurrentState = ClimbCurrentState.STOPPING;
             break;
     }
   }
 
   public void applyStates(){
     switch(climbWantedState){
+        case STOPPED:
+            stopClimb();
+            break;
+        case MOVE_LEFT_TO_POSITION:
+            setLeftClimbHeight(0);
+            break;
+        case MOVE_RIGHT_TO_POSITION:
+            setRightClimbHeight(0);
+            break;
+        case MOVE_BOTH_TO_POSITION:
+            setLeftClimbHeight(0);
+            setRightClimbHeight(0);
+            break;
         default:
+            stopClimb();
             break;
     }
   }
@@ -71,7 +103,7 @@ public class Climb extends SubsystemBase {
   }
 
   public void zeroClimbEncoder(){
-    io.zeroClimbEncoder();
+    io.zeroClimbPosition();
   }
 
   public void setClimbWantedState(ClimbWantedState indexerWantedState){

@@ -12,14 +12,13 @@ public abstract class ClimbIO {
 
   public void updateClimbInputs() {}
 
-  /** Sets the target height of the elevator */
   public void setLeftClimbHeight(double height) {}
 
   public void setRightClimbHeight(double height) {}
 
   public void stopClimb() {}
 
-  public void zeroClimbEncoder() {}
+  public void zeroClimbPosition() {}
 
   public void setLeftClimbVoltage(double voltage) {}
 
