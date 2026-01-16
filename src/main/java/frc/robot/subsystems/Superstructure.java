@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.feeder.Feeder;
@@ -11,11 +12,11 @@ import frc.robot.subsystems.shooter.flywheels.Flywheels;
 
 public class Superstructure extends SubsystemBase {
     private final CommandSwerveDrivetrain drivetrain;
-    private final Intake intake;
-    private final Feeder feeder;
-    private final Indexer indexer;
-    private final Hood hood;
-    private final Flywheels flywheels;
+    // private final Intake intake;
+    // private final Feeder feeder;
+    // private final Indexer indexer;
+    // private final Hood hood;
+    // private final Flywheels flywheels;
     private final CalculateShot shotCalculator = new CalculateShot();
 
     public enum WantedSuperState {
@@ -45,22 +46,24 @@ public class Superstructure extends SubsystemBase {
     private AutomationLevel automationLevel = AutomationLevel.AUTO_SHOOT;
 
     public Superstructure(
-        CommandSwerveDrivetrain drivetrain,
-        Intake intake,
-        Feeder feeder, 
-        Indexer indexer,
-        Hood hood,
-        Flywheels flywheels) {
+        CommandSwerveDrivetrain drivetrain
+        // Intake intake,
+        // Feeder feeder, 
+        // Indexer indexer,
+        // Hood hood,
+        // Flywheels flywheels
+        ) {
         this.drivetrain = drivetrain;
-        this.intake = intake;
-        this.feeder = feeder;
-        this.indexer = indexer;
-        this.hood = hood;
-        this.flywheels = flywheels;
+        // this.intake = intake;
+        // this.feeder = feeder;
+        // this.indexer = indexer;
+        // this.hood = hood;
+        // this.flywheels = flywheels;
     }
 
     @Override
     public void periodic() {
+        drivetrain.updateInputs();
         // This method will be called once per scheduler run
     }
 
@@ -95,5 +98,9 @@ public class Superstructure extends SubsystemBase {
         // flywheels.flywheelsAtSetpoint() && hood.hoodAtSetpoint() && swerve.isAimed
         return false;
     }
+
+    public Command zeroGyroCommand() {
+    return this.runOnce(() -> drivetrain.zeroGyro());
+  }
     
 }

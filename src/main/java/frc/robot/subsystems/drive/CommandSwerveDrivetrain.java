@@ -280,17 +280,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   private void applyStates() {
     switch (currentState) {
       case TELEOP_DRIVE:
+        ChassisSpeeds controllerSpeeds = new ChassisSpeeds(-joystickDeadbandApply(driver.getLeftY()) * MaxSpeed, -joystickDeadbandApply(driver.getLeftX()) * MaxSpeed, joystickDeadbandApply(-driver.getRightX()) * MaxAngularRate);
         setControl(
             drive
-                .withVelocityX(
-                    -joystickDeadbandApply(driver.getLeftY())
-                        * MaxSpeed) // Drive forward with negative Y (forward)
-                .withVelocityY(
-                    -joystickDeadbandApply(driver.getLeftX())
-                        * MaxSpeed) // Drive left with negative X (left)
-                .withRotationalRate(
-                    joystickDeadbandApply(-driver.getRightX())
-                        * MaxAngularRate)); // Drive counterclockwise with negative X (left));
+                .withVelocityX(controllerSpeeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
+                .withVelocityY(controllerSpeeds.vyMetersPerSecond) // Drive left with negative X (left)
+                .withRotationalRate(controllerSpeeds.omegaRadiansPerSecond)); // Drive counterclockwise with negative X (left));
+
+        DogLog.log("Drive/ControllerSpeeds/vxMetersPerSecond", -controllerSpeeds.vxMetersPerSecond);
+        DogLog.log("Drive/ControllerSpeeds", controllerSpeeds);
         break;
       case ROTATION_LOCK:
         setControl(

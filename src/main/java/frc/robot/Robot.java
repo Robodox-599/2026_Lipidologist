@@ -22,7 +22,7 @@ public class Robot extends TimedRobot {
       new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
   final CommandXboxController operator = new CommandXboxController(Constants.ControllerConstants.kOperatorControllerPort);
   final CommandSwerveDrivetrain drivetrain;
-  // final Superstructure superstructure = new Superstructure();
+  final Superstructure superstructure;
 
   // final AutoFactory autoFactory;
 
@@ -48,7 +48,9 @@ public class Robot extends TimedRobot {
         break;
     }
 
-    // new Bindings(driver, operator, superstructure);
+    superstructure = new Superstructure(drivetrain);
+
+    new Bindings(driver, operator, superstructure);
   }
 
   @Override
