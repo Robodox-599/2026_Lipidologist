@@ -76,6 +76,7 @@ public class Flywheels extends FlywheelsIO{
 
     public void setFlywheelWantedState(FlywheelWantedState flywheelWantedState, double rpm){
       this.flywheelWantedState = flywheelWantedState;
-      io.setRPM(rpm);
+    //   io.setRPM(rpm);
+    // io.targetRPM = rpm;
     }
 }
