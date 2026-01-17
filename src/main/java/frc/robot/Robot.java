@@ -7,21 +7,20 @@ package frc.robot;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Tracer;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.feeder.FeederIOTalonFX;
 
 public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
 
+  private final Feeder feeder;
+
   final CommandXboxController driver =
       new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
   final CommandXboxController operator = new CommandXboxController(Constants.ControllerConstants.kOperatorControllerPort);
-  // final Superstructure superstructure = new Superstructure();
-
-  // final AutoFactory autoFactory;
 
 @Override
   protected void loopFunc() {
@@ -29,6 +28,8 @@ public class Robot extends TimedRobot {
   }
 
   public Robot() {
+    feeder = new Feeder(new FeederIOTalonFX());
+
     DogLog.setOptions(
         new DogLogOptions()
             .withCaptureDs(true)
@@ -44,6 +45,11 @@ public class Robot extends TimedRobot {
     }
 
     // new Bindings(driver, operator, superstructure);
+
+    operator.rightBumper().onTrue(Commands.runOnce(() -> feeder.setWantedState(Feeder.WantedState.TRANSFERING_FUEL)));
+    operator.rightTrigger().onTrue(Commands.runOnce(() -> feeder.setWantedState(Feeder.WantedState.REVERSE)));
+
+    operator.x().onTrue(Commands.runOnce(() -> feeder.setWantedState(Feeder.WantedState.STOPPED)));
   }
 
   @Override
