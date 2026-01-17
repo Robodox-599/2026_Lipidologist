@@ -82,7 +82,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
     }
 
     @Override
-    public void setRPM(double rpm){
+    public void setRPM(double RPM){
         super.velocitySetpoint = velocity;
         flywheelMotor.setControl(new VelocityVoltage(velocity));
     }
