@@ -1,7 +1,6 @@
 package frc.robot.subsystems.shooter.hood;
 
 import dev.doglog.DogLog;
-import frc.robot.subsystems.shooter.flywheels.Flywheels;
 
 public class Hood extends HoodIO{
     private final HoodIO io;
