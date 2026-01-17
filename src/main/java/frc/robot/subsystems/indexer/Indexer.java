@@ -90,7 +90,7 @@ public class Indexer extends SubsystemBase {
     io.stopIndexer();
   }
 
-  public void setWantedState(WantedState wantedState){
+  public void setWantedState(Indexer.WantedState wantedState){
     this.wantedState = wantedState;
   }
 
