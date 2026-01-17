@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.Tracer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
+import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOTalonFX;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.constants.TunerConstants;
@@ -22,6 +24,7 @@ public class Robot extends TimedRobot {
       new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
   final CommandXboxController operator = new CommandXboxController(Constants.ControllerConstants.kOperatorControllerPort);
   final CommandSwerveDrivetrain drivetrain;
+  final IntakeRollers intakeRollers;
   final Superstructure superstructure;
 
   // final AutoFactory autoFactory;
@@ -42,13 +45,15 @@ public class Robot extends TimedRobot {
     switch (Constants.currentMode) {
       case REAL:
         drivetrain = TunerConstants.createDrivetrain(driver);
+        intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
         break;
       default:
         drivetrain = TunerConstants.createDrivetrain(driver);
+        intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
         break;
     }
 
-    superstructure = new Superstructure(driver, drivetrain);
+    superstructure = new Superstructure(driver, drivetrain, intakeRollers);
 
     new Bindings(driver, operator, superstructure);
   }
