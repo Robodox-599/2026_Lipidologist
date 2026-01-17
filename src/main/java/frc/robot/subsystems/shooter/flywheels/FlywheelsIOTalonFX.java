@@ -8,7 +8,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import dev.doglog.DogLog;
 
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -83,8 +83,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
 
     @Override
     public void setRPM(double RPM){
-        super.velocitySetpoint = velocity;
-        flywheelMotor.setControl(new VelocityVoltage(velocity));
+        super.velocitySetpoint = RPM;
+        flywheelMotor.setControl(new VelocityTorqueCurrentFOC(RPM));
     }
 
     @Override
