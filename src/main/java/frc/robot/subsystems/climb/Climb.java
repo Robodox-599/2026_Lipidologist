@@ -9,17 +9,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climb extends SubsystemBase {
   private final ClimbIO io;
-  private ClimbWantedState climbWantedState = ClimbWantedState.STOPPED;
-  private ClimbCurrentState climbCurrentState = ClimbCurrentState.STOPPING;
+  private WantedState wantedState = WantedState.STOPPED;
+  private CurrentState currentState = CurrentState.STOPPING;
 
-  public enum ClimbWantedState{
+  public enum WantedState{
     STOPPED,
     MOVE_LEFT_TO_POSITION,
     MOVE_RIGHT_TO_POSITION,
     MOVE_BOTH_TO_POSITION,
   }
 
-  public enum ClimbCurrentState{
+  public enum CurrentState{
     STOPPING,
     MOVING_LEFT_TO_POSITION,
     MOVING_RIGHT_TO_POSITION,
@@ -36,33 +36,33 @@ public class Climb extends SubsystemBase {
     handleStateTransitions();
     applyStates();
 
-    DogLog.log("Climb/wantedState", climbWantedState);
-    DogLog.log("Climb/currentState", climbCurrentState);
+    DogLog.log("Climb/wantedState", wantedState);
+    DogLog.log("Climb/currentState", currentState);
 
   }
 
   public void handleStateTransitions(){
-    switch (climbCurrentState) {
+    switch (currentState) {
         case STOPPING:
-            climbCurrentState = ClimbCurrentState.STOPPING;
+            currentState = CurrentState.STOPPING;
             break;
         case MOVING_LEFT_TO_POSITION:
-            climbCurrentState = ClimbCurrentState.MOVING_LEFT_TO_POSITION;
+            currentState = CurrentState.MOVING_LEFT_TO_POSITION;
             break;
         case MOVING_RIGHT_TO_POSITION:
-            climbCurrentState = ClimbCurrentState.MOVING_RIGHT_TO_POSITION;
+            currentState = CurrentState.MOVING_RIGHT_TO_POSITION;
             break;
         case MOVING_BOTH_TO_POSITION:
-            climbCurrentState = ClimbCurrentState.MOVING_BOTH_TO_POSITION;
+            currentState = CurrentState.MOVING_BOTH_TO_POSITION;
             break;
         default:
-            climbCurrentState = ClimbCurrentState.STOPPING;
+            currentState = CurrentState.STOPPING;
             break;
     }
   }
 
   public void applyStates(){
-    switch(climbWantedState){
+    switch(wantedState){
         case STOPPED:
             stopClimb();
             break;
@@ -106,8 +106,8 @@ public class Climb extends SubsystemBase {
     io.zeroClimbPosition();
   }
 
-  public void setWantedState(ClimbWantedState indexerWantedState){
-    this.climbWantedState = indexerWantedState;
+  public void setWantedState(WantedState WantedState){
+    this.wantedState = WantedState;
   }
 
 }
