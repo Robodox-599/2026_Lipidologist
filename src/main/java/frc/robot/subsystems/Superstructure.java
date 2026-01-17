@@ -21,7 +21,7 @@ import frc.robot.subsystems.shooter.flywheels.Flywheels;
 
 public class Superstructure extends SubsystemBase {
 
-  public record AdjustedShot(Translation2d adjustedHubTranslation, Rotation2d targetRotation) {}  
+  public record AdjustedShot(Rotation2d targetRotation, double shootSpeed, double hoodAngle) {}  
   private static final double LOOKAHEAD_TIME = 0.3;
 
     private final CommandXboxController driver;
@@ -38,6 +38,7 @@ public class Superstructure extends SubsystemBase {
         SHOOT_HUB,
         PREPARE_ALLIANCE_ZONE_SHOT,
         SHOOT_ALLIANCE_ZONE,
+        IDLE,
         STOP,
     }
 
@@ -46,6 +47,7 @@ public class Superstructure extends SubsystemBase {
         SHOOTING_HUB,
         PREPARING_ALLIANCE_ZONE_SHOT,
         SHOOTING_ALLIANCE_ZONE,
+        IDLING,
         STOPPED;
     }
 
@@ -101,24 +103,20 @@ public class Superstructure extends SubsystemBase {
             case SHOOT_HUB:
             case PREPARE_ALLIANCE_ZONE_SHOT:
             case SHOOT_ALLIANCE_ZONE:
+            case IDLE:
             case STOP:
 
         }
     }
 
     public void preparingHubShot() {
-        AdjustedShot adjustedShot = calculatedAdjustedHubPosition();
-        Translation2d currentTranslation = drivetrain.getPose().getTranslation();
-        double adjustedDistance = currentTranslation.getDistance(adjustedShot.adjustedHubTranslation());
+        AdjustedShot adjustedShot = calculatedAdjustedShot();
 
-        Rotation2d targetRotation = adjustedShot.targetRotation();
-        double shootSpeed = shotCalculator.getRPM(adjustedDistance);
-        double hoodAngle = shotCalculator.getHoodAngle(adjustedDistance);
-
-        drivetrain.setTargetRotation(targetRotation);
+        drivetrain.setTargetRotation(adjustedShot.targetRotation());
+        
     }
 
-    public AdjustedShot calculatedAdjustedHubPosition() {
+    public AdjustedShot calculatedAdjustedShot() {
         Pose2d pose = drivetrain.getPose();
         ChassisSpeeds currentChassisSpeeds = drivetrain.getChassisSpeeds();
 
@@ -142,9 +140,13 @@ public class Superstructure extends SubsystemBase {
 
         Translation2d swerveLookAheadTranslation = currentTranslation.plus(new Translation2d(averageChassisSpeeds.vxMetersPerSecond * LOOKAHEAD_TIME, averageChassisSpeeds.vyMetersPerSecond * LOOKAHEAD_TIME));
 
-        Rotation2d targetRotation = Rotation2d.fromRadians(Math.atan2(adjustedHubTranslation.getY() - swerveLookAheadTranslation.getY(), adjustedHubTranslation.getX() - swerveLookAheadTranslation.getX()));
+        double adjustedDistance = currentTranslation.getDistance(adjustedHubTranslation);
 
-        return new AdjustedShot(adjustedHubTranslation, targetRotation);
+        Rotation2d targetRotation = Rotation2d.fromRadians(Math.atan2(adjustedHubTranslation.getY() - swerveLookAheadTranslation.getY(), adjustedHubTranslation.getX() - swerveLookAheadTranslation.getX()));
+        double shootSpeed = shotCalculator.getRPM(adjustedDistance);
+        double hoodAngle = shotCalculator.getHoodAngle(adjustedDistance);
+
+        return new AdjustedShot(targetRotation, shootSpeed, hoodAngle);
     }
 
     private boolean areSystemsReadyForShot() {
