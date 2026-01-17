@@ -11,13 +11,13 @@ public class IntakeRollers {
         this.io = io;
     }
 
-    enum WantedState{
+    public enum WantedState{
         STOPPED,
         INTAKING_FUEL,
         REVERSE_FUEL
     }
 
-    enum CurrentState{
+    public enum CurrentState{
         STOPPED,
         INTAKING_FUEL,
         REVERSE_FUEL
@@ -71,8 +71,8 @@ public class IntakeRollers {
         io.setVelocity(velocity);
     }
 
-    public void setWantedState(WantedState intakeRollersWantedState){
-        this.wantedState = intakeRollersWantedState;
+    public void setWantedState(IntakeRollers.WantedState wantedState){
+        this.wantedState = wantedState;
     }
 
 
