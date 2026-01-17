@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Superstructure.WantedSuperState;
 
 public class Bindings extends SubsystemBase {
     
@@ -17,7 +18,9 @@ public class Bindings extends SubsystemBase {
 
         driver.y().onTrue(superstructure.zeroGyroCommand());
 
-        // driver.a().onTrue();
+        driver.rightTrigger().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+
+        driver.rightTrigger().onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
 
         
       }

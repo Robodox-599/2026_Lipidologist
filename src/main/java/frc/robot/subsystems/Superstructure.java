@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -82,7 +83,15 @@ public class Superstructure extends SubsystemBase {
     @Override
     public void periodic() {
         drivetrain.updateInputs();
+        intakeRollers.updateInputs();
+
+        handleStateTransitions();
+        applyStates();
         // This method will be called once per scheduler run
+        DogLog.log("Superstructure/WantedSuperState", wantedSuperState);
+        DogLog.log("Superstructure/CurrentSuperState", currentSuperState);
+
+        DogLog.log("working", true);
     }
 
     private void handleStateTransitions() {
@@ -104,8 +113,11 @@ public class Superstructure extends SubsystemBase {
             case PREPARE_ALLIANCE_ZONE_SHOT:
             case SHOOT_ALLIANCE_ZONE:
             case IDLE:
+                currentSuperState = CurrentSuperState.IDLING;
+                break;
             case STOP:
-
+                currentSuperState = CurrentSuperState.STOPPED;
+                break;
         }
     }
 
@@ -113,19 +125,22 @@ public class Superstructure extends SubsystemBase {
         switch (currentSuperState) {
             case IDLING:
                 idling();
+                break;
             case STOPPED:
                 stop();
+                break;
             default:
-
+                stop();
+                break;
         }
     }
 
     public void idling() {
-        // intakeRollers.setWantedState();
+        intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKING_FUEL);
     }
 
     public void stop() {
-
+        intakeRollers.setWantedState(IntakeRollers.WantedState.STOPPED);
     }
 
     public void preparingHubShot() {
@@ -177,5 +192,12 @@ public class Superstructure extends SubsystemBase {
     public Command zeroGyroCommand() {
     return this.runOnce(() -> drivetrain.zeroGyro());
   }
-    
+
+  public Command setWantedSuperStateCommand(WantedSuperState wantedState) {
+    return this.runOnce(() -> setWantedSuperState(wantedState));
+  }
+
+  public void setWantedSuperState(WantedSuperState state) {
+    wantedSuperState = state;
+  } 
 }

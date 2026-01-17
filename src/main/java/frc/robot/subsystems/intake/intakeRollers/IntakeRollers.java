@@ -28,8 +28,8 @@ public class IntakeRollers {
         handleStateTransitions();
         applyStates();
 
-        DogLog.log("WantedState", wantedState);
-        DogLog.log("CurrentState", currentState);
+        DogLog.log("Intake/Rollers/WantedState", wantedState);
+        DogLog.log("Intake/Rollers/CurrentState", currentState);
     }
 
     public void handleStateTransitions(){
@@ -55,7 +55,7 @@ public class IntakeRollers {
                 stop();
                 break;
             case INTAKING_FUEL:
-                setVelocity(0);
+                setVelocity(0.5);
                 break;
             case REVERSE_FUEL:
                 setVelocity(0);
