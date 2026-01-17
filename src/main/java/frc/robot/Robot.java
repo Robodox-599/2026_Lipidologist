@@ -7,21 +7,20 @@ package frc.robot;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Tracer;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 
 public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
 
+  private final Indexer indexer;
+
   final CommandXboxController driver =
       new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
   final CommandXboxController operator = new CommandXboxController(Constants.ControllerConstants.kOperatorControllerPort);
-  // final Superstructure superstructure = new Superstructure();
-
-  // final AutoFactory autoFactory;
 
 @Override
   protected void loopFunc() {
@@ -29,6 +28,8 @@ public class Robot extends TimedRobot {
   }
 
   public Robot() {
+    indexer = new Indexer(new IndexerIOTalonFX());
+
     DogLog.setOptions(
         new DogLogOptions()
             .withCaptureDs(true)
@@ -44,6 +45,13 @@ public class Robot extends TimedRobot {
     }
 
     // new Bindings(driver, operator, superstructure);
+
+    operator.rightTrigger().onTrue(Commands.runOnce(() -> indexer.setWantedState(Indexer.WantedState.TRANSFER_FUEL)));
+    operator.rightBumper().onTrue(Commands.runOnce(() -> indexer.setWantedState(Indexer.WantedState.REVERSE)));
+
+    operator.leftTrigger().onTrue(Commands.runOnce(() -> indexer.setWantedState(Indexer.WantedState.PULSE_FUEL)));
+
+    operator.x().onTrue(Commands.runOnce(() -> indexer.setWantedState(Indexer.WantedState.STOPPED)));
   }
 
   @Override
