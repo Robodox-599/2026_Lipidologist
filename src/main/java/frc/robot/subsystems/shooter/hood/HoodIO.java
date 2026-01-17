@@ -4,6 +4,7 @@ public class HoodIO {
     protected double position = 0;
     protected double velocity = 0;
     protected double wantedPosition = 0;
+    protected double targetPosition = 0;
     protected boolean isHoodInPosition = false;
 
     public void updateInputs() {}

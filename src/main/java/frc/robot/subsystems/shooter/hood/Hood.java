@@ -1,22 +1,23 @@
 package frc.robot.subsystems.shooter.hood;
 
 import dev.doglog.DogLog;
+import frc.robot.subsystems.shooter.flywheels.Flywheels;
 
 public class Hood extends HoodIO{
     private final HoodIO io;
-    private HoodWantedState hoodWantedState = HoodWantedState.STOPPED;
-    private HoodCurrentState hoodCurrentState = HoodCurrentState.STOPPED;
+    private WantedState wantedState = WantedState.STOPPED;
+    private CurrentState currentState = CurrentState.STOPPED;
 
     public Hood(HoodIO io) {
         this.io = io;
     }
 
-    public enum HoodWantedState {
+    public enum WantedState {
         MOVE_TO_POSITION,
         STOPPED
     }
 
-    public enum HoodCurrentState {
+    public enum CurrentState {
         MOVING_TO_POSITION,
         STOPPED
     }
@@ -25,28 +26,28 @@ public class Hood extends HoodIO{
         io.updateInputs();
         handleStateTransitions();
         applyStates();
-        DogLog.log("Hood/Wanted State", hoodWantedState);
-        DogLog.log("Hood/Current State", hoodCurrentState);
+        DogLog.log("Hood/Wanted State", wantedState);
+        DogLog.log("Hood/Current State", currentState);
     }
 
     public void handleStateTransitions() {
-        switch(hoodWantedState) {
+        switch(wantedState) {
             case MOVE_TO_POSITION:
-            hoodCurrentState = HoodCurrentState.MOVING_TO_POSITION;
+            currentState = CurrentState.MOVING_TO_POSITION;
             break;
             case STOPPED:
-            hoodCurrentState = HoodCurrentState.STOPPED;
+            currentState = CurrentState.STOPPED;
             break;
             default:
-            hoodCurrentState = HoodCurrentState.STOPPED;
+            currentState = CurrentState.STOPPED;
             break;
         }
     }
 
     private void applyStates() {
-        switch (hoodCurrentState) {
+        switch (currentState) {
             case MOVING_TO_POSITION:
-            setPosition(0);
+            setPosition(io.targetPosition);
             break;
             case STOPPED:
             stop();
@@ -67,5 +68,14 @@ public class Hood extends HoodIO{
     
     public boolean isHoodAtSetpoint() {
         return io.isHoodInPosition;
+    }
+
+    public void setWantedState(Hood.WantedState WantedState){
+      this.wantedState = WantedState;
+    }
+
+    public void setWantedState(Hood.WantedState WantedState, double position){
+      this.wantedState = WantedState;
+      io.targetPosition = position;
     }
 }

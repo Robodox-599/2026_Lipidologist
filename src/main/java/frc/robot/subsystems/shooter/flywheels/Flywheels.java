@@ -70,11 +70,11 @@ public class Flywheels extends FlywheelsIO{
         return io.isFlywheelAtSetpoint;
     }
     
-    public void setFlywheelWantedState(WantedState WantedState){
+    public void setWantedState(Flywheels.WantedState WantedState){
       this.wantedState = WantedState;
     }
 
-    public void setFlywheelWantedState(WantedState WantedState, double RPM){
+    public void setWantedState(Flywheels.WantedState WantedState, double RPM){
       this.wantedState = WantedState;
       io.targetRPM = RPM;
     }
