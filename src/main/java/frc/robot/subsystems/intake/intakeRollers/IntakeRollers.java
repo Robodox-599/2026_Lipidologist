@@ -3,7 +3,7 @@ package frc.robot.subsystems.intake.intakeRollers;
 import dev.doglog.DogLog;
 
 public class IntakeRollers {
-    private final IntakeRollersIO io;
+    private IntakeRollersIO io;
     private WantedState wantedState = WantedState.STOPPED;
     private CurrentState currentState = CurrentState.STOPPED;
     
@@ -29,13 +29,14 @@ public class IntakeRollers {
         applyStates();
 
         DogLog.log("WantedState", wantedState);
+        DogLog.log("CurrentState", currentState);
     }
 
     public void handleStateTransitions(){
         switch(wantedState){
             case STOPPED:
                 currentState = CurrentState.STOPPED;
-                break;  
+                break;
             case INTAKING_FUEL:
                 currentState = CurrentState.INTAKING_FUEL;
                 break;
@@ -68,6 +69,10 @@ public class IntakeRollers {
 
     public void setVelocity(double velocity){
         io.setVelocity(velocity);
+    }
+
+    public void setWantedState(WantedState intakeRollersWantedState){
+        this.wantedState = intakeRollersWantedState;
     }
 
 
