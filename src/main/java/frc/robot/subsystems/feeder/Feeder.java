@@ -80,7 +80,7 @@ public class Feeder extends SubsystemBase {
     io.stopFeeder();
   }
 
-  public void setWantedState(WantedState wantedState){
+  public void setWantedState(Feeder.WantedState wantedState){
     this.wantedState = wantedState;
   }
 
