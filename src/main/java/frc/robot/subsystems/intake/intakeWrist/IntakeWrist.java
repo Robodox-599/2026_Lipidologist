@@ -71,14 +71,11 @@ public class IntakeWrist {
         io.stop();
     }
 
-    public void setWantedState(WantedState wantedState){
-        io.wantedState = wantedState;
+    public void setWantedState(WantedState intakeWristWantedState){
+        io.wantedState = intakeWristWantedState;
     }
 
     public void setPosition(double position){
         io.wantedPosition = position;
     }
-    
-
-
 }
