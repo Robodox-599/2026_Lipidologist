@@ -106,7 +106,7 @@ public class Climb extends SubsystemBase {
     io.zeroClimbPosition();
   }
 
-  public void setClimbWantedState(ClimbWantedState indexerWantedState){
+  public void setWantedState(ClimbWantedState indexerWantedState){
     this.climbWantedState = indexerWantedState;
   }
 
