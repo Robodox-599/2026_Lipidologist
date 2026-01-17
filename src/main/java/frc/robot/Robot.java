@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
         break;
     }
 
-    superstructure = new Superstructure(drivetrain);
+    superstructure = new Superstructure(driver, drivetrain);
 
     new Bindings(driver, operator, superstructure);
   }

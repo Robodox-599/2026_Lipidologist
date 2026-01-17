@@ -45,11 +45,11 @@ import java.util.function.Supplier;
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
 
+  private static final double LOOKAHEAD_TIME = 0.3;
+
   private final Telemetry telemetry =
       new Telemetry(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond));
   CommandXboxController driver;
-  private double MaxSpeed =
-      TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
   private double MaxAngularRate =
       RotationsPerSecond.of(0.75)
           .in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -60,7 +60,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
           .withDriveRequestType(
               DriveRequestType.Velocity); // Use open-loop control for drive motors
 
-  private Rotation2d targetRotation;
+  private Translation2d target;
+              private Rotation2d targetRotation;
 
   private final PIDController choreoXController = new PIDController(5, 0, 0);
   private final PIDController choreoYController = new PIDController(5, 0, 0);
@@ -278,9 +279,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
 
   private void applyStates() {
+    ChassisSpeeds controllerSpeeds = new ChassisSpeeds(-joystickDeadbandApply(driver.getLeftY()) * TunerConstants.MaxSpeed, -joystickDeadbandApply(driver.getLeftX()) * TunerConstants.MaxSpeed, joystickDeadbandApply(-driver.getRightX()) * MaxAngularRate);
     switch (currentState) {
       case TELEOP_DRIVE:
-        ChassisSpeeds controllerSpeeds = new ChassisSpeeds(-joystickDeadbandApply(driver.getLeftY()) * MaxSpeed, -joystickDeadbandApply(driver.getLeftX()) * MaxSpeed, joystickDeadbandApply(-driver.getRightX()) * MaxAngularRate);
         setControl(
             drive
                 .withVelocityX(controllerSpeeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
@@ -293,12 +294,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
       case ROTATION_LOCK:
         setControl(
             driveAtAngle
-                .withVelocityX(
-                    -joystickDeadbandApply(driver.getLeftY())
-                        * MaxSpeed) // Drive forward with negative Y (forward)
-                .withVelocityY(
-                    -joystickDeadbandApply(driver.getLeftX())
-                        * MaxSpeed) // Drive left with negative X (left)
+                .withVelocityX(controllerSpeeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
+                .withVelocityY(controllerSpeeds.vyMetersPerSecond) // Drive left with negative X (left)
                 .withTargetDirection(targetRotation));
         break;
       case CHOREO_TRAJECTORY:
@@ -375,7 +372,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
 
   /* JOYSTICK DEADBAND */
-  private static double joystickDeadbandApply(double x) {
+  public double joystickDeadbandApply(double x) {
     return MathUtil.applyDeadband(
         (Math.signum(x) * (1.01 * Math.pow(x, 2) - 0.0202 * x + 0.0101)), 0.02);
   }

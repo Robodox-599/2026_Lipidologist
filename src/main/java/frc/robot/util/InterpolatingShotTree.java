@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public class InterpolatingShotTree {
     private final TreeMap<Double, ShotData> map = new TreeMap<>();
 
+  public record ShotData(double hoodAngle, double RPM, double flightTime) {}
+
   public InterpolatingShotTree() {}
 
   /**
@@ -49,8 +51,9 @@ public class InterpolatingShotTree {
   private ShotData interpolate(ShotData startValue, ShotData endValue, double t) {
     return new ShotData(
             MathUtil.interpolate(
-                startValue.getHoodAngle(), endValue.getHoodAngle(), t),
-        MathUtil.interpolate(startValue.getRPM(), endValue.getRPM(), t));
+                startValue.hoodAngle(), endValue.hoodAngle(), t),
+        MathUtil.interpolate(startValue.RPM(), endValue.RPM(), t), 
+        MathUtil.interpolate(startValue.flightTime(), endValue.flightTime(), t));
   }
 
   private double inverseInterpolate(Double upper, Double query, Double lower) {

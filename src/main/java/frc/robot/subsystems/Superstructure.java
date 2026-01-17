@@ -1,8 +1,17 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.FieldConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.constants.TunerConstants;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.indexer.Indexer;
@@ -11,6 +20,11 @@ import frc.robot.util.CalculateShot;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 
 public class Superstructure extends SubsystemBase {
+
+  public record AdjustedShot(Translation2d adjustedHubTranslation, Rotation2d targetRotation) {}  
+  private static final double LOOKAHEAD_TIME = 0.3;
+
+    private final CommandXboxController driver;
     private final CommandSwerveDrivetrain drivetrain;
     // private final Intake intake;
     // private final Feeder feeder;
@@ -46,6 +60,7 @@ public class Superstructure extends SubsystemBase {
     private AutomationLevel automationLevel = AutomationLevel.AUTO_SHOOT;
 
     public Superstructure(
+        CommandXboxController driver,
         CommandSwerveDrivetrain drivetrain
         // Intake intake,
         // Feeder feeder, 
@@ -54,6 +69,7 @@ public class Superstructure extends SubsystemBase {
         // Flywheels flywheels
         ) {
         this.drivetrain = drivetrain;
+        this.driver = driver;
         // this.intake = intake;
         // this.feeder = feeder;
         // this.indexer = indexer;
@@ -91,7 +107,44 @@ public class Superstructure extends SubsystemBase {
     }
 
     public void preparingHubShot() {
-        
+        AdjustedShot adjustedShot = calculatedAdjustedHubPosition();
+        Translation2d currentTranslation = drivetrain.getPose().getTranslation();
+        double adjustedDistance = currentTranslation.getDistance(adjustedShot.adjustedHubTranslation());
+
+        Rotation2d targetRotation = adjustedShot.targetRotation();
+        double shootSpeed = shotCalculator.getRPM(adjustedDistance);
+        double hoodAngle = shotCalculator.getHoodAngle(adjustedDistance);
+
+        drivetrain.setTargetRotation(targetRotation);
+    }
+
+    public AdjustedShot calculatedAdjustedHubPosition() {
+        Pose2d pose = drivetrain.getPose();
+        ChassisSpeeds currentChassisSpeeds = drivetrain.getChassisSpeeds();
+
+        Translation2d currentTranslation = pose.getTranslation();
+        Translation2d hubTranslation = DriverStation.getAlliance().orElseGet(() -> Alliance.Blue).equals(Alliance.Blue) ? FieldConstants.blueHub : FieldConstants.redHub;
+
+        ChassisSpeeds controllerChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-drivetrain.joystickDeadbandApply(driver.getLeftY())
+                        * TunerConstants.MaxSpeed, -drivetrain.joystickDeadbandApply(driver.getLeftX())
+                        * TunerConstants.MaxSpeed, 0.0, pose.getRotation());
+
+        ChassisSpeeds averageChassisSpeeds = new ChassisSpeeds((controllerChassisSpeeds.vxMetersPerSecond + currentChassisSpeeds.vxMetersPerSecond) / 2.0, (controllerChassisSpeeds.vyMetersPerSecond + currentChassisSpeeds.vyMetersPerSecond) / 2.0, 0.0);
+        // average the controller and robot chassis speeds in order to account for robot speed and what the controller is commanding
+
+        double distance = currentTranslation.getDistance(hubTranslation);
+
+        double flightTime = shotCalculator.getFlightTime(distance);
+
+        Translation2d adjustedHubTranslation = new Translation2d(hubTranslation.getX() - (averageChassisSpeeds.vxMetersPerSecond * flightTime), hubTranslation.getY() - (averageChassisSpeeds.vyMetersPerSecond * flightTime));
+        // flight time multiplied by the robot's x or y velocity = the distance compensation needed 
+        // that compensation is subtracted from the hub's actual position
+
+        Translation2d swerveLookAheadTranslation = currentTranslation.plus(new Translation2d(averageChassisSpeeds.vxMetersPerSecond * LOOKAHEAD_TIME, averageChassisSpeeds.vyMetersPerSecond * LOOKAHEAD_TIME));
+
+        Rotation2d targetRotation = Rotation2d.fromRadians(Math.atan2(adjustedHubTranslation.getY() - swerveLookAheadTranslation.getY(), adjustedHubTranslation.getX() - swerveLookAheadTranslation.getX()));
+
+        return new AdjustedShot(adjustedHubTranslation, targetRotation);
     }
 
     private boolean areSystemsReadyForShot() {
