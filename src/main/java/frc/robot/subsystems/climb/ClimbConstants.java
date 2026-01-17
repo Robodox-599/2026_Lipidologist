@@ -34,6 +34,7 @@ public class ClimbConstants {
   public static final double inchesPerRev = 0.0;
   public static final double climbLowerLimit = 0.0;
   public static final double climbUpperLimit = 100.0;
+  public static final double positionToleranceInches = 0.0;
 
   public static double convertToTicks(double height) {
     return height / inchesPerRev;
