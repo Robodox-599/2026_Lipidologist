@@ -13,7 +13,6 @@ import frc.robot.FieldConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.constants.TunerConstants;
 import frc.robot.subsystems.feeder.Feeder;
-import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.util.CalculateShot;
@@ -29,8 +28,8 @@ public class Superstructure extends SubsystemBase {
     // private final Intake intake;
     // private final Feeder feeder;
     // private final Indexer indexer;
-    // private final Hood hood;
-    // private final Flywheels flywheels;
+    private final Hood hood;
+    private final Flywheels flywheels;
     private final CalculateShot shotCalculator = new CalculateShot();
 
     public enum WantedSuperState {
@@ -63,20 +62,20 @@ public class Superstructure extends SubsystemBase {
 
     public Superstructure(
         CommandXboxController driver,
-        CommandSwerveDrivetrain drivetrain
+        CommandSwerveDrivetrain drivetrain,
         // Intake intake,
         // Feeder feeder, 
         // Indexer indexer,
-        // Hood hood,
-        // Flywheels flywheels
+        Hood hood,
+        Flywheels flywheels
         ) {
         this.drivetrain = drivetrain;
         this.driver = driver;
         // this.intake = intake;
         // this.feeder = feeder;
         // this.indexer = indexer;
-        // this.hood = hood;
-        // this.flywheels = flywheels;
+        this.hood = hood;
+        this.flywheels = flywheels;
     }
 
     @Override
@@ -113,6 +112,7 @@ public class Superstructure extends SubsystemBase {
         AdjustedShot adjustedShot = calculatedAdjustedShot();
 
         drivetrain.setTargetRotation(adjustedShot.targetRotation());
+        flywheels.setFlywheelWantedState(Flywheels.FlywheelWantedState.SET_VELOCITY, adjustedShot.shootSpeed());
         
     }
 
