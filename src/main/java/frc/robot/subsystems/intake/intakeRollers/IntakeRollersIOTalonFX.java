@@ -41,6 +41,8 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         intakeRollersConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         intakeRollersConfig.CurrentLimits.StatorCurrentLimit = IntakeRollersConstants.supplyCurrentLimit;
 
+        intakeRollersMotor.getConfigurator().apply(intakeRollersConfig);
+
         intakeRollersPosition = intakeRollersMotor.getPosition(); //?
         intakeRollersVelocity = intakeRollersMotor.getVelocity();
         intakeRollersAppliedVolts = intakeRollersMotor.getMotorVoltage();
