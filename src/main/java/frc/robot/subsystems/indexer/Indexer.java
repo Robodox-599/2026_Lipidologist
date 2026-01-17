@@ -9,17 +9,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Indexer extends SubsystemBase {
   private final IndexerIO io;
-  private IndexerWantedState indexerWantedState = IndexerWantedState.STOPPED;
-  private IndexerCurrentState indexerCurrentState = IndexerCurrentState.STOPPING;
+  private WantedState wantedState = WantedState.STOPPED;
+  private CurrentState currentState = CurrentState.STOPPING;
 
-  public enum IndexerWantedState{
+  public enum WantedState{
     TRANSFER_FUEL,
     PULSE_FUEL,
     REVERSE,
     STOPPED,
   }
 
-  public enum IndexerCurrentState{
+  public enum CurrentState{
     TRANSFERING_FUEL,
     PULSING_FUEL,
     REVERSING,
@@ -37,33 +37,33 @@ public class Indexer extends SubsystemBase {
     handleStateTransitions();
     applyStates();
 
-    DogLog.log("Indexer/wantedState", indexerWantedState);
-    DogLog.log("Indexer/currentState", indexerCurrentState);
+    DogLog.log("Indexer/wantedState", wantedState);
+    DogLog.log("Indexer/currentState", currentState);
 
   }
 
   public void handleStateTransitions(){
-    switch (indexerCurrentState) {
+    switch (currentState) {
         case STOPPING:
-            indexerCurrentState = IndexerCurrentState.STOPPING;
+            currentState = CurrentState.STOPPING;
             break;
         case TRANSFERING_FUEL:
-            indexerCurrentState = IndexerCurrentState.TRANSFERING_FUEL;
+            currentState = CurrentState.TRANSFERING_FUEL;
             break;
         case PULSING_FUEL:
-            indexerCurrentState = IndexerCurrentState.PULSING_FUEL; // use time wpilib func
+            currentState = CurrentState.PULSING_FUEL; // use time wpilib func
             break;
         case REVERSING:
-            indexerCurrentState = IndexerCurrentState.REVERSING;
+            currentState = CurrentState.REVERSING;
             break;
         default:
-            indexerCurrentState = IndexerCurrentState.STOPPING;
+            currentState = CurrentState.STOPPING;
             break;
     }
   }
 
   public void applyStates(){
-    switch(indexerCurrentState){
+    switch(currentState){
       case STOPPING:
         stopIndexer();
         break;
@@ -90,8 +90,8 @@ public class Indexer extends SubsystemBase {
     io.stopIndexer();
   }
 
-  public void setIndexerWantedState(IndexerWantedState indexerWantedState){
-    this.indexerWantedState = indexerWantedState;
+  public void setWantedState(WantedState wantedState){
+    this.wantedState = wantedState;
   }
 
   public void indexerPulseFuel(double volts){
