@@ -10,21 +10,23 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Tracer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.climb.Climb;
+import frc.robot.subsystems.climb.ClimbIOTalonFX;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.constants.TunerConstants;
 
 public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
 
+  private final Climb climb;
+
   final CommandXboxController driver =
       new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
   final CommandXboxController operator = new CommandXboxController(Constants.ControllerConstants.kOperatorControllerPort);
   final CommandSwerveDrivetrain drivetrain;
-  // final Superstructure superstructure = new Superstructure();
-
-  // final AutoFactory autoFactory;
 
 @Override
   protected void loopFunc() {
@@ -32,6 +34,8 @@ public class Robot extends TimedRobot {
   }
 
   public Robot() {
+    climb = new Climb(new ClimbIOTalonFX());
+
     DogLog.setOptions(
         new DogLogOptions()
             .withCaptureDs(true)
@@ -49,6 +53,12 @@ public class Robot extends TimedRobot {
     }
 
     // new Bindings(driver, operator, superstructure);
+    operator.leftTrigger().onTrue(Commands.runOnce(() -> climb.setWantedState(Climb.WantedState.MOVE_LEFT_TO_POSITION)));
+    operator.rightTrigger().onTrue(Commands.runOnce(() -> climb.setWantedState(Climb.WantedState.MOVE_RIGHT_TO_POSITION)));
+
+    operator.y().onTrue(Commands.runOnce(() -> climb.setWantedState(Climb.WantedState.MOVE_BOTH_TO_POSITION)));
+
+    operator.x().onTrue(Commands.runOnce(() -> climb.setWantedState(Climb.WantedState.STOPPED)));
   }
 
   @Override
