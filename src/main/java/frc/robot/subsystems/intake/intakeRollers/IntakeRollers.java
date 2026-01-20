@@ -54,10 +54,10 @@ public class IntakeRollers {
                 stop();
                 break;
             case INTAKING_FUEL:
-                setVelocity(0);
+                setVoltage(0);
                 break;
             case REVERSE_FUEL:
-                setVelocity(0);
+                setVoltage(0);
                 break;
         }
     }
@@ -72,6 +72,10 @@ public class IntakeRollers {
 
     public void setWantedState(IntakeRollers.WantedState wantedState){
         this.wantedState = wantedState;
+    }
+
+    public void setVoltage(double voltage){
+        io.setVoltage(voltage);
     }
 
 
