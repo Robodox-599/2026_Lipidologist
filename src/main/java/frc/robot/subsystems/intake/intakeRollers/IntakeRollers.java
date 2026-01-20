@@ -27,9 +27,8 @@ public class IntakeRollers {
         io.updateInputs();
         handleStateTransitions();
         applyStates();
-
-        DogLog.log("WantedState", wantedState);
-        DogLog.log("CurrentState", currentState);
+        DogLog.log("Intake/Rollers/WantedState", wantedState);
+        DogLog.log("Intake/Rollers/CurrentState", currentState);
     }
 
     public void handleStateTransitions(){

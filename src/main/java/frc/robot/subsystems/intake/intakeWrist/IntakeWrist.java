@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.intake.intakeWrist;
 
+import dev.doglog.DogLog;
+
 /** Add your docs here. */
 public class IntakeWrist {
     private IntakeWristIO io;
@@ -30,6 +32,8 @@ public class IntakeWrist {
         io.updateInputs();
         handleStateTransitions();
         applyStates();
+        DogLog.log("Intake/Wrist/WantedState", wantedState);
+        DogLog.log("Intake/Wrist/CurrentState", currentState);
     }
 
     public void handleStateTransitions(){
