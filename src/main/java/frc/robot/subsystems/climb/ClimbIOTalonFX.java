@@ -23,12 +23,20 @@ public class ClimbIOTalonFX extends ClimbIO {
   private final TalonFX rightMotor;
 
   private final MotionMagicVoltage motionMagicRequest;
-  private final StatusSignal<Angle> climbPosition;
-  private final StatusSignal<AngularVelocity> climbVelocity;
-  private final StatusSignal<Voltage> climbAppliedVolts;
-  private final StatusSignal<Current> climbStatorCurrent;
-  private final StatusSignal<Current> climbSupplyCurrent;
-  private final StatusSignal<Temperature> climbTempCelsius;
+
+  private final StatusSignal<Angle> leftClimbMotorPosition;
+  private final StatusSignal<AngularVelocity> leftClimbMotorVelocity;
+  private final StatusSignal<Voltage> leftClimbMotorAppliedVolts;
+  private final StatusSignal<Current> leftClimbMotorStatorCurrent;
+  private final StatusSignal<Current> leftClimbMotorSupplyCurrent;
+  private final StatusSignal<Temperature> leftClimbMotorTempCelsius;
+
+  private final StatusSignal<Angle> rightClimbMotorPosition;
+  private final StatusSignal<AngularVelocity> rightClimbMotorVelocity;
+  private final StatusSignal<Voltage> rightClimbMotorAppliedVolts;
+  private final StatusSignal<Current> rightClimbMotorStatorCurrent;
+  private final StatusSignal<Current> rightClimbMotorSupplyCurrent;
+  private final StatusSignal<Temperature> rightClimbMotorTempCelsius;
 
   public ClimbIOTalonFX() {
     leftMotor = new TalonFX(ClimbConstants.climbLeaderMotorID, ClimbConstants.climbFollowerMotorCANbus);
@@ -80,16 +88,25 @@ public class ClimbIOTalonFX extends ClimbIO {
     PhoenixUtil.tryUntilOk(10, () -> leftMotor.getConfigurator().apply(leftMotorConfig, 1));
     PhoenixUtil.tryUntilOk(10, () -> rightMotor.getConfigurator().apply(rightMotorConfig, 1));
 
-    climbPosition = leftMotor.getPosition();
-    climbVelocity = leftMotor.getVelocity();
-    climbAppliedVolts = leftMotor.getMotorVoltage();
-    climbStatorCurrent = leftMotor.getStatorCurrent();
-    climbSupplyCurrent = leftMotor.getSupplyCurrent();
-    climbTempCelsius = leftMotor.getDeviceTemp();
+    leftClimbMotorPosition = leftMotor.getPosition();
+    leftClimbMotorVelocity = leftMotor.getVelocity();
+    leftClimbMotorAppliedVolts = leftMotor.getMotorVoltage();
+    leftClimbMotorStatorCurrent = leftMotor.getStatorCurrent();
+    leftClimbMotorSupplyCurrent = leftMotor.getSupplyCurrent();
+    leftClimbMotorTempCelsius = leftMotor.getDeviceTemp();
+
+    rightClimbMotorPosition = rightMotor.getPosition();
+    rightClimbMotorVelocity = rightMotor.getVelocity();
+    rightClimbMotorAppliedVolts = rightMotor.getMotorVoltage();
+    rightClimbMotorStatorCurrent = rightMotor.getStatorCurrent();
+    rightClimbMotorSupplyCurrent = rightMotor.getSupplyCurrent();
+    rightClimbMotorTempCelsius = rightMotor.getDeviceTemp();
     
     BaseStatusSignal.setUpdateFrequencyForAll(
-        100.0, climbVelocity, climbTempCelsius, 
-          climbPosition, climbStatorCurrent, climbSupplyCurrent, climbAppliedVolts);
+        100.0, leftClimbMotorVelocity, leftClimbMotorTempCelsius, leftClimbMotorPosition, 
+        leftClimbMotorStatorCurrent, leftClimbMotorSupplyCurrent, leftClimbMotorAppliedVolts, leftClimbMotorTempCelsius,
+          rightClimbMotorVelocity, rightClimbMotorTempCelsius, rightClimbMotorPosition, rightClimbMotorStatorCurrent, 
+            rightClimbMotorSupplyCurrent, rightClimbMotorAppliedVolts, rightClimbMotorTempCelsius);
 
     leftMotor.optimizeBusUtilization();
     rightMotor.optimizeBusUtilization();
@@ -100,22 +117,46 @@ public class ClimbIOTalonFX extends ClimbIO {
   @Override
   public void updateClimbInputs() {
     BaseStatusSignal.refreshAll
-      (climbVelocity, climbTempCelsius, climbPosition, climbStatorCurrent, climbSupplyCurrent, climbAppliedVolts);
+      (leftClimbMotorVelocity, leftClimbMotorTempCelsius, leftClimbMotorPosition, 
+        leftClimbMotorStatorCurrent, leftClimbMotorSupplyCurrent, leftClimbMotorAppliedVolts, leftClimbMotorTempCelsius,
+          rightClimbMotorVelocity, rightClimbMotorTempCelsius, rightClimbMotorPosition, rightClimbMotorStatorCurrent, 
+            rightClimbMotorSupplyCurrent, rightClimbMotorAppliedVolts, rightClimbMotorTempCelsius);
 
-    super.positionInches = climbPosition.getValueAsDouble() * ClimbConstants.inchesPerRev;
-    super.targetPositionInches = motionMagicRequest.Position * ClimbConstants.inchesPerRev;
-    super.velocityInchesPerSec = climbVelocity.getValueAsDouble() * ClimbConstants.inchesPerRev;
-    super.appliedVolts = climbAppliedVolts.getValueAsDouble();
-    super.statorCurrent = climbStatorCurrent.getValueAsDouble();
-    super.supplyCurrent = climbSupplyCurrent.getValueAsDouble();
+    // left motor
+    super.leftMotorPositionInches = leftClimbMotorPosition.getValueAsDouble() * ClimbConstants.inchesPerRev;
+    super.leftMotorTargetPositionInches = motionMagicRequest.Position * ClimbConstants.inchesPerRev;
+    super.leftMotorVelocityInchesPerSec = leftClimbMotorVelocity.getValueAsDouble() * ClimbConstants.inchesPerRev;
+    super.leftMotorAppliedVolts = leftClimbMotorAppliedVolts.getValueAsDouble();
+    super.leftMotorStatorCurrent = leftClimbMotorStatorCurrent.getValueAsDouble();
+    super.leftMotorSupplyCurrent = leftClimbMotorSupplyCurrent.getValueAsDouble();
+    super.leftMotorTempCelsius = leftClimbMotorTempCelsius.getValueAsDouble();
 
-    DogLog.log("Climb/PositionInches", super.positionInches);
-    DogLog.log("Climb/TargetPositionInches", super.targetPositionInches);
-    DogLog.log("Climb/VelocityInchesPerSec", super.velocityInchesPerSec);
-    DogLog.log("Climb/StatorCurrent", super.statorCurrent);
-    DogLog.log("Climb/SupplyCurrent", super.supplyCurrent);
-    DogLog.log("Climb/AppliedVoltage", super.appliedVolts);
-    DogLog.log("Climb/TempCelcius", super.tempCelsius);
+    // right motor
+    super.rightMotorPositionInches = rightClimbMotorPosition.getValueAsDouble() * ClimbConstants.inchesPerRev;
+    super.rightMotorTargetPositionInches = motionMagicRequest.Position * ClimbConstants.inchesPerRev;
+    super.rightMotorVelocityInchesPerSec = rightClimbMotorVelocity.getValueAsDouble() * ClimbConstants.inchesPerRev;
+    super.rightMotorAppliedVolts = rightClimbMotorAppliedVolts.getValueAsDouble();
+    super.rightMotorStatorCurrent = rightClimbMotorStatorCurrent.getValueAsDouble();
+    super.rightMotorSupplyCurrent = rightClimbMotorSupplyCurrent.getValueAsDouble();
+    super.rightMotorTempCelsius = rightClimbMotorTempCelsius.getValueAsDouble();
+
+    // left motor
+    DogLog.log("Climb/LeftPositionInches", super.leftMotorPositionInches);
+    DogLog.log("Climb/LeftTargetPositionInches", super.leftMotorTargetPositionInches);
+    DogLog.log("Climb/LeftVelocityInchesPerSec", super.leftMotorVelocityInchesPerSec);
+    DogLog.log("Climb/LeftStatorCurrent", super.leftMotorStatorCurrent);
+    DogLog.log("Climb/LeftSupplyCurrent", super.leftMotorSupplyCurrent);
+    DogLog.log("Climb/LeftAppliedVoltage", super.leftMotorAppliedVolts);
+    DogLog.log("Climb/LeftTempCelcius", super.leftMotorTempCelsius);
+
+    // right motor
+    DogLog.log("Climb/RightPositionInches", super.rightMotorPositionInches);
+    DogLog.log("Climb/RightTargetPositionInches", super.rightMotorTargetPositionInches);
+    DogLog.log("Climb/RightVelocityInchesPerSec", super.rightMotorVelocityInchesPerSec);
+    DogLog.log("Climb/RightStatorCurrent", super.rightMotorStatorCurrent);
+    DogLog.log("Climb/RightSupplyCurrent", super.rightMotorSupplyCurrent);
+    DogLog.log("Climb/RightAppliedVoltage", super.rightMotorAppliedVolts);
+    DogLog.log("Climb/RightTempCelcius", super.rightMotorTempCelsius);
   }
 
   @Override
