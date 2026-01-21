@@ -19,5 +19,6 @@ public abstract class IntakeRollersIO {
     public void stop() {}
     public void setPosition(double position){}
     public void setVelocity(double velocity){}
+    public void setVoltage(double voltage){}
     
 }

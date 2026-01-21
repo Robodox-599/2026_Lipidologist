@@ -83,5 +83,8 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         intakeRollersMotor.set(velocity);
     }
 
-
+    @Override
+    public void setVoltage(double voltage){
+        intakeRollersMotor.setVoltage(voltage);
+    }
 }
