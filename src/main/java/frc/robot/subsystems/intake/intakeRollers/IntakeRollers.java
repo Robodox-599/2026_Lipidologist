@@ -1,4 +1,4 @@
-package frc.robot.subsystems.intake.intakeRollers;
+package frc.robot.subsystems.intake.intakeRollers; // make sure the folder name is all lowercase
 
 import dev.doglog.DogLog;
 

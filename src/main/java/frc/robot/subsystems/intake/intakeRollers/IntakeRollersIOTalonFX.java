@@ -41,6 +41,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         intakeRollersConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         intakeRollersConfig.CurrentLimits.StatorCurrentLimit = IntakeRollersConstants.supplyCurrentLimit;
 
+        // try to use the phoenixutil.tryuntil okay function with this (check the utils folder for more info)
         intakeRollersMotor.getConfigurator().apply(intakeRollersConfig);
 
         intakeRollersPosition = intakeRollersMotor.getPosition(); //?
@@ -78,6 +79,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         intakeRollersMotor.stopMotor();
     }
 
+    // you don't use velocity; make sure to remove it from this layer
     @Override
     public void setVelocity(double velocity){
         intakeRollersMotor.set(velocity);

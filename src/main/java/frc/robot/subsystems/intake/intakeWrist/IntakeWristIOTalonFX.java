@@ -29,6 +29,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
     public final CANcoder intakeWristCanCoder;
     public final TalonFXConfiguration intakeWristConfig;
     public final CANcoderConfiguration canCoderConfig;
+    // make sure to make this private (doesn't affect the functionality, but makes the code style consistant)
     MotionMagicVoltage m_request;
 
     public StatusSignal<Angle> intakeWristPosition;
@@ -67,8 +68,11 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
         intakeWristConfig.MotionMagic.MotionMagicCruiseVelocity = IntakeWristConstants.intakeWristMaxVelocity;
         intakeWristConfig.MotionMagic.MotionMagicCruiseVelocity = IntakeWristConstants.intakeWristMaxAcceleration;
 
+        // try to use the phoenixutil.tryuntilokay function with this (check the utils folder for more info)
         intakeWristMotor.getConfigurator().apply(intakeWristConfig);
         intakeWristCanCoder.getConfigurator().apply(canCoderConfig);
+
+
         intakeWristMotor.setNeutralMode(NeutralModeValue.Brake);
 
         intakeWristPosition = intakeWristMotor.getPosition();
