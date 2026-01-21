@@ -51,13 +51,6 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
 
         intakeWristConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         intakeWristConfig.CurrentLimits.StatorCurrentLimit = IntakeWristConstants.supplyCurrentLimit;
-        
-        intakeWristPosition = intakeWristMotor.getPosition(); //?
-        intakeWristVelocity = intakeWristMotor.getVelocity();
-        intakeWristAppliedVolts = intakeWristMotor.getMotorVoltage();
-        intakeWristStatorCurrent = intakeWristMotor.getStatorCurrent();
-        intakeWristSupplyCurrent = intakeWristMotor.getSupplyCurrent();
-        intakeWristTemperature = intakeWristMotor.getDeviceTemp();
 
         intakeWristConfig.Slot0.kP = IntakeWristConstants.kP;
         intakeWristConfig.Slot0.kI = IntakeWristConstants.kI;
