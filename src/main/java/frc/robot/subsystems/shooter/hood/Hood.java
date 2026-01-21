@@ -5,7 +5,7 @@ import dev.doglog.DogLog;
 public class Hood extends HoodIO{
     private final HoodIO io;
     private WantedState wantedState = WantedState.STOPPED;
-    private CurrentState currentState = CurrentState.STOPPED;
+    private CurrentState currentState = CurrentState.STOPPING;
 
     public Hood(HoodIO io) {
         this.io = io;
@@ -18,16 +18,16 @@ public class Hood extends HoodIO{
 
     public enum CurrentState {
         MOVING_TO_POSITION,
-        STOPPED // rename this to STOPPING
+        STOPPING 
     }
 
     public void updateInputs() {
         io.updateInputs();
         handleStateTransitions();
         applyStates();
-        // get rid of these random spaces
-        DogLog.log("Hood/Wanted State", wantedState);
-        DogLog.log("Hood/Current State", currentState);
+
+        DogLog.log("Hood/WantedState", wantedState);
+        DogLog.log("Hood/CurrentState", currentState);
     }
 
     public void handleStateTransitions() {
@@ -36,10 +36,10 @@ public class Hood extends HoodIO{
             currentState = CurrentState.MOVING_TO_POSITION;
             break;
             case STOPPED:
-            currentState = CurrentState.STOPPED;
+            currentState = CurrentState.STOPPING;
             break;
             default:
-            currentState = CurrentState.STOPPED;
+            currentState = CurrentState.STOPPING;
             break;
         }
     }
@@ -49,7 +49,7 @@ public class Hood extends HoodIO{
             case MOVING_TO_POSITION:
             setPosition(io.targetPosition);
             break;
-            case STOPPED:
+            case STOPPING:
             stop();
             break;
             default:
@@ -70,7 +70,6 @@ public class Hood extends HoodIO{
         return io.isHoodInPosition;
     }
     
-    // why are there two setWantedState functions? Get rid of whichever one you don't use
     public void setWantedState(Hood.WantedState WantedState){
       this.wantedState = WantedState;
     }

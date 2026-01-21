@@ -14,6 +14,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import frc.robot.util.PhoenixUtil;
 
 public class HoodIOTalonFX extends HoodIO {
     //motors + configuration
@@ -52,10 +53,7 @@ public class HoodIOTalonFX extends HoodIO {
         hoodMotor.setNeutralMode(NeutralModeValue.Brake);
 
         //applying configuration
-            // try to use the phoenixutil.tryuntilokay function with this (check the utils folder for more info)
-        hoodMotor.getConfigurator().apply(hoodConfiguration);
-
-        hoodMotor.setNeutralMode(NeutralModeValue.Brake);
+        PhoenixUtil.tryUntilOk(10, () -> hoodMotor.getConfigurator().apply(hoodConfiguration, 1));
 
         //status signals
         hoodVelocityRad = hoodMotor.getVelocity();
@@ -98,7 +96,6 @@ public class HoodIOTalonFX extends HoodIO {
         hoodMotor.setControl(motionMagic);
     }
 
-    //you don't use this; get rid of it
     @Override
     public void setVoltage(double voltage) {
         hoodMotor.setVoltage(voltage);

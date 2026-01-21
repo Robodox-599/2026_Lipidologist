@@ -5,7 +5,7 @@ import dev.doglog.DogLog;
 public class Flywheels extends FlywheelsIO{
     private final FlywheelsIO io;
     private WantedState wantedState = WantedState.STOPPED;
-    private CurrentState currentState = CurrentState.STOPPED;
+    private CurrentState currentState = CurrentState.STOPPING;
 
     public Flywheels(FlywheelsIO io) {
         this.io = io;
@@ -18,16 +18,16 @@ public class Flywheels extends FlywheelsIO{
 
     public enum CurrentState {
         SETTING_VELOCITY,
-        STOPPED // rename this to STOPPING
+        STOPPING
     }
     
     public void updateInputs() {
         io.updateInputs();
         handleStateTransitions();
         applyStates();
-        // make sure to get rid of these spaces; could cause errors
-        DogLog.log("Flywheel/Wanted State", wantedState);
-        DogLog.log("Flywheel/Current State", currentState);
+
+        DogLog.log("Flywheel/WantedState", wantedState);
+        DogLog.log("Flywheel/CurrentState", currentState);
     }
 
     public void handleStateTransitions() {
@@ -36,10 +36,10 @@ public class Flywheels extends FlywheelsIO{
             currentState = CurrentState.SETTING_VELOCITY;
             break;
             case STOPPED:
-            currentState = CurrentState.STOPPED;
+            currentState = CurrentState.STOPPING;
             break;
             default:
-            currentState = CurrentState.STOPPED;
+            currentState = CurrentState.STOPPING;
             break;
         }
     }
@@ -49,7 +49,7 @@ public class Flywheels extends FlywheelsIO{
             case SETTING_VELOCITY:
             setRPM(io.targetRPM);
             break;
-            case STOPPED:
+            case STOPPING:
             stop();
             break;
             default:
@@ -71,7 +71,6 @@ public class Flywheels extends FlywheelsIO{
         return io.isFlywheelAtSetpoint;
     }
     
-    // why are there two setWantedState functions? Get rid of whichever one you don't use
     public void setWantedState(Flywheels.WantedState WantedState){
       this.wantedState = WantedState;
     }

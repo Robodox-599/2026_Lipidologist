@@ -15,6 +15,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import frc.robot.util.PhoenixUtil;
 
 public class FlywheelsIOTalonFX extends FlywheelsIO{
     //motors + configuration
@@ -49,10 +50,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
         flywheelMotor.setNeutralMode(NeutralModeValue.Brake);
 
         //Applying configuration
-
-            // try to use the phoenixutil.tryuntilokay function with this (check the utils folder for more info)
-        flywheelMotor.getConfigurator().apply(flywheelConfiguration);
-        flywheelMotor.setNeutralMode(NeutralModeValue.Brake);
+        PhoenixUtil.tryUntilOk(10, () -> flywheelMotor.getConfigurator().apply(flywheelConfiguration, 1));
 
         //status signals
         flywheelVelocityRad = flywheelMotor.getVelocity();
