@@ -18,13 +18,14 @@ public class Flywheels extends FlywheelsIO{
 
     public enum CurrentState {
         SETTING_VELOCITY,
-        STOPPED
+        STOPPED // rename this to STOPPING
     }
     
     public void updateInputs() {
         io.updateInputs();
         handleStateTransitions();
         applyStates();
+        // make sure to get rid of these spaces; could cause errors
         DogLog.log("Flywheel/Wanted State", wantedState);
         DogLog.log("Flywheel/Current State", currentState);
     }
@@ -70,6 +71,7 @@ public class Flywheels extends FlywheelsIO{
         return io.isFlywheelAtSetpoint;
     }
     
+    // why are there two setWantedState functions? Get rid of whichever one you don't use
     public void setWantedState(Flywheels.WantedState WantedState){
       this.wantedState = WantedState;
     }

@@ -52,7 +52,9 @@ public class HoodIOTalonFX extends HoodIO {
         hoodMotor.setNeutralMode(NeutralModeValue.Brake);
 
         //applying configuration
+            // try to use the phoenixutil.tryuntilokay function with this (check the utils folder for more info)
         hoodMotor.getConfigurator().apply(hoodConfiguration);
+
         hoodMotor.setNeutralMode(NeutralModeValue.Brake);
 
         //status signals
@@ -87,7 +89,7 @@ public class HoodIOTalonFX extends HoodIO {
 
     @Override
     public void setPosition(double position) {
-       wantedPosition = MathUtil.clamp(position, HoodConstants.hoodMinAngle, HoodConstants.hoodMaxAngle);
+        wantedPosition = MathUtil.clamp(position, HoodConstants.hoodMinAngle, HoodConstants.hoodMaxAngle);
 
         super.wantedPosition = wantedPosition;
 
@@ -96,6 +98,7 @@ public class HoodIOTalonFX extends HoodIO {
         hoodMotor.setControl(motionMagic);
     }
 
+    //you don't use this; get rid of it
     @Override
     public void setVoltage(double voltage) {
         hoodMotor.setVoltage(voltage);

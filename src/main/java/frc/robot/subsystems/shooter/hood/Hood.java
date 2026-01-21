@@ -18,13 +18,14 @@ public class Hood extends HoodIO{
 
     public enum CurrentState {
         MOVING_TO_POSITION,
-        STOPPED
+        STOPPED // rename this to STOPPING
     }
 
     public void updateInputs() {
         io.updateInputs();
         handleStateTransitions();
         applyStates();
+        // get rid of these random spaces
         DogLog.log("Hood/Wanted State", wantedState);
         DogLog.log("Hood/Current State", currentState);
     }
@@ -68,7 +69,8 @@ public class Hood extends HoodIO{
     public boolean isHoodAtSetpoint() {
         return io.isHoodInPosition;
     }
-
+    
+    // why are there two setWantedState functions? Get rid of whichever one you don't use
     public void setWantedState(Hood.WantedState WantedState){
       this.wantedState = WantedState;
     }

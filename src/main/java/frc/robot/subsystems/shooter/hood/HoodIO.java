@@ -9,7 +9,10 @@ public class HoodIO {
 
     public void updateInputs() {}
     public void setPosition(double position) {}
+
+    // you don't use setVelocity nor setVoltage in any of your layers; get rid of them
     public void setVelocity(double velocity) {}
     public void setVoltage(double voltage) {}
+
     public void stop() {}
 }

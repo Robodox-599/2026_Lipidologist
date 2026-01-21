@@ -49,6 +49,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
         flywheelMotor.setNeutralMode(NeutralModeValue.Brake);
 
         //Applying configuration
+
+            // try to use the phoenixutil.tryuntilokay function with this (check the utils folder for more info)
         flywheelMotor.getConfigurator().apply(flywheelConfiguration);
         flywheelMotor.setNeutralMode(NeutralModeValue.Brake);
 

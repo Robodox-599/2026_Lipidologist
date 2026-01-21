@@ -9,6 +9,7 @@ public class FlywheelsIO {
 
     public void updateInputs() {}
     public void setRPM(double RPM) {}
+    // you don't use voltage in the applystates functions so get rid of it
     public void setVoltage(double voltage) {}
     public void stop() {}
 }
