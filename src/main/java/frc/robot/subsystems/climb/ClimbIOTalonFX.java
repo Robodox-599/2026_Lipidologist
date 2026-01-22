@@ -39,8 +39,8 @@ public class ClimbIOTalonFX extends ClimbIO {
   private final StatusSignal<Temperature> rightClimbMotorTempCelsius;
 
   public ClimbIOTalonFX() {
-    leftMotor = new TalonFX(ClimbConstants.climbLeaderMotorID, ClimbConstants.climbFollowerMotorCANbus);
-    rightMotor = new TalonFX(ClimbConstants.climbFollowerMotorID, ClimbConstants.climbFollowerMotorCANbus);
+    leftMotor = new TalonFX(ClimbConstants.climbLeftMotorID, ClimbConstants.climbLeftMotorCANbus);
+    rightMotor = new TalonFX(ClimbConstants.climbRightMotorID, ClimbConstants.climbRightMotorCANbus);
 
     motionMagicRequest = new MotionMagicVoltage(0).withSlot(0).withEnableFOC(true);
 
@@ -104,9 +104,10 @@ public class ClimbIOTalonFX extends ClimbIO {
     
     BaseStatusSignal.setUpdateFrequencyForAll(
         100.0, leftClimbMotorVelocity, leftClimbMotorTempCelsius, leftClimbMotorPosition, 
-        leftClimbMotorStatorCurrent, leftClimbMotorSupplyCurrent, leftClimbMotorAppliedVolts, leftClimbMotorTempCelsius,
-          rightClimbMotorVelocity, rightClimbMotorTempCelsius, rightClimbMotorPosition, rightClimbMotorStatorCurrent, 
-            rightClimbMotorSupplyCurrent, rightClimbMotorAppliedVolts, rightClimbMotorTempCelsius);
+        leftClimbMotorStatorCurrent, leftClimbMotorSupplyCurrent, leftClimbMotorAppliedVolts, 
+          leftClimbMotorTempCelsius, rightClimbMotorVelocity, rightClimbMotorTempCelsius, rightClimbMotorPosition, 
+            rightClimbMotorStatorCurrent,rightClimbMotorSupplyCurrent, rightClimbMotorAppliedVolts, 
+              rightClimbMotorTempCelsius);
 
     leftMotor.optimizeBusUtilization();
     rightMotor.optimizeBusUtilization();
@@ -159,6 +160,12 @@ public class ClimbIOTalonFX extends ClimbIO {
     DogLog.log("Climb/RightTempCelcius", super.rightMotorTempCelsius);
   }
 
+  /*
+   * This method is used to make the left motor go to whatever position we set it to in the command layer, while
+   * also clamping the range of positions it can go to
+   * 
+   * @param height A double representing a quantity of inches.
+  */
   @Override
   public void setLeftClimbHeight(double height) {
     double position = 
@@ -168,7 +175,12 @@ public class ClimbIOTalonFX extends ClimbIO {
     motionMagicRequest.Position = position;
     leftMotor.setControl(motionMagicRequest);
   }
-
+  /*
+   * This method is used to make the right motor go to whatever position we set it to in the command layer, while
+   * also clamping the range of positions it can go to
+   * 
+   * @param height A double representing a quantity of inches.
+   */
   @Override
   public void setRightClimbHeight(double height) {
     double position = 

@@ -5,11 +5,11 @@
 package frc.robot.subsystems.climb;
 
 public class ClimbConstants {
-  public static final int climbLeaderMotorID = 67;
-  public static final String climbLeaderMotorCANbus = "rio";
+  public static final int climbLeftMotorID = 67;
+  public static final String climbLeftMotorCANbus = "rio";
 
-  public static final int climbFollowerMotorID = 67;
-  public static final String climbFollowerMotorCANbus = "rio";
+  public static final int climbRightMotorID = 41;
+  public static final String climbRightMotorCANbus = "rio";
   
   public static final double climbGearRatio = 2;
   public static final double climbMOI = 2;
