@@ -12,12 +12,12 @@ public class Hood extends HoodIO{
     }
 
     public enum WantedState {
-        MOVE_TO_POSITION,
+        SET_POSITION,
         STOPPED
     }
 
     public enum CurrentState {
-        MOVING_TO_POSITION,
+        SETTING_POSITION,
         STOPPING 
     }
 
@@ -32,8 +32,8 @@ public class Hood extends HoodIO{
 
     public void handleStateTransitions() {
         switch(wantedState) {
-            case MOVE_TO_POSITION:
-            currentState = CurrentState.MOVING_TO_POSITION;
+            case SET_POSITION:
+            currentState = CurrentState.SETTING_POSITION;
             break;
             case STOPPED:
             currentState = CurrentState.STOPPING;
@@ -46,7 +46,7 @@ public class Hood extends HoodIO{
 
     private void applyStates() {
         switch (currentState) {
-            case MOVING_TO_POSITION:
+            case SETTING_POSITION:
             setPosition(io.targetPosition);
             break;
             case STOPPING:

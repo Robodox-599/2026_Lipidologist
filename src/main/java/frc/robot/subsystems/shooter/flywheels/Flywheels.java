@@ -12,12 +12,12 @@ public class Flywheels extends FlywheelsIO{
     }
 
     public enum WantedState {
-        SET_VELOCITY,
+        SET_RPM,
         STOPPED
     }
 
     public enum CurrentState {
-        SETTING_VELOCITY,
+        SETTING_RPM,
         STOPPING
     }
     
@@ -32,8 +32,8 @@ public class Flywheels extends FlywheelsIO{
 
     public void handleStateTransitions() {
         switch(wantedState) {
-            case SET_VELOCITY:
-            currentState = CurrentState.SETTING_VELOCITY;
+            case SET_RPM:
+            currentState = CurrentState.SETTING_RPM;
             break;
             case STOPPED:
             currentState = CurrentState.STOPPING;
@@ -46,7 +46,7 @@ public class Flywheels extends FlywheelsIO{
 
     private void applyStates() {
         switch (currentState) {
-            case SETTING_VELOCITY:
+            case SETTING_RPM:
             setRPM(io.targetRPM);
             break;
             case STOPPING:

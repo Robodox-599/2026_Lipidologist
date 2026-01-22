@@ -1,20 +1,23 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
+import frc.robot.subsystems.shooter.hood.Hood;
+import frc.robot.subsystems.shooter.hood.HoodIOTalonFX;
+import frc.robot.subsystems.shooter.flywheels.Flywheels;
+import frc.robot.subsystems.shooter.flywheels.FlywheelsIOTalonFX;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Tracer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Superstructure;
 
 public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
+  private final Hood hood;
+  private final Flywheels flywheels;
 
   final CommandXboxController driver =
       new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
@@ -36,18 +39,23 @@ public class Robot extends TimedRobot {
             .withNtPublish(true)
             .withCaptureConsole(true));
 
+    hood = new Hood(new HoodIOTalonFX());
+    flywheels = new Flywheels(new FlywheelsIOTalonFX());
+
     switch (Constants.currentMode) {
       case REAL:
         break;
       default:
         break;
     }
-
+    configureBindings();
     // new Bindings(driver, operator, superstructure);
   }
 
   @Override
   public void robotPeriodic() {
+    hood.updateInputs();
+    flywheels.updateInputs();
     scheduler.run();
   }
 
@@ -94,4 +102,12 @@ public class Robot extends TimedRobot {
   public void testExit() {
     scheduler.cancelAll();
   }
+
+   private void configureBindings() {
+    driver.x().onTrue(Commands.runOnce(() -> hood.setWantedState(Hood.WantedState.STOPPED)));
+    driver.x().onTrue(Commands.runOnce(() -> flywheels.setWantedState(Flywheels.WantedState.STOPPED)));
+
+    driver.a().onTrue(Commands.runOnce(() -> flywheels.setWantedState(Flywheels.WantedState.SET_RPM, 1)));
+    driver.b().onTrue(Commands.runOnce(() -> hood.setWantedState(Hood.WantedState.SET_POSITION, 4)));
+   }
 }

@@ -63,6 +63,7 @@ public class HoodIOTalonFX extends HoodIO {
         hoodStatorCurrent = hoodMotor.getStatorCurrent();
         hoodSupplyCurrent = hoodMotor.getSupplyCurrent();
 
+        //Update Frequency
         BaseStatusSignal.setUpdateFrequencyForAll(50, hoodVelocityRad, hoodTemperature, 
         hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
 
@@ -94,11 +95,6 @@ public class HoodIOTalonFX extends HoodIO {
         motionMagic = new MotionMagicVoltage(position).withSlot(0).withEnableFOC(true);
         
         hoodMotor.setControl(motionMagic);
-    }
-
-    @Override
-    public void setVoltage(double voltage) {
-        hoodMotor.setVoltage(voltage);
     }
 
     @Override
