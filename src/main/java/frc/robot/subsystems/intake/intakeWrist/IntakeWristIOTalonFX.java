@@ -107,6 +107,12 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
         DogLog.log("Intake/Wrist/Temperature", temperature);  
     }
 
+    /**
+         * stops the movement of the intakeWristMotor
+         * <ul>
+         *  <li> Units: rotations
+         * </ui>
+         */
     @Override
     public void stop(){
         intakeWristMotor.stopMotor();

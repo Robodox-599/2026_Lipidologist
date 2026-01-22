@@ -15,6 +15,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import frc.robot.util.PhoenixUtil;
 
 /** Add your docs here. */
 public class IntakeRollersIOTalonFX extends IntakeRollersIO {
@@ -41,8 +42,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         intakeRollersConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         intakeRollersConfig.CurrentLimits.StatorCurrentLimit = IntakeRollersConstants.supplyCurrentLimit;
 
-        // try to use the phoenixutil.tryuntil okay function with this (check the utils folder for more info)
-        intakeRollersMotor.getConfigurator().apply(intakeRollersConfig);
+        PhoenixUtil.tryUntilOk(10, ()-> intakeRollersMotor.getConfigurator().apply(intakeRollersConfig, 1));
 
         intakeRollersPosition = intakeRollersMotor.getPosition(); //?
         intakeRollersVelocity = intakeRollersMotor.getVelocity();
@@ -76,13 +76,10 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
 
     @Override
     public void stop(){
+        /**
+         * Stops the intakeRollersMotor
+         */
         intakeRollersMotor.stopMotor();
-    }
-
-    // you don't use velocity; make sure to remove it from this layer
-    @Override
-    public void setVelocity(double velocity){
-        intakeRollersMotor.set(velocity);
     }
 
     @Override

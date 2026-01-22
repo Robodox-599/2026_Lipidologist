@@ -2,9 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.intake.intakeWrist; // make sure the folder name is all lowercase
-
-import dev.doglog.DogLog;
+package frc.robot.subsystems.intake.intakeWrist;
 
 /** Add your docs here. */
 public class IntakeWrist {
@@ -18,22 +16,20 @@ public class IntakeWrist {
 
     enum WantedState{
         STOPPED,
-        INTAKING,
-        STOWING,
+        INTAKING_FUEL,
+        STOWING_FUEL,
     }
 
     enum CurrentState{
         STOPPED,
-        INTAKING,
-        STOWING
+        INTAKING_FUEL,
+        STOWING_FUEL
     }
 
     public void updateInputs(){
         io.updateInputs();
         handleStateTransitions();
         applyStates();
-        DogLog.log("Intake/Wrist/WantedState", wantedState);
-        DogLog.log("Intake/Wrist/CurrentState", currentState);
     }
 
     public void handleStateTransitions(){
@@ -41,11 +37,11 @@ public class IntakeWrist {
             case STOPPED:
                 currentState = CurrentState.STOPPED;
                 break;
-            case INTAKING:
-                currentState = CurrentState.INTAKING;
+            case INTAKING_FUEL:
+                currentState = CurrentState.INTAKING_FUEL;
                 break;
-            case STOWING:
-                currentState = CurrentState.STOWING;
+            case STOWING_FUEL:
+                currentState = CurrentState.STOWING_FUEL;
                 break;
             default:
                 currentState = CurrentState.STOPPED;
@@ -58,10 +54,10 @@ public class IntakeWrist {
             case STOPPED:
                 stop();
                 break;
-            case INTAKING:
+            case INTAKING_FUEL:
                 setPosition(0);
                 break;
-            case STOWING:
+            case STOWING_FUEL:
                 setPosition(0);
                 break;
             default:
