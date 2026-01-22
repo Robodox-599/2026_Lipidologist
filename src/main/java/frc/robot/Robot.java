@@ -55,6 +55,7 @@ public class Robot extends TimedRobot {
     // new Bindings(driver, operator, superstructure);
 
     driver.x().onTrue(Commands.runOnce(() -> intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKING_FUEL)));
+    driver.y().onTrue(Commands.runOnce(() -> intakeRollers.setWantedState(IntakeRollers.WantedState.STOPPED)));
   }
 
   @Override
