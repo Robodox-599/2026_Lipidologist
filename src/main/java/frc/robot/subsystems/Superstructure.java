@@ -18,12 +18,11 @@ import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.util.CalculateShot;
+import frc.robot.util.GetShotData;
+import frc.robot.util.CalculateShot.AdjustedShot;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 
 public class Superstructure extends SubsystemBase {
-
-  public record AdjustedShot(Rotation2d targetRotation, double shootSpeed, double hoodAngle) {}  
-  private static final double LOOKAHEAD_TIME = 0.3;
 
     private final CommandXboxController driver;
     private final CommandSwerveDrivetrain drivetrain;
@@ -32,7 +31,7 @@ public class Superstructure extends SubsystemBase {
     // private final Indexer indexer;
     // private final Hood hood;
     // private final Flywheels flywheels;
-    private final CalculateShot shotCalculator = new CalculateShot();
+    private final GetShotData shotCalculator = new GetShotData();
 
     public enum WantedSuperState {
         PREPARE_HUB_SHOT,
@@ -144,45 +143,13 @@ public class Superstructure extends SubsystemBase {
     }
 
     public void preparingHubShot() {
-        AdjustedShot adjustedShot = calculatedAdjustedShot();
+        AdjustedShot adjustedShot = CalculateShot.calculateAdjustedShot(drivetrain.getPose(), drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
 
         drivetrain.setTargetRotation(adjustedShot.targetRotation());
         // flywheels.setFlywheelWantedState(Flywheels.FlywheelWantedState.SET_VELOCITY, adjustedShot.shootSpeed());
         
     }
 
-    public AdjustedShot calculatedAdjustedShot() {
-        Pose2d pose = drivetrain.getPose();
-        ChassisSpeeds currentChassisSpeeds = drivetrain.getChassisSpeeds();
-
-        Translation2d currentTranslation = pose.getTranslation();
-        Translation2d hubTranslation = DriverStation.getAlliance().orElseGet(() -> Alliance.Blue).equals(Alliance.Blue) ? FieldConstants.blueHub : FieldConstants.redHub;
-
-        ChassisSpeeds controllerChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-drivetrain.joystickDeadbandApply(driver.getLeftY())
-                        * TunerConstants.MaxSpeed, -drivetrain.joystickDeadbandApply(driver.getLeftX())
-                        * TunerConstants.MaxSpeed, 0.0, pose.getRotation());
-
-        ChassisSpeeds averageChassisSpeeds = new ChassisSpeeds((controllerChassisSpeeds.vxMetersPerSecond + currentChassisSpeeds.vxMetersPerSecond) / 2.0, (controllerChassisSpeeds.vyMetersPerSecond + currentChassisSpeeds.vyMetersPerSecond) / 2.0, 0.0);
-        // average the controller and robot chassis speeds in order to account for robot speed and what the controller is commanding
-
-        double distance = currentTranslation.getDistance(hubTranslation);
-
-        double flightTime = shotCalculator.getFlightTime(distance);
-
-        Translation2d adjustedHubTranslation = new Translation2d(hubTranslation.getX() - (averageChassisSpeeds.vxMetersPerSecond * flightTime), hubTranslation.getY() - (averageChassisSpeeds.vyMetersPerSecond * flightTime));
-        // flight time multiplied by the robot's x or y velocity = the distance compensation needed 
-        // that compensation is subtracted from the hub's actual position
-
-        Translation2d swerveLookAheadTranslation = currentTranslation.plus(new Translation2d(averageChassisSpeeds.vxMetersPerSecond * LOOKAHEAD_TIME, averageChassisSpeeds.vyMetersPerSecond * LOOKAHEAD_TIME));
-
-        double adjustedDistance = currentTranslation.getDistance(adjustedHubTranslation);
-
-        Rotation2d targetRotation = Rotation2d.fromRadians(Math.atan2(adjustedHubTranslation.getY() - swerveLookAheadTranslation.getY(), adjustedHubTranslation.getX() - swerveLookAheadTranslation.getX()));
-        double shootSpeed = shotCalculator.getRPM(adjustedDistance);
-        double hoodAngle = shotCalculator.getHoodAngle(adjustedDistance);
-
-        return new AdjustedShot(targetRotation, shootSpeed, hoodAngle);
-    }
 
     private boolean areSystemsReadyForShot() {
         // flywheels.flywheelsAtSetpoint() && hood.hoodAtSetpoint() && swerve.isAimed

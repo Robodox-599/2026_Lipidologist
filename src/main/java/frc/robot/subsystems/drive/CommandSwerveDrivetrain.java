@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.FieldConstants;
 import frc.robot.subsystems.drive.constants.TunerConstants;
 import frc.robot.subsystems.drive.constants.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.util.ChassisAccelerations;
 import frc.robot.util.Tracer;
 
 import java.util.function.Supplier;
@@ -45,7 +46,7 @@ import java.util.function.Supplier;
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
 
-  private static final double LOOKAHEAD_TIME = 0.3;
+  private ChassisSpeeds prevFieldRelVelocities = new ChassisSpeeds();
 
   private final Telemetry telemetry =
       new Telemetry(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond));
@@ -243,6 +244,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
               });
     }
+    prevFieldRelVelocities = getFieldRelativeChassisSpeeds();
     Tracer.traceFunc("HandleStateTransitions", this::handleStateTransitions);
     Tracer.traceFunc("ApplyStates", this::applyStates);
     DogLog.log("Drive/CurrentState", currentState);
@@ -351,9 +353,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
 
   /* DATA */
-  public ChassisSpeeds getChassisSpeeds() {
+  public ChassisSpeeds getRobotRelativeChassisSpeeds() {
     return getState().Speeds;
   }
+
+  public ChassisSpeeds getFieldRelativeChassisSpeeds() {
+    return ChassisSpeeds.fromRobotRelativeSpeeds(getRobotRelativeChassisSpeeds(), getPose().getRotation()); // rotation may need to be flipped?
+  }
+
+  public ChassisAccelerations getFieldRelativeAccelerations() {
+        return new ChassisAccelerations(getFieldRelativeChassisSpeeds(), prevFieldRelVelocities, 0.020);
+    }
 
   public Pose2d getPose() {
     return getState().Pose;
