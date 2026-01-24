@@ -60,7 +60,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
         intakeWristConfig.Slot0.kS = IntakeWristConstants.kS;
         intakeWristConfig.Slot0.kV = IntakeWristConstants.kV;
         intakeWristConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-
+        
         intakeWristConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
         intakeWristConfig.Feedback.FeedbackRemoteSensorID = IntakeWristConstants.intakeWristCanCoderID;
         intakeWristConfig.Feedback.RotorToSensorRatio = IntakeWristConstants.intakeWristGearRatio;

@@ -63,8 +63,9 @@ public class IntakeWrist {
                     } else {
                         currentState = CurrentState.WRIST_EXTENDING;
                     }
-                    }
-                
+                } else{
+                    currentState = CurrentState.WRIST_RETRACTING;
+                }
                 break;
             default:
                 currentState = CurrentState.STOPPED;
