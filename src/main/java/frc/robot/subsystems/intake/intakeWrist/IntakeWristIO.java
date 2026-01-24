@@ -8,7 +8,7 @@ import frc.robot.subsystems.intake.intakeWrist.IntakeWrist.WantedState;
 
 /** Add your docs here. */
 public class IntakeWristIO {
-    protected double position = 0;
+    protected double targetPosition = 0;
     protected double velocity = 0;
     protected double voltage = 0;
     protected double statorCurrent = 0;
@@ -18,12 +18,15 @@ public class IntakeWristIO {
 
     public double wantedPosition = 0;
 
-    public boolean isWristInPosition = false;
+    public boolean atSetpoint = false;
     public WantedState wantedState;
 
     public void updateInputs(){}
 
     public void stop(){}
     public void setPosition(double position){}
+    public double getPosition(){
+        return 0.0;
+    }
 
 }

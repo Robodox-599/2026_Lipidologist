@@ -89,17 +89,17 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
     }
 
     public void updateInputs(){
-        super.position = intakeWristPosition.getValueAsDouble();
+        super.targetPosition = intakeWristPosition.getValueAsDouble();
         super.velocity = intakeWristPosition.getValueAsDouble();
         super.voltage = intakeWristAppliedVolts.getValueAsDouble();
         super.statorCurrent = intakeWristStatorCurrent.getValueAsDouble();
         super.supplyCurrent = intakeWristSupplyCurrent.getValueAsDouble();
         super.temperature = intakeWristTemperature.getValueAsDouble();
 
-        super.isWristInPosition = Math.abs(super.position - super.wantedPosition) < 0.02;
+        super.atSetpoint = Math.abs(super.targetPosition - super.wantedPosition) < 0.02;
 
-        DogLog.log("Intake/Wrist/position", position);
-        DogLog.log("Intake/Wrist/IsWristInPosition", super.isWristInPosition);
+        DogLog.log("Intake/Wrist/position", targetPosition);
+        DogLog.log("Intake/Wrist/IsWristInPosition", super.atSetpoint);
         DogLog.log("Intake/Wrist/Velocity", velocity);
         DogLog.log("Intake/Wrist/Voltage", voltage);
         DogLog.log("Intake/Wrist/StatorCurrent", statorCurrent);
@@ -120,7 +120,12 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
 
     @Override
     public void setPosition(double position){
-        super.wantedPosition = position;
+        super.targetPosition = position;
         intakeWristMotor.setControl(m_request.withPosition(position));
+    }
+
+    @Override
+    public double getPosition(){
+        return intakeWristMotor.getPosition().getValueAsDouble();
     }
 }

@@ -4,32 +4,39 @@
 
 package frc.robot.subsystems.intake.intakeWrist;
 
+import dev.doglog.DogLog;
+
 /** Add your docs here. */
 public class IntakeWrist {
     private IntakeWristIO io;
     private WantedState wantedState = WantedState.STOPPED;
     private CurrentState currentState = CurrentState.STOPPED;
 
-    public void intakeWristIO(IntakeWristIO io){
+    public IntakeWrist(IntakeWristIO io){
         this.io = io;
     }
 
     enum WantedState{
         STOPPED,
         INTAKING_FUEL,
-        STOWING_FUEL,
+        STOW,
+        AGITATING_FUEL
     }
 
     enum CurrentState{
         STOPPED,
         INTAKING_FUEL,
-        STOWING_FUEL
+        STOWED,
+        WRIST_RETRACTING,
+        WRIST_EXTENDING
     }
 
     public void updateInputs(){
         io.updateInputs();
         handleStateTransitions();
         applyStates();
+        DogLog.log("Intake/Wrist/WantedState", wantedState);
+        DogLog.log("Intake/Wrist/CurrentState", currentState);
     }
 
     public void handleStateTransitions(){
@@ -40,8 +47,24 @@ public class IntakeWrist {
             case INTAKING_FUEL:
                 currentState = CurrentState.INTAKING_FUEL;
                 break;
-            case STOWING_FUEL:
-                currentState = CurrentState.STOWING_FUEL;
+            case STOW:
+                currentState = CurrentState.STOWED;
+                break;
+            case AGITATING_FUEL:
+                if (currentState == CurrentState.WRIST_RETRACTING) {
+                    if (atSetpoint()) {
+                        currentState = CurrentState.WRIST_EXTENDING;
+                    } else {
+                        currentState = CurrentState.WRIST_RETRACTING;
+                    }
+                if (currentState == CurrentState.WRIST_EXTENDING){
+                    if (atSetpoint()){
+                        currentState = CurrentState.WRIST_RETRACTING;
+                    } else {
+                        currentState = CurrentState.WRIST_EXTENDING;
+                    }
+                    }
+                }
                 break;
             default:
                 currentState = CurrentState.STOPPED;
@@ -57,7 +80,13 @@ public class IntakeWrist {
             case INTAKING_FUEL:
                 setPosition(0);
                 break;
-            case STOWING_FUEL:
+            case STOWED:
+                setPosition(0);
+                break;
+            case WRIST_RETRACTING:
+                setPosition(0);
+                break;
+            case WRIST_EXTENDING:
                 setPosition(0);
                 break;
             default:
@@ -77,5 +106,10 @@ public class IntakeWrist {
 
     public void setPosition(double position){
         io.wantedPosition = position;
+    }
+
+    public boolean atSetpoint(){
+        //returns a value whether if the wrist is at target position
+        return io.atSetpoint;
     }
 }
