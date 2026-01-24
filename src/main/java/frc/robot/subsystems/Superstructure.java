@@ -119,6 +119,7 @@ public class Superstructure extends SubsystemBase {
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
                 }
+                break;
             case PREPARE_ALLIANCE_ZONE_SHOT:
             case SHOOT_ALLIANCE_ZONE:
             case IDLE:
@@ -132,20 +133,30 @@ public class Superstructure extends SubsystemBase {
 
     private void applyStates() {
         switch (currentSuperState) {
+            default:
+            case PREPARING_HUB_SHOT:
+                preparingHubShot();
+                break;
+            case SHOOTING_HUB:
+                shootingHub();
+                break;
+            case PREPARING_ALLIANCE_ZONE_SHOT:
+                preparingAllianceZoneShot();
+                break;
+            case SHOOTING_ALLIANCE_ZONE:
+                shootingAllianceZone();
+                break;
             case IDLING:
                 idling();
                 break;
             case STOPPED:
                 stop();
                 break;
-            default:
-                stop();
-                break;
         }
     }
 
     public void preparingHubShot() {
-        AdjustedShot adjustedShot = CalculateShot.calculateAdjustedShot(drivetrain.getPose(),
+        AdjustedShot adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
                 drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
 
         drivetrain.setTargetRotation(adjustedShot.targetRotation());
@@ -158,7 +169,33 @@ public class Superstructure extends SubsystemBase {
     }
 
     public void shootingHub() {
-        AdjustedShot adjustedShot = CalculateShot.calculateAdjustedShot(drivetrain.getPose(),
+        AdjustedShot adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
+                drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
+
+        drivetrain.setTargetRotation(adjustedShot.targetRotation());
+        feeder.setWantedState(Feeder.WantedState.FEED_FUEL);
+        indexer.setWantedState(Indexer.WantedState.TRANSFER_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKING_FUEL);
+        intakeWrist.setWantedState(IntakeWrist.WantedState.INTAKE_FUEL);
+        flywheels.setWantedState(Flywheels.WantedState.SET_RPM, adjustedShot.shootSpeed());
+        hood.setWantedState(Hood.WantedState.SET_POSITION, adjustedShot.hoodAngle());
+    }
+
+    public void preparingAllianceZoneShot() {
+        AdjustedShot adjustedShot = CalculateShot.calculateAllianceZoneAdjustedShot(drivetrain.getPose(),
+                drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
+
+        drivetrain.setTargetRotation(adjustedShot.targetRotation());
+        feeder.setWantedState(Feeder.WantedState.STOPPED);
+        indexer.setWantedState(Indexer.WantedState.TRANSFER_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKING_FUEL);
+        intakeWrist.setWantedState(IntakeWrist.WantedState.INTAKE_FUEL);
+        flywheels.setWantedState(Flywheels.WantedState.SET_RPM, adjustedShot.shootSpeed());
+        hood.setWantedState(Hood.WantedState.SET_POSITION, adjustedShot.hoodAngle());
+    }
+
+    public void shootingAllianceZone() {
+        AdjustedShot adjustedShot = CalculateShot.calculateAllianceZoneAdjustedShot(drivetrain.getPose(),
                 drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
 
         drivetrain.setTargetRotation(adjustedShot.targetRotation());

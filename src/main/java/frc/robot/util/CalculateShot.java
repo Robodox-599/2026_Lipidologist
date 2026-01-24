@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -16,7 +17,7 @@ public class CalculateShot {
     final static double LOOKAHEAD_TIME = 0.3;
     final static double accelerationCompensation = 0.5;
 
-    public static AdjustedShot calculateAdjustedShot(Pose2d robotPose, ChassisSpeeds fieldRelativeRobotVelocity,
+    public static AdjustedShot calculateHubAdjustedShot(Pose2d robotPose, ChassisSpeeds fieldRelativeRobotVelocity,
             ChassisAccelerations fieldRelativeRobotAcceleration) {
         Translation2d robotTranslation = robotPose.getTranslation();
         Translation2d hubTranslation = DriverStation.getAlliance().orElseGet(() -> Alliance.Blue).equals(Alliance.Blue)
@@ -24,7 +25,7 @@ public class CalculateShot {
                 : FieldConstants.redHub;
 
         double distance = robotTranslation.getDistance(hubTranslation);
-        double flightTime = GetShotData.getFlightTime(distance);
+        double flightTime = GetShotData.getHubFlightTime(distance);
 
         Translation2d adjustedHubTranslation = new Translation2d();
         for (int i = 0; i < maxGoalPositionIterations; i++) {
@@ -34,7 +35,7 @@ public class CalculateShot {
                     hubTranslation.getY() - (fieldRelativeRobotVelocity.vyMetersPerSecond * flightTime
                             + 0.5 * fieldRelativeRobotAcceleration.ayMetersPerSecondSquared * flightTime * flightTime * accelerationCompensation));
             double newDistance = robotTranslation.getDistance(adjustedHubTranslation);
-            double newFlightTime = GetShotData.getFlightTime(newDistance);
+            double newFlightTime = GetShotData.getHubFlightTime(newDistance);
 
             if (Math.abs(newFlightTime - flightTime) <= 0.01) {
                 break;
@@ -52,9 +53,55 @@ public class CalculateShot {
         Rotation2d targetRotation = Rotation2d
                 .fromRadians(Math.atan2(adjustedHubTranslation.getY() - robotTranslation.getY(),
                         adjustedHubTranslation.getX() - robotTranslation.getX()));
-        double shootSpeed = GetShotData.getRPM(adjustedDistance);
-        double hoodAngle = GetShotData.getHoodAngle(adjustedDistance);
+        double shootSpeed = GetShotData.getHubRPM(adjustedDistance);
+        double hoodAngle = GetShotData.getHubHoodAngle(adjustedDistance);
 
-        return new AdjustedShot(targetRotation, shootSpeed, hoodAngle);
+        AdjustedShot adjustedShot = new AdjustedShot(targetRotation, shootSpeed, hoodAngle);
+        DogLog.log("ShotCalculator/AdjustedShot", adjustedShot);
+        return adjustedShot;
+    }
+
+    public static AdjustedShot calculateAllianceZoneAdjustedShot(Pose2d robotPose, ChassisSpeeds fieldRelativeRobotVelocity,
+            ChassisAccelerations fieldRelativeRobotAcceleration) {
+        Translation2d robotTranslation = robotPose.getTranslation();
+        Translation2d hubTranslation = DriverStation.getAlliance().orElseGet(() -> Alliance.Blue).equals(Alliance.Blue)
+                ? FieldConstants.blueHub
+                : FieldConstants.redHub;
+
+        double distance = robotTranslation.getDistance(hubTranslation);
+        double flightTime = GetShotData.getAllianceZoneFlightTime(distance);
+
+        Translation2d adjustedHubTranslation = new Translation2d();
+        for (int i = 0; i < maxGoalPositionIterations; i++) {
+            adjustedHubTranslation = new Translation2d(
+                    hubTranslation.getX() - (fieldRelativeRobotVelocity.vxMetersPerSecond * flightTime
+                            + 0.5 * fieldRelativeRobotAcceleration.axMetersPerSecondSquared * flightTime * flightTime * accelerationCompensation), // vt + 0.5at^2 
+                    hubTranslation.getY() - (fieldRelativeRobotVelocity.vyMetersPerSecond * flightTime
+                            + 0.5 * fieldRelativeRobotAcceleration.ayMetersPerSecondSquared * flightTime * flightTime * accelerationCompensation));
+            double newDistance = robotTranslation.getDistance(adjustedHubTranslation);
+            double newFlightTime = GetShotData.getAllianceZoneFlightTime(newDistance);
+
+            if (Math.abs(newFlightTime - flightTime) <= 0.01) {
+                break;
+            }
+
+            flightTime = newFlightTime;
+        }
+
+        Translation2d swerveLookAheadTranslation = robotTranslation
+                .plus(new Translation2d(fieldRelativeRobotVelocity.vxMetersPerSecond * LOOKAHEAD_TIME,
+                        fieldRelativeRobotVelocity.vyMetersPerSecond * LOOKAHEAD_TIME));
+
+        double adjustedDistance = swerveLookAheadTranslation.getDistance(adjustedHubTranslation);
+
+        Rotation2d targetRotation = Rotation2d
+                .fromRadians(Math.atan2(adjustedHubTranslation.getY() - robotTranslation.getY(),
+                        adjustedHubTranslation.getX() - robotTranslation.getX()));
+        double shootSpeed = GetShotData.getAllianceZoneRPM(adjustedDistance);
+        double hoodAngle = GetShotData.getAllianceZoneHoodAngle(adjustedDistance);
+
+        AdjustedShot adjustedShot = new AdjustedShot(targetRotation, shootSpeed, hoodAngle);
+        DogLog.log("ShotCalculator/AdjustedShot", adjustedShot);
+        return adjustedShot;
     }
 }

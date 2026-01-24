@@ -84,6 +84,18 @@ public class Robot extends TimedRobot {
         vision = new Vision(
             new Camera(new CameraIOReal(CameraTransforms.frontLeftCameraConstants), drivetrain::addVisionMeasurement));
         break;
+      case SIM:
+        climb = new Climb(new ClimbIOTalonFX());
+        drivetrain = TunerConstants.createDrivetrain(driver);
+        feeder = new Feeder(new FeederIOTalonFX());
+        indexer = new Indexer(new IndexerIOTalonFX());
+        intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
+        intakeWrist = new IntakeWrist(new IntakeWristIOTalonFX());
+        flywheels = new Flywheels(new FlywheelsIOTalonFX());
+        hood = new Hood(new HoodIOTalonFX());
+        vision = new Vision(
+            new Camera(new CameraIOReal(CameraTransforms.frontLeftCameraConstants), drivetrain::addVisionMeasurement));
+        break;
       default:
         climb = new Climb(new ClimbIOTalonFX());
         drivetrain = TunerConstants.createDrivetrain(driver);
