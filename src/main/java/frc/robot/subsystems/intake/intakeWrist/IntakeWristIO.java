@@ -19,7 +19,6 @@ public class IntakeWristIO {
     public double wantedPosition = 0;
 
     public boolean atSetpoint = false;
-    public WantedState wantedState;
 
     public void updateInputs(){}
 
