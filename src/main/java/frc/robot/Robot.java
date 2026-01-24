@@ -24,7 +24,7 @@ public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
   private final Hood hood;
   private final Flywheels flywheels;
-
+  
   final CommandXboxController driver =
       new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
   final CommandXboxController operator = new CommandXboxController(Constants.ControllerConstants.kOperatorControllerPort);

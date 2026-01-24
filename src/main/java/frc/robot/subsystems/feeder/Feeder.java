@@ -9,16 +9,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Feeder extends SubsystemBase {
   private final FeederIO io;
-  private FeederWantedState feederWantedState = FeederWantedState.STOPPED;
-  private FeederCurrentState feederCurrentState = FeederCurrentState.STOPPED;
+  private WantedState wantedState = WantedState.STOPPED;
+  private CurrentState currentState = CurrentState.STOPPED;
 
-  public enum FeederWantedState{
+  public enum WantedState{
     STOPPED,
     TRANSFERING_FUEL,
     REVERSE,
   }
 
-  public enum FeederCurrentState{
+  public enum CurrentState{
     STOPPED,
     TRANSFERING_FUEL,
     REVERSE,
@@ -34,30 +34,30 @@ public class Feeder extends SubsystemBase {
     handleFeederStateTransitions();
     applyStates();
 
-    DogLog.log("Feeder/wantedState", feederWantedState);
-    DogLog.log("Feeder/currentState", feederCurrentState);
+    DogLog.log("Feeder/wantedState", wantedState);
+    DogLog.log("Feeder/currentState", currentState);
 
   }
 
   public void handleFeederStateTransitions(){
-    switch (feederWantedState) {
+    switch (wantedState) {
         case TRANSFERING_FUEL:
-            feederCurrentState = FeederCurrentState.TRANSFERING_FUEL;
+            currentState = CurrentState.TRANSFERING_FUEL;
             break;
         case STOPPED:
-            feederCurrentState = FeederCurrentState.STOPPED;
+            currentState = CurrentState.STOPPED;
             break;
         case REVERSE:
-            feederCurrentState = FeederCurrentState.REVERSE;
+            currentState = CurrentState.REVERSE;
             break;
         default:
-            feederCurrentState = FeederCurrentState.STOPPED;
+            currentState = CurrentState.STOPPED;
             break;
     }
   }
 
   public void applyStates(){
-    switch(feederCurrentState){
+    switch(currentState){
       case TRANSFERING_FUEL:
         setFeederVoltage(3);
         break;
@@ -80,8 +80,8 @@ public class Feeder extends SubsystemBase {
     io.stopFeeder();
   }
 
-  public void setFeederWantedState(FeederWantedState feederWantedState){
-    this.feederWantedState = feederWantedState;
+  public void setWantedState(Feeder.WantedState wantedState){
+    this.wantedState = wantedState;
   }
 
 }
