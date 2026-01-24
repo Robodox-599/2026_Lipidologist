@@ -7,8 +7,6 @@ package frc.robot;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Tracer;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -25,8 +23,6 @@ import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOTalonFX;
 public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
 
-  private final Climb climb;
-
   final CommandXboxController driver =
       new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
   final CommandXboxController operator = new CommandXboxController(Constants.ControllerConstants.kOperatorControllerPort);
@@ -42,7 +38,6 @@ public class Robot extends TimedRobot {
   }
 
   public Robot() {
-    climb = new Climb(new ClimbIOTalonFX());
 
     DogLog.setOptions(
         new DogLogOptions()
