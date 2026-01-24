@@ -98,7 +98,7 @@ public class Robot extends TimedRobot {
         break;
     }
 
-    superstructure = new Superstructure(driver, drivetrain, intakeRollers);
+    superstructure = new Superstructure(climb, drivetrain, feeder, indexer, intakeRollers, intakeWrist, flywheels, hood, vision);
 
     new Bindings(driver, operator, superstructure);
 

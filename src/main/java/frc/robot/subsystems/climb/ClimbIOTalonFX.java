@@ -116,7 +116,7 @@ public class ClimbIOTalonFX extends ClimbIO {
   }
 
   @Override
-  public void updateClimbInputs() {
+  public void updateInputs() {
     BaseStatusSignal.refreshAll
       (leftClimbMotorVelocity, leftClimbMotorTempCelsius, leftClimbMotorPosition, 
         leftClimbMotorStatorCurrent, leftClimbMotorSupplyCurrent, leftClimbMotorAppliedVolts, leftClimbMotorTempCelsius,

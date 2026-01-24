@@ -20,7 +20,7 @@ public class FeederIOSim extends FeederIO {
   }
 
   @Override
-  public void updateFeederInputs(){
+  public void updateInputs(){
     feederSimMotor.update(0.02);
 
     super.position = feederSimMotor.getAngularPositionRad();

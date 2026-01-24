@@ -14,13 +14,13 @@ public class Feeder extends SubsystemBase {
 
   public enum WantedState{
     STOPPED,
-    TRANSFERING_FUEL,
+    FEED_FUEL,
     REVERSE,
   }
 
   public enum CurrentState{
     STOPPED,
-    TRANSFERING_FUEL,
+    FEEDING_FUEL,
     REVERSE,
   }
 
@@ -28,8 +28,8 @@ public class Feeder extends SubsystemBase {
     this.io = io;
   }
 
-  public void updateFeederInputs() {
-    io.updateFeederInputs();
+  public void updateInputs() {
+    io.updateInputs();
     
     handleFeederStateTransitions();
     applyStates();
@@ -41,8 +41,8 @@ public class Feeder extends SubsystemBase {
 
   public void handleFeederStateTransitions(){
     switch (wantedState) {
-        case TRANSFERING_FUEL:
-            currentState = CurrentState.TRANSFERING_FUEL;
+        case FEED_FUEL:
+            currentState = CurrentState.FEEDING_FUEL;
             break;
         case STOPPED:
             currentState = CurrentState.STOPPED;
@@ -58,7 +58,7 @@ public class Feeder extends SubsystemBase {
 
   public void applyStates(){
     switch(currentState){
-      case TRANSFERING_FUEL:
+      case FEEDING_FUEL:
         setFeederVoltage(3);
         break;
       case STOPPED:

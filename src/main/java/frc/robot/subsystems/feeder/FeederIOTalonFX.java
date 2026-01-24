@@ -54,7 +54,7 @@ public class FeederIOTalonFX extends FeederIO {
     }
     
     @Override
-    public void updateFeederInputs() {
+    public void updateInputs() {
         BaseStatusSignal.refreshAll(feederVelocityRad, feederTemperature, 
             feederAppliedVolts, feederPosition, feederStatorCurrent, feederSupplyCurrent);
 

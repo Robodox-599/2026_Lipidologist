@@ -67,7 +67,7 @@ public class Flywheels extends FlywheelsIO{
     }
     
     
-    public boolean flywheelsAtSetpoint() {
+    public boolean atSetpoint() {
         return io.isFlywheelAtSetpoint;
     }
     

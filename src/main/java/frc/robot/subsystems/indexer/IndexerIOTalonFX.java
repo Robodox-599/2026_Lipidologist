@@ -59,7 +59,7 @@ public class IndexerIOTalonFX extends IndexerIO {
     }
     
     @Override
-    public void updateIndexerInputs() {
+    public void updateInputs() {
         BaseStatusSignal.refreshAll(indexerVelocityRad, indexerTemperature, 
             indexerAppliedVolts, indexerPosition, indexerStatorCurrent, indexerSupplyCurrent);
 

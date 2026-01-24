@@ -14,16 +14,16 @@ public class IntakeWrist {
         this.io = io;
     }
 
-    enum WantedState{
+    public enum WantedState{
         STOPPED,
-        INTAKING_FUEL,
-        STOWING_FUEL,
+        INTAKE_FUEL,
+        STOW,
     }
 
-    enum CurrentState{
+    public enum CurrentState{
         STOPPED,
         INTAKING_FUEL,
-        STOWING_FUEL
+        STOWED,
     }
 
     public void updateInputs(){
@@ -37,11 +37,11 @@ public class IntakeWrist {
             case STOPPED:
                 currentState = CurrentState.STOPPED;
                 break;
-            case INTAKING_FUEL:
+            case INTAKE_FUEL:
                 currentState = CurrentState.INTAKING_FUEL;
                 break;
-            case STOWING_FUEL:
-                currentState = CurrentState.STOWING_FUEL;
+            case STOW:
+                currentState = CurrentState.STOWED;
                 break;
             default:
                 currentState = CurrentState.STOPPED;
@@ -57,7 +57,7 @@ public class IntakeWrist {
             case INTAKING_FUEL:
                 setPosition(0);
                 break;
-            case STOWING_FUEL:
+            case STOWED:
                 setPosition(0);
                 break;
             default:

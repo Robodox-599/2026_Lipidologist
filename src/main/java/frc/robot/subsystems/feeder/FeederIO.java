@@ -8,7 +8,7 @@ public abstract class FeederIO {
     protected double appliedVolts = 0.0;
     protected double tempCelsius = 0.0;
 
-    public void updateFeederInputs() {}
+    public void updateInputs() {}
 
     public void setFeederVoltage(double volts) {}
 

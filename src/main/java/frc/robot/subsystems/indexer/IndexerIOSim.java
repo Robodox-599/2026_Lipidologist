@@ -24,7 +24,7 @@ public class IndexerIOSim extends IndexerIO {
   }
 
   @Override
-  public void updateIndexerInputs(){
+  public void updateInputs(){
     indexerSimMotor.update(0.02);
 
     super.position = indexerSimMotor.getAngularPositionRad();

@@ -66,7 +66,7 @@ public class Hood extends HoodIO{
         io.stop();
     }
     
-    public boolean isHoodAtSetpoint() {
+    public boolean atSetpoint() {
         return io.isHoodInPosition;
     }
     

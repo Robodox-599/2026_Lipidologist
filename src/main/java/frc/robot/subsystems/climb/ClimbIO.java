@@ -20,7 +20,7 @@ public abstract class ClimbIO {
   protected double rightMotorStatorCurrent = 0.0;
   protected double rightMotorSupplyCurrent = 0.0;
 
-  public void updateClimbInputs() {}
+  public void updateInputs() {}
 
   public void setLeftClimbHeight(double height) {}
 

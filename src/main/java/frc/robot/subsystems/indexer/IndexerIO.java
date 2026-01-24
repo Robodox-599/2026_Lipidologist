@@ -8,7 +8,7 @@ public abstract class IndexerIO {
     protected double appliedVolts = 0.0;
     protected double tempCelsius = 0.0;
 
-    public void updateIndexerInputs() {}
+    public void updateInputs() {}
 
     public void indexerPulseFuel(double volts) {}
 

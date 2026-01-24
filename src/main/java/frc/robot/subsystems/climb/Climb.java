@@ -30,8 +30,8 @@ public class Climb extends SubsystemBase {
     this.io = io;
   }
 
-  public void updateClimbInputs() {
-    io.updateClimbInputs();
+  public void updateInputs() {
+    io.updateInputs();
     
     handleStateTransitions();
     applyStates();

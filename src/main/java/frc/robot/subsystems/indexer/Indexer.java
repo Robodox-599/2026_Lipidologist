@@ -31,8 +31,8 @@ public class Indexer extends SubsystemBase {
     this.io = io;
   }
 
-  public void updateIndexerInputs() {
-    io.updateIndexerInputs();
+  public void updateInputs() {
+    io.updateInputs();
     
     handleStateTransitions();
     applyStates();
