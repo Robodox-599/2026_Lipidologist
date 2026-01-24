@@ -294,6 +294,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         DogLog.log("Drive/ControllerSpeeds", controllerSpeeds);
         break;
       case ROTATION_LOCK:
+        
         setControl(
             driveAtAngle
                 .withVelocityX(controllerSpeeds.vxMetersPerSecond) // Drive forward with negative Y (forward)

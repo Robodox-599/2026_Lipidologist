@@ -10,7 +10,7 @@ public class IntakeWrist {
     private WantedState wantedState = WantedState.STOPPED;
     private CurrentState currentState = CurrentState.STOPPED;
 
-    public void intakeWristIO(IntakeWristIO io){
+    public IntakeWrist(IntakeWristIO io){
         this.io = io;
     }
 
