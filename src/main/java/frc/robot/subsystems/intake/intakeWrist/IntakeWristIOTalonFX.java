@@ -29,6 +29,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
     public final CANcoder intakeWristCanCoder;
     public final TalonFXConfiguration intakeWristConfig;
     public final CANcoderConfiguration canCoderConfig;
+    // make sure to make this private (doesn't affect the functionality, but makes the code style consistant)
     MotionMagicVoltage m_request;
 
     public StatusSignal<Angle> intakeWristPosition;
@@ -51,13 +52,6 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
 
         intakeWristConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         intakeWristConfig.CurrentLimits.StatorCurrentLimit = IntakeWristConstants.supplyCurrentLimit;
-        
-//         intakeWristPosition = intakeWristMotor.getPosition(); //?
-//         intakeWristVelocity = intakeWristMotor.getVelocity();
-//         intakeWristAppliedVolts = intakeWristMotor.getMotorVoltage();
-//         intakeWristStatorCurrent = intakeWristMotor.getStatorCurrent();
-//         intakeWristSupplyCurrent = intakeWristMotor.getSupplyCurrent();
-//         intakeWristTemperature = intakeWristMotor.getDeviceTemp();
 
         intakeWristConfig.Slot0.kP = IntakeWristConstants.kP;
         intakeWristConfig.Slot0.kI = IntakeWristConstants.kI;
@@ -74,8 +68,11 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
         intakeWristConfig.MotionMagic.MotionMagicCruiseVelocity = IntakeWristConstants.intakeWristMaxVelocity;
         intakeWristConfig.MotionMagic.MotionMagicCruiseVelocity = IntakeWristConstants.intakeWristMaxAcceleration;
 
+        // try to use the phoenixutil.tryuntilokay function with this (check the utils folder for more info)
         intakeWristMotor.getConfigurator().apply(intakeWristConfig);
         intakeWristCanCoder.getConfigurator().apply(canCoderConfig);
+
+
         intakeWristMotor.setNeutralMode(NeutralModeValue.Brake);
 
         intakeWristPosition = intakeWristMotor.getPosition();
@@ -110,6 +107,12 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
         DogLog.log("Intake/Wrist/Temperature", temperature);  
     }
 
+    /**
+         * stops the movement of the intakeWristMotor
+         * <ul>
+         *  <li> Units: rotations
+         * </ui>
+         */
     @Override
     public void stop(){
         intakeWristMotor.stopMotor();

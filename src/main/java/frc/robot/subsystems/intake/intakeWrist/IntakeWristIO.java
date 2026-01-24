@@ -25,6 +25,5 @@ public class IntakeWristIO {
 
     public void stop(){}
     public void setPosition(double position){}
-    public void setVelocity(){}
 
 }

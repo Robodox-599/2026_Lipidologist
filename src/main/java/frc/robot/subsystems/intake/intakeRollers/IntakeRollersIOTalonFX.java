@@ -15,6 +15,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import frc.robot.util.PhoenixUtil;
 
 /** Add your docs here. */
 public class IntakeRollersIOTalonFX extends IntakeRollersIO {
@@ -41,7 +42,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         intakeRollersConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         intakeRollersConfig.CurrentLimits.StatorCurrentLimit = IntakeRollersConstants.supplyCurrentLimit;
 
-        intakeRollersMotor.getConfigurator().apply(intakeRollersConfig);
+        PhoenixUtil.tryUntilOk(10, ()-> intakeRollersMotor.getConfigurator().apply(intakeRollersConfig, 1));
 
         intakeRollersPosition = intakeRollersMotor.getPosition(); //?
         intakeRollersVelocity = intakeRollersMotor.getVelocity();
@@ -75,13 +76,14 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
 
     @Override
     public void stop(){
+        /**
+         * Stops the intakeRollersMotor
+         */
         intakeRollersMotor.stopMotor();
     }
 
     @Override
-    public void setVelocity(double velocity){
-        intakeRollersMotor.set(velocity);
+    public void setVoltage(double voltage){
+        intakeRollersMotor.setVoltage(voltage);
     }
-
-
 }

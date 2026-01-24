@@ -1,4 +1,4 @@
-package frc.robot.subsystems.intake.intakeRollers;
+package frc.robot.subsystems.intake.intakeRollers; // make sure the folder name is all lowercase
 
 import dev.doglog.DogLog;
 
@@ -27,7 +27,6 @@ public class IntakeRollers {
         io.updateInputs();
         handleStateTransitions();
         applyStates();
-
         DogLog.log("Intake/Rollers/WantedState", wantedState);
         DogLog.log("Intake/Rollers/CurrentState", currentState);
     }
@@ -55,10 +54,10 @@ public class IntakeRollers {
                 stop();
                 break;
             case INTAKING_FUEL:
-                setVelocity(0.5);
+                setVoltage(0);
                 break;
             case REVERSE_FUEL:
-                setVelocity(0);
+                setVoltage(0);
                 break;
         }
     }
@@ -73,6 +72,10 @@ public class IntakeRollers {
 
     public void setWantedState(IntakeRollers.WantedState wantedState){
         this.wantedState = wantedState;
+    }
+
+    public void setVoltage(double voltage){
+        io.setVoltage(voltage);
     }
 
 
