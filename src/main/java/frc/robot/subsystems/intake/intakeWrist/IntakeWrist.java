@@ -57,14 +57,14 @@ public class IntakeWrist {
                     } else {
                         currentState = CurrentState.WRIST_RETRACTING;
                     }
-                if (currentState == CurrentState.WRIST_EXTENDING){
+                } else if (currentState == CurrentState.WRIST_EXTENDING){
                     if (atSetpoint()){
                         currentState = CurrentState.WRIST_RETRACTING;
                     } else {
                         currentState = CurrentState.WRIST_EXTENDING;
                     }
                     }
-                }
+                
                 break;
             default:
                 currentState = CurrentState.STOPPED;

@@ -22,6 +22,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import frc.robot.util.PhoenixUtil;
 
 /** Add your docs here. */
 public class IntakeWristIOTalonFX extends IntakeWristIO{
@@ -68,10 +69,8 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
         intakeWristConfig.MotionMagic.MotionMagicCruiseVelocity = IntakeWristConstants.intakeWristMaxVelocity;
         intakeWristConfig.MotionMagic.MotionMagicCruiseVelocity = IntakeWristConstants.intakeWristMaxAcceleration;
 
-        // try to use the phoenixutil.tryuntilokay function with this (check the utils folder for more info)
-        intakeWristMotor.getConfigurator().apply(intakeWristConfig);
-        intakeWristCanCoder.getConfigurator().apply(canCoderConfig);
-
+        PhoenixUtil.tryUntilOk(10, () -> intakeWristMotor.getConfigurator().apply(intakeWristConfig));
+        PhoenixUtil.tryUntilOk(10, () -> intakeWristCanCoder.getConfigurator().apply(canCoderConfig));
 
         intakeWristMotor.setNeutralMode(NeutralModeValue.Brake);
 
