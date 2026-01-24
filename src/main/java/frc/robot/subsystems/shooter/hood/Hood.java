@@ -4,51 +4,52 @@ import dev.doglog.DogLog;
 
 public class Hood extends HoodIO{
     private final HoodIO io;
-    private HoodWantedState hoodWantedState = HoodWantedState.STOPPED;
-    private HoodCurrentState hoodCurrentState = HoodCurrentState.STOPPED;
+    private WantedState wantedState = WantedState.STOPPED;
+    private CurrentState currentState = CurrentState.STOPPING;
 
     public Hood(HoodIO io) {
         this.io = io;
     }
 
-    public enum HoodWantedState {
-        MOVE_TO_POSITION,
+    public enum WantedState {
+        SET_POSITION,
         STOPPED
     }
 
-    public enum HoodCurrentState {
-        MOVING_TO_POSITION,
-        STOPPED
+    public enum CurrentState {
+        SETTING_POSITION,
+        STOPPING 
     }
 
     public void updateInputs() {
         io.updateInputs();
         handleStateTransitions();
         applyStates();
-        DogLog.log("Hood/Wanted State", hoodWantedState);
-        DogLog.log("Hood/Current State", hoodCurrentState);
+
+        DogLog.log("Hood/WantedState", wantedState);
+        DogLog.log("Hood/CurrentState", currentState);
     }
 
     public void handleStateTransitions() {
-        switch(hoodWantedState) {
-            case MOVE_TO_POSITION:
-            hoodCurrentState = HoodCurrentState.MOVING_TO_POSITION;
+        switch(wantedState) {
+            case SET_POSITION:
+            currentState = CurrentState.SETTING_POSITION;
             break;
             case STOPPED:
-            hoodCurrentState = HoodCurrentState.STOPPED;
+            currentState = CurrentState.STOPPING;
             break;
             default:
-            hoodCurrentState = HoodCurrentState.STOPPED;
+            currentState = CurrentState.STOPPING;
             break;
         }
     }
 
     private void applyStates() {
-        switch (hoodCurrentState) {
-            case MOVING_TO_POSITION:
-            setPosition(0);
+        switch (currentState) {
+            case SETTING_POSITION:
+            setPosition(io.targetPosition);
             break;
-            case STOPPED:
+            case STOPPING:
             stop();
             break;
             default:
@@ -67,5 +68,14 @@ public class Hood extends HoodIO{
     
     public boolean isHoodAtSetpoint() {
         return io.isHoodInPosition;
+    }
+    
+    public void setWantedState(Hood.WantedState WantedState){
+      this.wantedState = WantedState;
+    }
+
+    public void setWantedState(Hood.WantedState WantedState, double position){
+      this.wantedState = WantedState;
+      io.targetPosition = position;
     }
 }

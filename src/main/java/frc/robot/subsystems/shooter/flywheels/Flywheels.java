@@ -4,51 +4,52 @@ import dev.doglog.DogLog;
 
 public class Flywheels extends FlywheelsIO{
     private final FlywheelsIO io;
-    private FlywheelWantedState flywheelWantedState = FlywheelWantedState.STOPPED;
-    private FlywheelCurrentState flywheelCurrentState = FlywheelCurrentState.STOPPED;
+    private WantedState wantedState = WantedState.STOPPED;
+    private CurrentState currentState = CurrentState.STOPPING;
 
     public Flywheels(FlywheelsIO io) {
         this.io = io;
     }
 
-    public enum FlywheelWantedState {
-        SET_VELOCITY,
+    public enum WantedState {
+        SET_RPM,
         STOPPED
     }
 
-    public enum FlywheelCurrentState {
-        SETTING_VELOCITY,
-        STOPPED
+    public enum CurrentState {
+        SETTING_RPM,
+        STOPPING
     }
     
     public void updateInputs() {
         io.updateInputs();
         handleStateTransitions();
         applyStates();
-        DogLog.log("Flywheel/Wanted State", flywheelWantedState);
-        DogLog.log("Flywheel/Current State", flywheelCurrentState);
+
+        DogLog.log("Flywheel/WantedState", wantedState);
+        DogLog.log("Flywheel/CurrentState", currentState);
     }
 
     public void handleStateTransitions() {
-        switch(flywheelWantedState) {
-            case SET_VELOCITY:
-            flywheelCurrentState = FlywheelCurrentState.SETTING_VELOCITY;
+        switch(wantedState) {
+            case SET_RPM:
+            currentState = CurrentState.SETTING_RPM;
             break;
             case STOPPED:
-            flywheelCurrentState = FlywheelCurrentState.STOPPED;
+            currentState = CurrentState.STOPPING;
             break;
             default:
-            flywheelCurrentState = FlywheelCurrentState.STOPPED;
+            currentState = CurrentState.STOPPING;
             break;
         }
     }
 
     private void applyStates() {
-        switch (flywheelCurrentState) {
-            case SETTING_VELOCITY:
-            setRPM(0);
+        switch (currentState) {
+            case SETTING_RPM:
+            setRPM(io.targetRPM);
             break;
-            case STOPPED:
+            case STOPPING:
             stop();
             break;
             default:
@@ -57,8 +58,8 @@ public class Flywheels extends FlywheelsIO{
         }
     }
 
-    public void setRPM(double rpm) {
-        io.setRPM(rpm);
+    public void setRPM(double RPM) {
+        io.setRPM(RPM);
     }
     
     public void stop() {
@@ -70,13 +71,12 @@ public class Flywheels extends FlywheelsIO{
         return io.isFlywheelAtSetpoint;
     }
     
-    public void setFlywheelWantedState(FlywheelWantedState flywheelWantedState){
-      this.flywheelWantedState = flywheelWantedState;
+    public void setWantedState(Flywheels.WantedState WantedState){
+      this.wantedState = WantedState;
     }
 
-    public void setFlywheelWantedState(FlywheelWantedState flywheelWantedState, double rpm){
-      this.flywheelWantedState = flywheelWantedState;
-    //   io.setRPM(rpm);
-    // io.targetRPM = rpm;
+    public void setWantedState(Flywheels.WantedState WantedState, double RPM){
+      this.wantedState = WantedState;
+      io.targetRPM = RPM;
     }
 }

@@ -8,13 +8,14 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import dev.doglog.DogLog;
 
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import frc.robot.util.PhoenixUtil;
 
 public class FlywheelsIOTalonFX extends FlywheelsIO{
     //motors + configuration
@@ -49,8 +50,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
         flywheelMotor.setNeutralMode(NeutralModeValue.Brake);
 
         //Applying configuration
-        flywheelMotor.getConfigurator().apply(flywheelConfiguration);
-        flywheelMotor.setNeutralMode(NeutralModeValue.Brake);
+        PhoenixUtil.tryUntilOk(10, () -> flywheelMotor.getConfigurator().apply(flywheelConfiguration, 1));
 
         //status signals
         flywheelVelocityRad = flywheelMotor.getVelocity();
@@ -82,9 +82,9 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
     }
 
     @Override
-    public void setRPM(double rpm){
-        super.velocitySetpoint = velocity;
-        flywheelMotor.setControl(new VelocityVoltage(velocity));
+    public void setRPM(double RPM){
+        super.velocitySetpoint = RPM;
+        flywheelMotor.setControl(new VelocityTorqueCurrentFOC(RPM));
     }
 
     @Override

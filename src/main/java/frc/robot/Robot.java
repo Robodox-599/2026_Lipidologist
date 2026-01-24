@@ -1,9 +1,9 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
+import frc.robot.subsystems.shooter.hood.Hood;
+import frc.robot.subsystems.shooter.hood.HoodIOTalonFX;
+import frc.robot.subsystems.shooter.flywheels.Flywheels;
+import frc.robot.subsystems.shooter.flywheels.FlywheelsIOTalonFX;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -22,6 +22,8 @@ import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOTalonFX;
 
 public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
+  private final Hood hood;
+  private final Flywheels flywheels;
 
   final CommandXboxController driver =
       new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
@@ -46,6 +48,9 @@ public class Robot extends TimedRobot {
             .withNtPublish(true)
             .withCaptureConsole(true));
 
+    hood = new Hood(new HoodIOTalonFX());
+    flywheels = new Flywheels(new FlywheelsIOTalonFX());
+
     switch (Constants.currentMode) {
       case REAL:
         drivetrain = TunerConstants.createDrivetrain(driver);
@@ -64,6 +69,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    hood.updateInputs();
+    flywheels.updateInputs();
     scheduler.run();
   }
 
@@ -111,4 +118,12 @@ public class Robot extends TimedRobot {
   public void testExit() {
     scheduler.cancelAll();
   }
+
+   private void configureBindings() {
+    driver.x().onTrue(Commands.runOnce(() -> hood.setWantedState(Hood.WantedState.STOPPED)));
+    driver.x().onTrue(Commands.runOnce(() -> flywheels.setWantedState(Flywheels.WantedState.STOPPED)));
+
+    driver.a().onTrue(Commands.runOnce(() -> flywheels.setWantedState(Flywheels.WantedState.SET_RPM, 1)));
+    driver.b().onTrue(Commands.runOnce(() -> hood.setWantedState(Hood.WantedState.SET_POSITION, 4)));
+   }
 }

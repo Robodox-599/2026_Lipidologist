@@ -14,6 +14,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import frc.robot.util.PhoenixUtil;
 
 public class HoodIOTalonFX extends HoodIO {
     //motors + configuration
@@ -52,8 +53,7 @@ public class HoodIOTalonFX extends HoodIO {
         hoodMotor.setNeutralMode(NeutralModeValue.Brake);
 
         //applying configuration
-        hoodMotor.getConfigurator().apply(hoodConfiguration);
-        hoodMotor.setNeutralMode(NeutralModeValue.Brake);
+        PhoenixUtil.tryUntilOk(10, () -> hoodMotor.getConfigurator().apply(hoodConfiguration, 1));
 
         //status signals
         hoodVelocityRad = hoodMotor.getVelocity();
@@ -63,6 +63,7 @@ public class HoodIOTalonFX extends HoodIO {
         hoodStatorCurrent = hoodMotor.getStatorCurrent();
         hoodSupplyCurrent = hoodMotor.getSupplyCurrent();
 
+        //Update Frequency
         BaseStatusSignal.setUpdateFrequencyForAll(50, hoodVelocityRad, hoodTemperature, 
         hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
 
@@ -87,18 +88,13 @@ public class HoodIOTalonFX extends HoodIO {
 
     @Override
     public void setPosition(double position) {
-       wantedPosition = MathUtil.clamp(position, HoodConstants.hoodMinAngle, HoodConstants.hoodMaxAngle);
+        wantedPosition = MathUtil.clamp(position, HoodConstants.hoodMinAngle, HoodConstants.hoodMaxAngle);
 
         super.wantedPosition = wantedPosition;
 
         motionMagic = new MotionMagicVoltage(position).withSlot(0).withEnableFOC(true);
         
         hoodMotor.setControl(motionMagic);
-    }
-
-    @Override
-    public void setVoltage(double voltage) {
-        hoodMotor.setVoltage(voltage);
     }
 
     @Override
