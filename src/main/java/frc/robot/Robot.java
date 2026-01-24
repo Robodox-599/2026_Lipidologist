@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOTalonFX;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.climb.Climb;
+import frc.robot.subsystems.climb.ClimbIOTalonFX;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.constants.TunerConstants;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
@@ -22,6 +24,8 @@ import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOTalonFX;
 
 public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
+
+  private final Climb climb;
 
   final CommandXboxController driver =
       new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
@@ -38,6 +42,8 @@ public class Robot extends TimedRobot {
   }
 
   public Robot() {
+    climb = new Climb(new ClimbIOTalonFX());
+
     DogLog.setOptions(
         new DogLogOptions()
             .withCaptureDs(true)
