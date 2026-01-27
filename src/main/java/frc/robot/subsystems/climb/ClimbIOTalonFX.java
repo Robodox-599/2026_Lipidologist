@@ -19,8 +19,11 @@ import edu.wpi.first.units.measure.Voltage;
 import frc.robot.util.PhoenixUtil;
 
 public class ClimbIOTalonFX extends ClimbIO {
-  private final TalonFX leftMotor;
   private final TalonFX rightMotor;
+  private final TalonFX leftMotor;
+
+  private TalonFXConfiguration leftMotorConfig;
+  private TalonFXConfiguration rightMotorConfig;
 
   private final MotionMagicVoltage motionMagicRequest;
 
@@ -44,8 +47,8 @@ public class ClimbIOTalonFX extends ClimbIO {
 
     motionMagicRequest = new MotionMagicVoltage(0).withSlot(0).withEnableFOC(true);
 
-    TalonFXConfiguration leftMotorConfig = new TalonFXConfiguration();
-    TalonFXConfiguration rightMotorConfig = new TalonFXConfiguration();
+    leftMotorConfig = new TalonFXConfiguration();
+    rightMotorConfig = new TalonFXConfiguration();
 
     // left motor config
 
@@ -62,6 +65,8 @@ public class ClimbIOTalonFX extends ClimbIO {
     leftMotorConfig.Slot0.kG = ClimbConstants.kG;
     leftMotorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
 
+    leftMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    leftMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     leftMotorConfig.CurrentLimits.StatorCurrentLimit = ClimbConstants.statorCurrentLimitAmps;
     leftMotorConfig.CurrentLimits.SupplyCurrentLimit = ClimbConstants.supplyCurrentLimitAmps;
     leftMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -81,6 +86,8 @@ public class ClimbIOTalonFX extends ClimbIO {
     rightMotorConfig.Slot0.kG = ClimbConstants.kG;
     rightMotorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
 
+    rightMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    rightMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     rightMotorConfig.CurrentLimits.StatorCurrentLimit = ClimbConstants.statorCurrentLimitAmps;
     rightMotorConfig.CurrentLimits.SupplyCurrentLimit = ClimbConstants.supplyCurrentLimitAmps;
     rightMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -93,7 +100,7 @@ public class ClimbIOTalonFX extends ClimbIO {
     leftClimbMotorAppliedVolts = leftMotor.getMotorVoltage();
     leftClimbMotorStatorCurrent = leftMotor.getStatorCurrent();
     leftClimbMotorSupplyCurrent = leftMotor.getSupplyCurrent();
-    leftClimbMotorTempCelsius = leftMotor.getDeviceTemp();
+    leftClimbMotorTempCelsius = leftMotor.getDeviceTemp();        
 
     rightClimbMotorPosition = rightMotor.getPosition();
     rightClimbMotorVelocity = rightMotor.getVelocity();
@@ -103,9 +110,9 @@ public class ClimbIOTalonFX extends ClimbIO {
     rightClimbMotorTempCelsius = rightMotor.getDeviceTemp();
     
     BaseStatusSignal.setUpdateFrequencyForAll(
-        100.0, leftClimbMotorVelocity, leftClimbMotorTempCelsius, leftClimbMotorPosition, 
+        50.0, leftClimbMotorVelocity, leftClimbMotorPosition, 
         leftClimbMotorStatorCurrent, leftClimbMotorSupplyCurrent, leftClimbMotorAppliedVolts, 
-          leftClimbMotorTempCelsius, rightClimbMotorVelocity, rightClimbMotorTempCelsius, rightClimbMotorPosition, 
+          leftClimbMotorTempCelsius, rightClimbMotorVelocity, rightClimbMotorPosition, 
             rightClimbMotorStatorCurrent,rightClimbMotorSupplyCurrent, rightClimbMotorAppliedVolts, 
               rightClimbMotorTempCelsius);
 
@@ -116,11 +123,11 @@ public class ClimbIOTalonFX extends ClimbIO {
   }
 
   @Override
-  public void updateClimbInputs() {
+  public void updateInputs() {
     BaseStatusSignal.refreshAll
       (leftClimbMotorVelocity, leftClimbMotorTempCelsius, leftClimbMotorPosition, 
-        leftClimbMotorStatorCurrent, leftClimbMotorSupplyCurrent, leftClimbMotorAppliedVolts, leftClimbMotorTempCelsius,
-          rightClimbMotorVelocity, rightClimbMotorTempCelsius, rightClimbMotorPosition, rightClimbMotorStatorCurrent, 
+        leftClimbMotorStatorCurrent, leftClimbMotorSupplyCurrent, leftClimbMotorAppliedVolts,
+          rightClimbMotorVelocity, rightClimbMotorPosition, rightClimbMotorStatorCurrent, 
             rightClimbMotorSupplyCurrent, rightClimbMotorAppliedVolts, rightClimbMotorTempCelsius);
 
     // left motor

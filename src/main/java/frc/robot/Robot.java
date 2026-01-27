@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
 
     operator.y().onTrue(Commands.runOnce(() -> climb.setWantedState(Climb.WantedState.MOVE_BOTH_TO_POSITION)));
 
-    operator.x().onTrue(Commands.runOnce(() -> climb.setWantedState(Climb.WantedState.STOPPED)));
+    operator.x().onTrue(Commands.runOnce(() -> climb.setWantedState(Climb.WantedState.STOP)));
   }
 
   @Override
