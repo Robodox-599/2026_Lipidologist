@@ -13,16 +13,14 @@ public class Climb {
 
   public enum WantedState{
     STOP,
-    MOVE_LEFT_TO_POSITION,
-    MOVE_RIGHT_TO_POSITION,
-    MOVE_BOTH_TO_POSITION,
+    EXTEND,
+    RETRACT,
   }
 
   public enum CurrentState{
     STOPPED,
-    MOVING_LEFT_TO_POSITION,
-    MOVING_RIGHT_TO_POSITION,
-    MOVING_BOTH_TO_POSITION,
+    EXTENDING,
+    RETRACTING,
   }
 
   public Climb(ClimbIO io) {
@@ -45,14 +43,11 @@ public class Climb {
         case STOP:
             currentState = CurrentState.STOPPED;
             break;
-        case MOVE_LEFT_TO_POSITION:
-            currentState = CurrentState.MOVING_LEFT_TO_POSITION;
+        case EXTEND:
+            currentState = CurrentState.EXTENDING;
             break;
-        case MOVE_RIGHT_TO_POSITION:
-            currentState = CurrentState.MOVING_RIGHT_TO_POSITION;
-            break;
-        case MOVE_BOTH_TO_POSITION:
-            currentState = CurrentState.MOVING_BOTH_TO_POSITION;
+        case RETRACT:
+            currentState = CurrentState.RETRACTING;
             break;
         default:
             currentState = CurrentState.STOPPED;
@@ -62,15 +57,11 @@ public class Climb {
 
   private void applyStates(){
     switch(currentState){
-        case MOVING_LEFT_TO_POSITION:
+        case EXTENDING:
             setLeftClimbHeight(0);
             break;
-        case MOVING_RIGHT_TO_POSITION:
-            setRightClimbHeight(0);
-            break;
-        case MOVING_BOTH_TO_POSITION:
+        case RETRACTING:
             setLeftClimbHeight(0);
-            setRightClimbHeight(0);
             break;
         case STOPPED:
             stopClimb();  
@@ -82,19 +73,11 @@ public class Climb {
   }
 
   public void setLeftClimbVoltage(double volts){
-    io.setLeftClimbVoltage(volts);
-  }
-
-  public void setRightClimbVoltage(double volts){
-    io.setRightClimbVoltage(volts);
+    io.setClimbVoltage(volts);
   }
 
   public void setLeftClimbHeight(double height){
-    io.setLeftClimbHeight(height);
-  }
-
-  public void setRightClimbHeight(double height){
-    io.setRightClimbHeight(height);
+    io.setClimbHeight(height);
   }
 
   public void stopClimb(){

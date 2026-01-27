@@ -3,13 +3,13 @@ package frc.robot.subsystems.climb;
 public abstract class ClimbIO {
 
   // left motor
-  protected double leftMotorVelocityInchesPerSec = 0.0;
-  protected double leftMotorAppliedVolts = 0.0;
-  protected double leftMotorTempCelsius = 0.0;
-  protected double leftMotorPositionInches = 0.0;
-  protected double leftMotorTargetPositionInches = 0.0;
-  protected double leftMotorStatorCurrent = 0.0;
-  protected double leftMotorSupplyCurrent = 0.0;
+  protected double velocityInchesPerSec = 0.0;
+  protected double appliedVolts = 0.0;
+  protected double tempCelsius = 0.0;
+  protected double positionInches = 0.0;
+  protected double targetPositionInches = 0.0;
+  protected double statorCurrent = 0.0;
+  protected double supplyCurrent = 0.0;
 
   // right motor
   protected double rightMotorVelocityInchesPerSec = 0.0;
@@ -22,7 +22,7 @@ public abstract class ClimbIO {
 
   public void updateInputs() {}
 
-  public void setLeftClimbHeight(double height) {}
+  public void setClimbHeight(double height) {}
 
   public void setRightClimbHeight(double height) {}
 
@@ -30,7 +30,7 @@ public abstract class ClimbIO {
 
   public void zeroClimbPosition() {}
 
-  public void setLeftClimbVoltage(double voltage) {}
+  public void setClimbVoltage(double voltage) {}
 
   public void setRightClimbVoltage(double voltage) {}
 }

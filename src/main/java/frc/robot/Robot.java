@@ -53,10 +53,8 @@ public class Robot extends TimedRobot {
     }
 
     // new Bindings(driver, operator, superstructure);
-    operator.leftTrigger().onTrue(Commands.runOnce(() -> climb.setWantedState(Climb.WantedState.MOVE_LEFT_TO_POSITION)));
-    operator.rightTrigger().onTrue(Commands.runOnce(() -> climb.setWantedState(Climb.WantedState.MOVE_RIGHT_TO_POSITION)));
-
-    operator.y().onTrue(Commands.runOnce(() -> climb.setWantedState(Climb.WantedState.MOVE_BOTH_TO_POSITION)));
+    operator.leftTrigger().onTrue(Commands.runOnce(() -> climb.setWantedState(Climb.WantedState.EXTEND)));
+    operator.rightTrigger().onTrue(Commands.runOnce(() -> climb.setWantedState(Climb.WantedState.RETRACT)));
 
     operator.x().onTrue(Commands.runOnce(() -> climb.setWantedState(Climb.WantedState.STOP)));
   }
