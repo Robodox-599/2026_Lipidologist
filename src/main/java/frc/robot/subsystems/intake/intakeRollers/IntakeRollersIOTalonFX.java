@@ -7,6 +7,8 @@ package frc.robot.subsystems.intake.intakeRollers;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import dev.doglog.DogLog;
@@ -25,8 +27,8 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
     private final StatusSignal<Angle> intakeRollersPosition;
     private final StatusSignal<AngularVelocity> intakeRollersVelocity;
     private final StatusSignal<Voltage> intakeRollersAppliedVolts;
-    private final StatusSignal<Current> intakeRollersStatorCurrent;
     private final StatusSignal<Current> intakeRollersSupplyCurrent;
+    private final StatusSignal<Current> intakeRollersStatorCurrent;
     private final StatusSignal<Temperature> intakeRollersTemperature;
 
     public IntakeRollersIOTalonFX(){
@@ -40,31 +42,33 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         // intakeRollersConfig.Slot0.kV = IntakeRollersConstants.kV;
 
         intakeRollersConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        intakeRollersConfig.CurrentLimits.StatorCurrentLimit = IntakeRollersConstants.supplyCurrentLimit;
+        intakeRollersConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        intakeRollersConfig.CurrentLimits.SupplyCurrentLimit = IntakeRollersConstants.supplyCurrentLimit;
+        intakeRollersConfig.CurrentLimits.StatorCurrentLimit = IntakeRollersConstants.statorCurrentLimit;
 
         PhoenixUtil.tryUntilOk(10, ()-> intakeRollersMotor.getConfigurator().apply(intakeRollersConfig, 1));
-
+        
         intakeRollersPosition = intakeRollersMotor.getPosition(); //?
         intakeRollersVelocity = intakeRollersMotor.getVelocity();
         intakeRollersAppliedVolts = intakeRollersMotor.getMotorVoltage();
-        intakeRollersStatorCurrent = intakeRollersMotor.getStatorCurrent();
         intakeRollersSupplyCurrent = intakeRollersMotor.getSupplyCurrent();
+        intakeRollersStatorCurrent = intakeRollersMotor.getStatorCurrent();
         intakeRollersTemperature = intakeRollersMotor.getDeviceTemp();
 
         BaseStatusSignal.setUpdateFrequencyForAll(50, intakeRollersPosition, intakeRollersVelocity, intakeRollersAppliedVolts, intakeRollersStatorCurrent, intakeRollersSupplyCurrent, intakeRollersTemperature);
-        
+
         intakeRollersMotor.optimizeBusUtilization();
     }
 
     public void updateInputs(){
-        BaseStatusSignal.refreshAll(intakeRollersPosition, intakeRollersVelocity, intakeRollersAppliedVolts, intakeRollersStatorCurrent, intakeRollersSupplyCurrent, intakeRollersTemperature);
-
         super.position = intakeRollersPosition.getValueAsDouble();
         super.velocity = intakeRollersVelocity.getValueAsDouble();
         super.voltage = intakeRollersAppliedVolts.getValueAsDouble();
         super.statorCurrent = intakeRollersStatorCurrent.getValueAsDouble();
         super.supplyCurrent = intakeRollersSupplyCurrent.getValueAsDouble();
         super.temperature = intakeRollersTemperature.getValueAsDouble();
+        
+        BaseStatusSignal.refreshAll(intakeRollersPosition, intakeRollersVelocity, intakeRollersStatorCurrent, intakeRollersSupplyCurrent, intakeRollersAppliedVolts, intakeRollersTemperature);
 
         DogLog.log("Intake/Rollers/Position", super.position);
         DogLog.log("Intake/Rollers/Velocity", super.velocity);
@@ -84,6 +88,6 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
 
     @Override
     public void setVoltage(double voltage){
-        intakeRollersMotor.setVoltage(voltage);
+        intakeRollersMotor.setControl(new VoltageOut(voltage));
     }
 }

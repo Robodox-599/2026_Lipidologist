@@ -3,8 +3,8 @@ package frc.robot.subsystems.intake.intakeRollers; // make sure the folder name 
 import dev.doglog.DogLog;
 
 public class IntakeRollers {
-    private IntakeRollersIO io;
-    private WantedState wantedState = WantedState.STOPPED;
+    private final IntakeRollersIO io;
+    private WantedState wantedState = WantedState.STOP;
     private CurrentState currentState = CurrentState.STOPPED;
     
     public IntakeRollers(IntakeRollersIO io){
@@ -12,15 +12,15 @@ public class IntakeRollers {
     }
 
     public enum WantedState{
-        STOPPED,
-        INTAKING_FUEL,
+        STOP,
+        INTAKE_FUEL,
         REVERSE_FUEL
     }
 
     public enum CurrentState{
         STOPPED,
         INTAKING_FUEL,
-        REVERSE_FUEL
+        REVERSING_FUEL
     }
 
     public void updateInputs(){
@@ -31,16 +31,16 @@ public class IntakeRollers {
         DogLog.log("Intake/Rollers/CurrentState", currentState);
     }
 
-    public void handleStateTransitions(){
+    private void handleStateTransitions(){
         switch(wantedState){
-            case STOPPED:
+            case STOP:
                 currentState = CurrentState.STOPPED;
                 break;
-            case INTAKING_FUEL:
+            case INTAKE_FUEL:
                 currentState = CurrentState.INTAKING_FUEL;
                 break;
             case REVERSE_FUEL:
-                currentState = CurrentState.REVERSE_FUEL;
+                currentState = CurrentState.REVERSING_FUEL;
                 break;
             default:
                 currentState = CurrentState.STOPPED;
@@ -48,7 +48,7 @@ public class IntakeRollers {
         }
     } 
 
-    public void applyStates(){
+    private void applyStates(){
         switch(currentState){
             case STOPPED:
                 stop();
@@ -56,8 +56,11 @@ public class IntakeRollers {
             case INTAKING_FUEL:
                 setVoltage(0);
                 break;
-            case REVERSE_FUEL:
+            case REVERSING_FUEL:
                 setVoltage(0);
+                break;
+            default:
+                stop();
                 break;
         }
     }
@@ -77,8 +80,6 @@ public class IntakeRollers {
     public void setVoltage(double voltage){
         io.setVoltage(voltage);
     }
-
-
 }
 
 
