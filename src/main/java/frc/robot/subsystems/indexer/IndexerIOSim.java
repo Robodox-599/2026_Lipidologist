@@ -12,15 +12,15 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class IndexerIOSim extends IndexerIO {
   private final DCMotorSim indexerSimMotor;
-  private static final DCMotor indexerGearbox = DCMotor.getKrakenX60Foc(1);
-
+  
   private final Timer pulseTimer = new Timer();
   private boolean pulseOn = false;
 
   /** Creates a new IndexerIOSim. */
   public IndexerIOSim() {
     indexerSimMotor = new DCMotorSim(LinearSystemId.createDCMotorSystem
-      (indexerGearbox, IndexerConstants.indexerMOI, IndexerConstants.indexerGearRatio), indexerGearbox);
+      (DCMotor.getKrakenX60Foc(1), IndexerConstants.indexerMOI, 
+        IndexerConstants.indexerGearRatio), DCMotor.getKrakenX60Foc(1));
   }
 
   @Override
