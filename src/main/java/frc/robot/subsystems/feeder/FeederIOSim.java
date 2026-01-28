@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class FeederIOSim extends FeederIO {
   private final DCMotorSim feederSimMotor;
-  private static final DCMotor feederGearbox = DCMotor.getKrakenX60Foc(1);
 
   /** Creates a new IndexerIOSim. */
   public FeederIOSim() {
     feederSimMotor = new DCMotorSim(LinearSystemId.createDCMotorSystem
-      (feederGearbox, FeederConstants.feederMOI, FeederConstants.feederGearRatio), feederGearbox);
+      (DCMotor.getKrakenX60Foc(1), FeederConstants.feederMOI, 
+        FeederConstants.feederGearRatio), DCMotor.getKrakenX60Foc(1));
   }
 
   @Override
