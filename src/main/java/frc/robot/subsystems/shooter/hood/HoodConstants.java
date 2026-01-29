@@ -5,6 +5,7 @@ public class HoodConstants {
     public static final int hoodMotorID = 0;
     public static final String hoodCANBus = "rio";
     public static final double hoodGearRatio = 0;
+    public static final double hoodMOI = 0;
    
     //real PID
     public static final double hoodRealkP = 0;

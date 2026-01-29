@@ -5,6 +5,7 @@ public class FlywheelsConstants {
     public static final int flywheelMotorID = 0;
     public static final String flywheelCANBus = "rio";
     public static final double flywheelGearRatio = 0;
+    public static final double flywheelMOI = 0;
    
     //real PID
     public static final double flywheelRealkP = 0;

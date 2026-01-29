@@ -9,5 +9,6 @@ public class HoodIO {
 
     public void updateInputs() {}
     public void setPosition(double position) {}
+    public void setVoltage(double voltage) {}
     public void stop() {}
 }
