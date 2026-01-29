@@ -26,36 +26,35 @@ public class Robot extends TimedRobot {
   final CommandXboxController operator = new CommandXboxController(
       Constants.ControllerConstants.kOperatorControllerPort);
   // final CommandSwerveDrivetrain drivetrain;
-  
-    private final IntakeRollers intakeRollers;
-      
-    
-      @Override
-      protected void loopFunc() {
-        super.loopFunc();
-      }
-    
-      public Robot() {
-        DogLog.setOptions(
-            new DogLogOptions()
-                .withCaptureDs(true)
-                .withCaptureNt(true)
-                .withNtPublish(true)
-                .withCaptureConsole(true));
-                
-        switch (Constants.currentMode) {
-          case REAL:
-            // drivetrain = TunerConstants.createDrivetrain(driver);
-            intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
-            break;
-          case SIM:
-            // drivetrain = TunerConstants.createDrivetrain(driver);
-            intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
-            break;
-          default:
-            // drivetrain = TunerConstants.createDrivetrain(driver);
-            intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
-            break;
+
+  private final IntakeRollers intakeRollers;
+
+  @Override
+  protected void loopFunc() {
+    super.loopFunc();
+  }
+
+  public Robot() {
+    DogLog.setOptions(
+        new DogLogOptions()
+            .withCaptureDs(true)
+            .withCaptureNt(true)
+            .withNtPublish(true)
+            .withCaptureConsole(true));
+
+    switch (Constants.currentMode) {
+      case REAL:
+        // drivetrain = TunerConstants.createDrivetrain(driver);
+        intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
+        break;
+      case SIM:
+        // drivetrain = TunerConstants.createDrivetrain(driver);
+        intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
+        break;
+      default:
+        // drivetrain = TunerConstants.createDrivetrain(driver);
+        intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
+        break;
     }
 
     // new Bindings(driver, operator, superstructure);
