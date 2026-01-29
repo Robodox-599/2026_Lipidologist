@@ -4,5 +4,9 @@
 
 package frc.robot.subsystems.intake.intakeWrist;
 
+
+
 /** Add your docs here. */
-public class IntakeWristIOSim {}
+public class IntakeWristIOSim extends IntakeWristIO {
+
+}

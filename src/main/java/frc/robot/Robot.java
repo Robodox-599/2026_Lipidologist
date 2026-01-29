@@ -16,58 +16,67 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.constants.TunerConstants;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
+import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOSim;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOTalonFX;
 
 public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
 
-  final CommandXboxController driver =
-      new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
-  final CommandXboxController operator = new CommandXboxController(Constants.ControllerConstants.kOperatorControllerPort);
-  final CommandSwerveDrivetrain drivetrain;
+  final CommandXboxController driver = new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
+  final CommandXboxController operator = new CommandXboxController(
+      Constants.ControllerConstants.kOperatorControllerPort);
+  // final CommandSwerveDrivetrain drivetrain;
   
-  private final IntakeRollers intakeRollers;
-
-@Override
-  protected void loopFunc() {
-    super.loopFunc();
-  }
-
-  public Robot() {
-    intakeRollers =  new IntakeRollers(new IntakeRollersIOTalonFX());
-
-    DogLog.setOptions(
-        new DogLogOptions()
-            .withCaptureDs(true)
-            .withCaptureNt(true)
-            .withNtPublish(true)
-            .withCaptureConsole(true));
-
-    switch (Constants.currentMode) {
-      case REAL:
-        drivetrain = TunerConstants.createDrivetrain(driver);
-        break;
-      default:
-        drivetrain = TunerConstants.createDrivetrain(driver);
-        break;
+    private final IntakeRollers intakeRollers;
+      
+    
+      @Override
+      protected void loopFunc() {
+        super.loopFunc();
+      }
+    
+      public Robot() {
+        DogLog.setOptions(
+            new DogLogOptions()
+                .withCaptureDs(true)
+                .withCaptureNt(true)
+                .withNtPublish(true)
+                .withCaptureConsole(true));
+                
+        switch (Constants.currentMode) {
+          case REAL:
+            // drivetrain = TunerConstants.createDrivetrain(driver);
+            intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
+            break;
+          case SIM:
+            // drivetrain = TunerConstants.createDrivetrain(driver);
+            intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
+            break;
+          default:
+            // drivetrain = TunerConstants.createDrivetrain(driver);
+            intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
+            break;
     }
 
     // new Bindings(driver, operator, superstructure);
 
-    driver.x().onTrue(Commands.runOnce(() -> intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKING_FUEL)));
-    driver.y().onTrue(Commands.runOnce(() -> intakeRollers.setWantedState(IntakeRollers.WantedState.STOPPED)));
+    driver.x().onTrue(Commands.runOnce(() -> intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKE_FUEL)));
+    driver.y().onTrue(Commands.runOnce(() -> intakeRollers.setWantedState(IntakeRollers.WantedState.STOP)));
   }
 
   @Override
   public void robotPeriodic() {
+    intakeRollers.updateInputs();
     scheduler.run();
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
   @Override
   public void disabledExit() {
@@ -75,22 +84,26 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+  }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
   public void autonomousExit() {
     scheduler.cancelAll();
-    
+
   }
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+  }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   @Override
   public void teleopExit() {
@@ -98,10 +111,12 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testInit() {}
+  public void testInit() {
+  }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   @Override
   public void testExit() {

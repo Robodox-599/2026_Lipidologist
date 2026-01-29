@@ -32,7 +32,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
     private final StatusSignal<Temperature> intakeRollersTemperature;
 
     public IntakeRollersIOTalonFX(){
-        intakeRollersMotor = new TalonFX(IntakeRollersConstants.IntakeRollersMotorID, IntakeRollersConstants.IntakeRollersCanBus);
+        intakeRollersMotor = new TalonFX(IntakeRollersConstants.intakeRollersMotorID, IntakeRollersConstants.intakeRollersCanBus);
         intakeRollersConfig = new TalonFXConfiguration();
 
         // intakeRollersConfig.Slot0.kP = IntakeRollersConstants.kP;
@@ -61,14 +61,14 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
     }
 
     public void updateInputs(){
+        BaseStatusSignal.refreshAll(intakeRollersPosition, intakeRollersVelocity, intakeRollersStatorCurrent, intakeRollersSupplyCurrent, intakeRollersAppliedVolts, intakeRollersTemperature);
+
         super.position = intakeRollersPosition.getValueAsDouble();
         super.velocity = intakeRollersVelocity.getValueAsDouble();
         super.voltage = intakeRollersAppliedVolts.getValueAsDouble();
         super.statorCurrent = intakeRollersStatorCurrent.getValueAsDouble();
         super.supplyCurrent = intakeRollersSupplyCurrent.getValueAsDouble();
         super.temperature = intakeRollersTemperature.getValueAsDouble();
-        
-        BaseStatusSignal.refreshAll(intakeRollersPosition, intakeRollersVelocity, intakeRollersStatorCurrent, intakeRollersSupplyCurrent, intakeRollersAppliedVolts, intakeRollersTemperature);
 
         DogLog.log("Intake/Rollers/Position", super.position);
         DogLog.log("Intake/Rollers/Velocity", super.velocity);
