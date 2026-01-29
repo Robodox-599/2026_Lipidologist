@@ -58,10 +58,10 @@ public class Climb {
   private void applyStates(){
     switch(currentState){
         case EXTENDING:
-            setLeftClimbHeight(0);
+            setClimbHeight(50);
             break;
         case RETRACTING:
-            setLeftClimbHeight(0);
+            setClimbHeight(15);
             break;
         case STOPPED:
             stopClimb();  
@@ -72,11 +72,11 @@ public class Climb {
     }
   }
 
-  public void setLeftClimbVoltage(double volts){
+  public void setClimbVoltage(double volts){
     io.setClimbVoltage(volts);
   }
 
-  public void setLeftClimbHeight(double height){
+  public void setClimbHeight(double height){
     io.setClimbHeight(height);
   }
 

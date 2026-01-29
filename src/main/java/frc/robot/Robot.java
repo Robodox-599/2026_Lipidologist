@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.climb.Climb;
+import frc.robot.subsystems.climb.ClimbIOSim;
 import frc.robot.subsystems.climb.ClimbIOTalonFX;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.constants.TunerConstants;
@@ -28,13 +29,13 @@ public class Robot extends TimedRobot {
   final CommandXboxController operator = new CommandXboxController(Constants.ControllerConstants.kOperatorControllerPort);
   final CommandSwerveDrivetrain drivetrain;
 
-@Override
+  @Override
   protected void loopFunc() {
     super.loopFunc();
   }
 
   public Robot() {
-    climb = new Climb(new ClimbIOTalonFX());
+    climb = new Climb(new ClimbIOSim());
 
     DogLog.setOptions(
         new DogLogOptions()
@@ -61,6 +62,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    climb.updateInputs();
     scheduler.run();
   }
 

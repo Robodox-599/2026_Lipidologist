@@ -31,10 +31,10 @@ public class ClimbConstants {
 
   public static final double statorCurrentLimitAmps = 0;
   public static final double supplyCurrentLimitAmps = 0;
-  public static final double inchesPerRev = 0.0;
+  public static final double inchesPerRev = 1.073;
   public static final double climbLowerLimit = 0.0;
   public static final double climbUpperLimit = 100.0;
-  public static final double positionToleranceInches = 0.0;
+  public static final double positionToleranceInches = 0.5;
 
   public static double convertToTicks(double height) {
     return height / inchesPerRev;

@@ -11,10 +11,10 @@ public class ClimbIOSim extends ClimbIO {
   private final PIDController positionController;
   private double targetPositionInches = 0.0;
 
-  private static final DCMotor climbGearbox = DCMotor.getKrakenX60Foc(2);
+
   private static final ElevatorSim climbSim =
       new ElevatorSim(
-          climbGearbox,
+          DCMotor.getKrakenX60Foc(1),
           6,
           Units.lbsToKilograms(28),
           Units.inchesToMeters(1),
@@ -47,13 +47,14 @@ public class ClimbIOSim extends ClimbIO {
     DogLog.log("Climb/TempCelcius", super.tempCelsius);
   }
 
-   @Override
+  @Override
   public void setClimbHeight(double height) {
     targetPositionInches = 
       MathUtil.clamp
         (ClimbConstants.convertToTicks(height), ClimbConstants.climbLowerLimit, ClimbConstants.climbUpperLimit);
 
-    positionInches = targetPositionInches;
+    climbSim.setInputVoltage(positionController.calculate(super.positionInches, super.targetPositionInches));
+    
   }
 
   @Override
