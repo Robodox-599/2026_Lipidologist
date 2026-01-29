@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 
 public class Robot extends TimedRobot {
@@ -28,7 +29,7 @@ public class Robot extends TimedRobot {
   }
 
   public Robot() {
-    indexer = new Indexer(new IndexerIOTalonFX());
+    indexer = new Indexer(new IndexerIOSim());
 
     DogLog.setOptions(
         new DogLogOptions()
@@ -56,6 +57,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    indexer.updateIndexerInputs();
     scheduler.run();
   }
 

@@ -43,17 +43,17 @@ public class Indexer extends SubsystemBase {
   }
 
   public void handleStateTransitions(){
-    switch (currentState) {
-        case STOPPING:
+    switch (wantedState) {
+        case STOPPED:
             currentState = CurrentState.STOPPING;
             break;
-        case TRANSFERING_FUEL:
+        case TRANSFER_FUEL:
             currentState = CurrentState.TRANSFERING_FUEL;
             break;
-        case PULSING_FUEL:
+        case PULSE_FUEL:
             currentState = CurrentState.PULSING_FUEL; // use time wpilib func
             break;
-        case REVERSING:
+        case REVERSE:
             currentState = CurrentState.REVERSING;
             break;
         default:
