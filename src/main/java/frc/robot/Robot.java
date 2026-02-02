@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.feeder.FeederIOSim;
 import frc.robot.subsystems.feeder.FeederIOTalonFX;
 
 public class Robot extends TimedRobot {
@@ -28,7 +29,7 @@ public class Robot extends TimedRobot {
   }
 
   public Robot() {
-    feeder = new Feeder(new FeederIOTalonFX());
+    feeder = new Feeder(new FeederIOSim());
 
     DogLog.setOptions(
         new DogLogOptions()
@@ -54,6 +55,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    feeder.updateFeederInputs();
     scheduler.run();
   }
 
