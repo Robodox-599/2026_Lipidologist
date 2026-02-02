@@ -40,7 +40,6 @@ public class ClimbIOSim extends ClimbIO {
     super.velocityInchesPerSec = (Units.metersToInches(climbSim.getVelocityMetersPerSecond()));
     super.targetPositionInches = targetPositionInches;
     super.positionInches = (Units.metersToInches(climbSim.getPositionMeters()));
-    super.appliedVolts = climbSim.getCurrentDrawAmps();
     super.tempCelsius = 25.0;
 
     DogLog.log("Climb/VelocityInchesPerSec", super.velocityInchesPerSec);
@@ -66,7 +65,9 @@ public class ClimbIOSim extends ClimbIO {
 
   @Override
   public void setClimbVoltage(double voltage) {
+    super.appliedVolts = voltage;
     climbSim.setInputVoltage(voltage);
+
   }
 
   @Override
