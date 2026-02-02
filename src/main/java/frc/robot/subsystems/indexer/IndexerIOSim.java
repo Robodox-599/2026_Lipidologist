@@ -29,15 +29,11 @@ public class IndexerIOSim extends IndexerIO {
 
     super.position = indexerSimMotor.getAngularPositionRad();
     super.velocity = indexerSimMotor.getAngularVelocityRPM() / 60.0;
-    super.statorCurrent = indexerSimMotor.getCurrentDrawAmps();
-    super.supplyCurrent = indexerSimMotor.getCurrentDrawAmps();
     super.appliedVolts = indexerSimMotor.getInputVoltage();
     super.tempCelsius = 25.0;
 
     DogLog.log("Indexer/Velocity", super.velocity);
     DogLog.log("Indexer/Position", super.position);
-    DogLog.log("Indexer/SupplyCurrent", super.supplyCurrent);
-    DogLog.log("Indexer/StatorCurrent", super.statorCurrent);
     DogLog.log("Indexer/AppliedVolts", super.appliedVolts);
     DogLog.log("Indexer/Temperature", super.tempCelsius);
   }
