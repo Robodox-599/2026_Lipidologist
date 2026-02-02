@@ -2,6 +2,7 @@ package frc.robot.subsystems.climb;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 
 public class ClimbIOSim extends ClimbIO {
   private final PIDController positionController;
+  //private final ElevatorFeedforward feedForward;
   private double targetPositionInches = 0.0;
 
 
@@ -27,6 +29,7 @@ public class ClimbIOSim extends ClimbIO {
     positionController =
         new PIDController(
             ClimbConstants.simKP, ClimbConstants.simKI, ClimbConstants.simKD);
+    //feedForward = new ElevatorFeedforward(ClimbConstants.simKS, ClimbConstants.simKG, ClimbConstants.simKS);
     positionController.setTolerance(ClimbConstants.positionToleranceInches);
   }
 
@@ -53,8 +56,7 @@ public class ClimbIOSim extends ClimbIO {
       MathUtil.clamp
         (ClimbConstants.convertToTicks(height), ClimbConstants.climbLowerLimit, ClimbConstants.climbUpperLimit);
 
-    climbSim.setInputVoltage(positionController.calculate(super.positionInches, super.targetPositionInches));
-    
+    climbSim.setInputVoltage(positionController.calculate(super.positionInches, super.targetPositionInches));  
   }
 
   @Override

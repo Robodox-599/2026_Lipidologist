@@ -21,9 +21,12 @@ public class ClimbConstants {
   public static final double kV = 0.124 * climbGearRatio;
   public static final double kG = 0.0;
 
-  public static final double simKP = 0.45;
+  public static final double simKP = 4.5;//4.5
   public static final double simKI = 0;
   public static final double simKD = 0;
+  public static final double simKS = 0.0;
+  public static final double simKV = 0;
+  public static final double simKG = 0.0;
 
   public static final double supplyCurrentLimit = 40;
   public static final double maxVelocityRotsPerSec = 0;
@@ -31,7 +34,7 @@ public class ClimbConstants {
 
   public static final double statorCurrentLimitAmps = 0;
   public static final double supplyCurrentLimitAmps = 0;
-  public static final double inchesPerRev = 1.073;
+  public static final double inchesPerRev = 1.0;
   public static final double climbLowerLimit = 0.0;
   public static final double climbUpperLimit = 100.0;
   public static final double positionToleranceInches = 0.5;
