@@ -25,15 +25,11 @@ public class FeederIOSim extends FeederIO {
 
     super.position = feederSimMotor.getAngularPositionRad();
     super.velocity = feederSimMotor.getAngularVelocityRPM() / 60.0;
-    super.statorCurrent = feederSimMotor.getCurrentDrawAmps();
-    super.supplyCurrent = feederSimMotor.getCurrentDrawAmps();
     super.appliedVolts = feederSimMotor.getInputVoltage();
     super.tempCelsius = 25.0;
 
     DogLog.log("Feeder/Velocity", super.velocity);
     DogLog.log("Feeder/Position", super.position);
-    DogLog.log("Feeder/SupplyCurrent", super.supplyCurrent);
-    DogLog.log("Feeder/StatorCurrent", super.statorCurrent);
     DogLog.log("Feeder/AppliedVolts", super.appliedVolts);
     DogLog.log("Feeder/Temperature", super.tempCelsius);
   }
