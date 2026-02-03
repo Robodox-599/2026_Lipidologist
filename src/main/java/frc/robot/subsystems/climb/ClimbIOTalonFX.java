@@ -1,6 +1,7 @@
 package frc.robot.subsystems.climb;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -20,7 +21,7 @@ import frc.robot.util.PhoenixUtil;
 
 public class ClimbIOTalonFX extends ClimbIO {
   private final TalonFX climbMotor;
-
+  private final CANBus climbBus;
   private TalonFXConfiguration climbConfig;
 
   private final MotionMagicVoltage motionMagicRequest;
@@ -33,7 +34,8 @@ public class ClimbIOTalonFX extends ClimbIO {
   private final StatusSignal<Temperature> climbTempCelsius;
 
   public ClimbIOTalonFX() {
-    climbMotor = new TalonFX(ClimbConstants.climbLeftMotorID, ClimbConstants.climbLeftMotorCANbus);
+    climbBus = new CANBus(ClimbConstants.climbMotorCANbus);
+    climbMotor = new TalonFX(ClimbConstants.climbMotorID, climbBus);
 
     motionMagicRequest = new MotionMagicVoltage(0).withSlot(0).withEnableFOC(true);
 
