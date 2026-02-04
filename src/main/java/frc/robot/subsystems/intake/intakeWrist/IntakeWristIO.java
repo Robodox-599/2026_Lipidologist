@@ -4,19 +4,16 @@
 
 package frc.robot.subsystems.intake.intakeWrist;
 
-import frc.robot.subsystems.intake.intakeWrist.IntakeWrist.WantedState;
-
 /** Add your docs here. */
 public class IntakeWristIO {
     protected double targetPosition = 0;
+    public double currentPosition = 0;
     protected double velocity = 0;
     protected double voltage = 0;
     protected double statorCurrent = 0;
     protected double supplyCurrent = 0;
     protected double Temperature = 0;
     public double temperature;
-
-    public double wantedPosition = 0;
 
     public boolean atSetpoint = false;
 
@@ -27,5 +24,6 @@ public class IntakeWristIO {
     public double getPosition(){
         return 0.0;
     }
+    public void setVoltage(double voltage) {}
 
 }

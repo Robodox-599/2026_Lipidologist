@@ -30,8 +30,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
     public final CANcoder intakeWristCanCoder;
     public final TalonFXConfiguration intakeWristConfig;
     public final CANcoderConfiguration canCoderConfig;
-    // make sure to make this private (doesn't affect the functionality, but makes the code style consistant)
-    MotionMagicVoltage m_request;
+    private MotionMagicVoltage m_request;
 
     public StatusSignal<Angle> intakeWristPosition;
     public StatusSignal<AngularVelocity> intakeWristVelocity;
@@ -47,27 +46,29 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
         canCoderConfig = new CANcoderConfiguration();
         m_request = new MotionMagicVoltage(0);
 
-        canCoderConfig.MagnetSensor.MagnetOffset = IntakeWristConstants.intakeWristMagnetOffset;
+        canCoderConfig.MagnetSensor.MagnetOffset = IntakeWristConstants.magnetOffset;
         canCoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-        canCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = IntakeWristConstants.intakeAbsoluteDiscontinuityPoint;
+        canCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = IntakeWristConstants.absoluteDiscontinuityPoint;
 
         intakeWristConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        intakeWristConfig.CurrentLimits.StatorCurrentLimit = IntakeWristConstants.supplyCurrentLimit;
+        intakeWristConfig.CurrentLimits.SupplyCurrentLimit = IntakeWristConstants.supplyCurrentLimit; //check needed
 
         intakeWristConfig.Slot0.kP = IntakeWristConstants.kP;
         intakeWristConfig.Slot0.kI = IntakeWristConstants.kI;
         intakeWristConfig.Slot0.kD = IntakeWristConstants.kD;
         intakeWristConfig.Slot0.kS = IntakeWristConstants.kS;
         intakeWristConfig.Slot0.kV = IntakeWristConstants.kV;
+        intakeWristConfig.Slot0.kG = IntakeWristConstants.kG;
+
         intakeWristConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         
         intakeWristConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
         intakeWristConfig.Feedback.FeedbackRemoteSensorID = IntakeWristConstants.intakeWristCanCoderID;
-        intakeWristConfig.Feedback.RotorToSensorRatio = IntakeWristConstants.intakeWristGearRatio;
+        intakeWristConfig.Feedback.RotorToSensorRatio = IntakeWristConstants.gearRatio;
         intakeWristConfig.ClosedLoopGeneral.ContinuousWrap = false;
 
-        intakeWristConfig.MotionMagic.MotionMagicCruiseVelocity = IntakeWristConstants.intakeWristMaxVelocity;
-        intakeWristConfig.MotionMagic.MotionMagicCruiseVelocity = IntakeWristConstants.intakeWristMaxAcceleration;
+        intakeWristConfig.MotionMagic.MotionMagicCruiseVelocity = IntakeWristConstants.maxVelocity;
+        intakeWristConfig.MotionMagic.MotionMagicCruiseVelocity = IntakeWristConstants.maxAcceleration;
 
         PhoenixUtil.tryUntilOk(10, () -> intakeWristMotor.getConfigurator().apply(intakeWristConfig));
         PhoenixUtil.tryUntilOk(10, () -> intakeWristCanCoder.getConfigurator().apply(canCoderConfig));
@@ -88,22 +89,23 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
     }
 
     public void updateInputs(){
-        super.targetPosition = intakeWristPosition.getValueAsDouble();
-        super.velocity = intakeWristPosition.getValueAsDouble();
+        super.currentPosition = intakeWristPosition.getValueAsDouble();
+        super.velocity = intakeWristVelocity.getValueAsDouble();
         super.voltage = intakeWristAppliedVolts.getValueAsDouble();
         super.statorCurrent = intakeWristStatorCurrent.getValueAsDouble();
         super.supplyCurrent = intakeWristSupplyCurrent.getValueAsDouble();
         super.temperature = intakeWristTemperature.getValueAsDouble();
 
-        super.atSetpoint = Math.abs(super.targetPosition - super.wantedPosition) < 0.02;
+        super.atSetpoint = Math.abs(super.currentPosition - super.targetPosition) < 0.02;
 
-        DogLog.log("Intake/Wrist/position", targetPosition);
-        DogLog.log("Intake/Wrist/IsWristInPosition", super.atSetpoint);
-        DogLog.log("Intake/Wrist/Velocity", velocity);
-        DogLog.log("Intake/Wrist/Voltage", voltage);
-        DogLog.log("Intake/Wrist/StatorCurrent", statorCurrent);
-        DogLog.log("Intake/Wrist/SupplyCurrent", supplyCurrent);
-        DogLog.log("Intake/Wrist/Temperature", temperature);  
+        DogLog.log("Intake/Wrist/Position", super.currentPosition);
+        DogLog.log("Intake/Wrist/TargetPosition", super.targetPosition);
+        DogLog.log("Intake/Wrist/AtSetpoint", super.atSetpoint);
+        DogLog.log("Intake/Wrist/Velocity", super.velocity);
+        DogLog.log("Intake/Wrist/Voltage", super.voltage);
+        DogLog.log("Intake/Wrist/StatorCurrent", super.statorCurrent);
+        DogLog.log("Intake/Wrist/SupplyCurrent", super.supplyCurrent);
+        DogLog.log("Intake/Wrist/Temperature", super.temperature);  
     }
 
     /**

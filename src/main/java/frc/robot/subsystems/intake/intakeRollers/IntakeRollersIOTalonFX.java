@@ -7,7 +7,6 @@ package frc.robot.subsystems.intake.intakeRollers;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -74,15 +73,12 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         DogLog.log("Intake/Rollers/Velocity", super.velocity);
         DogLog.log("Intake/Rollers/Voltage", super.voltage);
         DogLog.log("Intake/Rollers/StatorCurrent", super.statorCurrent);
-        DogLog.log("Intake/Rollers/SupplyCurrent", super.supplyCurrent);
+        DogLog.log("Intake/Rollers/SupplyCurrent", supplyCurrent);
         DogLog.log("Intake/Rollers/Temperature", super.temperature);
     }
 
     @Override
     public void stop(){
-        /**
-         * Stops the intakeRollersMotor
-         */
         intakeRollersMotor.stopMotor();
     }
 

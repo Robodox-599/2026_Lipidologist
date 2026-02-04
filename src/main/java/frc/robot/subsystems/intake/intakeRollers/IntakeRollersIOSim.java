@@ -18,28 +18,32 @@ public class IntakeRollersIOSim extends IntakeRollersIO {
         intakeRollersMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1),
                 IntakeRollersConstants.rotationalInertia, IntakeRollersConstants.intakeRollersGearRatio),
                 DCMotor.getKrakenX60Foc(1));
-
-                
     }
 
     @Override
     public void updateInputs() {
         intakeRollersMotorSim.update(0.02);
         super.statorCurrent = intakeRollersMotorSim.getCurrentDrawAmps();
-        super.supplyCurrent = 0.0;
         super.velocity = intakeRollersMotorSim.getAngularVelocityRPM();
-        super.voltage = 0.0;
+        super.voltage = intakeRollersMotorSim.getInputVoltage();
+        DogLog.log("Intake/Rollers/StatorCurrent", super.statorCurrent);
+        DogLog.log("Intake/Rollers/Velocity", super.velocity);
+        DogLog.log("Intake/Rollers/Voltage", super.voltage);
 
     }
 
     @Override
     public void setVoltage(double voltage) {
-        super.voltage = voltage;
         intakeRollersMotorSim.setInputVoltage(MathUtil.clamp(voltage, -12, 12));
     }
 
     @Override
     public void setVelocity(double velocity) {
         intakeRollersMotorSim.setAngularVelocity(velocity);
+    }
+
+    @Override
+    public void stop(){
+        intakeRollersMotorSim.setInputVoltage(0);
     }
 }

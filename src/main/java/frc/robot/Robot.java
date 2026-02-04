@@ -18,16 +18,20 @@ import frc.robot.subsystems.drive.constants.TunerConstants;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOSim;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOTalonFX;
+import frc.robot.subsystems.intake.intakeWrist.IntakeWrist;
+import frc.robot.subsystems.intake.intakeWrist.IntakeWristIOSim;
+import frc.robot.subsystems.intake.intakeWrist.IntakeWristIOTalonFX;
 
 public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
 
   final CommandXboxController driver = new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
-  final CommandXboxController operator = new CommandXboxController(
-      Constants.ControllerConstants.kOperatorControllerPort);
+  // final CommandXboxController operator = new CommandXboxController(
+  //     Constants.ControllerConstants.kOperatorControllerPort);
   // final CommandSwerveDrivetrain drivetrain;
 
   private final IntakeRollers intakeRollers;
+  private final IntakeWrist intakeWrist;
 
   @Override
   protected void loopFunc() {
@@ -46,26 +50,31 @@ public class Robot extends TimedRobot {
       case REAL:
         // drivetrain = TunerConstants.createDrivetrain(driver);
         intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
+        intakeWrist = new IntakeWrist(new IntakeWristIOTalonFX());
         break;
       case SIM:
         // drivetrain = TunerConstants.createDrivetrain(driver);
         intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
+        intakeWrist = new IntakeWrist(new IntakeWristIOSim());
         break;
       default:
         // drivetrain = TunerConstants.createDrivetrain(driver);
         intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
+        intakeWrist = new IntakeWrist(new IntakeWristIOSim());
         break;
     }
 
     // new Bindings(driver, operator, superstructure);
 
-    driver.x().onTrue(Commands.runOnce(() -> intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKE_FUEL)));
-    driver.y().onTrue(Commands.runOnce(() -> intakeRollers.setWantedState(IntakeRollers.WantedState.STOP)));
+       driver.x().onTrue(Commands.runOnce(() -> intakeWrist.setWantedState(IntakeWrist.WristWantedState.INTAKE_FUEL)));
+       driver.y().onTrue(Commands.runOnce(() -> intakeWrist.setWantedState(IntakeWrist.WristWantedState.STOW)));
+       driver.b().onTrue(Commands.runOnce(() -> intakeWrist.setWantedState(IntakeWrist.WristWantedState.AGITATE_FUEL)));
   }
 
   @Override
   public void robotPeriodic() {
     intakeRollers.updateInputs();
+    intakeWrist.updateInputs();
     scheduler.run();
   }
 

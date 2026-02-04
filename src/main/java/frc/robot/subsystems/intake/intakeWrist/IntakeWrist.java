@@ -5,28 +5,29 @@
 package frc.robot.subsystems.intake.intakeWrist;
 
 import dev.doglog.DogLog;
+import edu.wpi.first.math.util.Units;
 
 /** Add your docs here. */
 public class IntakeWrist {
-    private IntakeWristIO io;
-    private WantedState wantedState = WantedState.STOP;
-    private CurrentState currentState = CurrentState.STOPPED;
+    private final IntakeWristIO io;
+    private WristWantedState wantedState = WristWantedState.STOP;
+    private WristCurrentState currentState = WristCurrentState.STOPPED;
 
     public IntakeWrist(IntakeWristIO io){
         this.io = io;
     }
 
-    public enum WantedState{
+    public enum WristWantedState{
         STOP,
         INTAKE_FUEL,
-        STOW,
+        STOW, //pack
         AGITATE_FUEL
     }
 
-    public enum CurrentState{
+    public enum WristCurrentState{
         STOPPED,
         INTAKING_FUEL,
-        STOWING,
+        STOWING, //packing
         WRIST_RETRACTING,
         WRIST_EXTENDING
     }
@@ -42,33 +43,33 @@ public class IntakeWrist {
     public void handleStateTransitions(){
         switch(wantedState){
             case STOP:
-                currentState = CurrentState.STOPPED;
+                currentState = WristCurrentState.STOPPED;
                 break;
             case INTAKE_FUEL:
-                currentState = CurrentState.INTAKING_FUEL;
+                currentState = WristCurrentState.INTAKING_FUEL;
                 break;
             case STOW:
-                currentState = CurrentState.STOWING;
+                currentState = WristCurrentState.STOWING;
                 break;
             case AGITATE_FUEL:
-                if (currentState == CurrentState.WRIST_RETRACTING){
+                if (currentState == WristCurrentState.WRIST_RETRACTING){
                     if (atSetpoint()){
-                        currentState = CurrentState.WRIST_EXTENDING;
+                        currentState = WristCurrentState.WRIST_EXTENDING;
                     } else{
-                        currentState = CurrentState.WRIST_RETRACTING;
+                        currentState = WristCurrentState.WRIST_RETRACTING;
                     }
-                } else if(currentState == CurrentState.WRIST_EXTENDING){
+                } else if(currentState == WristCurrentState.WRIST_EXTENDING){
                     if (atSetpoint()){
-                        currentState = CurrentState.WRIST_RETRACTING;
+                        currentState = WristCurrentState.WRIST_RETRACTING;
                     } else{
-                        currentState = CurrentState.WRIST_EXTENDING;
+                        currentState = WristCurrentState.WRIST_EXTENDING;
                     } 
                 } else {
-                    currentState = CurrentState.WRIST_EXTENDING;
+                    currentState = WristCurrentState.WRIST_EXTENDING;
                 }
                 break;
             default:
-                currentState = CurrentState.STOPPED;
+                currentState = WristCurrentState.STOPPED;
                 break;
         }
     }
@@ -79,16 +80,16 @@ public class IntakeWrist {
                 stop();
                 break;
             case INTAKING_FUEL:
-                setPosition(0);
+                setPosition(0.3);
                 break;
             case STOWING:
-                setPosition(0);
+                setPosition(.2);
                 break;
             case WRIST_RETRACTING:
-                setPosition(0);
+                setPosition(0.2);
                 break;
             case WRIST_EXTENDING:
-                setPosition(0);
+                setPosition(0.4);
                 break;
             default:
                 stop();
@@ -101,12 +102,12 @@ public class IntakeWrist {
         io.stop();
     }
 
-    public void setWantedState(WantedState intakeWristWantedState){
-        wantedState = intakeWristWantedState;
+    public void setWantedState(IntakeWrist.WristWantedState wantedState){
+        this.wantedState = wantedState;
     }
 
     public void setPosition(double position){
-        io.wantedPosition = position;
+        io.setPosition(position);
     }
 
     public boolean atSetpoint(){

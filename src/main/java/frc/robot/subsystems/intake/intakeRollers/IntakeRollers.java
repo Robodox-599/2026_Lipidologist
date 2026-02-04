@@ -27,8 +27,8 @@ public class IntakeRollers {
         io.updateInputs();
         handleStateTransitions();
         applyStates();
-        DogLog.log("Intake/Rollers/WantedState", wantedState);
-        DogLog.log("Intake/Rollers/CurrentState", currentState);
+        DogLog.log("Intake/Rollers/WantedState", this.wantedState);
+        DogLog.log("Intake/Rollers/CurrentState", this.currentState);
     }
 
     private void handleStateTransitions(){
@@ -54,10 +54,10 @@ public class IntakeRollers {
                 stop();
                 break;
             case INTAKING_FUEL:
-                setVoltage(0);
+                setVoltage(5);
                 break;
             case REVERSING_FUEL:
-                setVoltage(0);
+                setVoltage(-5);
                 break;
             default:
                 stop();
