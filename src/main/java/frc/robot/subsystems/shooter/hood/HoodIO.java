@@ -1,7 +1,7 @@
 package frc.robot.subsystems.shooter.hood;
 
 public class HoodIO {
-    protected double position = 0;
+    protected double positionRadians = 0;
     protected double velocity = 0;
     protected double wantedPosition = 0;
     protected double targetPosition = 0;

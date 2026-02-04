@@ -1,8 +1,10 @@
 package frc.robot;
 
 import frc.robot.subsystems.shooter.hood.Hood;
+import frc.robot.subsystems.shooter.hood.HoodIOSim;
 import frc.robot.subsystems.shooter.hood.HoodIOTalonFX;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
+import frc.robot.subsystems.shooter.flywheels.FlywheelsIOSim;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOTalonFX;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
@@ -15,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Superstructure;
 
 public class Robot extends TimedRobot {
+  public static final RobotType ROBOT_TYPE = Robot.isReal() ? RobotType.REAL : RobotType.SIM;
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
   private final Hood hood;
   private final Flywheels flywheels;
@@ -25,6 +28,11 @@ public class Robot extends TimedRobot {
   // final Superstructure superstructure = new Superstructure();
 
   // final AutoFactory autoFactory;
+
+  public enum RobotType {
+    REAL,
+    SIM
+  }
 
 @Override
   protected void loopFunc() {
@@ -39,8 +47,8 @@ public class Robot extends TimedRobot {
             .withNtPublish(true)
             .withCaptureConsole(true));
 
-    hood = new Hood(new HoodIOTalonFX());
-    flywheels = new Flywheels(new FlywheelsIOTalonFX());
+    hood = new Hood(ROBOT_TYPE != RobotType.SIM ? new HoodIOTalonFX() : new HoodIOSim());
+    flywheels = new Flywheels(ROBOT_TYPE != RobotType.SIM ? new FlywheelsIOTalonFX() : new FlywheelsIOSim());
 
     switch (Constants.currentMode) {
       case REAL:
@@ -109,5 +117,8 @@ public class Robot extends TimedRobot {
 
     driver.a().onTrue(Commands.runOnce(() -> flywheels.setWantedState(Flywheels.WantedState.SET_RPM, 1)));
     driver.b().onTrue(Commands.runOnce(() -> hood.setWantedState(Hood.WantedState.SET_POSITION, 4)));
+
+    driver.leftTrigger().onTrue(Commands.runOnce(() -> flywheels.setVoltage(1)));
+    driver.rightTrigger().onTrue(Commands.runOnce(() -> hood.setVoltage(1)));
    }
 }

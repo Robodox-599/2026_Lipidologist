@@ -29,12 +29,12 @@ public class HoodIOSim extends HoodIO{
     public void updateInputs(){
     hoodMotorSim.update(0.02);
 
-    super.position = hoodMotorSim.getAngularPositionRad();
+    super.positionRadians = hoodMotorSim.getAngularPositionRad();
     super.velocity = hoodMotorSim.getAngularVelocityRPM() / 60.0;
  
 
     DogLog.log("Hood/Velocity", super.velocity);
-    DogLog.log("Hood/Position", super.position);
+    DogLog.log("Hood/Position", super.positionRadians);
   }
 
   @Override

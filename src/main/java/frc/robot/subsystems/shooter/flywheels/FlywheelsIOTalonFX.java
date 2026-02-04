@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter.flywheels;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -19,6 +20,7 @@ import frc.robot.util.PhoenixUtil;
 
 public class FlywheelsIOTalonFX extends FlywheelsIO{
     //motors + configuration
+    private final CANBus flywheelCANBus;
     private final TalonFX flywheelMotor;
     TalonFXConfiguration flywheelConfiguration;
    
@@ -32,7 +34,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
 
     public FlywheelsIOTalonFX(){
         //motors + configuration
-        flywheelMotor = new TalonFX(FlywheelsConstants.flywheelMotorID, FlywheelsConstants.flywheelCANBus);
+        flywheelCANBus = new CANBus();
+        flywheelMotor = new TalonFX(FlywheelsConstants.flywheelMotorID, flywheelCANBus);
         flywheelConfiguration = new TalonFXConfiguration();  
         
         //applying PID to configuration

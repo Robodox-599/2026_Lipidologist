@@ -66,6 +66,9 @@ public class Flywheels extends FlywheelsIO{
         io.stop();
     }
     
+     public void setVoltage(double voltage) {
+        io.setVoltage(voltage);
+    }
     
     public boolean flywheelsAtSetpoint() {
         return io.isFlywheelAtSetpoint;

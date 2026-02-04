@@ -65,6 +65,10 @@ public class Hood extends HoodIO{
     public void stop() {
         io.stop();
     }
+
+    public void setVoltage(double voltage) {
+        io.setVoltage(voltage);
+    }
     
     public boolean isHoodAtSetpoint() {
         return io.isHoodInPosition;
