@@ -9,7 +9,7 @@ public class ClimbConstants {
   public static final String climbMotorCANbus = "rio";
   
   public static final double climbGearRatio = 2;
-  public static final double climbMOI = 2;
+  public static final double climbMOI = 0.01;
 
   public static final double kP = 0.45;
   public static final double kI = 0;
@@ -18,16 +18,16 @@ public class ClimbConstants {
   public static final double kV = 0.124 * climbGearRatio;
   public static final double kG = 0.0;
 
-  public static final double simKP = 4.5;//4.5
+  public static final double simKP = 0.9;//0.45
   public static final double simKI = 0;
-  public static final double simKD = 0;
+  public static final double simKD = 0.0;
   public static final double simKS = 0.0;
   public static final double simKV = 0;
   public static final double simKG = 0.0;
 
   public static final double supplyCurrentLimit = 40;
-  public static final double maxVelocityRotsPerSec = 0;
-  public static final double maxAccelerationRotationsPerSecSQ = 0;
+  public static final double maxVelocityRotsPerSec = 100;
+  public static final double maxAccelerationRotationsPerSecSQ = maxVelocityRotsPerSec / 2;
 
   public static final double statorCurrentLimitAmps = 0;
   public static final double supplyCurrentLimitAmps = 0;

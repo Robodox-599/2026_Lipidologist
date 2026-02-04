@@ -2,34 +2,28 @@ package frc.robot.subsystems.climb;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class ClimbIOSim extends ClimbIO {
-  private final PIDController positionController;
-  //private final ElevatorFeedforward feedForward;
+  private final ProfiledPIDController positionController;
   private double targetPositionInches = 0.0;
 
-
-  private static final ElevatorSim climbSim =
-      new ElevatorSim(
-          DCMotor.getKrakenX60Foc(1),
-          6,
-          Units.lbsToKilograms(28),
-          Units.inchesToMeters(1),
-          Units.inchesToMeters(0),
-          Units.inchesToMeters(89),
-          true,
-          0);
+  private final DCMotorSim climbSim;
+  private static final DCMotor climbGearbox = DCMotor.getKrakenX60Foc(1);
 
   public ClimbIOSim() {
     positionController =
-        new PIDController(
-            ClimbConstants.simKP, ClimbConstants.simKI, ClimbConstants.simKD);
-    //feedForward = new ElevatorFeedforward(ClimbConstants.simKS, ClimbConstants.simKG, ClimbConstants.simKS);
+        new ProfiledPIDController(
+            ClimbConstants.simKP, ClimbConstants.simKI, ClimbConstants.simKD, 
+              new TrapezoidProfile.Constraints(ClimbConstants.maxVelocityRotsPerSec, ClimbConstants.maxAccelerationRotationsPerSecSQ));
+
+    climbSim = new DCMotorSim(LinearSystemId.createDCMotorSystem
+      (climbGearbox, ClimbConstants.climbMOI, ClimbConstants.climbGearRatio), climbGearbox);
+
     positionController.setTolerance(ClimbConstants.positionToleranceInches);
   }
 
@@ -37,9 +31,9 @@ public class ClimbIOSim extends ClimbIO {
   public void updateInputs() {
     climbSim.update(0.02);
 
-    super.velocityInchesPerSec = (Units.metersToInches(climbSim.getVelocityMetersPerSecond()));
+    super.velocityInchesPerSec = (climbSim.getAngularVelocityRPM() * ClimbConstants.inchesPerRev) / 60.0;
     super.targetPositionInches = targetPositionInches;
-    super.positionInches = (Units.metersToInches(climbSim.getPositionMeters()));
+    super.positionInches = (climbSim.getAngularPositionRad() / (2 * Math.PI)) * ClimbConstants.inchesPerRev;
     super.tempCelsius = 25.0;
 
     DogLog.log("Climb/VelocityInchesPerSec", super.velocityInchesPerSec);
