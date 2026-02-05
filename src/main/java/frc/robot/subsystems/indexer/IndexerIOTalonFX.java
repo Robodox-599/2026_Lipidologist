@@ -1,6 +1,7 @@
 package frc.robot.subsystems.indexer;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class IndexerIOTalonFX extends IndexerIO {
     private final TalonFX indexerMotor;
+    private final CANBus indexerBus;
     private TalonFXConfiguration indexerMotorConfig;
 
     private final Timer pulseTimer = new Timer();
@@ -29,7 +31,8 @@ public class IndexerIOTalonFX extends IndexerIO {
     private final StatusSignal<Current> indexerSupplyCurrent;
 
     public IndexerIOTalonFX() {
-        indexerMotor = new TalonFX(IndexerConstants.indexerMotorID, IndexerConstants.indexerCANBus);
+        indexerBus = new CANBus(IndexerConstants.indexerCANBus);
+        indexerMotor = new TalonFX(IndexerConstants.indexerMotorID, indexerBus);
         indexerMotorConfig = new TalonFXConfiguration();
         
         indexerMotorConfig.Slot0.kP = IndexerConstants.kP;

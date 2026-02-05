@@ -35,6 +35,7 @@ import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.feeder.FeederIOSim;
 import frc.robot.subsystems.feeder.FeederIOTalonFX;
 import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOTalonFX;
