@@ -14,14 +14,9 @@ public class IntakeWrist {
     private WristCurrentState currentState = WristCurrentState.STOPPED;
 
     public IntakeWrist(IntakeWristIO io){
-    public IntakeWrist(IntakeWristIO io){
         this.io = io;
     }
 
-    public enum WantedState{
-        STOPPED,
-        INTAKE_FUEL,
-        STOW,
     public enum WristWantedState{
         STOP,
         INTAKE_FUEL,
@@ -29,7 +24,6 @@ public class IntakeWrist {
         AGITATE_FUEL
     }
 
-    public enum CurrentState{
     public enum WristCurrentState{
         STOPPED,
         INTAKING_FUEL,
@@ -55,13 +49,9 @@ public class IntakeWrist {
             case INTAKE_FUEL:
                 currentState = WristCurrentState.INTAKING_FUEL;
                 break;
-            case INTAKE_FUEL:
-                currentState = CurrentState.INTAKING_FUEL;
             case STOW:
                 currentState = WristCurrentState.STOWING;
                 break;
-            case STOW:
-                currentState = CurrentState.STOWED;
             case AGITATE_FUEL:
                 if (currentState == WristCurrentState.WRIST_RETRACTING){
                     if (atSetpoint()){

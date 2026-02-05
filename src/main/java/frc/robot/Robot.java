@@ -66,7 +66,6 @@ public class Robot extends TimedRobot {
   final AutoRoutines autoRoutines;
 
   @Override
-  @Override
   protected void loopFunc() {
     super.loopFunc();
   }
@@ -153,12 +152,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
   }
-  public void disabledInit() {
-  }
 
   @Override
-  public void disabledPeriodic() {
-  }
   public void disabledPeriodic() {
   }
 
@@ -170,12 +165,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
   }
-  public void autonomousInit() {
-  }
 
   @Override
-  public void autonomousPeriodic() {
-  }
   public void autonomousPeriodic() {
   }
 
@@ -187,16 +178,10 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopInit() {
-  }
-  public void teleopInit() {
-  }
+  public void teleopInit() {}
 
   @Override
-  public void teleopPeriodic() {
-  }
-  public void teleopPeriodic() {
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void teleopExit() {
@@ -206,12 +191,8 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
   }
-  public void testInit() {
-  }
 
   @Override
-  public void testPeriodic() {
-  }
   public void testPeriodic() {
   }
 

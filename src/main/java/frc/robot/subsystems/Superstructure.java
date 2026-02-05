@@ -162,8 +162,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setTargetRotation(adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.WantedState.STOPPED);
         indexer.setWantedState(Indexer.WantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKING_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.WantedState.INTAKE_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKE_FUEL);
+        intakeWrist.setWantedState(IntakeWrist.WristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.WantedState.SET_RPM, adjustedShot.shootSpeed());
         hood.setWantedState(Hood.WantedState.SET_POSITION, adjustedShot.hoodAngle());
     }
@@ -175,8 +175,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setTargetRotation(adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.WantedState.FEED_FUEL);
         indexer.setWantedState(Indexer.WantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKING_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.WantedState.INTAKE_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKE_FUEL);
+        intakeWrist.setWantedState(IntakeWrist.WristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.WantedState.SET_RPM, adjustedShot.shootSpeed());
         hood.setWantedState(Hood.WantedState.SET_POSITION, adjustedShot.hoodAngle());
     }
@@ -188,8 +188,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setTargetRotation(adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.WantedState.STOPPED);
         indexer.setWantedState(Indexer.WantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKING_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.WantedState.INTAKE_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKE_FUEL);
+        intakeWrist.setWantedState(IntakeWrist.WristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.WantedState.SET_RPM, adjustedShot.shootSpeed());
         hood.setWantedState(Hood.WantedState.SET_POSITION, adjustedShot.hoodAngle());
     }
@@ -201,8 +201,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setTargetRotation(adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.WantedState.FEED_FUEL);
         indexer.setWantedState(Indexer.WantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKING_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.WantedState.INTAKE_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKE_FUEL);
+        intakeWrist.setWantedState(IntakeWrist.WristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.WantedState.SET_RPM, adjustedShot.shootSpeed());
         hood.setWantedState(Hood.WantedState.SET_POSITION, adjustedShot.hoodAngle());
     }
@@ -211,8 +211,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
         feeder.setWantedState(Feeder.WantedState.STOPPED);
         indexer.setWantedState(Indexer.WantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKING_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.WantedState.INTAKE_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKE_FUEL);
+        intakeWrist.setWantedState(IntakeWrist.WristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.WantedState.SET_RPM);
         hood.setWantedState(Hood.WantedState.SET_POSITION);
     }
@@ -221,8 +221,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
         feeder.setWantedState(Feeder.WantedState.STOPPED);
         indexer.setWantedState(Indexer.WantedState.STOPPED);
-        intakeRollers.setWantedState(IntakeRollers.WantedState.STOPPED);
-        intakeWrist.setWantedState(IntakeWrist.WantedState.STOPPED);
+        intakeRollers.setWantedState(IntakeRollers.WantedState.STOP);
+        intakeWrist.setWantedState(IntakeWrist.WristWantedState.STOP);
         flywheels.setWantedState(Flywheels.WantedState.STOPPED);
         hood.setWantedState(Hood.WantedState.STOPPED);
     }
