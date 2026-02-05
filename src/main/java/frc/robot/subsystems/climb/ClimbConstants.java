@@ -18,7 +18,7 @@ public class ClimbConstants {
   public static final double kV = 0.124 * climbGearRatio;
   public static final double kG = 0.0;
 
-  public static final double simKP = 0.9;//0.45
+  public static final double simKP = 0.35;//0.45
   public static final double simKI = 0;
   public static final double simKD = 0.0;
   public static final double simKS = 0.0;
