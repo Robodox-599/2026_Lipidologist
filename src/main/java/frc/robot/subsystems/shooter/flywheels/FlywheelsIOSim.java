@@ -31,12 +31,14 @@ public class FlywheelsIOSim extends FlywheelsIO{
     public void updateInputs(){
     flywheelMotorSim.update(0.02);
 
+    super.statorCurrent = flywheelMotorSim.getCurrentDrawAmps();
     super.position = flywheelMotorSim.getAngularPositionRad();
     super.RPM = flywheelMotorSim.getAngularVelocityRPM();
  
 
     DogLog.log("Flywheel/Velocity", super.RPM);
     DogLog.log("Flywheel/Position", super.position);
+    DogLog.log("Flywheel/Stator Current", super.statorCurrent);
   }
 
   @Override
@@ -49,6 +51,7 @@ public class FlywheelsIOSim extends FlywheelsIO{
 setVoltage(
         // feedforward.calculate(RPM)
         //     +
-        pid.calculate(flywheelMotorSim.getAngularVelocityRPM(), RPM));
+        pid.calculate(flywheelMotorSim.getAngularVelocityRPM(), super.targetRPM
+        ));
  }
 }

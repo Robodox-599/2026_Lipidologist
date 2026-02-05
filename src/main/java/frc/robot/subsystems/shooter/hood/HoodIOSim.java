@@ -44,8 +44,10 @@ public class HoodIOSim extends HoodIO{
 
  @Override
  public void setPosition(double position) {
-    hoodMotorSim.setAngle( feedforward.calculate(position)
-            + pid.calculate(hoodMotorSim.getAngularVelocityRPM(), position));
+    hoodMotorSim.setAngle( super.targetPosition
+      // feedforward.calculate(position)
+      //       + pid.calculate(hoodMotorSim.getAngularVelocityRPM(), position)
+            );
  }
 }
 

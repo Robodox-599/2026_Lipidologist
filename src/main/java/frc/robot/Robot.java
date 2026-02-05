@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
     driver.a().onTrue(Commands.runOnce(() -> flywheels.setWantedState(Flywheels.WantedState.SET_RPM, 1)));
     driver.b().onTrue(Commands.runOnce(() -> hood.setWantedState(Hood.WantedState.SET_POSITION, 4)));
 
-    driver.leftTrigger().onTrue(Commands.runOnce(() -> flywheels.setVoltage(1)));
+    driver.leftTrigger().onTrue(Commands.runOnce(() -> flywheels.setVoltage(10)));
     driver.rightTrigger().onTrue(Commands.runOnce(() -> hood.setVoltage(1)));
    }
 }

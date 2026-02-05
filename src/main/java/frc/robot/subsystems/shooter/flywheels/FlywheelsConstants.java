@@ -15,7 +15,7 @@ public class FlywheelsConstants {
     public static final double flywheelRealkV = 0;
   
     //sim PID
-    public static final double flywheelSimkP = 0;
+    public static final double flywheelSimkP = 1;
     public static final double flywheelSimkI = 0;
     public static final double flywheelSimkD = 0;
     public static final double flywheelSimkS = 0;
