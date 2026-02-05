@@ -27,6 +27,7 @@ import frc.robot.subsystems.intake.intakeWrist.IntakeWristIOTalonFX;
 import frc.robot.autos.AutoRoutines;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.climb.Climb;
+import frc.robot.subsystems.climb.ClimbIOSim;
 import frc.robot.subsystems.climb.ClimbIOTalonFX;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.constants.TunerConstants;
@@ -60,6 +61,7 @@ public class Robot extends TimedRobot {
   final AutoRoutines autoRoutines;
 
 
+  @Override
   @Override
   protected void loopFunc() {
     super.loopFunc();

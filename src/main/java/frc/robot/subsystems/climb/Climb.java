@@ -5,25 +5,22 @@
 package frc.robot.subsystems.climb;
 
 import dev.doglog.DogLog;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Climb extends SubsystemBase {
+public class Climb {
   private final ClimbIO io;
-  private WantedState wantedState = WantedState.STOPPED;
-  private CurrentState currentState = CurrentState.STOPPING;
+  private WantedState wantedState = WantedState.STOP;
+  private CurrentState currentState = CurrentState.STOPPED;
 
   public enum WantedState{
-    STOPPED,
-    MOVE_LEFT_TO_POSITION,
-    MOVE_RIGHT_TO_POSITION,
-    MOVE_BOTH_TO_POSITION,
+    STOP,
+    EXTEND,
+    RETRACT,
   }
 
   public enum CurrentState{
-    STOPPING,
-    MOVING_LEFT_TO_POSITION,
-    MOVING_RIGHT_TO_POSITION,
-    MOVING_BOTH_TO_POSITION,
+    STOPPED,
+    EXTENDING,
+    RETRACTING,
   }
 
   public Climb(ClimbIO io) {
@@ -36,45 +33,38 @@ public class Climb extends SubsystemBase {
     handleStateTransitions();
     applyStates();
 
-    DogLog.log("Climb/wantedState", wantedState);
-    DogLog.log("Climb/currentState", currentState);
+    DogLog.log("Climb/WantedState", wantedState);
+    DogLog.log("Climb/CurrentState", currentState);
 
   }
 
-  public void handleStateTransitions(){
-    switch (currentState) {
-        case STOPPING:
-            currentState = CurrentState.STOPPING;
+  private void handleStateTransitions(){
+    switch (wantedState) {
+        case STOP:
+            currentState = CurrentState.STOPPED;
             break;
-        case MOVING_LEFT_TO_POSITION:
-            currentState = CurrentState.MOVING_LEFT_TO_POSITION;
+        case EXTEND:
+            currentState = CurrentState.EXTENDING;
             break;
-        case MOVING_RIGHT_TO_POSITION:
-            currentState = CurrentState.MOVING_RIGHT_TO_POSITION;
-            break;
-        case MOVING_BOTH_TO_POSITION:
-            currentState = CurrentState.MOVING_BOTH_TO_POSITION;
+        case RETRACT:
+            currentState = CurrentState.RETRACTING;
             break;
         default:
-            currentState = CurrentState.STOPPING;
+            currentState = CurrentState.STOPPED;
             break;
     }
   }
 
-  public void applyStates(){
-    switch(wantedState){
+  private void applyStates(){
+    switch(currentState){
+        case EXTENDING:
+            setClimbHeight(50);
+            break;
+        case RETRACTING:
+            setClimbHeight(15);
+            break;
         case STOPPED:
-            stopClimb();
-            break;
-        case MOVE_LEFT_TO_POSITION:
-            setLeftClimbHeight(0);
-            break;
-        case MOVE_RIGHT_TO_POSITION:
-            setRightClimbHeight(0);
-            break;
-        case MOVE_BOTH_TO_POSITION:
-            setLeftClimbHeight(0);
-            setRightClimbHeight(0);
+            stopClimb();  
             break;
         default:
             stopClimb();
@@ -82,32 +72,24 @@ public class Climb extends SubsystemBase {
     }
   }
 
-  public void setLeftClimbVoltage(double volts){
-    io.setLeftClimbVoltage(volts);
+  public void setClimbVoltage(double volts){
+    io.setClimbVoltage(volts);
   }
 
-  public void setRightClimbVoltage(double volts){
-    io.setRightClimbVoltage(volts);
-  }
-
-  public void setLeftClimbHeight(double height){
-    io.setLeftClimbHeight(height);
-  }
-
-  public void setRightClimbHeight(double height){
-    io.setRightClimbHeight(height);
+  public void setClimbHeight(double height){
+    io.setClimbHeight(height);
   }
 
   public void stopClimb(){
     io.stopClimb();
   }
 
-  public void zeroClimbEncoder(){
+  public void zeroClimbPosition(){
     io.zeroClimbPosition();
   }
 
-  public void setWantedState(Climb.WantedState WantedState){
-    this.wantedState = WantedState;
+  public void setWantedState(Climb.WantedState wantedState){
+    this.wantedState = wantedState;
   }
 
 }
