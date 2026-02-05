@@ -38,7 +38,11 @@ import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
+import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOSim;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOTalonFX;
+import frc.robot.subsystems.intake.intakeWrist.IntakeWrist;
+import frc.robot.subsystems.intake.intakeWrist.IntakeWristIOSim;
+import frc.robot.subsystems.intake.intakeWrist.IntakeWristIOTalonFX;
 
 public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
@@ -61,6 +65,7 @@ public class Robot extends TimedRobot {
   final AutoFactory autoFactory;
   final AutoRoutines autoRoutines;
 
+  @Override
   @Override
   protected void loopFunc() {
     super.loopFunc();
@@ -148,8 +153,12 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
   }
+  public void disabledInit() {
+  }
 
   @Override
+  public void disabledPeriodic() {
+  }
   public void disabledPeriodic() {
   }
 
@@ -161,8 +170,12 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
   }
+  public void autonomousInit() {
+  }
 
   @Override
+  public void autonomousPeriodic() {
+  }
   public void autonomousPeriodic() {
   }
 
@@ -170,13 +183,18 @@ public class Robot extends TimedRobot {
   public void autonomousExit() {
     scheduler.cancelAll();
 
+
   }
 
   @Override
   public void teleopInit() {
   }
+  public void teleopInit() {
+  }
 
   @Override
+  public void teleopPeriodic() {
+  }
   public void teleopPeriodic() {
   }
 
@@ -188,8 +206,12 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
   }
+  public void testInit() {
+  }
 
   @Override
+  public void testPeriodic() {
+  }
   public void testPeriodic() {
   }
 

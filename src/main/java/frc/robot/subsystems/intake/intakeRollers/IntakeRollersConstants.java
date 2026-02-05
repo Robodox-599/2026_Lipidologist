@@ -6,8 +6,12 @@ package frc.robot.subsystems.intake.intakeRollers; // make sure the folder name 
 
 /** Add your docs here. */
 public class IntakeRollersConstants {
-    public static final int IntakeRollersMotorID = 13;
-    public static final String IntakeRollersCanBus = "rio";
+    public static final int intakeRollersMotorID = 0;
+    public static final String intakeRollersCanBus = "rio";
+
+    public static final int intakeRollersGearRatio = 1;
+
+    public static final double rotationalInertia = 0.01;
 
     public static final double kP = 0;
     public static final double kI = 0;
