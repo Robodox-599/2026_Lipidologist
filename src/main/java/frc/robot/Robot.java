@@ -1,12 +1,14 @@
 package frc.robot;
 
 import frc.robot.subsystems.shooter.hood.Hood;
+import frc.robot.subsystems.shooter.hood.HoodIOSim;
 import frc.robot.subsystems.shooter.hood.HoodIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.camera.Camera;
 import frc.robot.subsystems.vision.camera.CameraIOReal;
 import frc.robot.subsystems.vision.camera.CameraTransforms;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
+import frc.robot.subsystems.shooter.flywheels.FlywheelsIOSim;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOTalonFX;
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
@@ -36,6 +38,7 @@ import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOTalonFX;
 
 public class Robot extends TimedRobot {
+  public static final RobotType ROBOT_TYPE = Robot.isReal() ? RobotType.REAL : RobotType.SIM;
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
 
   final CommandXboxController driver = new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);

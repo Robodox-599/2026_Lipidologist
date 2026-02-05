@@ -6,6 +6,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.CANBus;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.math.MathUtil;
@@ -20,6 +21,7 @@ public class HoodIOTalonFX extends HoodIO {
     //motors + configuration
     private final TalonFX hoodMotor;
     TalonFXConfiguration hoodConfiguration;
+    private final CANBus hoodCANBus;
 
     //motion magic
     private MotionMagicVoltage motionMagic;
@@ -34,7 +36,8 @@ public class HoodIOTalonFX extends HoodIO {
 
     public HoodIOTalonFX() {
         //motors + configuration
-        hoodMotor = new TalonFX(HoodConstants.hoodMotorID, HoodConstants.hoodCANBus);
+        hoodCANBus = new CANBus();
+        hoodMotor = new TalonFX(HoodConstants.hoodMotorID, hoodCANBus);
         hoodConfiguration = new TalonFXConfiguration();
 
         //applying PID to configuration
@@ -75,12 +78,12 @@ public class HoodIOTalonFX extends HoodIO {
         BaseStatusSignal.refreshAll(hoodVelocityRad, hoodTemperature, 
         hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
 
-        super.position = hoodPosition.getValueAsDouble();
+        super.positionRadians = hoodPosition.getValueAsDouble();
         super.velocity = hoodVelocityRad.getValueAsDouble();
         super.isHoodInPosition = 
-            Math.abs(super.position - super.wantedPosition) < HoodConstants.positionTolerance;
+            Math.abs(super.positionRadians - super.wantedPosition) < HoodConstants.positionTolerance;
 
-        DogLog.log("Hood/Position", super.position);
+        DogLog.log("Hood/Position", super.positionRadians);
         DogLog.log("Hood/Velocity", super.velocity);
         DogLog.log("Hood/TargetPosition", super.wantedPosition);
         DogLog.log("Hood/isHoodAtPosition", super.isHoodInPosition);
@@ -95,6 +98,11 @@ public class HoodIOTalonFX extends HoodIO {
         motionMagic = new MotionMagicVoltage(position).withSlot(0).withEnableFOC(true);
         
         hoodMotor.setControl(motionMagic);
+    }
+
+ @Override
+    public void setVoltage(double voltage) {
+        hoodMotor.setVoltage(voltage);
     }
 
     @Override

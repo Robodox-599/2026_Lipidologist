@@ -4,7 +4,8 @@ public class FlywheelsConstants {
     //motor information
     public static final int flywheelMotorID = 0;
     public static final String flywheelCANBus = "rio";
-    public static final double flywheelGearRatio = 0;
+    public static final double flywheelGearRatio = 1;
+    public static final double flywheelMOI = 0.1;
    
     //real PID
     public static final double flywheelRealkP = 0;
@@ -19,6 +20,9 @@ public class FlywheelsConstants {
     public static final double flywheelSimkD = 0;
     public static final double flywheelSimkS = 0;
     public static final double flywheelSimkV = 0;
+
+    public static final double flywheelMaxVelocity = 100;
+    public static final double flywheelMaxAcceleration = 50;
 
     //current limits 
     public static final double supplyCurrentLimit = 50;

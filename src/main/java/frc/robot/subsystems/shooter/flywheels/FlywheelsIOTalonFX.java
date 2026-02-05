@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter.flywheels;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -20,6 +21,7 @@ import frc.robot.util.PhoenixUtil;
 
 public class FlywheelsIOTalonFX extends FlywheelsIO{
     //motors + configuration
+    private final CANBus flywheelCANBus;
     private final TalonFX flywheelMotor;
     TalonFXConfiguration flywheelConfiguration;
    
@@ -33,7 +35,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
 
     public FlywheelsIOTalonFX(){
         //motors + configuration
-        flywheelMotor = new TalonFX(FlywheelsConstants.flywheelMotorID, FlywheelsConstants.flywheelCANBus);
+        flywheelCANBus = new CANBus();
+        flywheelMotor = new TalonFX(FlywheelsConstants.flywheelMotorID, flywheelCANBus);
         flywheelConfiguration = new TalonFXConfiguration();  
         
         //applying PID to configuration
@@ -73,18 +76,18 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
         flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
 
         super.position = flywheelPosition.getValueAsDouble();
-        super.velocity = flywheelVelocityRad.getValueAsDouble();
+        super.RPM = flywheelVelocityRad.getValueAsDouble();
         super.isFlywheelAtSetpoint = 
-            Math.abs(super.velocity - super.velocitySetpoint) < FlywheelsConstants.velocityTolerance;
+            Math.abs(super.RPM - super.targetRPM) < FlywheelsConstants.velocityTolerance;
 
         DogLog.log("Flywheel/Position", super.position);
-        DogLog.log("FLywheel/Velocity", super.velocity);
+        DogLog.log("FLywheel/Velocity", super.RPM);
         DogLog.log("Flywheel/isFlywheelAtSpeed", super.isFlywheelAtSetpoint);
     }
 
     @Override
     public void setRPM(double RPM){
-        super.velocitySetpoint = RPM;
+        super.targetRPM = RPM;
         flywheelMotor.setControl(new VelocityTorqueCurrentFOC(RPM));
         flywheelMotor.setControl(new StaticBrake());
     }
