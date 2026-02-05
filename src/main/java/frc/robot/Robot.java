@@ -41,7 +41,6 @@ import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOTalonFX;
 
 public class Robot extends TimedRobot {
-  public static final RobotType ROBOT_TYPE = Robot.isReal() ? RobotType.REAL : RobotType.SIM;
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
 
   final CommandXboxController driver = new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
@@ -62,8 +61,6 @@ public class Robot extends TimedRobot {
   final AutoFactory autoFactory;
   final AutoRoutines autoRoutines;
 
-
-  @Override
   @Override
   protected void loopFunc() {
     super.loopFunc();
