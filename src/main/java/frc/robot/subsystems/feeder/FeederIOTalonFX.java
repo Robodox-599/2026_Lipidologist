@@ -1,6 +1,7 @@
 package frc.robot.subsystems.feeder;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -15,6 +16,7 @@ import edu.wpi.first.units.measure.Voltage;
 
 public class FeederIOTalonFX extends FeederIO {
     private final TalonFX feederMotor;
+    private final CANBus feederBus;
     private TalonFXConfiguration feederMotorConfig;
 
     private final StatusSignal<AngularVelocity> feederVelocityRad;
@@ -25,7 +27,9 @@ public class FeederIOTalonFX extends FeederIO {
     private final StatusSignal<Current> feederSupplyCurrent;
 
     public FeederIOTalonFX() {
-        feederMotor = new TalonFX(FeederConstants.feederMotorID, FeederConstants.feederCANBus);
+        feederBus = new CANBus(FeederConstants.feederCANBus);
+        feederMotor = new TalonFX(FeederConstants.feederMotorID, feederBus);
+
         feederMotorConfig = new TalonFXConfiguration();
         
         feederMotorConfig.Slot0.kP = FeederConstants.kP;
