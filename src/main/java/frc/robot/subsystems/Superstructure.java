@@ -122,6 +122,7 @@ public class Superstructure extends SubsystemBase {
                 // }
                 break;
             case PREPARE_ALLIANCE_ZONE_SHOT:
+                break;
             case SHOOT_ALLIANCE_ZONE:
             case IDLE:
                 currentSuperState = CurrentSuperState.IDLING;
