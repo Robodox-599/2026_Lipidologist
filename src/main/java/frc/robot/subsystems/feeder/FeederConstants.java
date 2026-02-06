@@ -6,7 +6,7 @@ package frc.robot.subsystems.feeder;
 
 public class FeederConstants {
   public static final int feederMotorID = 41;
-  public static final String feederCANBus = "diddyblud";
+  public static final String feederCANBus = "rio";
   public static final double feederGearRatio = 2;
   public static final double feederMOI = 0.01;
 

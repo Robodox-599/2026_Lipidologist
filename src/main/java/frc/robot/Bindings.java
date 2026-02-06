@@ -17,12 +17,6 @@ public class Bindings extends SubsystemBase {
         this.superstructure = superstructure;
 
         driver.y().onTrue(superstructure.zeroGyroCommand());
-
-        driver.rightTrigger().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
-
-        driver.rightTrigger().onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
-
-        
       }
 
       public Command rumbleControllers(CommandXboxController driver, CommandXboxController operator) {
