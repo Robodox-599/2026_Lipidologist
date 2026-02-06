@@ -78,18 +78,22 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
         super.position = flywheelPosition.getValueAsDouble();
         super.RPM = flywheelVelocityRad.getValueAsDouble();
         super.isFlywheelAtSetpoint = 
-            Math.abs(super.RPM - super.targetRPM) < FlywheelsConstants.velocityTolerance;
+            Math.abs(super.RPM - super.targetRPM) < FlywheelsConstants.RPMTolerance;
 
         DogLog.log("Flywheel/Position", super.position);
-        DogLog.log("FLywheel/Velocity", super.RPM);
+        DogLog.log("Flywheel/RPM", super.RPM);
         DogLog.log("Flywheel/isFlywheelAtSpeed", super.isFlywheelAtSetpoint);
     }
 
     @Override
     public void setRPM(double RPM){
         super.targetRPM = RPM;
-        flywheelMotor.setControl(new VelocityTorqueCurrentFOC(RPM));
-        flywheelMotor.setControl(new StaticBrake());
+
+        if(super.targetRPM < super.RPM){
+            flywheelMotor.setControl(new StaticBrake());
+        } else {
+            flywheelMotor.setControl(new VelocityTorqueCurrentFOC(RPM));
+        }
     }
 
     @Override

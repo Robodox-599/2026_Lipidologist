@@ -28,5 +28,8 @@ public class FlywheelsConstants {
     public static final double supplyCurrentLimit = 50;
  
     //velocity tolerance
-    public static final double velocityTolerance = 0;
+    public static final double RPMTolerance = 0;
+
+    //setpoints
+    public static final double constantRPMSetpoint = 0;
 }
