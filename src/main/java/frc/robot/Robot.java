@@ -69,6 +69,7 @@ public class Robot extends TimedRobot {
        driver.x().onTrue(Commands.runOnce(() -> intakeWrist.setWantedState(IntakeWrist.WristWantedState.INTAKE_FUEL)));
        driver.y().onTrue(Commands.runOnce(() -> intakeWrist.setWantedState(IntakeWrist.WristWantedState.STOW)));
        driver.b().onTrue(Commands.runOnce(() -> intakeWrist.setWantedState(IntakeWrist.WristWantedState.AGITATE_FUEL)));
+       driver.a().onTrue(Commands.runOnce(() -> intakeWrist.setWantedState(IntakeWrist.WristWantedState.STOP)));
   }
 
   @Override
