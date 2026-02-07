@@ -28,15 +28,15 @@ import frc.robot.subsystems.shooter.flywheels.Flywheels;
 
 public class Superstructure extends SubsystemBase {
 
-    // final Climb climb;
+    final Climb climb;
     final CommandSwerveDrivetrain drivetrain;
-    // final Feeder feeder;
-    // final Indexer indexer;
-    // final IntakeRollers intakeRollers;
-    // final IntakeWrist intakeWrist;
-    // final Flywheels flywheels;
-    // final Hood hood;
-    // final Vision vision;
+    final Feeder feeder;
+    final Indexer indexer;
+    final IntakeRollers intakeRollers;
+    final IntakeWrist intakeWrist;
+    final Flywheels flywheels;
+    final Hood hood;
+    final Vision vision;
     private final GetShotData shotCalculator = new GetShotData();
 
     public enum WantedSuperState {
@@ -68,38 +68,38 @@ public class Superstructure extends SubsystemBase {
     private AutomationLevel automationLevel = AutomationLevel.AUTO_SHOOT;
 
     public Superstructure(
-            // Climb climb,
-            CommandSwerveDrivetrain drivetrain
-            // Feeder feeder,
-            // Indexer indexer,
-            // IntakeRollers intakeRollers,
-            // IntakeWrist intakeWrist,
-            // Flywheels flywheels,
-            // Hood hood,
-            // Vision vision
+            Climb climb,
+            CommandSwerveDrivetrain drivetrain,
+            Feeder feeder,
+            Indexer indexer,
+            IntakeRollers intakeRollers,
+            IntakeWrist intakeWrist,
+            Flywheels flywheels,
+            Hood hood,
+            Vision vision
             ) {
-        // this.climb = climb;
+        this.climb = climb;
         this.drivetrain = drivetrain;
-        // this.feeder = feeder;
-        // this.indexer = indexer;
-        // this.intakeRollers = intakeRollers;
-        // this.intakeWrist = intakeWrist;
-        // this.flywheels = flywheels;
-        // this.hood = hood;
-        // this.vision = vision;
+        this.feeder = feeder;
+        this.indexer = indexer;
+        this.intakeRollers = intakeRollers;
+        this.intakeWrist = intakeWrist;
+        this.flywheels = flywheels;
+        this.hood = hood;
+        this.vision = vision;
     }
 
     @Override
     public void periodic() {
-        // climb.updateInputs();
+        climb.updateInputs();
         drivetrain.updateInputs();
-        // feeder.updateInputs();
-        // indexer.updateInputs();
-        // intakeRollers.updateInputs();
-        // intakeWrist.updateInputs();
-        // flywheels.updateInputs();
-        // hood.updateInputs();
-        // vision.updateInputs();
+        feeder.updateInputs();
+        indexer.updateInputs();
+        intakeRollers.updateInputs();
+        intakeWrist.updateInputs();
+        flywheels.updateInputs();
+        hood.updateInputs();
+        vision.updateInputs();
 
         handleStateTransitions();
         applyStates();
