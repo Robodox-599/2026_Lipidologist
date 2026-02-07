@@ -21,9 +21,10 @@ import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.util.AllianceShift;
 import frc.robot.util.CalculateShot;
 import frc.robot.util.GetShotData;
+import frc.robot.util.HubShiftUtil;
+import frc.robot.util.HubShiftUtil.ShiftInfo;
 import frc.robot.util.CalculateShot.AdjustedShot;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 
@@ -101,6 +102,13 @@ public class Superstructure extends SubsystemBase {
         flywheels.updateInputs();
         hood.updateInputs();
         vision.updateInputs();
+
+        ShiftInfo shiftInfo = HubShiftUtil.getShiftInfo();
+        DogLog.log("HubShift", shiftInfo.currentShift());
+        DogLog.log("HubShift/ElapsedTime", shiftInfo.elapsedTime());
+        DogLog.log("HubShift/RemainingTime", shiftInfo.remainingTime());
+        DogLog.log("HubShift/Active", shiftInfo.active());
+        // DogLog.log("HubShift", HubShiftUtil.getShiftInfo());
 
         handleStateTransitions();
         applyStates();
@@ -231,7 +239,7 @@ public class Superstructure extends SubsystemBase {
     }
 
     private boolean areSystemsReadyForShot() {
-        return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation() && AllianceShift.isHubActive();
+        return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation() && HubShiftUtil.isHubActive();
     }
 
     public Command zeroGyroCommand() {

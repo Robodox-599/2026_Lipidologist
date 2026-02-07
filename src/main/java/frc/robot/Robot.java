@@ -7,7 +7,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.camera.Camera;
 import frc.robot.subsystems.vision.camera.CameraIOReal;
 import frc.robot.subsystems.vision.camera.CameraTransforms;
-import frc.robot.util.AllianceShift;
+import frc.robot.util.HubShiftUtil;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOSim;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOTalonFX;
@@ -49,8 +49,8 @@ public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
 
   final CommandXboxController driver = new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
-  final CommandXboxController operator = new CommandXboxController(
-      Constants.ControllerConstants.kOperatorControllerPort);
+  // final CommandXboxController operator = new CommandXboxController(
+  //     Constants.ControllerConstants.kOperatorControllerPort);
   final Climb climb;
   final CommandSwerveDrivetrain drivetrain;
   final Feeder feeder;
@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
 
     superstructure = new Superstructure(climb, drivetrain, feeder, indexer, intakeRollers, intakeWrist, flywheels, hood, vision);
 
-    new Bindings(driver, operator, superstructure);
+    new Bindings(driver, superstructure);
 
     autoFactory =
         new AutoFactory(
@@ -139,7 +139,8 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData("AutoChooser", autoChooser);
 
-    RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> AllianceShift.initialize()));
+    RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
+    RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
   }
 
   @Override
