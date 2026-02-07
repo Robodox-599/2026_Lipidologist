@@ -7,6 +7,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.camera.Camera;
 import frc.robot.subsystems.vision.camera.CameraIOReal;
 import frc.robot.subsystems.vision.camera.CameraTransforms;
+import frc.robot.util.AllianceShift;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOSim;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOTalonFX;
@@ -144,6 +145,8 @@ public class Robot extends TimedRobot {
     // autoChooser.addRoutine("Left Auto - 4 Coral", autoRoutines::leftAutoRoutine);
 
     SmartDashboard.putData("AutoChooser", autoChooser);
+
+    RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> AllianceShift.initialize()));
   }
 
   @Override
@@ -175,8 +178,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousExit() {
     scheduler.cancelAll();
-
-
   }
 
   @Override
