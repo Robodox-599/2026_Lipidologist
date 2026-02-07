@@ -1,5 +1,7 @@
 package frc.robot.util;
 
+import java.lang.reflect.Field;
+
 import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -20,9 +22,7 @@ public class CalculateShot {
     public static AdjustedShot calculateHubAdjustedShot(Pose2d robotPose, ChassisSpeeds fieldRelativeRobotVelocity,
             ChassisAccelerations fieldRelativeRobotAcceleration) {
         Translation2d robotTranslation = robotPose.getTranslation();
-        Translation2d hubTranslation = DriverStation.getAlliance().orElseGet(() -> Alliance.Blue).equals(Alliance.Blue)
-                ? FieldConstants.blueHub
-                : FieldConstants.redHub;
+        Translation2d hubTranslation = AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
 
         double distance = robotTranslation.getDistance(hubTranslation);
         double flightTime = GetShotData.getHubFlightTime(distance);
@@ -64,10 +64,8 @@ public class CalculateShot {
     public static AdjustedShot calculateAllianceZoneAdjustedShot(Pose2d robotPose, ChassisSpeeds fieldRelativeRobotVelocity,
             ChassisAccelerations fieldRelativeRobotAcceleration) {
         Translation2d robotTranslation = robotPose.getTranslation();
-        Translation2d hubTranslation = DriverStation.getAlliance().orElseGet(() -> Alliance.Blue).equals(Alliance.Blue)
-                ? FieldConstants.blueHub
-                : FieldConstants.redHub;
-
+        Translation2d hubTranslation = AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
+        
         double distance = robotTranslation.getDistance(hubTranslation);
         double flightTime = GetShotData.getAllianceZoneFlightTime(distance);
 
