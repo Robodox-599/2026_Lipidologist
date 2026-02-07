@@ -83,4 +83,6 @@ public class AllianceShift {
             return false;
         }
     }
+
+    
 }

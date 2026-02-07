@@ -18,7 +18,6 @@ public class AllianceFlipUtil {
   public static Translation2d apply(Translation2d translation) {
     return new Translation2d(applyX(translation.getX()), applyY(translation.getY()));
   }
-
     
 public static boolean shouldFlip() {
         return DriverStation.getAlliance().isPresent()

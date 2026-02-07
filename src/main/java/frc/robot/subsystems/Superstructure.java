@@ -21,6 +21,7 @@ import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.util.AllianceShift;
 import frc.robot.util.CalculateShot;
 import frc.robot.util.GetShotData;
 import frc.robot.util.CalculateShot.AdjustedShot;
@@ -230,7 +231,7 @@ public class Superstructure extends SubsystemBase {
     }
 
     private boolean areSystemsReadyForShot() {
-        return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation();
+        return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation() && AllianceShift.isHubActive();
     }
 
     public Command zeroGyroCommand() {
