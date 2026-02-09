@@ -60,6 +60,7 @@ public class CalculateShot {
 
         AdjustedShot adjustedShot = new AdjustedShot(targetRotation, shootSpeed, hoodAngle);
         DogLog.log("ShotCalculator/AdjustedShot", adjustedShot);
+        DogLog.log("ShotCalculator/AdjustedHub", new Pose2d(adjustedHubTranslation.getX(), adjustedHubTranslation.getY(), new Rotation2d()));
         return adjustedShot;
     }
 

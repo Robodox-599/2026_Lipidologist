@@ -11,10 +11,10 @@ public class GetShotData {
     static {
         hubShotMap.put(
             1.0,
-            new ShotData(Units.degreesToRadians(45), 3.0, 3.0));
+            new ShotData(Units.degreesToRadians(45), 4000, 0.5));
         hubShotMap.put(
-            2.0,
-            new ShotData(Units.degreesToRadians(90), 3.0, 3.0));
+            7.0,
+            new ShotData(Units.degreesToRadians(50), 4800, 1.5));
     }
 
     static {
