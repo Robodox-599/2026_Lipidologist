@@ -22,12 +22,17 @@ public class Bindings extends SubsystemBase {
       CommandXboxController driver, Superstructure superstructure) {
     this.superstructure = superstructure;
 
-    driver.y().onTrue(superstructure.zeroGyroCommand());
+    driver.y().onTrue(superstructure.zeroPoseCommand());
 
-    new Trigger(() -> HubShiftUtil.isHubLookaheadActive(3)).debounce(0.1).onTrue(rumbleDriverSwapping(driver, 0.5, 3));
+    driver.rightTrigger().whileTrue();
+
+    new Trigger(() -> HubShiftUtil.isHubLookaheadActive(3)).onTrue(rumbleDriverSwapping(driver, 0.5, 3));
     
-    driver.a().onTrue(rumbleDriverContinuous(driver, 3));
-    driver.b().onTrue(rumbleDriverSwapping(driver, 0.5, 3));
+    // driver.a().onTrue(rumbleDriverContinuous(driver, 3));
+    // driver.b().onTrue(rumbleDriverSwapping(driver, 0.5, 3));
+
+    driver.povRight().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.PREPARE_HUB_SHOT));
+    driver.povRight().onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
   }
 
   public Command rumbleDriverContinuous(CommandXboxController driver, double totalTime) {
@@ -41,8 +46,10 @@ public class Bindings extends SubsystemBase {
     return Commands.sequence(
         Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kLeftRumble, 1)),
         Commands.waitSeconds(swapTime),
+        Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kLeftRumble, 0)),
         Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kRightRumble, 1)),
-        Commands.waitSeconds(swapTime))
+        Commands.waitSeconds(swapTime),
+        Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kRightRumble, 0)))
         .repeatedly().withTimeout(totalTime)
         .finallyDo(() -> driver.getHID().setRumble(RumbleType.kBothRumble, 0));
   }
