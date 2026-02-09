@@ -12,6 +12,7 @@ import dev.doglog.DogLog;
 import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -92,7 +93,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
         if(super.targetRPM < super.RPM){
             flywheelMotor.setControl(new StaticBrake());
         } else {
-            flywheelMotor.setControl(new VelocityTorqueCurrentFOC(RPM));
+            flywheelMotor.setControl(new VelocityTorqueCurrentFOC(Units.rotationsPerMinuteToRadiansPerSecond(RPM)));
         }
     }
 
