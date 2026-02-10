@@ -28,6 +28,8 @@ public class HoodConstants {
 
     //current limits 
     public static final double supplyCurrentLimit = 50;
+    public static final double statorCurrentLimit = 50;
+
 
     //sim stuff
     public static final double armLengthMeters = 0;

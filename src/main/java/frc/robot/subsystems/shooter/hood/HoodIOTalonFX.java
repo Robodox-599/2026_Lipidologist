@@ -2,6 +2,8 @@ package frc.robot.subsystems.shooter.hood;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -38,19 +40,17 @@ public class HoodIOTalonFX extends HoodIO {
         //motors + configuration
         hoodCANBus = new CANBus();
         hoodMotor = new TalonFX(HoodConstants.hoodMotorID, hoodCANBus);
-        hoodConfiguration = new TalonFXConfiguration();
-
-        //applying PID to configuration
-        hoodConfiguration.Slot0.kP = HoodConstants.hoodRealkP;
-        hoodConfiguration.Slot0.kI = HoodConstants.hoodRealkI;
-        hoodConfiguration.Slot0.kD = HoodConstants.hoodRealkD;
-        hoodConfiguration.Slot0.kG = HoodConstants.hoodRealkG;
-        hoodConfiguration.Slot0.kV = HoodConstants.hoodRealkV;
-        hoodConfiguration.Slot0.kS = HoodConstants.hoodRealkS;
-
-        //current limits
-        hoodConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
-        hoodConfiguration.CurrentLimits.SupplyCurrentLimit = HoodConstants.supplyCurrentLimit;
+        hoodConfiguration = new TalonFXConfiguration()
+            .withCurrentLimits(new CurrentLimitsConfigs()
+                .withSupplyCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(HoodConstants.supplyCurrentLimit)
+                .withStatorCurrentLimit(HoodConstants.statorCurrentLimit))
+            .withSlot0(new Slot0Configs()
+                .withKP(HoodConstants.hoodRealkP)
+                .withKI(HoodConstants.hoodRealkI)
+                .withKD(HoodConstants.hoodRealkD)
+                .withKS(HoodConstants.hoodRealkS)
+                .withKV(HoodConstants.hoodRealkV)); ;
 
         //other configuration stuff
         hoodMotor.setNeutralMode(NeutralModeValue.Brake);
@@ -75,7 +75,7 @@ public class HoodIOTalonFX extends HoodIO {
 
     @Override
     public void updateInputs(){
-        BaseStatusSignal.refreshAll(hoodVelocityRad, hoodTemperature, 
+        BaseStatusSignal.refreshAll(hoodTemperature, 
         hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
 
         super.positionRadians = hoodPosition.getValueAsDouble();
@@ -84,7 +84,6 @@ public class HoodIOTalonFX extends HoodIO {
             Math.abs(super.positionRadians - super.wantedPosition) < HoodConstants.positionTolerance;
 
         DogLog.log("Hood/Position", super.positionRadians);
-        DogLog.log("Hood/Velocity", super.velocity);
         DogLog.log("Hood/TargetPosition", super.wantedPosition);
         DogLog.log("Hood/isHoodAtPosition", super.isHoodInPosition);
     }
