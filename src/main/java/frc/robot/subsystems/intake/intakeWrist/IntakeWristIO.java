@@ -8,7 +8,6 @@ package frc.robot.subsystems.intake.intakeWrist;
 public class IntakeWristIO {
     protected double targetPosition = 0;
     public double currentPosition = 0;
-    protected double velocity = 0;
     protected double voltage = 0;
     protected double statorCurrent = 0;
     protected double supplyCurrent = 0;

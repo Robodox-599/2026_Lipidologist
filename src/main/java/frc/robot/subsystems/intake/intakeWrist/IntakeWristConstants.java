@@ -27,6 +27,7 @@ public class IntakeWristConstants {
     public static final double magnetOffset = 0.0;
     public static final double gearRatio = 5;
     public static final double supplyCurrentLimit = 0.0;
+    public static final double statorCurrentLimit = 0.0;
     public static final double minAngleRad = 0;
     public static final double maxAngleRad = Math.PI;
     public static final double startAngleRad = 0;

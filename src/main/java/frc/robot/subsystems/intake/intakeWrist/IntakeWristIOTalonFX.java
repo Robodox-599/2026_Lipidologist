@@ -5,8 +5,15 @@
 package frc.robot.subsystems.intake.intakeWrist;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -18,7 +25,6 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
@@ -30,45 +36,68 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
     public final CANcoder intakeWristCanCoder;
     public final TalonFXConfiguration intakeWristConfig;
     public final CANcoderConfiguration canCoderConfig;
+    public final CANBus intakeWristCanBus;
     private MotionMagicVoltage m_request;
 
     public StatusSignal<Angle> intakeWristPosition;
-    public StatusSignal<AngularVelocity> intakeWristVelocity;
     public StatusSignal<Voltage> intakeWristAppliedVolts;
     public StatusSignal<Current> intakeWristStatorCurrent;
     public StatusSignal<Current> intakeWristSupplyCurrent;
     public StatusSignal<Temperature> intakeWristTemperature;
     
     public IntakeWristIOTalonFX(){
-        intakeWristMotor = new TalonFX(IntakeWristConstants.intakeWristMotorID, IntakeWristConstants.intakeWristCanBus);
+        intakeWristCanBus = new CANBus(IntakeWristConstants.intakeWristCanBus);
+        intakeWristMotor = new TalonFX(IntakeWristConstants.intakeWristMotorID, intakeWristCanBus);
         intakeWristCanCoder = new CANcoder(IntakeWristConstants.intakeWristCanCoderID);
-        intakeWristConfig = new TalonFXConfiguration();
-        canCoderConfig = new CANcoderConfiguration();
+        intakeWristConfig = new TalonFXConfiguration()
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withSupplyCurrentLimitEnable(true)
+                    .withStatorCurrentLimit(IntakeWristConstants.supplyCurrentLimit)
+            )
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withStatorCurrentLimitEnable(true)
+                    .withStatorCurrentLimit(IntakeWristConstants.statorCurrentLimit)
+            )
+            .withSlot0(
+                new Slot0Configs()
+                    .withKP(IntakeWristConstants.kP)
+                    .withKI(IntakeWristConstants.kI)
+                    .withKD(IntakeWristConstants.kD)
+                    .withKV(IntakeWristConstants.kV)
+                    .withKS(IntakeWristConstants.kS)
+                    .withKG(IntakeWristConstants.kG)
+                    
+                    .withGravityType(GravityTypeValue.Arm_Cosine)
+            )
+            .withFeedback(
+                new FeedbackConfigs()
+                    .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
+                    .withFeedbackRemoteSensorID(IntakeWristConstants.intakeWristCanCoderID)
+                    .withRotorToSensorRatio(IntakeWristConstants.gearRatio)
+                    
+
+            )
+            .withClosedLoopGeneral(
+                new ClosedLoopGeneralConfigs()
+                    .withContinuousWrap(false)
+            )
+            .withMotionMagic(
+                new MotionMagicConfigs()
+                    .withMotionMagicCruiseVelocity(IntakeWristConstants.maxVelocity)
+                    .withMotionMagicAcceleration(IntakeWristConstants.maxAcceleration)
+            )
+            ;
+        canCoderConfig = new CANcoderConfiguration()
+            .withMagnetSensor(
+                new MagnetSensorConfigs()
+                    .withMagnetOffset(IntakeWristConstants.magnetOffset)
+                    .withSensorDirection(SensorDirectionValue.Clockwise_Positive)
+                    .withAbsoluteSensorDiscontinuityPoint(IntakeWristConstants.absoluteDiscontinuityPoint)
+                
+            );
         m_request = new MotionMagicVoltage(0);
-
-        canCoderConfig.MagnetSensor.MagnetOffset = IntakeWristConstants.magnetOffset;
-        canCoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-        canCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = IntakeWristConstants.absoluteDiscontinuityPoint;
-
-        intakeWristConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        intakeWristConfig.CurrentLimits.SupplyCurrentLimit = IntakeWristConstants.supplyCurrentLimit; //check needed
-
-        intakeWristConfig.Slot0.kP = IntakeWristConstants.kP;
-        intakeWristConfig.Slot0.kI = IntakeWristConstants.kI;
-        intakeWristConfig.Slot0.kD = IntakeWristConstants.kD;
-        intakeWristConfig.Slot0.kS = IntakeWristConstants.kS;
-        intakeWristConfig.Slot0.kV = IntakeWristConstants.kV;
-        intakeWristConfig.Slot0.kG = IntakeWristConstants.kG;
-
-        intakeWristConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-        
-        intakeWristConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-        intakeWristConfig.Feedback.FeedbackRemoteSensorID = IntakeWristConstants.intakeWristCanCoderID;
-        intakeWristConfig.Feedback.RotorToSensorRatio = IntakeWristConstants.gearRatio;
-        intakeWristConfig.ClosedLoopGeneral.ContinuousWrap = false;
-
-        intakeWristConfig.MotionMagic.MotionMagicCruiseVelocity = IntakeWristConstants.maxVelocity;
-        intakeWristConfig.MotionMagic.MotionMagicCruiseVelocity = IntakeWristConstants.maxAcceleration;
 
         PhoenixUtil.tryUntilOk(10, () -> intakeWristMotor.getConfigurator().apply(intakeWristConfig));
         PhoenixUtil.tryUntilOk(10, () -> intakeWristCanCoder.getConfigurator().apply(canCoderConfig));
@@ -76,13 +105,12 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
         intakeWristMotor.setNeutralMode(NeutralModeValue.Brake);
 
         intakeWristPosition = intakeWristMotor.getPosition();
-        intakeWristVelocity = intakeWristMotor.getVelocity();
         intakeWristAppliedVolts = intakeWristMotor.getMotorVoltage();
         intakeWristStatorCurrent = intakeWristMotor.getStatorCurrent();
         intakeWristSupplyCurrent = intakeWristMotor.getSupplyCurrent();
         intakeWristTemperature = intakeWristMotor.getDeviceTemp();
 
-        BaseStatusSignal.setUpdateFrequencyForAll(50, intakeWristPosition, intakeWristVelocity, intakeWristAppliedVolts, intakeWristStatorCurrent, intakeWristSupplyCurrent, intakeWristTemperature);
+        BaseStatusSignal.setUpdateFrequencyForAll(50, intakeWristPosition, intakeWristAppliedVolts, intakeWristStatorCurrent, intakeWristSupplyCurrent, intakeWristTemperature);
 
         intakeWristMotor.optimizeBusUtilization();        
         intakeWristCanCoder.optimizeBusUtilization();
@@ -90,7 +118,6 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
 
     public void updateInputs(){
         super.currentPosition = intakeWristPosition.getValueAsDouble();
-        super.velocity = intakeWristVelocity.getValueAsDouble();
         super.voltage = intakeWristAppliedVolts.getValueAsDouble();
         super.statorCurrent = intakeWristStatorCurrent.getValueAsDouble();
         super.supplyCurrent = intakeWristSupplyCurrent.getValueAsDouble();
@@ -101,7 +128,6 @@ public class IntakeWristIOTalonFX extends IntakeWristIO{
         DogLog.log("Intake/Wrist/Position", super.currentPosition);
         DogLog.log("Intake/Wrist/TargetPosition", super.targetPosition);
         DogLog.log("Intake/Wrist/AtSetpoint", super.atSetpoint);
-        DogLog.log("Intake/Wrist/Velocity", super.velocity);
         DogLog.log("Intake/Wrist/Voltage", super.voltage);
         DogLog.log("Intake/Wrist/StatorCurrent", super.statorCurrent);
         DogLog.log("Intake/Wrist/SupplyCurrent", super.supplyCurrent);

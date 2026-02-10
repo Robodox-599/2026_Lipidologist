@@ -39,13 +39,11 @@ public class IntakeWristIOSim extends IntakeWristIO {
         intakeWristMotorSim.update(0.02);
         super.statorCurrent = intakeWristMotorSim.getCurrentDrawAmps();
         super.currentPosition = intakeWristMotorSim.getAngularPositionRad();
-        super.velocity = intakeWristMotorSim.getAngularVelocityRPM();
         super.atSetpoint = Math.abs(super.currentPosition - super.targetPosition) < 0.02;
 
         DogLog.log("Intake/Wrist/StatorCurrent", super.statorCurrent);
         DogLog.log("Intake/Wrist/Position", super.currentPosition);
         DogLog.log("Intake/Wrist/TargetPosition", super.targetPosition);
-        DogLog.log("Intake/Wrist/Velocity", super.velocity);
         DogLog.log("Intake/Wrist/Voltage", super.voltage);
         DogLog.log("Intake/Wrist/AtSetpoint", super.atSetpoint);
     }
