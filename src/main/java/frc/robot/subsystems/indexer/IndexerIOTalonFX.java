@@ -3,29 +3,33 @@ package frc.robot.subsystems.indexer;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import dev.doglog.DogLog;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;         
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.util.PhoenixUtil;
 
 public class IndexerIOTalonFX extends IndexerIO {
     private final TalonFX indexerMotor;
     private final CANBus indexerBus;
-    private TalonFXConfiguration indexerMotorConfig;
+    private TalonFXConfiguration indexerConfig;
 
     private final Timer pulseTimer = new Timer();
     private boolean pulseOn = false;
 
     private final StatusSignal<AngularVelocity> indexerVelocityRad;
     private final StatusSignal<Temperature> indexerTemperature;
-    private final StatusSignal<Angle> indexerPosition;
     private final StatusSignal<Voltage> indexerAppliedVolts;
     private final StatusSignal<Current> indexerStatorCurrent;
     private final StatusSignal<Current> indexerSupplyCurrent;
@@ -33,29 +37,40 @@ public class IndexerIOTalonFX extends IndexerIO {
     public IndexerIOTalonFX() {
         indexerBus = new CANBus(IndexerConstants.indexerCANBus);
         indexerMotor = new TalonFX(IndexerConstants.indexerMotorID, indexerBus);
-        indexerMotorConfig = new TalonFXConfiguration();
+        indexerConfig = new TalonFXConfiguration();
         
-        indexerMotorConfig.Slot0.kP = IndexerConstants.kP;
-        indexerMotorConfig.Slot0.kI = IndexerConstants.kI;
-        indexerMotorConfig.Slot0.kD = IndexerConstants.kD;
-        indexerMotorConfig.Slot0.kS = IndexerConstants.kS;
-        indexerMotorConfig.Slot0.kV = IndexerConstants.kV;
+        indexerConfig = new TalonFXConfiguration()
+            .withMotionMagic(
+            new MotionMagicConfigs()
+                .withMotionMagicCruiseVelocity(IndexerConstants.maxVelocityRotsPerSec)
+                .withMotionMagicAcceleration(IndexerConstants.maxAccelerationRotationsPerSecSQ))
+            .withSlot0(
+            new Slot0Configs()
+                .withKP(IndexerConstants.kP)
+                .withKI(IndexerConstants.kI)
+                .withKD(IndexerConstants.kD)
+                .withKV(IndexerConstants.kV)
+                .withKS(IndexerConstants.kS))
+            .withCurrentLimits(
+            new CurrentLimitsConfigs()
+                .withStatorCurrentLimit(IndexerConstants.statorCurrentLimitAmps)
+                .withStatorCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(IndexerConstants.supplyCurrentLimitAmps)
+                .withSupplyCurrentLimitEnable(true))
+            .withMotorOutput(
+            new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake)
+                .withInverted(InvertedValue.Clockwise_Positive));
 
-        indexerMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        indexerMotorConfig.CurrentLimits.SupplyCurrentLimit = IndexerConstants.supplyCurrentLimit;
-
-        indexerMotor.getConfigurator().apply(indexerMotorConfig);
-        indexerMotor.setNeutralMode(NeutralModeValue.Brake);
+        PhoenixUtil.tryUntilOk(10, () -> indexerMotor.getConfigurator().apply(indexerConfig, 1));
 
         indexerVelocityRad = indexerMotor.getVelocity();
         indexerTemperature = indexerMotor.getDeviceTemp();
         indexerAppliedVolts = indexerMotor.getMotorVoltage();
-        indexerPosition = indexerMotor.getPosition();
         indexerStatorCurrent = indexerMotor.getStatorCurrent();
         indexerSupplyCurrent = indexerMotor.getSupplyCurrent();
 
         BaseStatusSignal.setUpdateFrequencyForAll(50,indexerVelocityRad, 
-            indexerTemperature, indexerAppliedVolts, indexerPosition, indexerStatorCurrent, 
+            indexerTemperature, indexerAppliedVolts, indexerStatorCurrent, 
                 indexerSupplyCurrent);
 
         indexerMotor.optimizeBusUtilization();
@@ -64,9 +79,8 @@ public class IndexerIOTalonFX extends IndexerIO {
     @Override
     public void updateInputs() {
         BaseStatusSignal.refreshAll(indexerVelocityRad, indexerTemperature, 
-            indexerAppliedVolts, indexerPosition, indexerStatorCurrent, indexerSupplyCurrent);
+            indexerAppliedVolts, indexerStatorCurrent, indexerSupplyCurrent);
 
-        super.position = indexerPosition.getValueAsDouble();
         super.velocity = indexerVelocityRad.getValueAsDouble();
         super.supplyCurrent = indexerSupplyCurrent.getValueAsDouble();
         super.statorCurrent = indexerStatorCurrent.getValueAsDouble();
@@ -74,7 +88,6 @@ public class IndexerIOTalonFX extends IndexerIO {
         super.tempCelsius = indexerTemperature.getValueAsDouble();
 
         DogLog.log("Indexer/Velocity", super.velocity);
-        DogLog.log("Indexer/Position", super.position);
         DogLog.log("Indexer/SupplyCurrent", super.supplyCurrent);
         DogLog.log("Indexer/StatorCurrent", super.statorCurrent);
         DogLog.log("Indexer/AppliedVolts", super.appliedVolts);

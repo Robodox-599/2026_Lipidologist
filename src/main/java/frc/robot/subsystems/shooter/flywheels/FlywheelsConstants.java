@@ -26,6 +26,7 @@ public class FlywheelsConstants {
 
     //current limits 
     public static final double supplyCurrentLimit = 50;
+    public static final double statorCurrentLimit = 50;
  
     //velocity tolerance
     public static final double RPMTolerance = 0;
