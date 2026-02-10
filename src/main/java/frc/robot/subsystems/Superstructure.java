@@ -22,12 +22,11 @@ import frc.robot.subsystems.intake.intakeWrist.IntakeWrist;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.CalculateShot;
+import frc.robot.util.GetShotData;
 import frc.robot.util.HubShiftUtil;
 import frc.robot.util.HubShiftUtil.ShiftInfo;
-import frc.robot.util.ShotData;
 import frc.robot.util.CalculateShot.AdjustedShot;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
-import frc.robot.util.AllianceFlipUtil;
 
 public class Superstructure extends SubsystemBase {
 
@@ -40,7 +39,7 @@ public class Superstructure extends SubsystemBase {
     final Flywheels flywheels;
     final Hood hood;
     final Vision vision;
-    private final ShotData shotCalculator = new ShotData();
+    private final GetShotData shotCalculator = new GetShotData();
 
     public enum WantedSuperState {
         PREPARE_HUB_SHOT,
@@ -109,6 +108,7 @@ public class Superstructure extends SubsystemBase {
         DogLog.log("HubShift/ElapsedTime", shiftInfo.elapsedTime());
         DogLog.log("HubShift/RemainingTime", shiftInfo.remainingTime());
         DogLog.log("HubShift/Active", shiftInfo.active());
+        // DogLog.log("HubShift", HubShiftUtil.getShiftInfo());
 
         handleStateTransitions();
         applyStates();
@@ -124,22 +124,15 @@ public class Superstructure extends SubsystemBase {
                 currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
                 break;
             case SHOOT_HUB:
-                if (areSystemsReadyForHubShot()) {
-                    currentSuperState = CurrentSuperState.SHOOTING_HUB;
-                } else {
-                    currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
-                }
+                // if (areSystemsReadyForShot()) {
+                //     currentSuperState = CurrentSuperState.SHOOTING_HUB;
+                // } else {
+                //     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
+                // }
                 break;
             case PREPARE_ALLIANCE_ZONE_SHOT:
-                currentSuperState = CurrentSuperState.PREPARING_ALLIANCE_ZONE_SHOT;
                 break;
             case SHOOT_ALLIANCE_ZONE:
-                if (areSystemsReadyForAllianceZoneShot()) {
-                    currentSuperState = CurrentSuperState.SHOOTING_ALLIANCE_ZONE;
-                } else {
-                    currentSuperState = CurrentSuperState.PREPARING_ALLIANCE_ZONE_SHOT;
-                }
-                break;
             case IDLE:
                 currentSuperState = CurrentSuperState.IDLING;
                 break;
@@ -178,14 +171,6 @@ public class Superstructure extends SubsystemBase {
                 drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
 
         drivetrain.setTargetRotation(adjustedShot.targetRotation());
-
-        // Translation2d hubTranslation = FieldConstants.Hub.topCenterPoint.toTranslation2d();
-        // Translation2d robotTranslation = drivetrain.getPose().getTranslation();
-        // Rotation2d targetRotation = Rotation2d
-        //         .fromRadians(Math.atan2(hubTranslation.getY() - robotTranslation.getY(),
-        //                 hubTranslation.getX() - robotTranslation.getX()));
-        // drivetrain.setTargetRotation(targetRotation);
-
         feeder.setWantedState(Feeder.WantedState.STOPPED);
         indexer.setWantedState(Indexer.WantedState.TRANSFER_FUEL);
         intakeRollers.setWantedState(IntakeRollers.WantedState.INTAKE_FUEL);
@@ -244,7 +229,7 @@ public class Superstructure extends SubsystemBase {
     }
 
     public void stop() {
-        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.STOPPED);
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
         feeder.setWantedState(Feeder.WantedState.STOPPED);
         indexer.setWantedState(Indexer.WantedState.STOPPED);
         intakeRollers.setWantedState(IntakeRollers.WantedState.STOP);
@@ -253,20 +238,12 @@ public class Superstructure extends SubsystemBase {
         hood.setWantedState(Hood.WantedState.STOPPED);
     }
 
-    private boolean areSystemsReadyForHubShot() {
+    private boolean areSystemsReadyForShot() {
         return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation() && HubShiftUtil.isHubActive();
-    }
-
-    private boolean areSystemsReadyForAllianceZoneShot() {
-        return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation();
     }
 
     public Command zeroGyroCommand() {
         return this.runOnce(() -> drivetrain.zeroGyro());
-    }
-
-    public Command zeroPoseCommand() {
-        return this.runOnce(() -> {drivetrain.zeroGyro(); drivetrain.resetPose();});
     }
 
     public Command setWantedSuperStateCommand(WantedSuperState wantedState) {
@@ -275,9 +252,5 @@ public class Superstructure extends SubsystemBase {
 
     public void setWantedSuperState(WantedSuperState state) {
         wantedSuperState = state;
-    }
-
-    public Pose2d getPose() {
-        return drivetrain.getPose();
     }
 }

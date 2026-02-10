@@ -3,8 +3,6 @@ package frc.robot.subsystems.shooter.flywheels;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -14,7 +12,6 @@ import dev.doglog.DogLog;
 import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -40,20 +37,21 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
         //motors + configuration
         flywheelCANBus = new CANBus();
         flywheelMotor = new TalonFX(FlywheelsConstants.flywheelMotorID, flywheelCANBus);
-        flywheelConfiguration = new TalonFXConfiguration()
-           .withCurrentLimits(new CurrentLimitsConfigs()
-                .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(FlywheelsConstants.supplyCurrentLimit)
-                .withStatorCurrentLimit(FlywheelsConstants.statorCurrentLimit))
-            .withSlot0(new Slot0Configs()
-                .withKP(FlywheelsConstants.flywheelRealkP)
-                .withKI(FlywheelsConstants.flywheelRealkI)
-                .withKD(FlywheelsConstants.flywheelRealkD)
-                .withKS(FlywheelsConstants.flywheelRealkS)
-                .withKV(FlywheelsConstants.flywheelRealkV));  
-                
+        flywheelConfiguration = new TalonFXConfiguration();  
+        
+        //applying PID to configuration
+        flywheelConfiguration.Slot0.kP = FlywheelsConstants.flywheelRealkP;
+        flywheelConfiguration.Slot0.kI = FlywheelsConstants.flywheelRealkI;
+        flywheelConfiguration.Slot0.kD = FlywheelsConstants.flywheelRealkD;
+        flywheelConfiguration.Slot0.kS = FlywheelsConstants.flywheelRealkS;
+        flywheelConfiguration.Slot0.kV = FlywheelsConstants.flywheelRealkV;
+        
+        //current limits
+        flywheelConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
+        flywheelConfiguration.CurrentLimits.SupplyCurrentLimit = FlywheelsConstants.supplyCurrentLimit;
+
         //other configuration stuff
-        flywheelMotor.setNeutralMode(NeutralModeValue.Coast);
+        flywheelMotor.setNeutralMode(NeutralModeValue.Brake);
 
         //Applying configuration
         PhoenixUtil.tryUntilOk(10, () -> flywheelMotor.getConfigurator().apply(flywheelConfiguration, 1));
@@ -77,24 +75,24 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
         BaseStatusSignal.refreshAll(flywheelVelocityRad, flywheelTemperature, 
         flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
 
+        super.position = flywheelPosition.getValueAsDouble();
         super.RPM = flywheelVelocityRad.getValueAsDouble();
-        super.statorCurrent = flywheelStatorCurrent.getValueAsDouble();
         super.isFlywheelAtSetpoint = 
             Math.abs(super.RPM - super.targetRPM) < FlywheelsConstants.RPMTolerance;
 
+        DogLog.log("Flywheel/Position", super.position);
         DogLog.log("Flywheel/RPM", super.RPM);
         DogLog.log("Flywheel/isFlywheelAtSpeed", super.isFlywheelAtSetpoint);
-        DogLog.log("Flywheel/statorCurrent", super.statorCurrent);
     }
 
     @Override
     public void setRPM(double RPM){
         super.targetRPM = RPM;
 
-        if(super.RPM - super.targetRPM < FlywheelsConstants.RPMTolerance){
+        if(super.targetRPM < super.RPM){
             flywheelMotor.setControl(new StaticBrake());
         } else {
-            flywheelMotor.setControl(new VelocityTorqueCurrentFOC(Units.rotationsPerMinuteToRadiansPerSecond(RPM)));
+            flywheelMotor.setControl(new VelocityTorqueCurrentFOC(RPM));
         }
     }
 

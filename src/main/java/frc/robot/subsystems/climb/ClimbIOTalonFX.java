@@ -3,10 +3,6 @@ package frc.robot.subsystems.climb;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -43,29 +39,26 @@ public class ClimbIOTalonFX extends ClimbIO {
 
     motionMagicRequest = new MotionMagicVoltage(0).withSlot(0).withEnableFOC(true);
 
-    climbConfig = new TalonFXConfiguration()
-        .withMotionMagic(
-          new MotionMagicConfigs()
-            .withMotionMagicCruiseVelocity(ClimbConstants.maxVelocityRotsPerSec)
-            .withMotionMagicAcceleration(ClimbConstants.maxAccelerationRotationsPerSecSQ))
-        .withSlot0(
-          new Slot0Configs()
-            .withKP(ClimbConstants.kP)
-            .withKI(ClimbConstants.kI)
-            .withKD(ClimbConstants.kD)
-            .withKV(ClimbConstants.kV)
-            .withKS(ClimbConstants.kS)
-            .withKG(ClimbConstants.kG)
-            .withGravityType(GravityTypeValue.Elevator_Static))
-        .withCurrentLimits(
-          new CurrentLimitsConfigs()
-            .withStatorCurrentLimit(ClimbConstants.statorCurrentLimitAmps)
-            .withStatorCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(ClimbConstants.supplyCurrentLimitAmps)
-            .withSupplyCurrentLimitEnable(true))
-        .withMotorOutput(
-          new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake)
-            .withInverted(InvertedValue.Clockwise_Positive));
+    climbConfig = new TalonFXConfiguration();
+
+    climbConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+    climbConfig.MotionMagic.MotionMagicCruiseVelocity = ClimbConstants.maxVelocityRotsPerSec;
+    climbConfig.MotionMagic.MotionMagicAcceleration = ClimbConstants.maxAccelerationRotationsPerSecSQ;
+ 
+    climbConfig.Slot0.kP = ClimbConstants.kP;
+    climbConfig.Slot0.kI = ClimbConstants.kI;
+    climbConfig.Slot0.kD = ClimbConstants.kD;
+    climbConfig.Slot0.kV = ClimbConstants.kV;
+    climbConfig.Slot0.kS = ClimbConstants.kS;
+    climbConfig.Slot0.kG = ClimbConstants.kG;
+    climbConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
+
+    climbConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    climbConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    climbConfig.CurrentLimits.StatorCurrentLimit = ClimbConstants.statorCurrentLimitAmps;
+    climbConfig.CurrentLimits.SupplyCurrentLimit = ClimbConstants.supplyCurrentLimitAmps;
+    climbConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     PhoenixUtil.tryUntilOk(10, () -> climbMotor.getConfigurator().apply(climbConfig, 1));
 
@@ -74,12 +67,12 @@ public class ClimbIOTalonFX extends ClimbIO {
     climbAppliedVolts = climbMotor.getMotorVoltage();
     climbStatorCurrent = climbMotor.getStatorCurrent();
     climbSupplyCurrent = climbMotor.getSupplyCurrent();
-    climbTempCelsius = climbMotor.getDeviceTemp();
-
+    climbTempCelsius = climbMotor.getDeviceTemp();        
+    
     BaseStatusSignal.setUpdateFrequencyForAll(
-        50.0, climbVelocity, climbPosition,
-        climbStatorCurrent, climbSupplyCurrent, climbAppliedVolts,
-        climbTempCelsius);
+        50.0, climbVelocity, climbPosition, 
+        climbStatorCurrent, climbSupplyCurrent, climbAppliedVolts, 
+          climbTempCelsius);
 
     climbMotor.optimizeBusUtilization();
 
@@ -88,7 +81,8 @@ public class ClimbIOTalonFX extends ClimbIO {
 
   @Override
   public void updateInputs() {
-    BaseStatusSignal.refreshAll(climbVelocity, climbTempCelsius, climbPosition,
+    BaseStatusSignal.refreshAll
+      (climbVelocity, climbTempCelsius, climbPosition, 
         climbStatorCurrent, climbSupplyCurrent, climbAppliedVolts);
 
     super.positionInches = climbPosition.getValueAsDouble() * ClimbConstants.inchesPerRev;
@@ -109,16 +103,16 @@ public class ClimbIOTalonFX extends ClimbIO {
   }
 
   /*
-   * This method is used to make the motor go to whatever position we set it to in
-   * the command layer, while
+   * This method is used to make the motor go to whatever position we set it to in the command layer, while
    * also clamping the range of positions it can go to
    * 
    * @param height A double representing a quantity of inches.
-   */
+  */
   @Override
   public void setClimbHeight(double height) {
-    double position = MathUtil.clamp(ClimbConstants.convertToTicks(height), ClimbConstants.climbLowerLimit,
-        ClimbConstants.climbUpperLimit);
+    double position = 
+      MathUtil.clamp
+        (ClimbConstants.convertToTicks(height), ClimbConstants.climbLowerLimit, ClimbConstants.climbUpperLimit);
 
     motionMagicRequest.Position = position;
     climbMotor.setControl(motionMagicRequest);
