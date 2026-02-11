@@ -110,7 +110,7 @@ public class Superstructure extends SubsystemBase {
         DogLog.log("HubShift/Active", shiftInfo.active());
 
         handleStateTransitions();
-        applyStates();
+        // applyStates();
         // This method will be called once per scheduler run
         DogLog.log("Superstructure/WantedSuperState", wantedSuperState);
         DogLog.log("Superstructure/CurrentSuperState", currentSuperState);
