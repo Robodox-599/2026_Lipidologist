@@ -4,20 +4,20 @@ import dev.doglog.DogLog;
 
 public class Flywheels extends FlywheelsIO{
     private final FlywheelsIO io;
-    private WantedState wantedState = WantedState.STOPPED;
-    private CurrentState currentState = CurrentState.STOPPING;
+    private FlywheelWantedState wantedState = FlywheelWantedState.STOPPED;
+    private FlywheelCurrentState currentState = FlywheelCurrentState.STOPPING;
 
     public Flywheels(FlywheelsIO io) {
         this.io = io;
     }
 
-    public enum WantedState {
+    public enum FlywheelWantedState {
         SET_RPM,
         SET_CONSTANT_RPM,
         STOPPED
     }
 
-    public enum CurrentState {
+    public enum FlywheelCurrentState {
         SETTING_RPM,
         SETTING_CONSTANT_RPM,
         STOPPING
@@ -35,16 +35,16 @@ public class Flywheels extends FlywheelsIO{
     public void handleStateTransitions() {
         switch(wantedState) {
             case SET_RPM:
-            currentState = CurrentState.SETTING_RPM;
+            currentState = FlywheelCurrentState.SETTING_RPM;
             break;
             case SET_CONSTANT_RPM:
-            currentState = CurrentState.SETTING_CONSTANT_RPM;
+            currentState = FlywheelCurrentState.SETTING_CONSTANT_RPM;
             break;
             case STOPPED:
-            currentState = CurrentState.STOPPING;
+            currentState = FlywheelCurrentState.STOPPING;
             break;
             default:
-            currentState = CurrentState.STOPPING;
+            currentState = FlywheelCurrentState.STOPPING;
             break;
         }
     }
@@ -82,11 +82,11 @@ public class Flywheels extends FlywheelsIO{
         return io.isFlywheelAtSetpoint;
     }
     
-    public void setWantedState(Flywheels.WantedState WantedState){
+    public void setWantedState(Flywheels.FlywheelWantedState WantedState){
       this.wantedState = WantedState;
     }
 
-    public void setWantedState(Flywheels.WantedState WantedState, double RPM){
+    public void setWantedState(Flywheels.FlywheelWantedState WantedState, double RPM){
       this.wantedState = WantedState;
       io.targetRPM = RPM;
     }

@@ -41,7 +41,7 @@ public class FeederIOTalonFX extends FeederIO {
                 .withMotionMagicAcceleration(FeederConstants.maxAccelerationRotationsPerSecSQ))
             .withSlot0(
             new Slot0Configs()
-                .withKP(FeederConstants.kP)
+                .withKP(FeederConstants.kP) 
                 .withKI(FeederConstants.kI)
                 .withKD(FeederConstants.kD)
                 .withKV(FeederConstants.kV)

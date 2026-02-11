@@ -8,7 +8,7 @@ public class IndexerConstants {
   public static final int indexerMotorID = 67;
   public static final String indexerCANBus = "rio";
   public static final double indexerGearRatio = 2;
-  public static final double indexerMOI = 2;
+  public static final double indexerMOI = 0.01; // normal MOI
 
   public static final double kP = 0.45;
   public static final double kI = 0;
