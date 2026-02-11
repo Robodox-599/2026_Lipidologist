@@ -23,13 +23,11 @@ public class FeederIOSim extends FeederIO {
   public void updateInputs(){
     feederSimMotor.update(0.02);
 
-    super.position = feederSimMotor.getAngularPositionRad();
-    super.velocity = feederSimMotor.getAngularVelocityRPM() / 60.0;
+    super.velocity = feederSimMotor.getAngularVelocityRPM() / 60.0; // converting minutes to seconds
     super.appliedVolts = feederSimMotor.getInputVoltage();
     super.tempCelsius = 25.0;
 
     DogLog.log("Feeder/Velocity", super.velocity);
-    DogLog.log("Feeder/Position", super.position);
     DogLog.log("Feeder/AppliedVolts", super.appliedVolts);
     DogLog.log("Feeder/Temperature", super.tempCelsius);
   }

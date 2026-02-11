@@ -8,16 +8,16 @@ import dev.doglog.DogLog;
 
 public class Climb {
   private final ClimbIO io;
-  private WantedState wantedState = WantedState.STOP;
-  private CurrentState currentState = CurrentState.STOPPED;
+  private ClimbWantedState wantedState = ClimbWantedState.STOP;
+  private ClimbCurrentState currentState = ClimbCurrentState.STOPPED;
 
-  public enum WantedState{
+  public enum ClimbWantedState{
     STOP,
     EXTEND,
     RETRACT,
   }
 
-  public enum CurrentState{
+  public enum ClimbCurrentState{
     STOPPED,
     EXTENDING,
     RETRACTING,
@@ -41,16 +41,16 @@ public class Climb {
   private void handleStateTransitions(){
     switch (wantedState) {
         case STOP:
-            currentState = CurrentState.STOPPED;
+            currentState = ClimbCurrentState.STOPPED;
             break;
         case EXTEND:
-            currentState = CurrentState.EXTENDING;
+            currentState = ClimbCurrentState.EXTENDING;
             break;
         case RETRACT:
-            currentState = CurrentState.RETRACTING;
+            currentState = ClimbCurrentState.RETRACTING;
             break;
         default:
-            currentState = CurrentState.STOPPED;
+            currentState = ClimbCurrentState.STOPPED;
             break;
     }
   }
@@ -88,7 +88,7 @@ public class Climb {
     io.zeroClimbPosition();
   }
 
-  public void setWantedState(Climb.WantedState wantedState){
+  public void setWantedState(Climb.ClimbWantedState wantedState){
     this.wantedState = wantedState;
   }
 
