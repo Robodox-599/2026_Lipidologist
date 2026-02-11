@@ -12,6 +12,7 @@ import choreo.auto.AutoFactory;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -142,6 +143,18 @@ public class Robot extends TimedRobot {
 
     RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
+
+    driver.x().onTrue(Commands.runOnce(() -> {
+      feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
+      indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+    }));
+
+    driver.y().onTrue(Commands.runOnce(() -> {
+      intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+      intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+    }));
+
+
   }
 
   @Override
