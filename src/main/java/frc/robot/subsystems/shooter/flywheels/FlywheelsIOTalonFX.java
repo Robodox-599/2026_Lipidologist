@@ -12,7 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
 
 import com.ctre.phoenix6.controls.StaticBrake;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -94,7 +94,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
         if(super.RPM - super.targetRPM < FlywheelsConstants.RPMTolerance){
             flywheelMotor.setControl(new StaticBrake());
         } else {
-            flywheelMotor.setControl(new VelocityTorqueCurrentFOC(Units.rotationsPerMinuteToRadiansPerSecond(RPM)));
+            flywheelMotor.setControl(new VelocityVoltage(Units.rotationsPerMinuteToRadiansPerSecond(RPM)));
         }
     }
 
