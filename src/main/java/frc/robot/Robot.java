@@ -3,10 +3,6 @@ package frc.robot;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.shooter.hood.HoodIOSim;
 import frc.robot.subsystems.shooter.hood.HoodIOTalonFX;
-import frc.robot.subsystems.vision.Vision;
-import frc.robot.subsystems.vision.camera.Camera;
-import frc.robot.subsystems.vision.camera.CameraIOReal;
-import frc.robot.subsystems.vision.camera.CameraTransforms;
 import frc.robot.util.HubShiftUtil;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOSim;
@@ -59,7 +55,7 @@ public class Robot extends TimedRobot {
   final IntakeWrist intakeWrist;
   final Flywheels flywheels;
   final Hood hood;
-  final Vision vision;
+  // final Vision vision;
   final Superstructure superstructure;
   
   final AutoChooser autoChooser = new AutoChooser();
@@ -89,8 +85,8 @@ public class Robot extends TimedRobot {
         intakeWrist = new IntakeWrist(new IntakeWristIOTalonFX());
         flywheels = new Flywheels(new FlywheelsIOTalonFX());
         hood = new Hood(new HoodIOTalonFX());
-        vision = new Vision(
-            new Camera(new CameraIOReal(CameraTransforms.frontLeftCameraConstants), drivetrain::addVisionMeasurement));
+        // vision = new Vision(
+        //     new Camera(new CameraIOReal(CameraTransforms.frontLeftCameraConstants), drivetrain::addVisionMeasurement));
         break;
       case SIM:
         climb = new Climb(new ClimbIOSim());
@@ -101,7 +97,7 @@ public class Robot extends TimedRobot {
         intakeWrist = new IntakeWrist(new IntakeWristIOSim());
         flywheels = new Flywheels(new FlywheelsIOSim());
         hood = new Hood(new HoodIOSim());
-        vision = new Vision();
+        // vision = new Vision();
         break;
       default: // defaults to sim
         climb = new Climb(new ClimbIOSim());
@@ -112,14 +108,15 @@ public class Robot extends TimedRobot {
         intakeWrist = new IntakeWrist(new IntakeWristIOSim());
         flywheels = new Flywheels(new FlywheelsIOSim());
         hood = new Hood(new HoodIOSim());
-        vision = new Vision();
+        // vision = new Vision();
         break;
     }
 
     superstructure = new Superstructure(
       climb, 
     drivetrain,
-    feeder, indexer, intakeRollers, intakeWrist, flywheels, hood, vision
+    feeder, indexer, intakeRollers, intakeWrist, flywheels, hood
+    // vision
     );
 
     new Bindings(driver, superstructure);
