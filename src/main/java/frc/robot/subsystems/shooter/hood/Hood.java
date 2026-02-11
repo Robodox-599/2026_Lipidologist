@@ -4,19 +4,19 @@ import dev.doglog.DogLog;
 
 public class Hood extends HoodIO{
     private final HoodIO io;
-    private WantedState wantedState = WantedState.STOPPED;
-    private CurrentState currentState = CurrentState.STOPPING;
+    private HoodWantedState wantedState = HoodWantedState.STOPPED;
+    private HoodCurrentState currentState = HoodCurrentState.STOPPING;
 
     public Hood(HoodIO io) {
         this.io = io;
     }
 
-    public enum WantedState {
+    public enum HoodWantedState {
         SET_POSITION,
         STOPPED
     }
 
-    public enum CurrentState {
+    public enum HoodCurrentState {
         SETTING_POSITION,
         STOPPING 
     }
@@ -33,13 +33,13 @@ public class Hood extends HoodIO{
     public void handleStateTransitions() {
         switch(wantedState) {
             case SET_POSITION:
-            currentState = CurrentState.SETTING_POSITION;
+            currentState = HoodCurrentState.SETTING_POSITION;
             break;
             case STOPPED:
-            currentState = CurrentState.STOPPING;
+            currentState = HoodCurrentState.STOPPING;
             break;
             default:
-            currentState = CurrentState.STOPPING;
+            currentState = HoodCurrentState.STOPPING;
             break;
         }
     }
@@ -74,11 +74,11 @@ public class Hood extends HoodIO{
         return io.isHoodInPosition;
     }
     
-    public void setWantedState(Hood.WantedState WantedState){
+    public void setWantedState(Hood.HoodWantedState WantedState){
       this.wantedState = WantedState;
     }
 
-    public void setWantedState(Hood.WantedState WantedState, double position){
+    public void setWantedState(Hood.HoodWantedState WantedState, double position){
       this.wantedState = WantedState;
       io.targetPosition = position;
     }
