@@ -33,10 +33,10 @@ public class HoodConstants {
 
     //sim stuff
     public static final double armLengthMeters = 0;
-    public static final double startingAngle = 0;
+    public static final double startingAngleRotations = 0;
  
     //positon tolerances
     public static final double positionTolerance = 0;
-    public static final double hoodMinAngle = 0;
-    public static final double hoodMaxAngle = 0;
+    public static final double hoodMinAngleRotations = 0;
+    public static final double hoodMaxAngleRotations = 0;
 }

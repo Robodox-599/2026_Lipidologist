@@ -78,19 +78,19 @@ public class HoodIOTalonFX extends HoodIO {
         BaseStatusSignal.refreshAll(hoodTemperature, 
         hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
 
-        super.positionRadians = hoodPosition.getValueAsDouble();
+        super.positionRotations = hoodPosition.getValueAsDouble();
         super.velocity = hoodVelocityRad.getValueAsDouble();
         super.isHoodInPosition = 
-            Math.abs(super.positionRadians - super.wantedPosition) < HoodConstants.positionTolerance;
+            Math.abs(super.positionRotations - super.wantedPosition) < HoodConstants.positionTolerance;
 
-        DogLog.log("Hood/Position", super.positionRadians);
+        DogLog.log("Hood/Position", super.positionRotations);
         DogLog.log("Hood/TargetPosition", super.wantedPosition);
         DogLog.log("Hood/isHoodAtPosition", super.isHoodInPosition);
     }
 
     @Override
     public void setPosition(double position) {
-        wantedPosition = MathUtil.clamp(position, HoodConstants.hoodMinAngle, HoodConstants.hoodMaxAngle);
+        wantedPosition = MathUtil.clamp(position, HoodConstants.hoodMinAngleRotations, HoodConstants.hoodMaxAngleRotations);
 
         super.wantedPosition = wantedPosition;
 
