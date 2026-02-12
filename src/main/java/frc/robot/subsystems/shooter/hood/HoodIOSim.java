@@ -6,6 +6,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class HoodIOSim extends HoodIO{
@@ -22,7 +23,7 @@ public class HoodIOSim extends HoodIO{
       HoodConstants.hoodSimkV);
       
       pid = new ProfiledPIDController(HoodConstants.hoodSimkP, 
-      HoodConstants.hoodSimkI, HoodConstants.hoodSimkD, null);
+      HoodConstants.hoodSimkI, HoodConstants.hoodSimkD, new Constraints(HoodConstants.hoodMaxVelocity, HoodConstants.hoodMaxAcceleration));
     }
 
     @Override
@@ -44,7 +45,7 @@ public class HoodIOSim extends HoodIO{
 
  @Override
  public void setPosition(double position) {
-    hoodMotorSim.setAngle( feedforward.calculate(position)
+    hoodMotorSim.setInputVoltage( feedforward.calculate(position)
             + pid.calculate(hoodMotorSim.getAngularVelocityRPM(), position));
  }
 }
