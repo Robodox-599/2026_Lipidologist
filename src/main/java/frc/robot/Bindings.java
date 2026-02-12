@@ -22,9 +22,9 @@ public class Bindings extends SubsystemBase {
       CommandXboxController driver, Superstructure superstructure) {
     this.superstructure = superstructure;
 
-    driver.y().onTrue(superstructure.zeroPoseCommand());
+    // driver.y().onTrue(superstructure.zeroPoseCommand());
 
-    driver.rightTrigger().whileTrue();
+    // driver.rightTrigger().whileTrue();
 
     new Trigger(() -> HubShiftUtil.isHubLookaheadActive(3)).onTrue(rumbleDriverSwapping(driver, 0.5, 3));
     
