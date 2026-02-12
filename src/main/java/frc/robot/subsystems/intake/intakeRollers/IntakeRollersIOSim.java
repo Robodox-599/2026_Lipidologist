@@ -24,7 +24,7 @@ public class IntakeRollersIOSim extends IntakeRollersIO {
     public void updateInputs() {
         intakeRollersMotorSim.update(0.02);
         super.statorCurrent = intakeRollersMotorSim.getCurrentDrawAmps();
-        super.velocity = intakeRollersMotorSim.getAngularVelocityRPM() / 60; //units to RPS
+        super.velocity = intakeRollersMotorSim.getAngularVelocityRPM();
         super.voltage = intakeRollersMotorSim.getInputVoltage();
         DogLog.log("Intake/Rollers/StatorCurrent", super.statorCurrent);
         DogLog.log("Intake/Rollers/Velocity", super.velocity);

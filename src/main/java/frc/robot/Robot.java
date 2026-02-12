@@ -150,7 +150,7 @@ public class Robot extends TimedRobot {
     }));
 
     driver.y().onTrue(Commands.runOnce(() -> {
-      intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.EXTEND);
+      intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
       intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
     }));
 
