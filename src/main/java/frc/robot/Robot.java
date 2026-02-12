@@ -154,6 +154,11 @@ public class Robot extends TimedRobot {
       intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
     }));
 
+    driver.a().onTrue(Commands.runOnce(()-> {
+      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.4);
+      flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPM, 95);
+
+    }));
 
   }
 
