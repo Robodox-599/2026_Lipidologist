@@ -18,17 +18,18 @@ public class IntakeWrist {
 
     public enum IntakeWristWantedState{
         STOP,
-        EXTEND,
+        INTAKE_FUEL,
         STOW, //pack
         AGITATE_FUEL
     }
 
     public enum IntakeWristCurrentState{
         STOPPED,
+        INTAKING_FUEL,
         STOWED,
         STOWING, //packing
-        RETRACTING,
-        EXTENDING
+        WRIST_RETRACTING,
+        WRIST_EXTENDING
     }
 
     public void updateInputs(){
@@ -44,27 +45,27 @@ public class IntakeWrist {
             case STOP:
                 currentState = IntakeWristCurrentState.STOPPED;
                 break;
-            case EXTEND:
-                currentState = IntakeWristCurrentState.EXTENDING;
+            case INTAKE_FUEL:
+                currentState = IntakeWristCurrentState.INTAKING_FUEL;
                 break;
             case STOW:
                 currentState = IntakeWristCurrentState.STOWING;
                 break;
             case AGITATE_FUEL:
-                if (currentState == IntakeWristCurrentState.RETRACTING){
+                if (currentState == IntakeWristCurrentState.WRIST_RETRACTING){
                     if (atSetpoint()){
-                        currentState = IntakeWristCurrentState.EXTENDING;
+                        currentState = IntakeWristCurrentState.WRIST_EXTENDING;
                     } else{
-                        currentState = IntakeWristCurrentState.RETRACTING;
+                        currentState = IntakeWristCurrentState.WRIST_RETRACTING;
                     }
-                } else if(currentState == IntakeWristCurrentState.EXTENDING){
+                } else if(currentState == IntakeWristCurrentState.WRIST_EXTENDING){
                     if (atSetpoint()){
-                        currentState = IntakeWristCurrentState.RETRACTING;
+                        currentState = IntakeWristCurrentState.WRIST_RETRACTING;
                     } else{
-                        currentState = IntakeWristCurrentState.EXTENDING;
+                        currentState = IntakeWristCurrentState.WRIST_EXTENDING;
                     } 
                 } else {
-                    currentState = IntakeWristCurrentState.EXTENDING;
+                    currentState = IntakeWristCurrentState.WRIST_EXTENDING;
                 }
                 break;
             default:
@@ -78,17 +79,19 @@ public class IntakeWrist {
             case STOPPED:
                 stop();
                 break;
-            case EXTENDING:
+            case INTAKING_FUEL:
                 setPosition(0.3);
                 break;
             case STOWING:
                 setPosition(.2);
                 break;
-            case RETRACTING:
+            case WRIST_RETRACTING:
                 setPosition(0.2);
                 break;
             case STOWED:
                 setPosition(0);
+            case WRIST_EXTENDING:
+                setPosition(0.4);
                 break;
             default:
                 stop();

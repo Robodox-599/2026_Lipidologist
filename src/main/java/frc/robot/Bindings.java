@@ -27,13 +27,13 @@ public class Bindings extends SubsystemBase {
       CommandXboxController driver, Superstructure superstructure) {
     this.superstructure = superstructure;
 
-    // driver.y().onTrue(superstructure.zeroPoseCommand());
+    driver.y().onTrue(superstructure.zeroPoseCommand());
 
-    // driver.rightTrigger().whileTrue(new RepeatCommand(setShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    driver.rightTrigger().whileTrue(new RepeatCommand(setShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    // driver.povRight().and(driver.rightTrigger().negate()).whileTrue(new RepeatCommand(setPrepareShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    driver.povRight().and(driver.rightTrigger().negate()).whileTrue(new RepeatCommand(setPrepareShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    // new Trigger(() -> HubShiftUtil.isHubLookaheadActive(3)).onTrue(rumbleDriverSwapping(driver, 0.5, 3));
+    new Trigger(() -> HubShiftUtil.isHubLookaheadActive(3)).onTrue(rumbleDriverSwapping(driver, 0.5, 3));
     
     // driver.a().onTrue(rumbleDriverContinuous(driver, 3));
     // driver.b().onTrue(rumbleDriverSwapping(driver, 0.5, 3));
