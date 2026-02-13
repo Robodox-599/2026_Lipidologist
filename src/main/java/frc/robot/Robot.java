@@ -3,6 +3,9 @@ package frc.robot;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.shooter.hood.HoodIOSim;
 import frc.robot.subsystems.shooter.hood.HoodIOTalonFX;
+import frc.robot.subsystems.vision.camera.CameraTransforms;
+import frc.robot.subsystems.vision6.Vision;
+import frc.robot.subsystems.vision6.VisionIOReal;
 import frc.robot.util.HubShiftUtil;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOSim;
@@ -91,6 +94,8 @@ public class Robot extends TimedRobot {
         // vision = new Vision(
         // new Camera(new CameraIOReal(CameraTransforms.frontLeftCameraConstants),
         // drivetrain::addVisionMeasurement));
+        // Vision vision = new Vision(drivetrain::addVisionMeasurement, new VisionIOReal(CameraTransforms.frontLeftCameraConstants, () -> drivetrain.getPose()));
+        Vision vision = new Vision(drivetrain::addVisionMeasurement, new VisionIOReal(CameraTransforms.frontLeftCameraConstants, () -> drivetrain.getPose()));
         break;
       case SIM:
         // climb = new Climb(new ClimbIOSim());

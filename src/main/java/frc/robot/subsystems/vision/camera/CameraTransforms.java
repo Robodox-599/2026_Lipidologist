@@ -8,9 +8,10 @@
 // import edu.wpi.first.math.geometry.Transform3d;
 // import edu.wpi.first.math.geometry.Translation3d;
 // import edu.wpi.first.math.util.Units;
-// import frc.robot.subsystems.vision.camera.Camera.CameraConstants;
 
 // public class CameraTransforms {
+
+//   public record CameraConstants(String name, Transform3d robotToCamera) {}
 // //   /* VISION */
 //   // FRONT LEFT CAMERA
 //   public static final String frontLeftCameraName = "FL_Camera";

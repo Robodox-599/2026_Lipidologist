@@ -31,7 +31,6 @@
 //   private final PhotonPoseEstimator poseEstimator =
 //       new PhotonPoseEstimator(
 //           FieldConstants.AprilTags.aprilTagFieldLayout, 
-//           PoseStrategy.MULTI_TAG_PNP_ON_RIO, 
 //           null
 //           );
 //   private final CameraIO io;
@@ -42,7 +41,6 @@
 //     poseEstimator.setRobotToCameraTransform(io.getCameraConstants().robotToCamera());
 //     this.consumer = consumer;
 //     poseEstimator.setTagModel(TargetModel.kAprilTag36h11);
-//     poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 //   }
 
 //   // Functional interface for vision consumer
@@ -154,4 +152,7 @@
 //     result.targets = newTargets;
 //     return result;
 //   }
+
+
+
 // }
