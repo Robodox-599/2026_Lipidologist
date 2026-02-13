@@ -3,7 +3,6 @@ package frc.robot.subsystems.shooter.hood;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -11,16 +10,12 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class HoodIOSim extends HoodIO{
     private final DCMotorSim hoodMotorSim;
-    private final SimpleMotorFeedforward feedforward;
     private final ProfiledPIDController pid;
 
     public HoodIOSim() {
      hoodMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem
       (DCMotor.getKrakenX60Foc(1), HoodConstants.hoodMOI, 
         HoodConstants.hoodGearRatio), DCMotor.getKrakenX60Foc(1));
-
-      feedforward = new SimpleMotorFeedforward(HoodConstants.hoodSimkS, 
-      HoodConstants.hoodSimkV);
       
       pid = new ProfiledPIDController(HoodConstants.hoodSimkP, 
       HoodConstants.hoodSimkI, HoodConstants.hoodSimkD, new Constraints(HoodConstants.hoodMaxVelocity, HoodConstants.hoodMaxAcceleration));
@@ -30,12 +25,14 @@ public class HoodIOSim extends HoodIO{
     public void updateInputs(){
     hoodMotorSim.update(0.02);
 
-    super.positionRotations = hoodMotorSim.getAngularPositionRad();
-    super.velocity = hoodMotorSim.getAngularVelocityRPM() / 60.0;
- 
+    super.positionRotations = hoodMotorSim.getAngularPositionRotations();
+     super.isHoodInPosition = 
+            Math.abs(super.positionRotations - super.targetPosition) < HoodConstants.positionTolerance;
 
-    DogLog.log("Hood/Velocity", super.velocity);
     DogLog.log("Hood/Position", super.positionRotations);
+    DogLog.log("Hood/TargetPosition", super.targetPosition);
+    DogLog.log("Hood/IsHoodAtPosition", super.isHoodInPosition);
+
   }
 
   @Override
@@ -45,8 +42,13 @@ public class HoodIOSim extends HoodIO{
 
  @Override
  public void setPosition(double position) {
-    hoodMotorSim.setInputVoltage( feedforward.calculate(position)
-            + pid.calculate(hoodMotorSim.getAngularVelocityRPM(), position));
+    hoodMotorSim.setInputVoltage(pid.calculate(hoodMotorSim.getAngularPositionRotations(), position));
+ }
+
+ @Override
+ public void stop() {
+    super.targetPosition = 0;
+    hoodMotorSim.setInputVoltage(pid.calculate(hoodMotorSim.getAngularPositionRotations(), 0));
  }
 }
 

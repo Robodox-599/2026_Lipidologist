@@ -8,14 +8,14 @@ public class FlywheelsConstants {
     public static final double flywheelMOI = 0.1;
    
     //real PID
-    public static final double flywheelRealkP = 0;
+    public static final double flywheelRealkP = 0.2;
     public static final double flywheelRealkI = 0;
-    public static final double flywheelRealkD = 0;
+    public static final double flywheelRealkD = 1;
     public static final double flywheelRealkS = 0;
     public static final double flywheelRealkV = 0;
   
     //sim PID
-    public static final double flywheelSimkP = 0;
+    public static final double flywheelSimkP = 1.25;
     public static final double flywheelSimkI = 0;
     public static final double flywheelSimkD = 0;
     public static final double flywheelSimkS = 0;
@@ -29,7 +29,7 @@ public class FlywheelsConstants {
     public static final double statorCurrentLimit = 50;
  
     //velocity tolerance
-    public static final double RPMTolerance = 0;
+    public static final double RPMTolerance = 0.01;
 
     //setpoints
     public static final double constantRPMSetpoint = 0;
