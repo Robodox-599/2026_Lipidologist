@@ -57,8 +57,17 @@ public class Vision {
       List<Pose3d> robotPosesRejected = new LinkedList<>();
 
       for (PoseObservation observation : io[cameraIndex].poseObservations) {
+
+        // Check whether to reject pose
+        boolean rejectPose = shouldRejectPoseObservation(observation);
+
+        // Log poses
+        robotPoses.add(observation.pose());
         if (shouldRejectPoseObservation(observation)) {
+          robotPosesRejected.add(observation.pose());
           continue;
+        } else {
+          robotPosesAccepted.add(observation.pose());
         }
 
         // Calculate standard deviations
@@ -74,6 +83,7 @@ public class Vision {
             VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
       }
 
+      // Log camera data
       DogLog.log("Vision/" + io[cameraIndex].constants.name() + "/RobotPoses",
           robotPoses.toArray(new Pose3d[robotPoses.size()]));
       DogLog.log("Vision/" + io[cameraIndex].constants.name() + "/RobotPosesAccepted",
