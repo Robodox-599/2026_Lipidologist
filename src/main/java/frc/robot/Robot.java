@@ -98,7 +98,7 @@ public class Robot extends TimedRobot {
         intakeWrist = new IntakeWrist(new IntakeWristIOSim());
         flywheels = new Flywheels(new FlywheelsIOSim());
         hood = new Hood(new HoodIOSim());
-        // vision = new Vision();
+        // vision = new Vision();dsa
         break;
       default: // defaults to sim
         climb = new Climb(new ClimbIOSim());
@@ -144,21 +144,32 @@ public class Robot extends TimedRobot {
     RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
 
-    driver.x().onTrue(Commands.runOnce(() -> {
-      feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
-      indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-    }));
+    // driver.x().onTrue(Commands.runOnce(() -> {
+    //   feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
+    //   indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+    // }));
 
-    driver.y().onTrue(Commands.runOnce(() -> {
-      intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.EXTEND);
-      intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
-    }));
+    // driver.y().onTrue(Commands.runOnce(() -> {
+    //   intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.EXTEND);
+    //   intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+    // }));
 
-    driver.a().onTrue(Commands.runOnce(()-> {
-      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.4);
-      flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPM, 95);
+    // driver.a().onTrue(Commands.runOnce(()-> {
+    //   hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.4);
+    //   flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPM, 95);
+    // }));
 
-    }));
+    driver.rightTrigger().onTrue(Commands.runOnce(() -> feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL)));
+
+    driver.leftTrigger().onTrue(Commands.runOnce(() -> feeder.setWantedState(Feeder.FeederWantedState.REVERSE)));
+    
+    driver.leftBumper().onTrue(Commands.runOnce(() -> feeder.setWantedState(Feeder.FeederWantedState.STOPPED)));
+
+    driver.a().onTrue(Commands.runOnce(() -> indexer.setWantedState(Indexer.IndexerWantedState.REVERSE)));
+
+    driver.b().onTrue(Commands.runOnce(() -> indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL)));
+
+
 
   }
 

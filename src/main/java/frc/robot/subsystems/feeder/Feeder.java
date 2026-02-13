@@ -65,7 +65,8 @@ public class Feeder extends SubsystemBase {
         stopFeeder();
         break;
       case REVERSE:
-        setFeederVoltage(-3.0);
+        setFeederVoltage(-3.0); 
+        break;
       default:
         stopFeeder();
         break;
