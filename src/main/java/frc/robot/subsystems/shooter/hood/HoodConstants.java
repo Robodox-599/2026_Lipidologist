@@ -16,9 +16,9 @@ public class HoodConstants {
     public static final double hoodRealkG = 0;
 
     //sim PID
-    public static final double hoodSimkP = 0;
+    public static final double hoodSimkP = 7;
     public static final double hoodSimkI = 0;
-    public static final double hoodSimkD = 0;
+    public static final double hoodSimkD = 6;
     public static final double hoodSimkS = 0;
     public static final double hoodSimkV = 0;
     public static final double hoodSimkG = 0;
@@ -30,13 +30,12 @@ public class HoodConstants {
     public static final double supplyCurrentLimit = 50;
     public static final double statorCurrentLimit = 50;
 
-
     //sim stuff
     public static final double armLengthMeters = 0;
     public static final double startingAngleRotations = 0;
  
     //positon tolerances
-    public static final double positionTolerance = 0;
+    public static final double positionTolerance = 0.01;
     public static final double hoodMinAngleRotations = 0;
     public static final double hoodMaxAngleRotations = 0;
 }
