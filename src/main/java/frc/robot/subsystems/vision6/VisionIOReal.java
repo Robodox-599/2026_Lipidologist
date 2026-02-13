@@ -58,7 +58,7 @@ public class VisionIOReal extends VisionIO {
 
         // Calculate total distance from each tag to robot
         for (PhotonTrackedTarget target : visionEst.targetsUsed) {
-          totalTagDistance = target.getBestCameraToTarget().getTranslation().getNorm();
+          totalTagDistance += target.getBestCameraToTarget().getTranslation().getNorm();
         }
 
         // Add pose observation

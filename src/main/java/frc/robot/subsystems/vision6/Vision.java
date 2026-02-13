@@ -63,7 +63,7 @@ public class Vision {
 
         // Log poses
         robotPoses.add(observation.pose());
-        if (shouldRejectPoseObservation(observation)) {
+        if (rejectPose) {
           robotPosesRejected.add(observation.pose());
           continue;
         } else {
