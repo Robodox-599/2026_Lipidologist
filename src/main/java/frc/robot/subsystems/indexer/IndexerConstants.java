@@ -16,9 +16,9 @@ public class IndexerConstants {
   public static final double kS = 0.03;
   public static final double kV = 0.124 * indexerGearRatio;
 
-  public static final double simKP = 0.45;
-  public static final double simKI = 0;
-  public static final double simKD = 0;
+  public static final double simkP = 0.45;
+  public static final double simkI = 0;
+  public static final double simkD = 0;
 
   public static final double pulseTimeInterval = 0.4;
   public static final double supplyCurrentLimit = 40;
