@@ -2,7 +2,7 @@ package frc.robot.subsystems.shooter.flywheels;
 
 import dev.doglog.DogLog;
 
-public class Flywheels extends FlywheelsIO{
+public class Flywheels extends FlywheelsIO {
     private final FlywheelsIO io;
     private FlywheelWantedState wantedState = FlywheelWantedState.STOPPED;
     private FlywheelCurrentState currentState = FlywheelCurrentState.STOPPING;
@@ -22,7 +22,7 @@ public class Flywheels extends FlywheelsIO{
         SETTING_CONSTANT_RPM,
         STOPPING
     }
-    
+
     public void updateInputs() {
         io.updateInputs();
         handleStateTransitions();
@@ -33,61 +33,61 @@ public class Flywheels extends FlywheelsIO{
     }
 
     public void handleStateTransitions() {
-        switch(wantedState) {
+        switch (wantedState) {
             case SET_RPM:
-            currentState = FlywheelCurrentState.SETTING_RPM;
-            break;
+                currentState = FlywheelCurrentState.SETTING_RPM;
+                break;
             case SET_CONSTANT_RPM:
-            currentState = FlywheelCurrentState.SETTING_CONSTANT_RPM;
-            break;
+                currentState = FlywheelCurrentState.SETTING_CONSTANT_RPM;
+                break;
             case STOPPED:
-            currentState = FlywheelCurrentState.STOPPING;
-            break;
+                currentState = FlywheelCurrentState.STOPPING;
+                break;
             default:
-            currentState = FlywheelCurrentState.STOPPING;
-            break;
+                currentState = FlywheelCurrentState.STOPPING;
+                break;
         }
     }
 
     private void applyStates() {
         switch (currentState) {
             case SETTING_RPM:
-            setRPM(io.targetRPM);
-            break;
+                setRPM(io.targetRPM);
+                break;
             case SETTING_CONSTANT_RPM:
-            setRPM(FlywheelsConstants.constantRPMSetpoint);
-            break;
+                setRPM(FlywheelsConstants.constantRPMSetpoint);
+                break;
             case STOPPING:
-            stop();
-            break;
+                stop();
+                break;
             default:
-            stop();
-            break;
+                stop();
+                break;
         }
     }
 
     public void setRPM(double RPM) {
         io.setRPM(RPM);
     }
-    
+
     public void stop() {
         io.stop();
     }
-    
-     public void setVoltage(double voltage) {
+
+    public void setVoltage(double voltage) {
         io.setVoltage(voltage);
     }
-    
+
     public boolean atSetpoint() {
         return io.isFlywheelAtSetpoint;
     }
-    
-    public void setWantedState(Flywheels.FlywheelWantedState WantedState){
-      this.wantedState = WantedState;
+
+    public void setWantedState(Flywheels.FlywheelWantedState WantedState) {
+        this.wantedState = WantedState;
     }
 
-    public void setWantedState(Flywheels.FlywheelWantedState WantedState, double RPM){
-      this.wantedState = WantedState;
-      io.targetRPM = RPM;
+    public void setWantedState(Flywheels.FlywheelWantedState WantedState, double RPM) {
+        this.wantedState = WantedState;
+        io.targetRPM = RPM;
     }
 }

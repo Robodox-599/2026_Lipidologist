@@ -43,14 +43,14 @@ public class CalculateShot {
             flightTime = newFlightTime;
         }
 
-        /* Accounts for shooting latency between calculation and actual shot */
-        // Translation2d swerveLookAheadTranslation = robotTranslation
-        //         .plus(new Translation2d(fieldRelativeRobotVelocity.vxMetersPerSecond * LOOKAHEAD_TIME,
-        //                 fieldRelativeRobotVelocity.vyMetersPerSecond * LOOKAHEAD_TIME));
+        /* Accounts for shooting latency */
+        Translation2d swerveLookAheadTranslation = robotTranslation
+                .plus(new Translation2d(fieldRelativeRobotVelocity.vxMetersPerSecond * LOOKAHEAD_TIME,
+                        fieldRelativeRobotVelocity.vyMetersPerSecond * LOOKAHEAD_TIME));
 
-        // double adjustedDistance = swerveLookAheadTranslation.getDistance(adjustedHubTranslation);
+        double adjustedDistance = swerveLookAheadTranslation.getDistance(adjustedHubTranslation);
 
-        double adjustedDistance = robotTranslation.getDistance(adjustedHubTranslation);
+        // double adjustedDistance = robotTranslation.getDistance(adjustedHubTranslation);
 
         Rotation2d targetRotation = Rotation2d
                 .fromRadians(Math.atan2(adjustedHubTranslation.getY() - robotTranslation.getY(),

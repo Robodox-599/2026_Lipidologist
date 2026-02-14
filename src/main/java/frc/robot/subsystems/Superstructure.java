@@ -20,6 +20,7 @@ import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist;
 import frc.robot.subsystems.shooter.hood.Hood;
+import frc.robot.subsystems.vision6.Vision;
 import frc.robot.util.CalculateShot;
 import frc.robot.util.HubShiftUtil;
 import frc.robot.util.HubShiftUtil.ShiftInfo;
@@ -38,7 +39,7 @@ public class Superstructure extends SubsystemBase {
     final IntakeWrist intakeWrist;
     // final Flywheels flywheels;
     // final Hood hood;
-    // final Vision vision;
+    final Vision vision;
     private final ShotData shotCalculator = new ShotData();
 
     public enum WantedSuperState {
@@ -75,10 +76,10 @@ public class Superstructure extends SubsystemBase {
             // Feeder feeder,
             // Indexer indexer,
             IntakeRollers intakeRollers,
-            IntakeWrist intakeWrist
+            IntakeWrist intakeWrist,
             // Flywheels flywheels,
             // Hood hood
-            // Vision vision
+            Vision vision
             ) {
         // this.climb = climb;
         this.drivetrain = drivetrain;
@@ -88,7 +89,7 @@ public class Superstructure extends SubsystemBase {
         this.intakeWrist = intakeWrist;
         // this.flywheels = flywheels;
         // this.hood = hood;
-        // this.vision = vision;
+        this.vision = vision;
     }
 
     @Override
@@ -101,7 +102,7 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.updateInputs();
         // flywheels.updateInputs();
         // hood.updateInputs();
-        // vision.updateInputs();
+        vision.updateInputs();
 
         ShiftInfo shiftInfo = HubShiftUtil.getShiftInfo();
         DogLog.log("HubShift", shiftInfo.currentShift());

@@ -75,6 +75,7 @@ public class Vision {
         double linearStdDev = VisionConstants.linearStdDevBaseline * stdDevFactor;
         double angularStdDev = VisionConstants.angularStdDevBaseline * stdDevFactor;
 
+        // Don't trust angular position on single-tag
         if (observation.tagCount() == 1) {
           angularStdDev = 1000.0;
         }

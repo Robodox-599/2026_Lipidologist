@@ -50,7 +50,7 @@ public class HoodIOTalonFX extends HoodIO {
                 .withKI(HoodConstants.hoodRealkI)
                 .withKD(HoodConstants.hoodRealkD)
                 .withKS(HoodConstants.hoodRealkS)
-                .withKV(HoodConstants.hoodRealkV)); ;
+                .withKV(HoodConstants.hoodRealkV));
 
         //other configuration stuff
         hoodMotor.setNeutralMode(NeutralModeValue.Brake);

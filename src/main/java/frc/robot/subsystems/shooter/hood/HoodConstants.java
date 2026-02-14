@@ -1,5 +1,4 @@
 package frc.robot.subsystems.shooter.hood;
-import com.ctre.phoenix6.CANBus;
 
 public class HoodConstants {
     //motor information
