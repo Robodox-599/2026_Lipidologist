@@ -1,0 +1,134 @@
+{
+ "name":"jaiden's autos",
+ "version":2,
+ "type":"Swerve",
+ "variables":{
+  "expressions":{
+   "bumperRadius":{
+    "dimension":"Length",
+    "var":{
+     "exp":"30.5 in / 2",
+     "val":0.38735
+    }
+   },
+   "centerLine":{
+    "dimension":"Length",
+    "var":{
+     "exp":"fieldLength / 2",
+     "val":8.2705
+    }
+   },
+   "fieldLength":{
+    "dimension":"Length",
+    "var":{
+     "exp":"16.541 m",
+     "val":16.541
+    }
+   },
+   "fieldWidth":{
+    "dimension":"Length",
+    "var":{
+     "exp":"8.069 m",
+     "val":8.069
+    }
+   },
+   "fuelRadius":{
+    "dimension":"Length",
+    "var":{
+     "exp":"5.91 in / 2",
+     "val":0.075057
+    }
+   },
+   "startingFuelWidth":{
+    "dimension":"Length",
+    "var":{
+     "exp":"206 in",
+     "val":5.2324
+    }
+   },
+   "startingLine":{
+    "dimension":"Length",
+    "var":{
+     "exp":"4 m",
+     "val":4.0
+    }
+   }
+  },
+  "poses":{}
+ },
+ "config":{
+  "frontLeft":{
+   "x":{
+    "exp":"10.875 in",
+    "val":0.276225
+   },
+   "y":{
+    "exp":"10.875 in",
+    "val":0.276225
+   }
+  },
+  "backLeft":{
+   "x":{
+    "exp":"-10.875 in",
+    "val":-0.276225
+   },
+   "y":{
+    "exp":"10.875 in",
+    "val":0.276225
+   }
+  },
+  "mass":{
+   "exp":"150 lbs",
+   "val":68.0388555
+  },
+  "inertia":{
+   "exp":"6 kg m ^ 2",
+   "val":6.0
+  },
+  "gearing":{
+   "exp":"7.03125",
+   "val":7.03125
+  },
+  "radius":{
+   "exp":"2 in",
+   "val":0.0508
+  },
+  "vmax":{
+   "exp":"6000 RPM",
+   "val":628.3185307179587
+  },
+  "tmax":{
+   "exp":"1.2 N * m",
+   "val":1.2
+  },
+  "cof":{
+   "exp":"1.5",
+   "val":1.5
+  },
+  "bumper":{
+   "front":{
+    "exp":"15.25 in",
+    "val":0.38735
+   },
+   "side":{
+    "exp":"15.25 in",
+    "val":0.38735
+   },
+   "back":{
+    "exp":"15.25 in",
+    "val":0.38735
+   }
+  },
+  "differentialTrackWidth":{
+   "exp":"22 in",
+   "val":0.5588
+  }
+ },
+ "generationFeatures":[],
+ "codegen":{
+  "root":null,
+  "genVars":true,
+  "genTrajData":true,
+  "useChoreoLib":true
+ }
+}
