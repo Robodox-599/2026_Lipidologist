@@ -3,6 +3,7 @@ package frc.robot.subsystems.shooter.hood;
 public class HoodConstants {
     //motor information
     public static final int hoodMotorID = 0;
+    public static final int hoodCANCoderID = 0;
     public static final double hoodGearRatio = 1;
     public static final double hoodMOI = 0.1;
    
@@ -37,4 +38,8 @@ public class HoodConstants {
     public static final double positionTolerance = 0.01;
     public static final double hoodMinAngleRotations = 0;
     public static final double hoodMaxAngleRotations = 0;
+
+    //cancoderstuff
+    public static final double hoodMagnetOffset = 0.0;
+    public static final double absoluteDiscontinuityPoint = 0.0;
 }
