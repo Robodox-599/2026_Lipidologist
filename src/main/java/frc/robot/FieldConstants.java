@@ -503,7 +503,7 @@ public class FieldConstants {
             List.of(TAGS), FieldConstants.fieldLengthMeters, FieldConstants.fieldWidthMeters);
 
     public static Pose3d getTagPose(int tagID) {
-        return TAGS[tagID].pose;
+        return TAGS[tagID - 1].pose;
     }
   }
 }

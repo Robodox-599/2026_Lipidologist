@@ -11,6 +11,9 @@ import frc.robot.util.HubShiftUtil;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOSim;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOTalonFX;
+
+import java.lang.reflect.Field;
+
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import dev.doglog.DogLog;

@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.FieldConstants;
 import frc.robot.subsystems.drive.constants.TunerConstants;
 import frc.robot.subsystems.drive.constants.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ChassisAccelerations;
 import frc.robot.util.Tracer;
 
@@ -294,7 +295,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         DogLog.log("Drive/ControllerSpeeds", controllerSpeeds);
         break;
       case ROTATION_LOCK:
-        
+        if (AllianceFlipUtil.shouldFlip()) {
+          targetRotation.rotateBy(kRedAlliancePerspectiveRotation.unaryMinus());
+        }
         setControl(
             driveAtAngle
                 .withVelocityX(controllerSpeeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
