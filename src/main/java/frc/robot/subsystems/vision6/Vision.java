@@ -25,11 +25,20 @@ public class Vision {
   private final VisionConsumer consumer;
   private final VisionIOReal[] io;
 
+  private final Alert[] disconnectedAlerts;
   private final Alert cameraDisconnectedAlert = new Alert("One or more cameras are disconnected.", AlertType.kWarning);
 
   public Vision(VisionConsumer consumer, VisionIOReal... io) {
     this.consumer = consumer;
     this.io = io;
+
+    // Initialize disconnected alerts
+    this.disconnectedAlerts = new Alert[io.length];
+    for (int i = 0; i < io.length; i++) {
+      disconnectedAlerts[i] =
+          new Alert(
+              "Vision camera " + Integer.toString(i) + " is disconnected.", AlertType.kWarning);
+    }
   }
 
   // Functional interface for vision consumer
@@ -45,6 +54,11 @@ public class Vision {
     for (int i = 0; i < io.length; i++) {
       io[i].updateInputs();
     }
+
+    // Initialize logging values
+    List<Pose3d> allRobotPoses = new LinkedList<>();
+    List<Pose3d> allRobotPosesAccepted = new LinkedList<>();
+    List<Pose3d> allRobotPosesRejected = new LinkedList<>();
 
     // Loop over cameras
     for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
@@ -91,7 +105,19 @@ public class Vision {
           robotPosesAccepted.toArray(new Pose3d[robotPosesAccepted.size()]));
       DogLog.log("Vision/" + io[cameraIndex].constants.name() + "/RobotPosesRejected",
           robotPosesRejected.toArray(new Pose3d[robotPosesRejected.size()]));
+      allRobotPoses.addAll(robotPoses);
+      allRobotPosesAccepted.addAll(robotPosesAccepted);
+      allRobotPosesRejected.addAll(robotPosesRejected);
     }
+    // Log summary data
+    DogLog.log(
+        "Vision/Summary/RobotPoses", allRobotPoses.toArray(new Pose3d[allRobotPoses.size()]));
+    DogLog.log(
+        "Vision/Summary/RobotPosesAccepted",
+        allRobotPosesAccepted.toArray(new Pose3d[allRobotPosesAccepted.size()]));
+    DogLog.log(
+        "Vision/Summary/RobotPosesRejected",
+        allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
   }
 
   private boolean shouldRejectPoseObservation(PoseObservation observation) {
