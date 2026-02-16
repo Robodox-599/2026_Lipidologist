@@ -7,6 +7,7 @@ import frc.robot.subsystems.vision6.Vision;
 import frc.robot.subsystems.vision6.VisionConstants;
 import frc.robot.subsystems.vision6.VisionIOReal;
 import frc.robot.subsystems.vision6.VisionIOSim;
+import frc.robot.util.FuelSim;
 import frc.robot.util.HubShiftUtil;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOSim;
@@ -32,6 +33,7 @@ import frc.robot.subsystems.intake.intakeWrist.IntakeWristIOTalonFX;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist.IntakeWristWantedState;
 import frc.robot.autos.AutoRoutines;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Superstructure.WantedSuperState;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbIOSim;
 import frc.robot.subsystems.climb.ClimbIOTalonFX;
@@ -67,6 +69,8 @@ public class Robot extends TimedRobot {
   // final Hood hood;
   final Vision vision;
   final Superstructure superstructure;
+
+  final FuelSim fuelSim = new FuelSim();
 
   final AutoChooser autoChooser = new AutoChooser();
   final AutoFactory autoFactory;
@@ -111,6 +115,14 @@ public class Robot extends TimedRobot {
         vision = new Vision(drivetrain::addVisionMeasurement,
             new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
             new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()));
+
+        fuelSim.clearFuel();
+        fuelSim.spawnStartingFuel();
+        fuelSim.registerRobot(0.7747, 0.7747, 0.0762, () -> drivetrain.getPose(), () -> drivetrain.getFieldRelativeChassisSpeeds());
+        fuelSim.registerIntake(-0.7747-0.1, 0.7747+0.1, -0.7747-0.1, -0.7747-0.1);
+        fuelSim.setSubticks(1);
+
+        fuelSim.start();
         break;
       default: // defaults to sim
         // climb = new Climb(new ClimbIOSim());
@@ -133,7 +145,8 @@ public class Robot extends TimedRobot {
         // feeder, indexer,
         intakeRollers, intakeWrist,
     // flywheels, hood,
-    vision
+    vision, 
+    fuelSim
     );
 
     new Bindings(driver, superstructure);
@@ -159,21 +172,7 @@ public class Robot extends TimedRobot {
     RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
 
-    driver.rightTrigger().onTrue(Commands.runOnce(() -> {
-      intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
-      intakeRollers.setWantedState((IntakeRollersWantedState.INTAKE_FUEL));
-    })).onFalse(Commands.runOnce(() -> {
-      intakeWrist.setWantedState(IntakeWristWantedState.STOW);
-      intakeRollers.setWantedState((IntakeRollersWantedState.STOP));
-    }));
-
-    driver.leftTrigger().onTrue(Commands.runOnce(() -> {
-      intakeWrist.setWantedState(IntakeWristWantedState.AGITATE_FUEL);
-      intakeRollers.setWantedState((IntakeRollersWantedState.INTAKE_FUEL));
-    })).onFalse(Commands.runOnce(() -> {
-      intakeWrist.setWantedState(IntakeWristWantedState.STOW);
-      intakeRollers.setWantedState((IntakeRollersWantedState.STOP));
-    }));
+    driver.rightTrigger().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
   }
 
   @Override
