@@ -10,8 +10,8 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 
 public class VisionConstants {
-    public static final double maxZError = 0.2; // 0.3
-    public static final double maxAmbiguity = 0.2; // 0.75
+    public static final double maxZError = 0.2; // 0.75 
+    public static final double maxAmbiguity = 0.2; // 0.3
 
     public static double linearStdDevBaseline = 0.3; // Meters (0.02)
     public static double angularStdDevBaseline = 0.6; // Radians (0.06)
