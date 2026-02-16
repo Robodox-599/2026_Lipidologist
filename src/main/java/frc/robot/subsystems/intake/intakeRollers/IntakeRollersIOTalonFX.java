@@ -8,9 +8,11 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.units.measure.Angle;
@@ -42,7 +44,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
                         .withSupplyCurrentLimit(IntakeRollersConstants.supplyCurrentLimit)
                         .withStatorCurrentLimitEnable(true)
                         .withStatorCurrentLimit(IntakeRollersConstants.statorCurrentLimit)
-                );
+                ).withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive));
 
         // intakeRollersConfig.Slot0.kP = IntakeRollersConstants.kP;
         // intakeRollersConfig.Slot0.kI = IntakeRollersConstants.kI;

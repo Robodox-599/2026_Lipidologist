@@ -54,7 +54,7 @@ public class IntakeRollers {
                 stop();
                 break;
             case INTAKING_FUEL:
-                setVoltage(5);
+                setVoltage(10);
                 break;
             case REVERSING_FUEL:
                 setVoltage(-5);

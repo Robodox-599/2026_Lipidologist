@@ -33,7 +33,9 @@ public class Bindings extends SubsystemBase {
 
     // driver.povRight().and(driver.rightTrigger().negate()).whileTrue(new RepeatCommand(setPrepareShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    driver.povRight().whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    // driver.povRight().whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+
+    driver.leftTrigger().whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
     new Trigger(() -> HubShiftUtil.isHubLookaheadActive(3)).onTrue(rumbleDriverSwapping(driver, 0.5, 3));
     

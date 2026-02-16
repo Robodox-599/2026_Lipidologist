@@ -195,10 +195,11 @@ public class Superstructure extends SubsystemBase {
     }
 
     public void shootingHub() {
-        AdjustedShot adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
-                drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
+        // AdjustedShot adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
+        //         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
 
-        drivetrain.setTargetRotation(adjustedShot.targetRotation());
+        // drivetrain.setTargetRotation(adjustedShot.targetRotation());
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
         // feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
         // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);

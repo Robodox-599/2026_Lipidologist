@@ -26,7 +26,6 @@ public class IntakeWrist {
     public enum IntakeWristCurrentState{
         STOPPED,
         INTAKING_FUEL,
-        STOWED,
         STOWING, //packing
         WRIST_RETRACTING,
         WRIST_EXTENDING
@@ -80,18 +79,16 @@ public class IntakeWrist {
                 stop();
                 break;
             case INTAKING_FUEL:
-                setPosition(0.3);
+                setPosition(-0.02);
                 break;
             case STOWING:
-                setPosition(.2);
+                setPosition(.337);
                 break;
             case WRIST_RETRACTING:
-                setPosition(0.2);
+                setPosition(0.167);
                 break;
-            case STOWED:
-                setPosition(0);
             case WRIST_EXTENDING:
-                setPosition(0.4);
+                setPosition(0.05);
                 break;
             default:
                 stop();

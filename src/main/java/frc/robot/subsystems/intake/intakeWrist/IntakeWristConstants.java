@@ -15,17 +15,17 @@ public class IntakeWristConstants {
 
     public static final double rotationalInertia = 0.01;
 
-    public static final double gearRatio = 26.8888888889;
+    public static final double gearRatio = (44.0/12.0) * (44.0/18.0) * (36.0/12.0);
 
-    public static final double kP = 0;
+    public static final double kP = 60;
     public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double kV = Constants.kMotors.kKrakenX60Foc.kV * gearRatio;
+    public static final double kD = 1.5;
+    public static final double kV = (Constants.kMotors.kKrakenX60Foc.kV * gearRatio);
     public static final double kS = 0.35;
-    public static final double kG = 0.15;
+    public static final double kG = .435;
 
     public static final double maxVelocity = (12 - kS - kG) / kV;
-    public static final double maxAcceleration = maxVelocity * 2;
+    public static final double maxAcceleration = maxVelocity;
     public static final double absoluteDiscontinuityPoint = 0.35;
     public static final double magnetOffset = 0.486572265625;
     public static final double supplyCurrentLimit = 70.0;

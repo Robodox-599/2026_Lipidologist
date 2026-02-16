@@ -89,14 +89,14 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
                 .withMagnetSensor(
                         new MagnetSensorConfigs()
                                 .withMagnetOffset(IntakeWristConstants.magnetOffset)
-                                .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive)
+                                .withSensorDirection(SensorDirectionValue.Clockwise_Positive)
                                 .withAbsoluteSensorDiscontinuityPoint(IntakeWristConstants.absoluteDiscontinuityPoint)
 
                 );
         m_request = new MotionMagicVoltage(0);
 
-        PhoenixUtil.tryUntilOk(10, () -> intakeWristMotor.getConfigurator().apply(intakeWristConfig));
         PhoenixUtil.tryUntilOk(10, () -> intakeWristCanCoder.getConfigurator().apply(canCoderConfig));
+        PhoenixUtil.tryUntilOk(10, () -> intakeWristMotor.getConfigurator().apply(intakeWristConfig));
 
         // intakeWristMotor.setNeutralMode(NeutralModeValue.Brake);
 
