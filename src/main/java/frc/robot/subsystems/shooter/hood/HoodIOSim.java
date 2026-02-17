@@ -26,11 +26,13 @@ public class HoodIOSim extends HoodIO{
     hoodMotorSim.update(0.02);
 
     super.positionRotations = hoodMotorSim.getAngularPositionRotations();
-     super.isHoodInPosition = 
-            Math.abs(super.positionRotations - super.targetPosition) < HoodConstants.positionTolerance;
+    super.statorCurrent = hoodMotorSim.getCurrentDrawAmps();
+    super.isHoodInPosition = 
+            Math.abs(super.positionRotations - super.targetPositionRots) < HoodConstants.positionTolerance;
 
     DogLog.log("Hood/Position", super.positionRotations);
-    DogLog.log("Hood/TargetPosition", super.targetPosition);
+    DogLog.log("Hood/TargetPosition", super.targetPositionRots);
+    DogLog.log("Hood/StatorCurrent", super.statorCurrent);
     DogLog.log("Hood/IsHoodAtPosition", super.isHoodInPosition);
 
   }
@@ -47,7 +49,7 @@ public class HoodIOSim extends HoodIO{
 
  @Override
  public void stop() {
-    super.targetPosition = 0;
+    super.targetPositionRots = 0;
     hoodMotorSim.setInputVoltage(pid.calculate(hoodMotorSim.getAngularPositionRotations(), 0));
  }
 }

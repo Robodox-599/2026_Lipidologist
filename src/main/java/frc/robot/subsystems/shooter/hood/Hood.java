@@ -47,7 +47,7 @@ public class Hood {
     private void applyStates() {
         switch (currentState) {
             case SETTING_POSITION:
-                setPosition(io.targetPosition);
+                setPosition(io.targetPositionRots);
                 break;
             case STOPPING:
                 stop();
@@ -80,6 +80,6 @@ public class Hood {
 
     public void setWantedState(Hood.HoodWantedState WantedState, double position) {
         this.wantedState = WantedState;
-        io.targetPosition = position;
+        io.targetPositionRots = position;
     }
 }

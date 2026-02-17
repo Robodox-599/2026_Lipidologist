@@ -7,21 +7,26 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.FlywheelConstants;
 
 public class FlywheelsIOSim extends FlywheelsIO {
   private final DCMotorSim flywheelMotorSim;
   private final ProfiledPIDController pid;
 
-  public FlywheelsIOSim() {
+  private final FlywheelConstants flywheelConstants;
+
+  public FlywheelsIOSim(FlywheelConstants flywheelConstants) {
+    this.flywheelConstants = flywheelConstants;
+
     flywheelMotorSim = new DCMotorSim(
         LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), FlywheelsConstants.flywheelMOI,
             FlywheelsConstants.flywheelGearRatio),
         DCMotor.getKrakenX60Foc(1));
-    // FlywheelsConstants.flywheelSimkV);
 
-    pid = new ProfiledPIDController(FlywheelsConstants.flywheelSimkP,
-        FlywheelsConstants.flywheelSimkI, FlywheelsConstants.flywheelSimkD,
+    pid = new ProfiledPIDController(this.flywheelConstants.kP(),
+        this.flywheelConstants.kI(), this.flywheelConstants.kD(),
         new Constraints(FlywheelsConstants.flywheelMaxVelocity, FlywheelsConstants.flywheelMaxAcceleration));
+
   }
 
   @Override
@@ -29,10 +34,12 @@ public class FlywheelsIOSim extends FlywheelsIO {
     flywheelMotorSim.update(0.02);
 
     super.RPS = flywheelMotorSim.getAngularVelocityRPM() / 60;
+    super.statorCurrent = flywheelMotorSim.getCurrentDrawAmps();
     super.isFlywheelAtSetpoint = Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSTolerance;
 
     DogLog.log("Flywheel/RPS", super.RPS);
     DogLog.log("Flywheel/TargetRPS", super.targetRPS);
+    DogLog.log("Flywheel/StatorCurrent", super.statorCurrent);
     DogLog.log("Flywheel/IsFlywheelAtSpeed", super.isFlywheelAtSetpoint);
   }
 

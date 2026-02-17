@@ -71,6 +71,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
         flywheelStatorCurrent = flywheelMotor.getStatorCurrent();
         flywheelSupplyCurrent = flywheelMotor.getSupplyCurrent();
 
+        //update frequency
         BaseStatusSignal.setUpdateFrequencyForAll(50, flywheelVelocityRPS, flywheelTemperature,
                 flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
 
@@ -81,7 +82,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     public void updateInputs() {
         BaseStatusSignal.refreshAll(flywheelVelocityRPS, flywheelTemperature,
                 flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
-
+ 
         super.RPS = flywheelVelocityRPS.getValueAsDouble();
         super.statorCurrent = flywheelStatorCurrent.getValueAsDouble();
         super.supplyCurrent = flywheelSupplyCurrent.getValueAsDouble();

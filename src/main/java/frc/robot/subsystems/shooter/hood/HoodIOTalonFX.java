@@ -33,17 +33,16 @@ public class HoodIOTalonFX extends HoodIO {
     private final TalonFX hoodMotor;
     TalonFXConfiguration hoodConfiguration;
     private final CANBus hoodCANBus;
-
+   
     //cancoder + configuration
     private final CANcoder hoodCANCoder;
-
+    CANcoderConfiguration CANCoderConfig;
 
     //motion magic
     private MotionMagicVoltage motionMagic;
-    CANcoderConfiguration CANCoderConfig;
 
     //status signals
-    private final StatusSignal<AngularVelocity> hoodVelocityRad;
+    private final StatusSignal<AngularVelocity> hoodVelocityRotsPerSec;
     private final StatusSignal<Temperature> hoodTemperature;
     private final StatusSignal<Angle> hoodPosition;
     private final StatusSignal<Voltage> hoodAppliedVolts;
@@ -90,7 +89,7 @@ public class HoodIOTalonFX extends HoodIO {
 
 
         //status signals
-        hoodVelocityRad = hoodMotor.getVelocity();
+        hoodVelocityRotsPerSec = hoodMotor.getVelocity();
         hoodTemperature = hoodMotor.getDeviceTemp();
         hoodPosition = hoodCANCoder.getAbsolutePosition();
         hoodAppliedVolts = hoodMotor.getMotorVoltage();
@@ -98,7 +97,7 @@ public class HoodIOTalonFX extends HoodIO {
         hoodSupplyCurrent = hoodMotor.getSupplyCurrent();
 
         //Update Frequency
-        BaseStatusSignal.setUpdateFrequencyForAll(50, hoodVelocityRad, hoodTemperature, 
+        BaseStatusSignal.setUpdateFrequencyForAll(50, hoodVelocityRotsPerSec, hoodTemperature, 
         hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
 
         hoodMotor.optimizeBusUtilization();
@@ -111,20 +110,26 @@ public class HoodIOTalonFX extends HoodIO {
         hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
 
         super.positionRotations = hoodPosition.getValueAsDouble();
-        super.velocity = hoodVelocityRad.getValueAsDouble();
+        super.RPS = hoodVelocityRotsPerSec.getValueAsDouble();
+        super.statorCurrent = hoodStatorCurrent.getValueAsDouble();
+        super.supplyCurrent = hoodSupplyCurrent.getValueAsDouble();
+        super.temperature = hoodTemperature.getValueAsDouble();
         super.isHoodInPosition = 
-            Math.abs(super.positionRotations - super.targetPosition) < HoodConstants.positionTolerance;
+            Math.abs(super.positionRotations - super.targetPositionRots) < HoodConstants.positionTolerance;
 
         DogLog.log("Hood/Position", super.positionRotations);
-        DogLog.log("Hood/TargetPosition", super.targetPosition);
+        DogLog.log("Hood/TargetPosition", super.targetPositionRots);
+        DogLog.log("Hood/StatorCurrent", super.statorCurrent);
+        DogLog.log("Hood/SupplyCurrent", super.supplyCurrent);
+        DogLog.log("Hood/Temperature", super.temperature);
         DogLog.log("Hood/isHoodAtPosition", super.isHoodInPosition);
     }
 
     @Override
     public void setPosition(double position) {
-        targetPosition = MathUtil.clamp(position, HoodConstants.hoodMinAngleRotations, HoodConstants.hoodMaxAngleRotations);
+        targetPositionRots = MathUtil.clamp(position, HoodConstants.hoodMinAngleRotations, HoodConstants.hoodMaxAngleRotations);
 
-        super.targetPosition = targetPosition;
+        super.targetPositionRots = targetPositionRots;
 
         motionMagic = new MotionMagicVoltage(position).withSlot(0).withEnableFOC(true);
         
