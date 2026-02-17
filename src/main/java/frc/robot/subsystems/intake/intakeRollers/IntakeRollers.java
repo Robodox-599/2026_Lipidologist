@@ -69,10 +69,6 @@ public class IntakeRollers {
         io.stop();
     }
 
-    public void setVelocity(double velocity){
-        io.setVelocity(velocity);
-    }
-
     public void setWantedState(IntakeRollers.IntakeRollersWantedState wantedState){
         this.wantedState = wantedState;
     }

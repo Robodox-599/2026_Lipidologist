@@ -13,6 +13,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.units.measure.Angle;
@@ -40,11 +41,11 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         intakeRollersMotorConfig = new TalonFXConfiguration()
                 .withCurrentLimits(
                     new CurrentLimitsConfigs()
-                        .withSupplyCurrentLimitEnable(true)
                         .withSupplyCurrentLimit(IntakeRollersConstants.supplyCurrentLimit)
-                        .withStatorCurrentLimitEnable(true)
+                        .withSupplyCurrentLimitEnable(true)
                         .withStatorCurrentLimit(IntakeRollersConstants.statorCurrentLimit)
-                ).withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive));
+                        .withStatorCurrentLimitEnable(true)
+                ).withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Brake));
 
         // intakeRollersConfig.Slot0.kP = IntakeRollersConstants.kP;
         // intakeRollersConfig.Slot0.kI = IntakeRollersConstants.kI;
