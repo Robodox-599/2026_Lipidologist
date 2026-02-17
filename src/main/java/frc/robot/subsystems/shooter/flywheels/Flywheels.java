@@ -2,29 +2,33 @@ package frc.robot.subsystems.shooter.flywheels;
 
 import dev.doglog.DogLog;
 
-public class Flywheels extends FlywheelsIO {
-    private final FlywheelsIO io;
+public class Flywheels {
+    private final FlywheelsIO[] io;
     private FlywheelWantedState wantedState = FlywheelWantedState.STOPPED;
     private FlywheelCurrentState currentState = FlywheelCurrentState.STOPPING;
 
-    public Flywheels(FlywheelsIO io) {
+    private double targetRPS = 0;
+
+    public Flywheels(FlywheelsIO... io) {
         this.io = io;
     }
 
     public enum FlywheelWantedState {
-        SET_RPM,
-        SET_CONSTANT_RPM,
+        SET_RPS,
+        IDLE,
         STOPPED
     }
 
     public enum FlywheelCurrentState {
-        SETTING_RPM,
-        SETTING_CONSTANT_RPM,
+        SETTING_RPS,
+        IDLING,
         STOPPING
     }
 
     public void updateInputs() {
-        io.updateInputs();
+        for (int i = 0; i < io.length; i++) {
+            io[i].updateInputs();
+        }
         handleStateTransitions();
         applyStates();
 
@@ -34,11 +38,11 @@ public class Flywheels extends FlywheelsIO {
 
     public void handleStateTransitions() {
         switch (wantedState) {
-            case SET_RPM:
-                currentState = FlywheelCurrentState.SETTING_RPM;
+            case SET_RPS:
+                currentState = FlywheelCurrentState.SETTING_RPS;
                 break;
-            case SET_CONSTANT_RPM:
-                currentState = FlywheelCurrentState.SETTING_CONSTANT_RPM;
+            case IDLE:
+                currentState = FlywheelCurrentState.IDLING;
                 break;
             case STOPPED:
                 currentState = FlywheelCurrentState.STOPPING;
@@ -51,11 +55,11 @@ public class Flywheels extends FlywheelsIO {
 
     private void applyStates() {
         switch (currentState) {
-            case SETTING_RPM:
-                setRPM(io.targetRPM);
+            case SETTING_RPS:
+                setRPS(targetRPS);
                 break;
-            case SETTING_CONSTANT_RPM:
-                setRPM(FlywheelsConstants.constantRPMSetpoint);
+            case IDLING:
+                setRPS(FlywheelsConstants.idleRPS);
                 break;
             case STOPPING:
                 stop();
@@ -66,28 +70,38 @@ public class Flywheels extends FlywheelsIO {
         }
     }
 
-    public void setRPM(double RPM) {
-        io.setRPM(RPM);
+    public void setRPS(double RPS) {
+        for (int i = 0; i < io.length; i++) {
+            io[i].setRPS(RPS);
+        }
     }
 
     public void stop() {
-        io.stop();
+        for (int i = 0; i < io.length; i++) {
+            io[i].stop();
+        }
     }
 
     public void setVoltage(double voltage) {
-        io.setVoltage(voltage);
+        for (int i = 0; i < io.length; i++) {
+            io[i].setVoltage(voltage);
+        }
     }
 
     public boolean atSetpoint() {
-        return io.isFlywheelAtSetpoint;
+        boolean allFlywheelsAtSetpoint = true;
+        for (int i = 0; i < io.length; i++) {
+            allFlywheelsAtSetpoint = allFlywheelsAtSetpoint && io[i].isFlywheelAtSetpoint;
+        }
+        return allFlywheelsAtSetpoint;
     }
 
-    public void setWantedState(Flywheels.FlywheelWantedState WantedState) {
-        this.wantedState = WantedState;
+    public void setWantedState(Flywheels.FlywheelWantedState wantedState) {
+        this.wantedState = wantedState;
     }
 
-    public void setWantedState(Flywheels.FlywheelWantedState WantedState, double RPM) {
-        this.wantedState = WantedState;
-        io.targetRPM = RPM;
+    public void setWantedState(Flywheels.FlywheelWantedState wantedState, double targetRPS) {
+        this.wantedState = wantedState;
+        this.targetRPS = targetRPS;
     }
 }

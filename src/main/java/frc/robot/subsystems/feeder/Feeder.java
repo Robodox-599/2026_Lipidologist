@@ -7,7 +7,7 @@ package frc.robot.subsystems.feeder;
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Feeder extends SubsystemBase {
+public class Feeder {
   private final FeederIO io;
   private FeederWantedState wantedState = FeederWantedState.STOPPED;
   private FeederCurrentState currentState = FeederCurrentState.STOPPED;
