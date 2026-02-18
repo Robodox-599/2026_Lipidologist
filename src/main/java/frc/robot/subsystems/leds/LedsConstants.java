@@ -1,6 +1,6 @@
 package frc.robot.subsystems.leds;
 
-public class LedsConstants {
+public class LEDsConstants {
     public static String ledsCanBus = "rio";
     public static int candleID = 0;
 
