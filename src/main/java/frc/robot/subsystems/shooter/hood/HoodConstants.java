@@ -2,8 +2,8 @@ package frc.robot.subsystems.shooter.hood;
 
 public class HoodConstants {
     //motor information
-    public static final int hoodMotorID = 0;
-    public static final int hoodCANCoderID = 0;
+    public static final int hoodMotorID = 18;
+    public static final int hoodCANCoderID = 19;
     public static final double hoodGearRatio = 1;
     public static final double hoodMOI = 0.1;
    

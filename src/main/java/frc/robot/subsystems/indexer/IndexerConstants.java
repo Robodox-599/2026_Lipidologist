@@ -5,7 +5,7 @@
 package frc.robot.subsystems.indexer;
 
 public class IndexerConstants {
-  public static final int indexerMotorID = 67;
+  public static final int indexerMotorID = 16;
   public static final String indexerCANBus = "rio";
   public static final double indexerGearRatio = 2;
   public static final double indexerMOI = 0.01; // normal MOI

@@ -33,12 +33,12 @@ public class Superstructure extends SubsystemBase {
 
     // final Climb climb;
     final CommandSwerveDrivetrain drivetrain;
-    // final Feeder feeder;
-    // final Indexer indexer;
+    final Feeder feeder;
+    final Indexer indexer;
     final IntakeRollers intakeRollers;
     final IntakeWrist intakeWrist;
-    // final Flywheels flywheels;
-    // final Hood hood;
+    final Flywheels flywheels;
+    final Hood hood;
     final Vision vision;
     private final ShotData shotCalculator = new ShotData();
 
@@ -73,22 +73,22 @@ public class Superstructure extends SubsystemBase {
     public Superstructure(
             // Climb climb,
             CommandSwerveDrivetrain drivetrain,
-            // Feeder feeder,
-            // Indexer indexer,
+            Feeder feeder,
+            Indexer indexer,
             IntakeRollers intakeRollers,
             IntakeWrist intakeWrist,
-            // Flywheels flywheels,
-            // Hood hood
+            Flywheels flywheels,
+            Hood hood,
             Vision vision
             ) {
         // this.climb = climb;
         this.drivetrain = drivetrain;
-        // this.feeder = feeder;
-        // this.indexer = indexer;
+        this.feeder = feeder;
+        this.indexer = indexer;
         this.intakeRollers = intakeRollers;
         this.intakeWrist = intakeWrist;
-        // this.flywheels = flywheels;
-        // this.hood = hood;
+        this.flywheels = flywheels;
+        this.hood = hood;
         this.vision = vision;
     }
 
@@ -96,12 +96,12 @@ public class Superstructure extends SubsystemBase {
     public void periodic() {
         // climb.updateInputs();
         drivetrain.updateInputs();
-        // feeder.updateInputs();
-        // indexer.updateInputs();
+        feeder.updateInputs();
+        indexer.updateInputs();
         intakeRollers.updateInputs();
         intakeWrist.updateInputs();
-        // flywheels.updateInputs();
-        // hood.updateInputs();
+        flywheels.updateInputs();
+        hood.updateInputs();
         vision.updateInputs();
 
         ShiftInfo shiftInfo = HubShiftUtil.getShiftInfo();
