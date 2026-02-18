@@ -17,8 +17,6 @@ public abstract class IntakeRollersIO {
 
     public void stop() {}
     public void setPosition(double position){}
-    // You don't use velocity in the apply states function so get rid of it here
-    public void setVelocity(double velocity){}
     public void setVoltage(double voltage){}
     
 }

@@ -2,23 +2,23 @@ package frc.robot.subsystems.shooter.hood;
 
 import dev.doglog.DogLog;
 
-public class Hood extends HoodIO{
+public class Hood {
     private final HoodIO io;
-    private WantedState wantedState = WantedState.STOPPED;
-    private CurrentState currentState = CurrentState.STOPPING;
+    private HoodWantedState wantedState = HoodWantedState.STOPPED;
+    private HoodCurrentState currentState = HoodCurrentState.STOPPING;
 
     public Hood(HoodIO io) {
         this.io = io;
     }
 
-    public enum WantedState {
+    public enum HoodWantedState {
         SET_POSITION,
         STOPPED
     }
 
-    public enum CurrentState {
+    public enum HoodCurrentState {
         SETTING_POSITION,
-        STOPPING 
+        STOPPING
     }
 
     public void updateInputs() {
@@ -31,37 +31,37 @@ public class Hood extends HoodIO{
     }
 
     public void handleStateTransitions() {
-        switch(wantedState) {
+        switch (wantedState) {
             case SET_POSITION:
-            currentState = CurrentState.SETTING_POSITION;
-            break;
+                currentState = HoodCurrentState.SETTING_POSITION;
+                break;
             case STOPPED:
-            currentState = CurrentState.STOPPING;
-            break;
+                currentState = HoodCurrentState.STOPPING;
+                break;
             default:
-            currentState = CurrentState.STOPPING;
-            break;
+                currentState = HoodCurrentState.STOPPING;
+                break;
         }
     }
 
     private void applyStates() {
         switch (currentState) {
             case SETTING_POSITION:
-            setPosition(io.targetPosition);
-            break;
+                setPosition(io.targetPositionRots);
+                break;
             case STOPPING:
-            stop();
-            break;
+                stop();
+                break;
             default:
-            stop();
-            break;
+                stop();
+                break;
         }
     }
 
     public void setPosition(double position) {
         io.setPosition(position);
     }
-    
+
     public void stop() {
         io.stop();
     }
@@ -69,17 +69,17 @@ public class Hood extends HoodIO{
     public void setVoltage(double voltage) {
         io.setVoltage(voltage);
     }
-    
+
     public boolean atSetpoint() {
         return io.isHoodInPosition;
     }
-    
-    public void setWantedState(Hood.WantedState WantedState){
-      this.wantedState = WantedState;
+
+    public void setWantedState(Hood.HoodWantedState WantedState) {
+        this.wantedState = WantedState;
     }
 
-    public void setWantedState(Hood.WantedState WantedState, double position){
-      this.wantedState = WantedState;
-      io.targetPosition = position;
+    public void setWantedState(Hood.HoodWantedState WantedState, double position) {
+        this.wantedState = WantedState;
+        io.targetPositionRots = position;
     }
 }

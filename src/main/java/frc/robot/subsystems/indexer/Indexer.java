@@ -9,17 +9,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Indexer extends SubsystemBase {
   private final IndexerIO io;
-  private WantedState wantedState = WantedState.STOPPED;
-  private CurrentState currentState = CurrentState.STOPPING;
+  private IndexerWantedState wantedState = IndexerWantedState.STOPPED;
+  private IndexerCurrentState currentState = IndexerCurrentState.STOPPING;
 
-  public enum WantedState{
+  public enum IndexerWantedState{
     TRANSFER_FUEL,
     PULSE_FUEL,
     REVERSE,
     STOPPED,
   }
 
-  public enum CurrentState{
+  public enum IndexerCurrentState{
     TRANSFERING_FUEL,
     PULSING_FUEL,
     REVERSING,
@@ -45,19 +45,19 @@ public class Indexer extends SubsystemBase {
   public void handleStateTransitions(){
     switch (wantedState) {
         case STOPPED:
-            currentState = CurrentState.STOPPING;
+            currentState = IndexerCurrentState.STOPPING;
             break;
         case TRANSFER_FUEL:
-            currentState = CurrentState.TRANSFERING_FUEL;
+            currentState = IndexerCurrentState.TRANSFERING_FUEL;
             break;
         case PULSE_FUEL:
-            currentState = CurrentState.PULSING_FUEL; // use time wpilib func
+            currentState = IndexerCurrentState.PULSING_FUEL; // use time wpilib func
             break;
         case REVERSE:
-            currentState = CurrentState.REVERSING;
+            currentState = IndexerCurrentState.REVERSING;
             break;
         default:
-            currentState = CurrentState.STOPPING;
+            currentState = IndexerCurrentState.STOPPING;
             break;
     }
   }
@@ -90,7 +90,7 @@ public class Indexer extends SubsystemBase {
     io.stopIndexer();
   }
 
-  public void setWantedState(Indexer.WantedState wantedState){
+  public void setWantedState(Indexer.IndexerWantedState wantedState){
     this.wantedState = wantedState;
   }
 

@@ -9,24 +9,23 @@ import dev.doglog.DogLog;
 /** Add your docs here. */
 public class IntakeWrist {
     private final IntakeWristIO io;
-    private WristWantedState wantedState = WristWantedState.STOP;
-    private WristCurrentState currentState = WristCurrentState.STOPPED;
+    private IntakeWristWantedState wantedState = IntakeWristWantedState.STOP;
+    private IntakeWristCurrentState currentState = IntakeWristCurrentState.STOPPED;
 
     public IntakeWrist(IntakeWristIO io){
         this.io = io;
     }
 
-    public enum WristWantedState{
+    public enum IntakeWristWantedState{
         STOP,
         INTAKE_FUEL,
         STOW, //pack
         AGITATE_FUEL
     }
 
-    public enum WristCurrentState{
+    public enum IntakeWristCurrentState{
         STOPPED,
         INTAKING_FUEL,
-        STOWED,
         STOWING, //packing
         WRIST_RETRACTING,
         WRIST_EXTENDING
@@ -43,33 +42,33 @@ public class IntakeWrist {
     public void handleStateTransitions(){
         switch(wantedState){
             case STOP:
-                currentState = WristCurrentState.STOPPED;
+                currentState = IntakeWristCurrentState.STOPPED;
                 break;
             case INTAKE_FUEL:
-                currentState = WristCurrentState.INTAKING_FUEL;
+                currentState = IntakeWristCurrentState.INTAKING_FUEL;
                 break;
             case STOW:
-                currentState = WristCurrentState.STOWING;
+                currentState = IntakeWristCurrentState.STOWING;
                 break;
             case AGITATE_FUEL:
-                if (currentState == WristCurrentState.WRIST_RETRACTING){
+                if (currentState == IntakeWristCurrentState.WRIST_RETRACTING){
                     if (atSetpoint()){
-                        currentState = WristCurrentState.WRIST_EXTENDING;
+                        currentState = IntakeWristCurrentState.WRIST_EXTENDING;
                     } else{
-                        currentState = WristCurrentState.WRIST_RETRACTING;
+                        currentState = IntakeWristCurrentState.WRIST_RETRACTING;
                     }
-                } else if(currentState == WristCurrentState.WRIST_EXTENDING){
+                } else if(currentState == IntakeWristCurrentState.WRIST_EXTENDING){
                     if (atSetpoint()){
-                        currentState = WristCurrentState.WRIST_RETRACTING;
+                        currentState = IntakeWristCurrentState.WRIST_RETRACTING;
                     } else{
-                        currentState = WristCurrentState.WRIST_EXTENDING;
+                        currentState = IntakeWristCurrentState.WRIST_EXTENDING;
                     } 
                 } else {
-                    currentState = WristCurrentState.WRIST_EXTENDING;
+                    currentState = IntakeWristCurrentState.WRIST_EXTENDING;
                 }
                 break;
             default:
-                currentState = WristCurrentState.STOPPED;
+                currentState = IntakeWristCurrentState.STOPPED;
                 break;
         }
     }
@@ -80,18 +79,16 @@ public class IntakeWrist {
                 stop();
                 break;
             case INTAKING_FUEL:
-                setPosition(0.3);
+                setPosition(-0.02);
                 break;
             case STOWING:
-                setPosition(.2);
+                setPosition(.337);
                 break;
             case WRIST_RETRACTING:
-                setPosition(0.2);
+                setPosition(0.167);
                 break;
-            case STOWED:
-                setPosition(0);
             case WRIST_EXTENDING:
-                setPosition(0.4);
+                setPosition(0.05);
                 break;
             default:
                 stop();
@@ -104,7 +101,7 @@ public class IntakeWrist {
         io.stop();
     }
 
-    public void setWantedState(IntakeWrist.WristWantedState wantedState){
+    public void setWantedState(IntakeWrist.IntakeWristWantedState wantedState){
         this.wantedState = wantedState;
     }
 

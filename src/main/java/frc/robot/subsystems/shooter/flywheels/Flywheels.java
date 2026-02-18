@@ -2,29 +2,33 @@ package frc.robot.subsystems.shooter.flywheels;
 
 import dev.doglog.DogLog;
 
-public class Flywheels extends FlywheelsIO{
-    private final FlywheelsIO io;
-    private WantedState wantedState = WantedState.STOPPED;
-    private CurrentState currentState = CurrentState.STOPPING;
+public class Flywheels {
+    private final FlywheelsIO[] io;
+    private FlywheelWantedState wantedState = FlywheelWantedState.STOPPED;
+    private FlywheelCurrentState currentState = FlywheelCurrentState.STOPPING;
 
-    public Flywheels(FlywheelsIO io) {
+    private double targetRPS = 0;
+
+    public Flywheels(FlywheelsIO... io) {
         this.io = io;
     }
 
-    public enum WantedState {
-        SET_RPM,
-        SET_CONSTANT_RPM,
+    public enum FlywheelWantedState {
+        SET_RPS,
+        IDLE,
         STOPPED
     }
 
-    public enum CurrentState {
-        SETTING_RPM,
-        SETTING_CONSTANT_RPM,
+    public enum FlywheelCurrentState {
+        SETTING_RPS,
+        IDLING,
         STOPPING
     }
-    
+
     public void updateInputs() {
-        io.updateInputs();
+        for (int i = 0; i < io.length; i++) {
+            io[i].updateInputs();
+        }
         handleStateTransitions();
         applyStates();
 
@@ -33,61 +37,71 @@ public class Flywheels extends FlywheelsIO{
     }
 
     public void handleStateTransitions() {
-        switch(wantedState) {
-            case SET_RPM:
-            currentState = CurrentState.SETTING_RPM;
-            break;
-            case SET_CONSTANT_RPM:
-            currentState = CurrentState.SETTING_CONSTANT_RPM;
-            break;
+        switch (wantedState) {
+            case SET_RPS:
+                currentState = FlywheelCurrentState.SETTING_RPS;
+                break;
+            case IDLE:
+                currentState = FlywheelCurrentState.IDLING;
+                break;
             case STOPPED:
-            currentState = CurrentState.STOPPING;
-            break;
+                currentState = FlywheelCurrentState.STOPPING;
+                break;
             default:
-            currentState = CurrentState.STOPPING;
-            break;
+                currentState = FlywheelCurrentState.STOPPING;
+                break;
         }
     }
 
     private void applyStates() {
         switch (currentState) {
-            case SETTING_RPM:
-            setRPM(io.targetRPM);
-            break;
-            case SETTING_CONSTANT_RPM:
-            setRPM(FlywheelsConstants.constantRPMSetpoint);
-            break;
+            case SETTING_RPS:
+                setRPS(targetRPS);
+                break;
+            case IDLING:
+                setRPS(FlywheelsConstants.idleRPS);
+                break;
             case STOPPING:
-            stop();
-            break;
+                stop();
+                break;
             default:
-            stop();
-            break;
+                stop();
+                break;
         }
     }
 
-    public void setRPM(double RPM) {
-        io.setRPM(RPM);
-    }
-    
-    public void stop() {
-        io.stop();
-    }
-    
-     public void setVoltage(double voltage) {
-        io.setVoltage(voltage);
-    }
-    
-    public boolean atSetpoint() {
-        return io.isFlywheelAtSetpoint;
-    }
-    
-    public void setWantedState(Flywheels.WantedState WantedState){
-      this.wantedState = WantedState;
+    public void setRPS(double RPS) {
+        for (int i = 0; i < io.length; i++) {
+            io[i].setRPS(RPS);
+        }
     }
 
-    public void setWantedState(Flywheels.WantedState WantedState, double RPM){
-      this.wantedState = WantedState;
-      io.targetRPM = RPM;
+    public void stop() {
+        for (int i = 0; i < io.length; i++) {
+            io[i].stop();
+        }
+    }
+
+    public void setVoltage(double voltage) {
+        for (int i = 0; i < io.length; i++) {
+            io[i].setVoltage(voltage);
+        }
+    }
+
+    public boolean atSetpoint() {
+        boolean allFlywheelsAtSetpoint = true;
+        for (int i = 0; i < io.length; i++) {
+            allFlywheelsAtSetpoint = allFlywheelsAtSetpoint && io[i].isFlywheelAtSetpoint;
+        }
+        return allFlywheelsAtSetpoint;
+    }
+
+    public void setWantedState(Flywheels.FlywheelWantedState wantedState) {
+        this.wantedState = wantedState;
+    }
+
+    public void setWantedState(Flywheels.FlywheelWantedState wantedState, double targetRPS) {
+        this.wantedState = wantedState;
+        this.targetRPS = targetRPS;
     }
 }

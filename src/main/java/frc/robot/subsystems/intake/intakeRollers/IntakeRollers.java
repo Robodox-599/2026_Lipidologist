@@ -4,20 +4,20 @@ import dev.doglog.DogLog;
 
 public class IntakeRollers {
     private final IntakeRollersIO io;
-    private WantedState wantedState = WantedState.STOP;
-    private CurrentState currentState = CurrentState.STOPPED;
+    private IntakeRollersWantedState wantedState = IntakeRollersWantedState.STOP;
+    private IntakeRollersCurrentState currentState = IntakeRollersCurrentState.STOPPED;
     
     public IntakeRollers(IntakeRollersIO io){
         this.io = io;
     }
 
-    public enum WantedState{
+    public enum IntakeRollersWantedState{
         STOP,
         INTAKE_FUEL,
         REVERSE_FUEL
     }
 
-    public enum CurrentState{
+    public enum IntakeRollersCurrentState{
         STOPPED,
         INTAKING_FUEL,
         REVERSING_FUEL
@@ -34,16 +34,16 @@ public class IntakeRollers {
     private void handleStateTransitions(){
         switch(wantedState){
             case STOP:
-                currentState = CurrentState.STOPPED;
+                currentState = IntakeRollersCurrentState.STOPPED;
                 break;
             case INTAKE_FUEL:
-                currentState = CurrentState.INTAKING_FUEL;
+                currentState = IntakeRollersCurrentState.INTAKING_FUEL;
                 break;
             case REVERSE_FUEL:
-                currentState = CurrentState.REVERSING_FUEL;
+                currentState = IntakeRollersCurrentState.REVERSING_FUEL;
                 break;
             default:
-                currentState = CurrentState.STOPPED;
+                currentState = IntakeRollersCurrentState.STOPPED;
                 break;
         }
     } 
@@ -54,7 +54,7 @@ public class IntakeRollers {
                 stop();
                 break;
             case INTAKING_FUEL:
-                setVoltage(5);
+                setVoltage(10);
                 break;
             case REVERSING_FUEL:
                 setVoltage(-5);
@@ -69,11 +69,7 @@ public class IntakeRollers {
         io.stop();
     }
 
-    public void setVelocity(double velocity){
-        io.setVelocity(velocity);
-    }
-
-    public void setWantedState(IntakeRollers.WantedState wantedState){
+    public void setWantedState(IntakeRollers.IntakeRollersWantedState wantedState){
         this.wantedState = wantedState;
     }
 

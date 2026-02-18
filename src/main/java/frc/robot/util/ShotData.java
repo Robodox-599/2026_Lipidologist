@@ -10,11 +10,44 @@ public class ShotData {
 
     static {
         hubShotMap.put(
-            1.0,
-            new Shot(Units.degreesToRadians(45), 4000, 0.5));
+            0.15,
+            new Shot(Units.degreesToRadians(85.6), 4000, 1.47));
         hubShotMap.put(
-            7.0,
-            new Shot(Units.degreesToRadians(50), 4800, 1.5));
+            0.3,
+            new Shot(Units.degreesToRadians(85), 4000, 1.47));
+        hubShotMap.put(
+            0.6,
+            new Shot(Units.degreesToRadians(83.6), 4000, 1.46));
+        hubShotMap.put(
+            0.9,
+            new Shot(Units.degreesToRadians(81.6), 4000, 1.45));
+        hubShotMap.put(
+            1.2,
+            new Shot(Units.degreesToRadians(80.6), 4000, 1.45));
+        hubShotMap.put(
+            1.5,
+            new Shot(Units.degreesToRadians(78), 4000, 1.43));
+        hubShotMap.put(
+            2.0,
+            new Shot(Units.degreesToRadians(75.3), 4000, 1.42));
+        hubShotMap.put(
+            2.5,
+            new Shot(Units.degreesToRadians(72), 4000, 1.39));
+        hubShotMap.put(
+            3.0,
+            new Shot(Units.degreesToRadians(68.3), 4000, 1.35));
+        hubShotMap.put(
+            3.5,
+            new Shot(Units.degreesToRadians(64), 4000, 1.30));
+        hubShotMap.put(
+            4.0,
+            new Shot(Units.degreesToRadians(57), 4000, 1.19));
+        hubShotMap.put(
+            4.5,
+            new Shot(Units.degreesToRadians(59), 4300, 1.30));
+        hubShotMap.put(
+            5.0,
+            new Shot(Units.degreesToRadians(62), 4500, 1.45));
     }
 
     static {

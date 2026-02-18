@@ -5,10 +5,10 @@
 package frc.robot.subsystems.indexer;
 
 public class IndexerConstants {
-  public static final int indexerMotorID = 67;
+  public static final int indexerMotorID = 16;
   public static final String indexerCANBus = "rio";
   public static final double indexerGearRatio = 2;
-  public static final double indexerMOI = 2;
+  public static final double indexerMOI = 0.01; // normal MOI
 
   public static final double kP = 0.45;
   public static final double kI = 0;
@@ -25,6 +25,6 @@ public class IndexerConstants {
   public static final double maxVelocityRotsPerSec = 100;
   public static final double maxAccelerationRotationsPerSecSQ = maxVelocityRotsPerSec / 2;
 
-  public static final double statorCurrentLimitAmps = 0;
-  public static final double supplyCurrentLimitAmps = 0;
+  public static final double statorCurrentLimitAmps = 120;
+  public static final double supplyCurrentLimitAmps = 30;
 }

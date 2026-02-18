@@ -15,7 +15,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
 
 import com.ctre.phoenix6.controls.StaticBrake;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -23,89 +23,93 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.FlywheelConstants;
 import frc.robot.util.PhoenixUtil;
 
-public class FlywheelsIOTalonFX extends FlywheelsIO{
-    //motors + configuration
+public class FlywheelsIOTalonFX extends FlywheelsIO {
+    // motors + configuration
     private final CANBus flywheelCANBus;
     private final TalonFX flywheelMotor;
     TalonFXConfiguration flywheelConfiguration;
-   
-    //status signals
-    private final StatusSignal<AngularVelocity> flywheelVelocityRad;
+
+    // status signals
+    private final StatusSignal<AngularVelocity> flywheelVelocityRPS;
     private final StatusSignal<Temperature> flywheelTemperature;
     private final StatusSignal<Angle> flywheelPosition;
     private final StatusSignal<Voltage> flywheelAppliedVolts;
     private final StatusSignal<Current> flywheelStatorCurrent;
     private final StatusSignal<Current> flywheelSupplyCurrent;
 
-    public FlywheelsIOTalonFX(){
-        //motors + configuration
-        flywheelCANBus = new CANBus();
-        flywheelMotor = new TalonFX(FlywheelsConstants.flywheelMotorID, flywheelCANBus);
+    private final FlywheelConstants flywheelConstants;
+
+    public FlywheelsIOTalonFX(FlywheelConstants flywheelConstants) {
+        this.flywheelConstants = flywheelConstants;
+
+        // motors + configuration
+        flywheelCANBus = new CANBus(this.flywheelConstants.CANBus());
+        flywheelMotor = new TalonFX(this.flywheelConstants.motorID(), flywheelCANBus);
         flywheelConfiguration = new TalonFXConfiguration()
-        .withMotorOutput(
+             .withMotorOutput(
             new MotorOutputConfigs()
                 .withPeakReverseDutyCycle(0))
         .withTorqueCurrent(new TorqueCurrentConfigs().withPeakReverseTorqueCurrent(0))
         .withVoltage(new VoltageConfigs().withPeakReverseVoltage(0))
         .withCurrentLimits(
             new CurrentLimitsConfigs()
-                .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(FlywheelsConstants.supplyCurrentLimit)
-                .withStatorCurrentLimit(FlywheelsConstants.statorCurrentLimit))
-        .withSlot0(
+                        .withSupplyCurrentLimitEnable(true)
+                        .withSupplyCurrentLimit(FlywheelsConstants.supplyCurrentLimit)
+                        .withStatorCurrentLimit(FlywheelsConstants.statorCurrentLimit))
+            .withSlot0(
             new Slot0Configs()
-                .withKP(FlywheelsConstants.flywheelRealkP)
-                .withKI(FlywheelsConstants.flywheelRealkI)
-                .withKD(FlywheelsConstants.flywheelRealkD)
-                .withKS(FlywheelsConstants.flywheelRealkS)
-                .withKV(FlywheelsConstants.flywheelRealkV));  
-                
-        //other configuration stuff
-        flywheelMotor.setNeutralMode(NeutralModeValue.Coast);
+                        .withKP(this.flywheelConstants.kP())
+                        .withKI(this.flywheelConstants.kI())
+                        .withKD(this.flywheelConstants.kD())
+                        .withKS(this.flywheelConstants.kS())
+                        .withKV(this.flywheelConstants.kV()))
+                .withMotorOutput(new MotorOutputConfigs().withInverted(this.flywheelConstants.invert())
+                        .withNeutralMode(NeutralModeValue.Coast));
 
-        //Applying configuration
+        // Applying configuration
         PhoenixUtil.tryUntilOk(10, () -> flywheelMotor.getConfigurator().apply(flywheelConfiguration, 1));
 
-        //status signals
-        flywheelVelocityRad = flywheelMotor.getVelocity();
+        // status signals
+        flywheelVelocityRPS = flywheelMotor.getVelocity();
         flywheelTemperature = flywheelMotor.getDeviceTemp();
         flywheelPosition = flywheelMotor.getPosition();
         flywheelAppliedVolts = flywheelMotor.getMotorVoltage();
         flywheelStatorCurrent = flywheelMotor.getStatorCurrent();
         flywheelSupplyCurrent = flywheelMotor.getSupplyCurrent();
 
-        BaseStatusSignal.setUpdateFrequencyForAll(50, flywheelVelocityRad, flywheelTemperature, 
-        flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
+        //update frequency
+        BaseStatusSignal.setUpdateFrequencyForAll(50, flywheelVelocityRPS, flywheelTemperature,
+                flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
 
         flywheelMotor.optimizeBusUtilization();
     }
 
     @Override
-    public void updateInputs(){
-        BaseStatusSignal.refreshAll(flywheelVelocityRad, flywheelTemperature, 
-        flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
-
-        super.RPM = flywheelVelocityRad.getValueAsDouble();
+    public void updateInputs() {
+        BaseStatusSignal.refreshAll(flywheelVelocityRPS, flywheelTemperature,
+                flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
+ 
+        super.RPS = flywheelVelocityRPS.getValueAsDouble();
         super.statorCurrent = flywheelStatorCurrent.getValueAsDouble();
-        super.isFlywheelAtSetpoint = 
-            Math.abs(super.RPM - super.targetRPM) < FlywheelsConstants.RPMTolerance;
+        super.supplyCurrent = flywheelSupplyCurrent.getValueAsDouble();
+        super.temperature = flywheelTemperature.getValueAsDouble();
+        super.isFlywheelAtSetpoint = Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSTolerance;
 
-        DogLog.log("Flywheel/RPM", super.RPM);
-        DogLog.log("Flywheel/isFlywheelAtSpeed", super.isFlywheelAtSetpoint);
-        DogLog.log("Flywheel/statorCurrent", super.statorCurrent);
+        DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/RPS", super.RPS);
+        DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/TargetRPS", super.targetRPS);
+        DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/isFlywheelAtSpeed", super.isFlywheelAtSetpoint);
+        DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/statorCurrent", super.statorCurrent);
+        DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/supplyCurrent", super.supplyCurrent);
+        DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/temperature", super.temperature);
     }
 
     @Override
-    public void setRPM(double RPM){
-        super.targetRPM = RPM;
-
-        if(super.targetRPM + FlywheelsConstants.RPMTolerance < super.RPM){
-            flywheelMotor.setControl(new StaticBrake());
-        } else {
-            flywheelMotor.setControl(new VelocityTorqueCurrentFOC(Units.rotationsPerMinuteToRadiansPerSecond(RPM)));
-        }
+    public void setRPS(double RPS) {
+        super.targetRPS = RPS;
+        flywheelMotor.setControl(new VelocityVoltage(RPS));
     }
 
     @Override

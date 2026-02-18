@@ -5,7 +5,7 @@
 package frc.robot.subsystems.feeder;
 
 public class FeederConstants {
-  public static final int feederMotorID = 41;
+  public static final int feederMotorID = 17;
   public static final String feederCANBus = "rio";
   public static final double feederGearRatio = 2;
   public static final double feederMOI = 0.01;
@@ -20,6 +20,6 @@ public class FeederConstants {
   public static final double maxVelocityRotsPerSec = 100;
   public static final double maxAccelerationRotationsPerSecSQ = maxVelocityRotsPerSec / 2;
 
-  public static final double statorCurrentLimitAmps = 0;
-  public static final double supplyCurrentLimitAmps = 0;
+  public static final double statorCurrentLimitAmps = 120;
+  public static final double supplyCurrentLimitAmps = 50;
 }

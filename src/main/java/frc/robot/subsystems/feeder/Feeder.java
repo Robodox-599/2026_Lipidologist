@@ -7,18 +7,18 @@ package frc.robot.subsystems.feeder;
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Feeder extends SubsystemBase {
+public class Feeder {
   private final FeederIO io;
-  private WantedState wantedState = WantedState.STOPPED;
-  private CurrentState currentState = CurrentState.STOPPED;
+  private FeederWantedState wantedState = FeederWantedState.STOPPED;
+  private FeederCurrentState currentState = FeederCurrentState.STOPPED;
 
-  public enum WantedState{
+  public enum FeederWantedState{
     STOPPED,
     FEED_FUEL,
     REVERSE,
   }
 
-  public enum CurrentState{
+  public enum FeederCurrentState{
     STOPPED,
     FEEDING_FUEL,
     REVERSE,
@@ -42,16 +42,16 @@ public class Feeder extends SubsystemBase {
   public void handleFeederStateTransitions(){
     switch (wantedState) {
         case FEED_FUEL:
-            currentState = CurrentState.FEEDING_FUEL;
+            currentState = FeederCurrentState.FEEDING_FUEL;
             break;
         case STOPPED:
-            currentState = CurrentState.STOPPED;
+            currentState = FeederCurrentState.STOPPED;
             break;
         case REVERSE:
-            currentState = CurrentState.REVERSE;
+            currentState = FeederCurrentState.REVERSE;
             break;
         default:
-            currentState = CurrentState.STOPPED;
+            currentState = FeederCurrentState.STOPPED;
             break;
     }
   }
@@ -80,7 +80,7 @@ public class Feeder extends SubsystemBase {
     io.stopFeeder();
   }
 
-  public void setWantedState(Feeder.WantedState wantedState){
+  public void setWantedState(Feeder.FeederWantedState wantedState){
     this.wantedState = wantedState;
   }
 
