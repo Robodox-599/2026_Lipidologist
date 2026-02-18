@@ -1,4 +1,4 @@
-package frc.robot.leds;
+package frc.robot.subsystems.leds;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.CANdleConfiguration;

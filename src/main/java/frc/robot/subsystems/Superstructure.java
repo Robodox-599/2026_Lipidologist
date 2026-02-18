@@ -21,6 +21,7 @@ import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.vision6.Vision;
+import frc.robot.subsystems.leds.LEDs;
 import frc.robot.util.CalculateShot;
 import frc.robot.util.HubShiftUtil;
 import frc.robot.util.HubShiftUtil.ShiftInfo;
@@ -40,6 +41,7 @@ public class Superstructure extends SubsystemBase {
     final IntakeWrist intakeWrist;
     final Flywheels flywheels;
     final Hood hood;
+    final LEDs leds;
     final Vision vision;
     private final ShotData shotCalculator = new ShotData();
 
@@ -75,6 +77,7 @@ public class Superstructure extends SubsystemBase {
             IntakeWrist intakeWrist,
             Flywheels flywheels,
             Hood hood,
+            LEDs leds,
             Vision vision
             ) {
         // this.climb = climb;
@@ -85,6 +88,7 @@ public class Superstructure extends SubsystemBase {
         this.intakeWrist = intakeWrist;
         this.flywheels = flywheels;
         this.hood = hood;
+        this.leds = leds;
         this.vision = vision;
     }
 
@@ -98,6 +102,7 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.updateInputs();
         flywheels.updateInputs();
         hood.updateInputs();
+        leds.updateInputs();
         vision.updateInputs();
 
         ShiftInfo shiftInfo = HubShiftUtil.getShiftInfo();
@@ -186,6 +191,7 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
         hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
+        leds.setWantedState(LEDs.LEDsWantedState.PREPARE_HUB_SHOT);
     }
 
     public void shootingHub() {
@@ -200,6 +206,7 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
         hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
+        leds.setWantedState(LEDs.LEDsWantedState.SHOOT_HUB);
     }
 
     public void preparingAllianceZoneShot() {
@@ -213,6 +220,7 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
         hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
+        leds.setWantedState(LEDs.LEDsWantedState.PREPARE_ALLIANCE_ZONE_SHOT);
     }
 
     public void shootingAllianceZone() {
@@ -226,6 +234,7 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
         hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
+        leds.setWantedState(LEDs.LEDsWantedState.SHOOT_ALLIANCE_ZONE);
     }
 
     public void idling() {
@@ -236,6 +245,7 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS);
         hood.setWantedState(Hood.HoodWantedState.SET_POSITION);
+        leds.setWantedState(LEDs.LEDsWantedState.IDLE);
     }
 
     public void stop() {
@@ -246,6 +256,7 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.STOP);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.STOPPED);
         hood.setWantedState(Hood.HoodWantedState.STOPPED);
+        leds.setWantedState(LEDs.LEDsWantedState.STOP);
     }
 
     public void testing() {
