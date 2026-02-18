@@ -49,23 +49,23 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
         flywheelCANBus = new CANBus(this.flywheelConstants.CANBus());
         flywheelMotor = new TalonFX(this.flywheelConstants.motorID(), flywheelCANBus);
         flywheelConfiguration = new TalonFXConfiguration()
-             .withMotorOutput(
-            new MotorOutputConfigs()
-                .withPeakReverseDutyCycle(0))
-        .withTorqueCurrent(new TorqueCurrentConfigs().withPeakReverseTorqueCurrent(0))
-        .withVoltage(new VoltageConfigs().withPeakReverseVoltage(0))
-        .withCurrentLimits(
-            new CurrentLimitsConfigs()
-                        .withSupplyCurrentLimitEnable(true)
-                        .withSupplyCurrentLimit(FlywheelsConstants.supplyCurrentLimit)
-                        .withStatorCurrentLimit(FlywheelsConstants.statorCurrentLimit))
-            .withSlot0(
-            new Slot0Configs()
-                        .withKP(this.flywheelConstants.kP())
-                        .withKI(this.flywheelConstants.kI())
-                        .withKD(this.flywheelConstants.kD())
-                        .withKS(this.flywheelConstants.kS())
-                        .withKV(this.flywheelConstants.kV()))
+                .withMotorOutput(
+                        new MotorOutputConfigs()
+                                .withPeakReverseDutyCycle(0))
+                .withTorqueCurrent(new TorqueCurrentConfigs().withPeakReverseTorqueCurrent(0))
+                .withVoltage(new VoltageConfigs().withPeakReverseVoltage(0))
+                .withCurrentLimits(
+                        new CurrentLimitsConfigs()
+                                .withSupplyCurrentLimitEnable(true)
+                                .withSupplyCurrentLimit(FlywheelsConstants.supplyCurrentLimit)
+                                .withStatorCurrentLimit(FlywheelsConstants.statorCurrentLimit))
+                .withSlot0(
+                        new Slot0Configs()
+                                .withKP(this.flywheelConstants.kP())
+                                .withKI(this.flywheelConstants.kI())
+                                .withKD(this.flywheelConstants.kD())
+                                .withKS(this.flywheelConstants.kS())
+                                .withKV(this.flywheelConstants.kV()))
                 .withMotorOutput(new MotorOutputConfigs().withInverted(this.flywheelConstants.invert())
                         .withNeutralMode(NeutralModeValue.Coast));
 
@@ -80,7 +80,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
         flywheelStatorCurrent = flywheelMotor.getStatorCurrent();
         flywheelSupplyCurrent = flywheelMotor.getSupplyCurrent();
 
-        //update frequency
+        // update frequency
         BaseStatusSignal.setUpdateFrequencyForAll(50, flywheelVelocityRPS, flywheelTemperature,
                 flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
 
@@ -91,7 +91,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     public void updateInputs() {
         BaseStatusSignal.refreshAll(flywheelVelocityRPS, flywheelTemperature,
                 flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
- 
+
         super.RPS = flywheelVelocityRPS.getValueAsDouble();
         super.statorCurrent = flywheelStatorCurrent.getValueAsDouble();
         super.supplyCurrent = flywheelSupplyCurrent.getValueAsDouble();
