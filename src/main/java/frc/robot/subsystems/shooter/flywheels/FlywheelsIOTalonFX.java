@@ -4,8 +4,11 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TorqueCurrentConfigs;
+import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -41,11 +44,18 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
         flywheelCANBus = new CANBus();
         flywheelMotor = new TalonFX(FlywheelsConstants.flywheelMotorID, flywheelCANBus);
         flywheelConfiguration = new TalonFXConfiguration()
-           .withCurrentLimits(new CurrentLimitsConfigs()
+        .withMotorOutput(
+            new MotorOutputConfigs()
+                .withPeakReverseDutyCycle(0))
+        .withTorqueCurrent(new TorqueCurrentConfigs().withPeakReverseTorqueCurrent(0))
+        .withVoltage(new VoltageConfigs().withPeakReverseVoltage(0))
+        .withCurrentLimits(
+            new CurrentLimitsConfigs()
                 .withSupplyCurrentLimitEnable(true)
                 .withSupplyCurrentLimit(FlywheelsConstants.supplyCurrentLimit)
                 .withStatorCurrentLimit(FlywheelsConstants.statorCurrentLimit))
-            .withSlot0(new Slot0Configs()
+        .withSlot0(
+            new Slot0Configs()
                 .withKP(FlywheelsConstants.flywheelRealkP)
                 .withKI(FlywheelsConstants.flywheelRealkI)
                 .withKD(FlywheelsConstants.flywheelRealkD)
@@ -91,7 +101,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO{
     public void setRPM(double RPM){
         super.targetRPM = RPM;
 
-        if(super.RPM - super.targetRPM < FlywheelsConstants.RPMTolerance){
+        if(super.targetRPM + FlywheelsConstants.RPMTolerance < super.RPM){
             flywheelMotor.setControl(new StaticBrake());
         } else {
             flywheelMotor.setControl(new VelocityTorqueCurrentFOC(Units.rotationsPerMinuteToRadiansPerSecond(RPM)));
