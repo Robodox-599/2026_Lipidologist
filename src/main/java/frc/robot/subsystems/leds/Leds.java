@@ -58,6 +58,7 @@ public class LEDs {
                 break;
             default:
                 ledCurrentState = LedCurrentState.STOPPED;
+                break;
         }
     }
 
@@ -85,10 +86,14 @@ public class LEDs {
                 setLedColor(0, 0, 0);
                 break;
 
-        }
+        }s
     }
 
     public void setLedColor(int red, int green, int blue){
         io.setLedColor(red, green, blue);
+    }
+
+    public void setWantedState(LEDs.LedWantedState ledWantedState){
+        this.ledWantedState = ledWantedState;
     }
 }
