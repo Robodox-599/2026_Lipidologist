@@ -80,31 +80,31 @@ public class LEDs {
     public void applyStates() {
         switch (currentState) {
             case PREPARING_HUB_SHOT:
-                setLEDsColor(LEDsConstants.hubShotPrepared);
+                setLEDsColor(LEDsConstants.purple);
                 break;
             case SHOOTING_HUB:
-                setLEDsColor(LEDsConstants.hubShooting);
+                setLEDsColor(LEDsConstants.green);
                 break;
             case PREPARING_ALLIANCE_ZONE_SHOT:
-                setLEDsColor(LEDsConstants.allianceZoneShotPrepared);
+                setLEDsColor(LEDsConstants.pink);
                 break;
             case SHOOTING_ALLIANCE_ZONE:
-                setLEDsColor(LEDsConstants.allianceZoneShooting);
+                setLEDsColor(LEDsConstants.yellow);
                 break;
             case PREPARING_CLIMB:
-                setLEDsColor(LEDsConstants.climbPrepared);
+                setLEDsColor(LEDsConstants.magenta);
                 break;
             case CLIMBING:
-                setLEDsColor(LEDsConstants.climbing);
+                setLEDsColor(LEDsConstants.lilac);
                 break;
             case IDLING:
-                setLEDsColor(LEDsConstants.idling);
+                setLEDsColor(LEDsConstants.lime);
                 break;
             case STOPPING:
-                setLEDsColor(LEDsConstants.stopped);
+                setLEDsColor(LEDsConstants.red);
                 break;
             default:
-                setLEDsColor(LEDsConstants.stopped);
+                setLEDsColor(LEDsConstants.red);
                 break;
         }
     }
