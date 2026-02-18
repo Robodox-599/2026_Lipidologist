@@ -59,21 +59,21 @@ public class Feeder {
   public void applyStates(){
     switch(currentState){
       case FEEDING_FUEL:
-        setFeederVoltage(3);
+        setFeederVelocity(3);
         break;
       case STOPPED:
         stopFeeder();
         break;
       case REVERSE:
-        setFeederVoltage(-3.0);
+        setFeederVelocity(-3.0);
       default:
         stopFeeder();
         break;
     }
   }
 
-  public void setFeederVoltage(double volts){
-    io.setFeederVoltage(volts);
+  private void setFeederVelocity(double velocity){
+    io.setFeederVelocity(velocity);
   }
 
   public void stopFeeder(){
