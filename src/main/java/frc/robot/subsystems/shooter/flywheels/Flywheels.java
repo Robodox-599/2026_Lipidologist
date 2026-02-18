@@ -32,8 +32,8 @@ public class Flywheels {
         handleStateTransitions();
         applyStates();
 
-        DogLog.log("Flywheel/WantedState", wantedState);
-        DogLog.log("Flywheel/CurrentState", currentState);
+        DogLog.log("Flywheels/WantedState", wantedState);
+        DogLog.log("Flywheels/CurrentState", currentState);
     }
 
     public void handleStateTransitions() {

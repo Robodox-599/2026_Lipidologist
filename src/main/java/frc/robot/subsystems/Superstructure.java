@@ -27,6 +27,7 @@ import frc.robot.util.HubShiftUtil.ShiftInfo;
 import frc.robot.util.ShotData;
 import frc.robot.util.CalculateShot.AdjustedShot;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
+import frc.robot.subsystems.shooter.flywheels.Flywheels.FlywheelWantedState;
 import frc.robot.util.AllianceFlipUtil;
 
 public class Superstructure extends SubsystemBase {
@@ -49,6 +50,7 @@ public class Superstructure extends SubsystemBase {
         SHOOT_ALLIANCE_ZONE,
         IDLE,
         STOP,
+        TESTING
     }
 
     public enum CurrentSuperState {
@@ -57,18 +59,12 @@ public class Superstructure extends SubsystemBase {
         PREPARING_ALLIANCE_ZONE_SHOT,
         SHOOTING_ALLIANCE_ZONE,
         IDLING,
-        STOPPED;
+        STOPPED,
+        TESTING
     }
 
-    public enum AutomationLevel {
-        AUTO_ROTATION_LOCK,
-        AUTO_SHOOT,
-        MANUAL;
-    }
-
-    private WantedSuperState wantedSuperState = WantedSuperState.STOP;
-    private CurrentSuperState currentSuperState = CurrentSuperState.STOPPED;
-    private AutomationLevel automationLevel = AutomationLevel.AUTO_SHOOT;
+    private WantedSuperState wantedSuperState = WantedSuperState.TESTING;
+    private CurrentSuperState currentSuperState = CurrentSuperState.TESTING;
 
     public Superstructure(
             // Climb climb,
@@ -124,27 +120,30 @@ public class Superstructure extends SubsystemBase {
                 currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
                 break;
             case SHOOT_HUB:
-                // if (areSystemsReadyForHubShot()) {
+                if (areSystemsReadyForHubShot()) {
                     currentSuperState = CurrentSuperState.SHOOTING_HUB;
-                // } else {
-                //     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
-                // }
+                } else {
+                    currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
+                }
                 break;
             case PREPARE_ALLIANCE_ZONE_SHOT:
                 currentSuperState = CurrentSuperState.PREPARING_ALLIANCE_ZONE_SHOT;
                 break;
             case SHOOT_ALLIANCE_ZONE:
-                // if (areSystemsReadyForAllianceZoneShot()) {
+                if (areSystemsReadyForAllianceZoneShot()) {
                     currentSuperState = CurrentSuperState.SHOOTING_ALLIANCE_ZONE;
-                // } else {
-                //     currentSuperState = CurrentSuperState.PREPARING_ALLIANCE_ZONE_SHOT;
-                // }
+                } else {
+                    currentSuperState = CurrentSuperState.PREPARING_ALLIANCE_ZONE_SHOT;
+                }
                 break;
             case IDLE:
                 currentSuperState = CurrentSuperState.IDLING;
                 break;
             case STOP:
                 currentSuperState = CurrentSuperState.STOPPED;
+                break;
+            case TESTING:
+                currentSuperState = CurrentSuperState.TESTING;
                 break;
         }
     }
@@ -170,6 +169,9 @@ public class Superstructure extends SubsystemBase {
             case STOPPED:
                 stop();
                 break;
+            case TESTING:
+                testing();
+                break;
         }
     }
 
@@ -178,34 +180,26 @@ public class Superstructure extends SubsystemBase {
                 drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
 
         drivetrain.setTargetRotation(adjustedShot.targetRotation());
-
-        // Translation2d hubTranslation = FieldConstants.Hub.topCenterPoint.toTranslation2d();
-        // Translation2d robotTranslation = drivetrain.getPose().getTranslation();
-        // Rotation2d targetRotation = Rotation2d
-        //         .fromRadians(Math.atan2(hubTranslation.getY() - robotTranslation.getY(),
-        //                 hubTranslation.getX() - robotTranslation.getX()));
-        // drivetrain.setTargetRotation(targetRotation);
-
-        // feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
-        // flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPM, adjustedShot.shootSpeed());
-        // hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
+        hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
     }
 
     public void shootingHub() {
-        // AdjustedShot adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
-        //         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
+        AdjustedShot adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
+                drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
 
-        // drivetrain.setTargetRotation(adjustedShot.targetRotation());
+        drivetrain.setTargetRotation(adjustedShot.targetRotation());
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
-        // feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
-        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
+        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
-        // flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPM, adjustedShot.shootSpeed());
-        // hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
+        hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
     }
 
     public void preparingAllianceZoneShot() {
@@ -213,12 +207,12 @@ public class Superstructure extends SubsystemBase {
                 drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
 
         drivetrain.setTargetRotation(adjustedShot.targetRotation());
-        // feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
-        // flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPM, adjustedShot.shootSpeed());
-        // hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
+        hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
     }
 
     public void shootingAllianceZone() {
@@ -226,41 +220,51 @@ public class Superstructure extends SubsystemBase {
                 drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
 
         drivetrain.setTargetRotation(adjustedShot.targetRotation());
-        // feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
-        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
+        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
-        // flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPM, adjustedShot.shootSpeed());
-        // hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
+        hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
     }
 
     public void idling() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
-        // feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
-        // flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPM);
-        // hood.setWantedState(Hood.HoodWantedState.SET_POSITION);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS);
+        hood.setWantedState(Hood.HoodWantedState.SET_POSITION);
     }
 
     public void stop() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.STOPPED);
-        // feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        // indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+        indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.STOP);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.STOP);
-        // flywheels.setWantedState(Flywheels.FlywheelWantedState.STOPPED);
-        // hood.setWantedState(Hood.HoodWantedState.STOPPED);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.STOPPED);
+        hood.setWantedState(Hood.HoodWantedState.STOPPED);
     }
 
-    // private boolean areSystemsReadyForHubShot() {
-    //     return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation() && HubShiftUtil.isHubActive();
-    // }
+    public void testing() {
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
+        // feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS);
+        // hood.setWantedState(Hood.HoodWantedState.SET_POSITION);
+    }
 
-    // private boolean areSystemsReadyForAllianceZoneShot() {
-    //     return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation();
-    // }
+    private boolean areSystemsReadyForHubShot() {
+        return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation() && HubShiftUtil.isHubActive();
+    }
+
+    private boolean areSystemsReadyForAllianceZoneShot() {
+        return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation();
+    }
 
     public Command zeroGyroCommand() {
         return this.runOnce(() -> drivetrain.zeroGyro());

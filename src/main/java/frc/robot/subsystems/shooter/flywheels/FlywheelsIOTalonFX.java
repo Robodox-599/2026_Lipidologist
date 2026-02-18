@@ -56,9 +56,10 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
                 .withVoltage(new VoltageConfigs().withPeakReverseVoltage(0))
                 .withCurrentLimits(
                         new CurrentLimitsConfigs()
-                                .withSupplyCurrentLimitEnable(true)
                                 .withSupplyCurrentLimit(FlywheelsConstants.supplyCurrentLimit)
-                                .withStatorCurrentLimit(FlywheelsConstants.statorCurrentLimit))
+                                .withSupplyCurrentLimitEnable(true)
+                                .withStatorCurrentLimit(FlywheelsConstants.statorCurrentLimit)
+                                .withStatorCurrentLimitEnable(true))
                 .withSlot0(
                         new Slot0Configs()
                                 .withKP(this.flywheelConstants.kP())
@@ -109,7 +110,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     @Override
     public void setRPS(double RPS) {
         super.targetRPS = RPS;
-        flywheelMotor.setControl(new VelocityVoltage(RPS));
+        flywheelMotor.setControl(new VelocityVoltage(super.targetRPS));
     }
 
     @Override

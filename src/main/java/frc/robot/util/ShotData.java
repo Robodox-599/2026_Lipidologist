@@ -63,8 +63,8 @@ public class ShotData {
         return hubShotMap.get(distance).hoodAngle();
     }
 
-    public static double getHubRPM(double distance) {
-        return hubShotMap.get(distance).RPM();
+    public static double getHubRPS(double distance) {
+        return hubShotMap.get(distance).RPS();
     }
 
     public static double getHubFlightTime(double distance) {
@@ -75,8 +75,8 @@ public class ShotData {
         return allianceZoneShotMap.get(distance).hoodAngle();
     }
 
-    public static double getAllianceZoneRPM(double distance) {
-        return allianceZoneShotMap.get(distance).RPM();
+    public static double getAllianceZoneRPS(double distance) {
+        return allianceZoneShotMap.get(distance).RPS();
     }
 
     public static double getAllianceZoneFlightTime(double distance) {

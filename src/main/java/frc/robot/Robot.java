@@ -20,6 +20,7 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -109,7 +110,7 @@ public class Robot extends TimedRobot {
         indexer = new Indexer(new IndexerIOSim());
         intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
         intakeWrist = new IntakeWrist(new IntakeWristIOSim());
-        flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheel));
+        flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
         hood = new Hood(new HoodIOSim());
         vision = new Vision(drivetrain::addVisionMeasurement,
             new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
@@ -122,7 +123,7 @@ public class Robot extends TimedRobot {
         indexer = new Indexer(new IndexerIOSim());
         intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
         intakeWrist = new IntakeWrist(new IntakeWristIOSim());
-        flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheel));
+        flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
         hood = new Hood(new HoodIOSim());
         vision = new Vision(drivetrain::addVisionMeasurement,
             new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
@@ -163,10 +164,13 @@ public class Robot extends TimedRobot {
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
 
     driver.rightTrigger().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+
+    SmartDashboard.putNumber("Flywheel Velocity", 0.0);
   }
 
   @Override
   public void robotPeriodic() {
+    flywheels.setRPS(SmartDashboard.getNumber("Flywheel Velocity", 0.0));
     scheduler.run();
   }
 

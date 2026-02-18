@@ -33,14 +33,14 @@ public class FlywheelsIOSim extends FlywheelsIO {
   public void updateInputs() {
     flywheelMotorSim.update(0.02);
 
-    super.RPS = flywheelMotorSim.getAngularVelocityRPM() / 60;
+    super.RPS = flywheelMotorSim.getAngularVelocityRPM() / 60.0;
     super.statorCurrent = flywheelMotorSim.getCurrentDrawAmps();
     super.isFlywheelAtSetpoint = Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSTolerance;
 
-    DogLog.log("Flywheel/RPS", super.RPS);
-    DogLog.log("Flywheel/TargetRPS", super.targetRPS);
-    DogLog.log("Flywheel/StatorCurrent", super.statorCurrent);
-    DogLog.log("Flywheel/IsFlywheelAtSpeed", super.isFlywheelAtSetpoint);
+    DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/RPS", super.RPS);
+    DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/TargetRPS", super.targetRPS);
+    DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/StatorCurrent", super.statorCurrent);
+    DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/IsFlywheelAtSpeed", super.isFlywheelAtSetpoint);
   }
 
   @Override
@@ -50,12 +50,13 @@ public class FlywheelsIOSim extends FlywheelsIO {
 
   @Override
   public void setRPS(double RPS) {
-    setVoltage(pid.calculate(flywheelMotorSim.getAngularVelocityRPM() / 60, RPS));
+    super.targetRPS = RPS;
+    setVoltage(pid.calculate(flywheelMotorSim.getAngularVelocityRPM() / 60.0, super.targetRPS));
   }
 
   @Override
   public void stop() {
     super.targetRPS = 0;
-    flywheelMotorSim.setInputVoltage(pid.calculate(flywheelMotorSim.getAngularVelocityRPM() / 60, 0));
+    setVoltage(0);
   }
 }

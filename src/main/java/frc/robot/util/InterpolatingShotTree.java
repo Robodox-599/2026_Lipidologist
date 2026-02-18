@@ -8,7 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public class InterpolatingShotTree {
     private final TreeMap<Double, Shot> map = new TreeMap<>();
 
-  public record Shot(double hoodAngle, double RPM, double flightTime) {}
+  public record Shot(double hoodAngle, double RPS, double flightTime) {}
 
   public InterpolatingShotTree() {}
 
@@ -16,7 +16,7 @@ public class InterpolatingShotTree {
    * This method puts shooting data points into the treemap
    * 
    * @param key the distance from the goal
-   * @param value the shot's hood angle and RPM
+   * @param value the shot's hood angle and RPS
    * 
    */
   public void put(Double distance, Shot data) {
@@ -52,7 +52,7 @@ public class InterpolatingShotTree {
     return new Shot(
             MathUtil.interpolate(
                 startValue.hoodAngle(), endValue.hoodAngle(), t),
-        MathUtil.interpolate(startValue.RPM(), endValue.RPM(), t), 
+        MathUtil.interpolate(startValue.RPS(), endValue.RPS(), t), 
         MathUtil.interpolate(startValue.flightTime(), endValue.flightTime(), t));
   }
 

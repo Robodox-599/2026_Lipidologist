@@ -55,7 +55,7 @@ public class CalculateShot {
         Rotation2d targetRotation = Rotation2d
                 .fromRadians(Math.atan2(adjustedHubTranslation.getY() - robotTranslation.getY(),
                         adjustedHubTranslation.getX() - robotTranslation.getX()));
-        double shootSpeed = ShotData.getHubRPM(adjustedDistance);
+        double shootSpeed = ShotData.getHubRPS(adjustedDistance);
         double hoodAngle = ShotData.getHubHoodAngle(adjustedDistance);
 
         AdjustedShot adjustedShot = new AdjustedShot(targetRotation, shootSpeed, hoodAngle);
@@ -100,7 +100,7 @@ public class CalculateShot {
         Rotation2d targetRotation = Rotation2d
                 .fromRadians(Math.atan2(adjustedHubTranslation.getY() - robotTranslation.getY(),
                         adjustedHubTranslation.getX() - robotTranslation.getX()));
-        double shootSpeed = ShotData.getAllianceZoneRPM(adjustedDistance);
+        double shootSpeed = ShotData.getAllianceZoneRPS(adjustedDistance);
         double hoodAngle = ShotData.getAllianceZoneHoodAngle(adjustedDistance);
 
         AdjustedShot adjustedShot = new AdjustedShot(targetRotation, shootSpeed, hoodAngle);

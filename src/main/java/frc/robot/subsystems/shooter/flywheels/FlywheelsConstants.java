@@ -16,12 +16,12 @@ public class FlywheelsConstants {
     // public static final double flywheelRealkS = 0;
     // public static final double flywheelRealkV = 0;
 
-    // sim PID
-    public static final double flywheelSimkP = 1.25;
-    public static final double flywheelSimkI = 0;
-    public static final double flywheelSimkD = 0;
-    public static final double flywheelSimkS = 0;
-    public static final double flywheelSimkV = 0;
+//     // sim PID
+//     public static final double flywheelSimkP = 1.25;
+//     public static final double flywheelSimkI = 0;
+//     public static final double flywheelSimkD = 0;
+//     public static final double flywheelSimkS = 0;
+//     public static final double flywheelSimkV = 0;
 
     public static final double flywheelMaxVelocity = 100;
     public static final double flywheelMaxAcceleration = 50;
@@ -45,6 +45,13 @@ public class FlywheelsConstants {
     public static final FlywheelConstants MiddleFlywheel = new FlywheelConstants("MiddleFlywheel", 21, "rio", 0, 0, 0, 0,
             0, InvertedValue.CounterClockwise_Positive);
     public static final FlywheelConstants RightFlywheel = new FlywheelConstants("RightFlywheel", 22, "rio", 0, 0, 0, 0,
+            0, InvertedValue.CounterClockwise_Positive);
+
+            public static final FlywheelConstants LeftFlywheelSim = new FlywheelConstants("LeftFlywheel", 20, "rio", 1.25, 0, 0, 0, 0,
+            InvertedValue.Clockwise_Positive);
+    public static final FlywheelConstants MiddleFlywheelSim = new FlywheelConstants("MiddleFlywheel", 21, "rio", 1.25, 0, 0, 0,
+            0, InvertedValue.CounterClockwise_Positive);
+    public static final FlywheelConstants RightFlywheelSim = new FlywheelConstants("RightFlywheel", 22, "rio", 1.25, 0, 0, 0,
             0, InvertedValue.CounterClockwise_Positive);
 
 }

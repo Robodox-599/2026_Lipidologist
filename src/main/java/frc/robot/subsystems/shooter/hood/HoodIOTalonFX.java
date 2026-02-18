@@ -7,6 +7,7 @@ import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -29,19 +30,19 @@ import edu.wpi.first.units.measure.Voltage;
 import frc.robot.util.PhoenixUtil;
 
 public class HoodIOTalonFX extends HoodIO {
-    //motors + configuration
+    // motors + configuration
     private final TalonFX hoodMotor;
     TalonFXConfiguration hoodConfiguration;
     private final CANBus hoodCANBus;
-   
-    //cancoder + configuration
+
+    // cancoder + configuration
     private final CANcoder hoodCANCoder;
     CANcoderConfiguration CANCoderConfig;
 
-    //motion magic
+    // motion magic
     private MotionMagicVoltage motionMagic;
 
-    //status signals
+    // status signals
     private final StatusSignal<AngularVelocity> hoodVelocityRotsPerSec;
     private final StatusSignal<Temperature> hoodTemperature;
     private final StatusSignal<Angle> hoodPosition;
@@ -50,32 +51,35 @@ public class HoodIOTalonFX extends HoodIO {
     private final StatusSignal<Current> hoodSupplyCurrent;
 
     public HoodIOTalonFX() {
-        //motors + configuration
+        // motors + configuration
         hoodCANBus = new CANBus();
         hoodMotor = new TalonFX(HoodConstants.hoodMotorID, hoodCANBus);
         hoodCANCoder = new CANcoder(HoodConstants.hoodCANCoderID, hoodCANBus);
         hoodConfiguration = new TalonFXConfiguration()
-            .withCurrentLimits(new CurrentLimitsConfigs()
-                .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(HoodConstants.supplyCurrentLimit)
-                .withStatorCurrentLimit(HoodConstants.statorCurrentLimit))
-            .withSlot0(new Slot0Configs()
-                .withKP(HoodConstants.hoodRealkP)
-                .withKI(HoodConstants.hoodRealkI)
-                .withKD(HoodConstants.hoodRealkD)
-                .withKS(HoodConstants.hoodRealkS)
-                .withKV(HoodConstants.hoodRealkV))
-            .withFeedback(new FeedbackConfigs()
-                .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
-                .withFeedbackRemoteSensorID(HoodConstants.hoodCANCoderID)
-                .withRotorToSensorRatio(HoodConstants.hoodGearRatio))
-            .withClosedLoopGeneral(
+                .withCurrentLimits(new CurrentLimitsConfigs()
+                        .withSupplyCurrentLimit(HoodConstants.supplyCurrentLimit)
+                        .withSupplyCurrentLimitEnable(true)
+                        .withStatorCurrentLimit(HoodConstants.statorCurrentLimit)
+                        .withStatorCurrentLimitEnable(true))
+                .withSlot0(new Slot0Configs()
+                        .withKP(HoodConstants.hoodRealkP)
+                        .withKI(HoodConstants.hoodRealkI)
+                        .withKD(HoodConstants.hoodRealkD)
+                        .withKS(HoodConstants.hoodRealkS)
+                        .withKV(HoodConstants.hoodRealkV))
+                .withFeedback(new FeedbackConfigs()
+                        .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
+                        .withFeedbackRemoteSensorID(HoodConstants.hoodCANCoderID)
+                        .withRotorToSensorRatio(HoodConstants.hoodGearRatio))
+                .withClosedLoopGeneral(
                         new ClosedLoopGeneralConfigs()
                                 .withContinuousWrap(false))
-            .withMotorOutput(
-                    new MotorOutputConfigs()
-                        .withInverted(InvertedValue.Clockwise_Positive)
-                        .withNeutralMode(NeutralModeValue.Brake));
+                .withMotorOutput(
+                        new MotorOutputConfigs()
+                                .withInverted(InvertedValue.Clockwise_Positive)
+                                .withNeutralMode(NeutralModeValue.Brake))
+                .withMotionMagic(new MotionMagicConfigs().withMotionMagicCruiseVelocity(HoodConstants.hoodMaxVelocity)
+                        .withMotionMagicAcceleration(HoodConstants.hoodMaxAcceleration));
 
         CANCoderConfig = new CANcoderConfiguration()
                 .withMagnetSensor(new MagnetSensorConfigs()
@@ -83,12 +87,11 @@ public class HoodIOTalonFX extends HoodIO {
                         .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive)
                         .withAbsoluteSensorDiscontinuityPoint(HoodConstants.absoluteDiscontinuityPoint));
 
-        //applying configuration
+        // applying configuration
         PhoenixUtil.tryUntilOk(10, () -> hoodMotor.getConfigurator().apply(hoodConfiguration, 1));
         PhoenixUtil.tryUntilOk(10, () -> hoodCANCoder.getConfigurator().apply(CANCoderConfig));
 
-
-        //status signals
+        // status signals
         hoodVelocityRotsPerSec = hoodMotor.getVelocity();
         hoodTemperature = hoodMotor.getDeviceTemp();
         hoodPosition = hoodCANCoder.getAbsolutePosition();
@@ -96,26 +99,26 @@ public class HoodIOTalonFX extends HoodIO {
         hoodStatorCurrent = hoodMotor.getStatorCurrent();
         hoodSupplyCurrent = hoodMotor.getSupplyCurrent();
 
-        //Update Frequency
-        BaseStatusSignal.setUpdateFrequencyForAll(50, hoodVelocityRotsPerSec, hoodTemperature, 
-        hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
+        // Update Frequency
+        BaseStatusSignal.setUpdateFrequencyForAll(50, hoodVelocityRotsPerSec, hoodTemperature,
+                hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
 
         hoodMotor.optimizeBusUtilization();
         hoodCANCoder.optimizeBusUtilization();
     }
 
     @Override
-    public void updateInputs(){
-        BaseStatusSignal.refreshAll(hoodTemperature, 
-        hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
+    public void updateInputs() {
+        BaseStatusSignal.refreshAll(hoodTemperature,
+                hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
 
         super.positionRotations = hoodPosition.getValueAsDouble();
         super.RPS = hoodVelocityRotsPerSec.getValueAsDouble();
         super.statorCurrent = hoodStatorCurrent.getValueAsDouble();
         super.supplyCurrent = hoodSupplyCurrent.getValueAsDouble();
         super.temperature = hoodTemperature.getValueAsDouble();
-        super.isHoodInPosition = 
-            Math.abs(super.positionRotations - super.targetPositionRots) < HoodConstants.positionTolerance;
+        super.isHoodInPosition = Math
+                .abs(super.positionRotations - super.targetPositionRots) < HoodConstants.positionTolerance;
 
         DogLog.log("Hood/Position", super.positionRotations);
         DogLog.log("Hood/TargetPosition", super.targetPositionRots);
@@ -127,16 +130,17 @@ public class HoodIOTalonFX extends HoodIO {
 
     @Override
     public void setPosition(double position) {
-        targetPositionRots = MathUtil.clamp(position, HoodConstants.hoodMinAngleRotations, HoodConstants.hoodMaxAngleRotations);
+        targetPositionRots = MathUtil.clamp(position, HoodConstants.hoodMinAngleRotations,
+                HoodConstants.hoodMaxAngleRotations);
 
         super.targetPositionRots = targetPositionRots;
 
         motionMagic = new MotionMagicVoltage(position).withSlot(0).withEnableFOC(true);
-        
+
         hoodMotor.setControl(motionMagic);
     }
 
- @Override
+    @Override
     public void setVoltage(double voltage) {
         hoodMotor.setVoltage(voltage);
     }
