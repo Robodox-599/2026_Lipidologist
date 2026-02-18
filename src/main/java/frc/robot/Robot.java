@@ -66,11 +66,13 @@ public class Robot extends TimedRobot {
   // final Flywheels flywheels;
   // final Hood hood;
   final Vision vision;
+  final LEDs leds;
   final Superstructure superstructure;
 
   final AutoChooser autoChooser = new AutoChooser();
   final AutoFactory autoFactory;
   final AutoRoutines autoRoutines;
+  
 
   @Override
   protected void loopFunc() {
@@ -97,8 +99,9 @@ public class Robot extends TimedRobot {
         // hood = new Hood(new HoodIOTalonFX());
         vision = new Vision(drivetrain::addVisionMeasurement,
             new VisionIOReal(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-            new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()));
+            new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()))
         break;
+        
       case SIM:
         // climb = new Climb(new ClimbIOSim());
         drivetrain = TunerConstants.createDrivetrain(driver);

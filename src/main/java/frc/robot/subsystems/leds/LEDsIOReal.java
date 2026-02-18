@@ -9,14 +9,14 @@ import com.ctre.phoenix6.signals.StripTypeValue;
 
 
 
-public class poo4 extends LEDsIO{
+public class LEDsIOReal extends LEDsIO{
     public CANBus canBus;
     public CANdle candle;
     public CANdleConfiguration candleConfig;
 
-    public poo4(){
-        this.canBus = new CANBus(poo2.ledsCanBus);
-        this.candle = new CANdle(poo2.candleID, this.canBus);
+    public LEDsIOReal(){
+        this.canBus = new CANBus(LEDsConstants.ledsCanBus);
+        this.candle = new CANdle(LEDsConstants.candleID, this.canBus);
         this.candleConfig = new CANdleConfiguration();
 
         this.candleConfig.LED.StripType = StripTypeValue.RGB;
@@ -28,6 +28,6 @@ public class poo4 extends LEDsIO{
     public void setLedColor(int red, int green, int blue){
         RGBWColor color = new RGBWColor(red, green, blue, 0);
 
-        this.candle.setControl(new SolidColor(0, poo2.ledEnd).withColor(color));
+        this.candle.setControl(new SolidColor(0, LEDsConstants.ledEnd).withColor(color));
     }
 }
