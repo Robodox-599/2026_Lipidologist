@@ -2,8 +2,8 @@ package frc.robot.subsystems.leds;
 
 import dev.doglog.DogLog;
 
-public class LEDs {
-    private final LEDsIO io;
+public class temp2 {
+    private final poo3 io;
     private LedWantedState ledWantedState = LedWantedState.STOP;
     private LedCurrentState ledCurrentState = LedCurrentState.STOPPED;
 
@@ -25,7 +25,7 @@ public class LEDs {
         STOPPED;
     }
 
-    public LEDs(LEDsIO io){
+    public temp2(poo3 io){
         this.io = io;
     }
 
@@ -86,14 +86,14 @@ public class LEDs {
                 setLedColor(0, 0, 0);
                 break;
 
-        }s
+        }
     }
 
     public void setLedColor(int red, int green, int blue){
         io.setLedColor(red, green, blue);
     }
 
-    public void setWantedState(LEDs.LedWantedState ledWantedState){
+    public void setWantedState(temp2.LedWantedState ledWantedState){
         this.ledWantedState = ledWantedState;
     }
 }
