@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -24,11 +25,13 @@ public class FeederIOTalonFX extends FeederIO {
     private final CANBus feederBus;
     private TalonFXConfiguration feederConfig;
 
-    private final StatusSignal<AngularVelocity> feederVelocityRad;
+    private final StatusSignal<AngularVelocity> feederVelocityRPS;
     private final StatusSignal<Temperature> feederTemperature;
     private final StatusSignal<Voltage> feederAppliedVolts;
     private final StatusSignal<Current> feederStatorCurrent;
     private final StatusSignal<Current> feederSupplyCurrent;
+
+    
 
     public FeederIOTalonFX() {
         feederBus = new CANBus(FeederConstants.feederCANBus);
@@ -58,13 +61,13 @@ public class FeederIOTalonFX extends FeederIO {
 
         PhoenixUtil.tryUntilOk(10, () -> feederMotor.getConfigurator().apply(feederConfig, 1));
 
-        feederVelocityRad = feederMotor.getVelocity();
+        feederVelocityRPS = feederMotor.getVelocity();
         feederTemperature = feederMotor.getDeviceTemp();
         feederAppliedVolts = feederMotor.getMotorVoltage();
         feederStatorCurrent = feederMotor.getStatorCurrent();
         feederSupplyCurrent = feederMotor.getSupplyCurrent();
 
-        BaseStatusSignal.setUpdateFrequencyForAll(50, feederVelocityRad,
+        BaseStatusSignal.setUpdateFrequencyForAll(50, feederVelocityRPS,
                 feederTemperature, feederAppliedVolts, feederStatorCurrent, feederSupplyCurrent);
 
         feederMotor.optimizeBusUtilization();
@@ -72,10 +75,10 @@ public class FeederIOTalonFX extends FeederIO {
 
     @Override
     public void updateInputs() {
-        BaseStatusSignal.refreshAll(feederVelocityRad, feederTemperature,
+        BaseStatusSignal.refreshAll(feederVelocityRPS, feederTemperature,
                 feederAppliedVolts, feederStatorCurrent, feederSupplyCurrent);
 
-        super.velocity = feederVelocityRad.getValueAsDouble();
+        super.velocity = feederVelocityRPS.getValueAsDouble();
         super.supplyCurrent = feederSupplyCurrent.getValueAsDouble();
         super.statorCurrent = feederStatorCurrent.getValueAsDouble();
         super.appliedVolts = feederAppliedVolts.getValueAsDouble();
@@ -94,7 +97,7 @@ public class FeederIOTalonFX extends FeederIO {
     }
 
     @Override
-    public void setFeederVoltage(double volts) {
-        feederMotor.setVoltage(volts);
+    public void setFeederVelocity(double velocity) {
+        feederMotor.setControl(new VelocityVoltage(velocity));
     }
 }

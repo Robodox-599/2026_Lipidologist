@@ -9,7 +9,7 @@ public abstract class FeederIO {
 
     public void updateInputs() {}
 
-    public void setFeederVoltage(double volts) {}
+    public void setFeederVelocity(double volts) {}
 
     public void stopFeeder() {}
 }
