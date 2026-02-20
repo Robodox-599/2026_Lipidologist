@@ -14,6 +14,7 @@ import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -26,7 +27,7 @@ public class VisionIOSim extends VisionIOReal {
     private static VisionSystemSim visionSim;
     private final PhotonCameraSim cameraSim;
     private final Supplier<Pose2d> robotPoseSupplier;
-    
+
     public VisionIOSim(CameraConstants constants, Supplier<Pose2d> robotPoseSupplier) {
         super(constants, robotPoseSupplier);
         this.robotPoseSupplier = robotPoseSupplier;
@@ -54,6 +55,8 @@ public class VisionIOSim extends VisionIOReal {
         cameraSim.setMaxSightRange(Units.feetToMeters(22.0));
 
         visionSim.addCamera(cameraSim, constants.robotToCamera());
+
+        DogLog.log("Vision/" + constants.name() + "/robotToCamera", constants.robotToCamera());
     }
 
     @Override

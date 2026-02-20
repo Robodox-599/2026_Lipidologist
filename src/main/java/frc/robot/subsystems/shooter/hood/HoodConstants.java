@@ -4,15 +4,15 @@ public class HoodConstants {
     //motor information
     public static final int hoodMotorID = 18;
     public static final int hoodCANCoderID = 19;
-    public static final double hoodGearRatio = 1;
+    public static final double hoodGearRatio = 51;
     public static final double hoodMOI = 0.1;
    
     //real PID
-    public static final double hoodRealkP = 0;
+    public static final double hoodRealkP = 45;
     public static final double hoodRealkI = 0;
     public static final double hoodRealkD = 0;
-    public static final double hoodRealkS = 0;
-    public static final double hoodRealkV = 0;
+    public static final double hoodRealkS = 0.48;
+    public static final double hoodRealkV = 6.12;
     public static final double hoodRealkG = 0;
 
     //sim PID
@@ -23,7 +23,7 @@ public class HoodConstants {
     public static final double hoodSimkV = 0;
     public static final double hoodSimkG = 0;
 
-    public static final double hoodMaxVelocity = 100;
+    public static final double hoodMaxVelocity = (12- hoodRealkS) / hoodRealkV;
     public static final double hoodMaxAcceleration = 50;
 
     //current limits 
@@ -37,9 +37,9 @@ public class HoodConstants {
     //positon tolerances
     public static final double positionTolerance = 0.01;
     public static final double hoodMinAngleRotations = 0;
-    public static final double hoodMaxAngleRotations = 0;
+    public static final double hoodMaxAngleRotations = 0.12;
 
     //cancoderstuff
-    public static final double hoodMagnetOffset = 0.0;
+    public static final double hoodMagnetOffset = 0.9968;
     public static final double absoluteDiscontinuityPoint = 0.0;
 }

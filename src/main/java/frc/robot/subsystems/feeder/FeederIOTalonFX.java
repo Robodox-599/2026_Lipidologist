@@ -54,7 +54,7 @@ public class FeederIOTalonFX extends FeederIO {
                                 .withSupplyCurrentLimitEnable(true))
                 .withMotorOutput(
                         new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake)
-                                .withInverted(InvertedValue.Clockwise_Positive));
+                                .withInverted(InvertedValue.CounterClockwise_Positive));
 
         PhoenixUtil.tryUntilOk(10, () -> feederMotor.getConfigurator().apply(feederConfig, 1));
 

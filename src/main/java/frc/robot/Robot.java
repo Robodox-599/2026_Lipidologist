@@ -97,7 +97,9 @@ public class Robot extends TimedRobot {
         indexer = new Indexer(new IndexerIOTalonFX());
         intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
         intakeWrist = new IntakeWrist(new IntakeWristIOTalonFX());
-        flywheels = new Flywheels(new FlywheelsIOTalonFX(FlywheelsConstants.LeftFlywheel), new FlywheelsIOTalonFX(FlywheelsConstants.MiddleFlywheel), new FlywheelsIOTalonFX(FlywheelsConstants.RightFlywheel));
+        flywheels = new Flywheels(new FlywheelsIOTalonFX(FlywheelsConstants.LeftFlywheel),
+            new FlywheelsIOTalonFX(FlywheelsConstants.MiddleFlywheel),
+            new FlywheelsIOTalonFX(FlywheelsConstants.RightFlywheel));
         hood = new Hood(new HoodIOTalonFX());
         vision = new Vision(drivetrain::addVisionMeasurement,
             new VisionIOReal(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
@@ -136,9 +138,8 @@ public class Robot extends TimedRobot {
         drivetrain,
         feeder, indexer,
         intakeRollers, intakeWrist,
-    flywheels, hood,
-    vision
-    );
+        flywheels, hood,
+        vision);
 
     new Bindings(driver, superstructure);
 
@@ -163,7 +164,8 @@ public class Robot extends TimedRobot {
     RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
 
-    driver.rightTrigger().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    driver.rightTrigger().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.TESTING))
+        .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
 
     SmartDashboard.putNumber("Flywheel Velocity", 0.0);
   }

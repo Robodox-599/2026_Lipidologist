@@ -68,7 +68,7 @@ public class HoodIOTalonFX extends HoodIO {
                         .withKS(HoodConstants.hoodRealkS)
                         .withKV(HoodConstants.hoodRealkV))
                 .withFeedback(new FeedbackConfigs()
-                        .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
+                        .withFeedbackSensorSource(FeedbackSensorSourceValue.FusedCANcoder)
                         .withFeedbackRemoteSensorID(HoodConstants.hoodCANCoderID)
                         .withRotorToSensorRatio(HoodConstants.hoodGearRatio))
                 .withClosedLoopGeneral(
@@ -84,7 +84,7 @@ public class HoodIOTalonFX extends HoodIO {
         CANCoderConfig = new CANcoderConfiguration()
                 .withMagnetSensor(new MagnetSensorConfigs()
                         .withMagnetOffset(HoodConstants.hoodMagnetOffset)
-                        .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive)
+                        .withSensorDirection(SensorDirectionValue.Clockwise_Positive)
                         .withAbsoluteSensorDiscontinuityPoint(HoodConstants.absoluteDiscontinuityPoint));
 
         // applying configuration

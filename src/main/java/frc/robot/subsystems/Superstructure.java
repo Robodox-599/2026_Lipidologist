@@ -63,8 +63,8 @@ public class Superstructure extends SubsystemBase {
         TESTING
     }
 
-    private WantedSuperState wantedSuperState = WantedSuperState.TESTING;
-    private CurrentSuperState currentSuperState = CurrentSuperState.TESTING;
+    private WantedSuperState wantedSuperState = WantedSuperState.STOP;
+    private CurrentSuperState currentSuperState = CurrentSuperState.STOPPED;
 
     public Superstructure(
             // Climb climb,
@@ -250,11 +250,11 @@ public class Superstructure extends SubsystemBase {
 
     public void testing() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
-        // feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-        // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
-        // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
-        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS);
+        feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
+        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 75);
         // hood.setWantedState(Hood.HoodWantedState.SET_POSITION);
     }
 
