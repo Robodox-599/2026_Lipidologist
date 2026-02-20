@@ -116,10 +116,25 @@ public class HubShiftUtil {
     return getShiftInfo().active();
   }
 
-  public static boolean isHubLookaheadActive(double lookaheadTime) {
+  public static boolean isHubPredictedActive(double flightTime) {
+    ShiftInfo shiftInfo = getShiftInfo();
+    if (shiftInfo.active()) {
+      return flightTime < (shiftInfo.remainingTime() + 3.0); 
+    } else {
+      if (shiftInfo.remainingTime() < flightTime) {
+        return true;
+      } 
+      if (shiftInfo.elapsedTime() + flightTime < 3.0) {
+        return true;
+      }
+      return false;
+    }
+  }
+
+  public static boolean isHubActiveSoon(double lookaheadTime) {
     ShiftInfo shiftInfo = getShiftInfo();
     boolean isHubLookaheadActive = (shiftInfo.active()) || (!shiftInfo.active() && shiftInfo.remainingTime() < lookaheadTime);
-    DogLog.log("HubShift/hubLookaheadActive", isHubLookaheadActive);
+    DogLog.log("HubShift/isHubActiveSoon", isHubLookaheadActive);
     return isHubLookaheadActive;
   }
 }

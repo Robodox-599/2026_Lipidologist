@@ -78,16 +78,15 @@ public class FeederIOTalonFX extends FeederIO {
         BaseStatusSignal.refreshAll(feederVelocityRPS, feederTemperature,
                 feederAppliedVolts, feederStatorCurrent, feederSupplyCurrent);
 
-        super.velocity = feederVelocityRPS.getValueAsDouble();
+        super.RPS = feederVelocityRPS.getValueAsDouble();
         super.supplyCurrent = feederSupplyCurrent.getValueAsDouble();
         super.statorCurrent = feederStatorCurrent.getValueAsDouble();
-        super.appliedVolts = feederAppliedVolts.getValueAsDouble();
         super.tempCelsius = feederTemperature.getValueAsDouble();
 
-        DogLog.log("Feeder/Velocity", super.velocity);
+        DogLog.log("Feeder/RPS", super.RPS);
+        DogLog.log("Feeder/TargetRPS", super.targetRPS);
         DogLog.log("Feeder/SupplyCurrent", super.supplyCurrent);
         DogLog.log("Feeder/StatorCurrent", super.statorCurrent);
-        DogLog.log("Feeder/AppliedVolts", super.appliedVolts);
         DogLog.log("Feeder/Temperature", super.tempCelsius);
     }
 
@@ -97,7 +96,7 @@ public class FeederIOTalonFX extends FeederIO {
     }
 
     @Override
-    public void setFeederVelocity(double velocity) {
-        feederMotor.setControl(new VelocityVoltage(velocity));
+    public void setFeederVelocity(double RPS) {
+        feederMotor.setControl(new VelocityVoltage(RPS));
     }
 }

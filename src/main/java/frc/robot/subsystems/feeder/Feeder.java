@@ -66,14 +66,15 @@ public class Feeder {
         break;
       case REVERSE:
         setFeederVelocity(-3.0);
+        break;
       default:
         stopFeeder();
         break;
     }
   }
 
-  private void setFeederVelocity(double velocity){
-    io.setFeederVelocity(velocity);
+  private void setFeederVelocity(double RPS){
+    io.setFeederVelocity(RPS);
   }
 
   public void stopFeeder(){

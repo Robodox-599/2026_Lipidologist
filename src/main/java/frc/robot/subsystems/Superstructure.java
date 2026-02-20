@@ -77,8 +77,8 @@ public class Superstructure extends SubsystemBase {
             IntakeWrist intakeWrist,
             Flywheels flywheels,
             Hood hood,
-            LEDs leds,
-            Vision vision
+            Vision vision,
+            LEDs leds
             ) {
         // this.climb = climb;
         this.drivetrain = drivetrain;
@@ -88,8 +88,8 @@ public class Superstructure extends SubsystemBase {
         this.intakeWrist = intakeWrist;
         this.flywheels = flywheels;
         this.hood = hood;
-        this.leds = leds;
         this.vision = vision;
+        this.leds = leds;
     }
 
     @Override

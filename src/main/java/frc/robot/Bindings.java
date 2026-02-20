@@ -37,7 +37,7 @@ public class Bindings extends SubsystemBase {
 
     // driver.leftTrigger().whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    new Trigger(() -> HubShiftUtil.isHubLookaheadActive(3)).onTrue(rumbleDriverSwapping(driver, 0.5, 3));
+    new Trigger(() -> HubShiftUtil.isHubActiveSoon(3)).onTrue(rumbleDriverSwapping(driver, 0.5, 3));
     
     // driver.a().onTrue(rumbleDriverContinuous(driver, 3));
     // driver.b().onTrue(rumbleDriverSwapping(driver, 0.5, 3));

@@ -32,6 +32,9 @@ import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOTalonFX;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollers.IntakeRollersWantedState;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWristIOTalonFX;
+import frc.robot.subsystems.leds.LEDs;
+import frc.robot.subsystems.leds.LEDsIO;
+import frc.robot.subsystems.leds.LEDsIOReal;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist.IntakeWristWantedState;
 import frc.robot.autos.AutoRoutines;
 import frc.robot.subsystems.Superstructure;
@@ -70,6 +73,7 @@ public class Robot extends TimedRobot {
   final Flywheels flywheels;
   final Hood hood;
   final Vision vision;
+  final LEDs leds;
   final Superstructure superstructure;
 
   final AutoChooser autoChooser = new AutoChooser();
@@ -104,6 +108,7 @@ public class Robot extends TimedRobot {
         vision = new Vision(drivetrain::addVisionMeasurement,
             new VisionIOReal(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
             new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()));
+        leds = new LEDs(new LEDsIOReal());
         break;
       case SIM:
         // climb = new Climb(new ClimbIOSim());
@@ -117,6 +122,7 @@ public class Robot extends TimedRobot {
         vision = new Vision(drivetrain::addVisionMeasurement,
             new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
             new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()));
+            leds = new LEDs(new LEDsIO());
         break;
       default: // defaults to sim
         // climb = new Climb(new ClimbIOSim());
@@ -130,6 +136,7 @@ public class Robot extends TimedRobot {
         vision = new Vision(drivetrain::addVisionMeasurement,
             new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
             new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()));
+            leds = new LEDs(new LEDsIO());
         break;
     }
 
@@ -139,7 +146,7 @@ public class Robot extends TimedRobot {
         feeder, indexer,
         intakeRollers, intakeWrist,
         flywheels, hood,
-        vision);
+        vision, leds);
 
     new Bindings(driver, superstructure);
 
