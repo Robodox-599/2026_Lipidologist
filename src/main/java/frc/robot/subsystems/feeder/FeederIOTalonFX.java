@@ -67,16 +67,16 @@ public class FeederIOTalonFX extends FeederIO {
         feederStatorCurrent = feederMotor.getStatorCurrent();
         feederSupplyCurrent = feederMotor.getSupplyCurrent();
 
-        // BaseStatusSignal.setUpdateFrequencyForAll(50, feederVelocityRPS,
-        //         feederTemperature, feederAppliedVolts, feederStatorCurrent, feederSupplyCurrent);
+        BaseStatusSignal.setUpdateFrequencyForAll(50, feederVelocityRPS,
+                feederTemperature, feederAppliedVolts, feederStatorCurrent, feederSupplyCurrent);
 
-        //feederMotor.optimizeBusUtilization();
+        feederMotor.optimizeBusUtilization();
     }
 
     @Override
     public void updateInputs() {
-        // BaseStatusSignal.refreshAll(feederVelocityRPS, feederTemperature,
-        //         feederAppliedVolts, feederStatorCurrent, feederSupplyCurrent);
+        BaseStatusSignal.refreshAll(feederVelocityRPS, feederTemperature,
+                feederAppliedVolts, feederStatorCurrent, feederSupplyCurrent);
 
         super.RPS = feederVelocityRPS.getValueAsDouble();
         super.supplyCurrent = feederSupplyCurrent.getValueAsDouble();

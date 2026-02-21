@@ -13,8 +13,8 @@ public class VisionConstants {
     public static final double maxZError = 0.2; // 0.75 
     public static final double maxAmbiguity = 0.2; // 0.3
 
-    public static double linearStdDevBaseline = 5; // Meters (0.02)
-    public static double angularStdDevBaseline = 10; // Radians (0.06)
+    public static double linearStdDevBaseline = 0.02; // Meters (0.02)
+    public static double angularStdDevBaseline = 0.06; // Radians (0.06)
     public static final double singleTagMaxDistanceMeters = 5; 
 
     // public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
@@ -37,13 +37,13 @@ public class VisionConstants {
     public static final double frontLeftCameraPoseZ = Units.inchesToMeters(18.451); // 18.451 (Z value in CAD)
 
     // CAMERA 1 POSE (ROLL)
-    public static final double frontLeftCameraPoseRoll = Units.degreesToRadians(5.9670); // 5.9670
+    public static final double frontLeftCameraPoseRoll = Units.degreesToRadians(-5.9670); // 5.9670
 
     // CAMERA 1 POSE (PITCH)
-    public static final double frontLeftCameraPosePitch = Units.degreesToRadians(90 - 60.7203); // 90 - 60.7203 (up/down rotation)
+    public static final double frontLeftCameraPosePitch = Units.degreesToRadians(60.7203-90); // 90 - 60.7203 (up/down rotation)
 
     // CAMERA 1 POSE (YAW)
-    public static final double frontLeftCameraPoseYaw = Units.degreesToRadians(102.0 - 90.0); // 102.0 - 90.0 (left/right rotation)
+    public static final double frontLeftCameraPoseYaw = Units.degreesToRadians(180+12); // 102.0 - 90.0 (left/right rotation)
 
     // FRONT RIGHT CAMERA
     public static final String frontRightCameraName = "FR_Camera";
@@ -58,13 +58,13 @@ public class VisionConstants {
     public static final double frontRightCameraPoseZ = Units.inchesToMeters(18.369); // 18.369 (Z value in CAD)
 
     // CAMERA 2 POSE (ROLL)
-    public static final double frontRightCameraPoseRoll = Units.degreesToRadians(-4.4670); // 4.4670
+    public static final double frontRightCameraPoseRoll = Units.degreesToRadians(4.4670); // -4.4670
 
     // CAMERA 2 POSE (PITCH)
-    public static final double frontRightCameraPosePitch = Units.degreesToRadians(90.0 - 68.5050); // 90 - 68.5050 (up/down rotation)
+    public static final double frontRightCameraPosePitch = Units.degreesToRadians(68.5050-90); // 90 - 68.5050 (up/down rotation)
 
     // CAMERA 2 POSE (YAW)
-    public static final double frontRightCameraPoseYaw = Units.degreesToRadians(90.0 - 102.0); // 90.0 - 102.0 (left/right rotation)
+    public static final double frontRightCameraPoseYaw = Units.degreesToRadians(180-12); // 90.0 - 102.0 (left/right rotation)
 
 //     // BACK CAMERA
 //     public static final String backCameraName = "B_Camera";

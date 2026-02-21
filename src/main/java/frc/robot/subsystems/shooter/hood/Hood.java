@@ -23,7 +23,7 @@ public class Hood {
     }
 
     public void updateInputs() {
-        Tracer.traceFunc("Hood UpdateInputs", io::updateInputs);
+        Tracer.traceFunc("HoodUpdateInputs", io::updateInputs);
         handleStateTransitions();
         applyStates();
 

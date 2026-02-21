@@ -38,8 +38,8 @@ public class Superstructure extends SubsystemBase {
     final CommandSwerveDrivetrain drivetrain;
     final Feeder feeder;
     final Indexer indexer;
-    final IntakeRollers intakeRollers;
-    final IntakeWrist intakeWrist;
+    // final IntakeRollers intakeRollers;
+    // final IntakeWrist intakeWrist;
     final Flywheels flywheels;
     final Hood hood;
     final LEDs leds;
@@ -86,8 +86,8 @@ public class Superstructure extends SubsystemBase {
             CommandSwerveDrivetrain drivetrain,
             Feeder feeder,
             Indexer indexer,
-            IntakeRollers intakeRollers,
-            IntakeWrist intakeWrist,
+            // IntakeRollers intakeRollers,
+            // IntakeWrist intakeWrist,
             Flywheels flywheels,
             Hood hood,
             Vision vision,
@@ -96,8 +96,8 @@ public class Superstructure extends SubsystemBase {
         this.drivetrain = drivetrain;
         this.feeder = feeder;
         this.indexer = indexer;
-        this.intakeRollers = intakeRollers;
-        this.intakeWrist = intakeWrist;
+        // this.intakeRollers = intakeRollers;
+        // this.intakeWrist = intakeWrist;
         this.flywheels = flywheels;
         this.hood = hood;
         this.vision = vision;
@@ -110,14 +110,14 @@ public class Superstructure extends SubsystemBase {
 
         // climb.updateInputs();
         Tracer.traceFunc("Drivetrain Periodic", drivetrain::updateInputs);
-        Tracer.traceFunc("Feeder Periodic", feeder::updateInputs);
-        Tracer.traceFunc("Indexer Periodic", indexer::updateInputs);
-        Tracer.traceFunc("IntakeRollers Periodic", intakeRollers::updateInputs);
-        Tracer.traceFunc("IntakeWrist Periodic", intakeWrist::updateInputs);
-        Tracer.traceFunc("Flywheels Periodic", flywheels::updateInputs);
-        Tracer.traceFunc("Hood Periodic", hood::updateInputs);
-        Tracer.traceFunc("LEDs Periodic", leds::updateInputs);
-        Tracer.traceFunc("Vision Periodic", vision::updateInputs);
+        Tracer.traceFunc("FeederPeriodic", feeder::updateInputs);
+        Tracer.traceFunc("IndexerPeriodic", indexer::updateInputs);
+        // Tracer.traceFunc("IntakeRollers Periodic", intakeRollers::updateInputs);
+        // Tracer.traceFunc("IntakeWrist Periodic", intakeWrist::updateInputs);
+        Tracer.traceFunc("FlywheelsPeriodic", flywheels::updateInputs);
+        Tracer.traceFunc("HoodPeriodic", hood::updateInputs);
+        Tracer.traceFunc("LEDsPeriodic", leds::updateInputs);
+        Tracer.traceFunc("VisionPeriodic", vision::updateInputs);
 
         ShiftInfo shiftInfo = HubShiftUtil.getShiftInfo();
         DogLog.log("HubShift", shiftInfo.currentShift());
@@ -130,6 +130,8 @@ public class Superstructure extends SubsystemBase {
         // This method will be called once per scheduler run
         DogLog.log("Superstructure/WantedSuperState", wantedSuperState);
         DogLog.log("Superstructure/CurrentSuperState", currentSuperState);
+
+        Tracer.endTrace();
     }
 
     private void handleStateTransitions() {
@@ -220,8 +222,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+        // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
         hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
         leds.setWantedState(LEDs.LEDsWantedState.PREPARE_HUB_SHOT);
@@ -234,8 +236,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+        // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
         hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
         leds.setWantedState(LEDs.LEDsWantedState.PREPARE_HUB_SHOT);
@@ -248,8 +250,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
+        // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
         hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
         leds.setWantedState(LEDs.LEDsWantedState.SHOOT_HUB);
@@ -262,8 +264,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
+        // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
         hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
         leds.setWantedState(LEDs.LEDsWantedState.SHOOT_HUB);
@@ -276,8 +278,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+        // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
         hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
         leds.setWantedState(LEDs.LEDsWantedState.PREPARE_ALLIANCE_ZONE_SHOT);
@@ -290,8 +292,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
+        // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
         hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
         leds.setWantedState(LEDs.LEDsWantedState.SHOOT_ALLIANCE_ZONE);
@@ -301,8 +303,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+        // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS);
         hood.setWantedState(Hood.HoodWantedState.SET_POSITION);
         leds.setWantedState(LEDs.LEDsWantedState.IDLE);
@@ -312,19 +314,19 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.CHOREO_TRAJECTORY);
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+        // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS);
         hood.setWantedState(Hood.HoodWantedState.SET_POSITION);
         leds.setWantedState(LEDs.LEDsWantedState.IDLE);
     }
 
     public void stop() {
-        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.STOPPED);
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
         indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
-        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.STOP);
-        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.STOP);
+        // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.STOP);
+        // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.STOP);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.STOPPED);
         hood.setWantedState(Hood.HoodWantedState.STOPPED);
         leds.setWantedState(LEDs.LEDsWantedState.STOP);
@@ -334,8 +336,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
+        // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 75);
         // hood.setWantedState(Hood.HoodWantedState.SET_POSITION);
     }

@@ -71,6 +71,7 @@ public class Vision {
       List<Pose3d> robotPosesRejected = new LinkedList<>();
 
       for (PoseObservation observation : io[cameraIndex].poseObservations) {
+        DogLog.log("Vision/" + io[cameraIndex].constants.name() + "/Observation", observation);
 
         // Check whether to reject pose
         boolean rejectPose = shouldRejectPoseObservation(observation);
@@ -123,6 +124,7 @@ public class Vision {
   private boolean shouldRejectPoseObservation(PoseObservation observation) {
     // Should have at least one tag
     if (observation.tagCount() <= 0) {
+      DogLog.log("Vision/RejectReason", "No Tags");
       return true;
     }
 
@@ -131,16 +133,19 @@ public class Vision {
       // Single tag results have ambiguity which cause the estimator to pick the wrong
       // location
       if (observation.ambiguity() > VisionConstants.maxAmbiguity) {
+        DogLog.log("Vision/RejectReason", "Over Max Ambiguity");
         return true;
       }
       // Single tag results get worse at a distance
       if (observation.averageTagDistance() > VisionConstants.singleTagMaxDistanceMeters) {
+        DogLog.log("Vision/RejectReason", "Too Far");
         return true;
       }
     }
 
     // Result must not be above or below the floor
     if (Math.abs(observation.pose().getZ()) > VisionConstants.maxZError) {
+        DogLog.log("Vision/RejectReason", "Above Ground");
       return true;
     }
 

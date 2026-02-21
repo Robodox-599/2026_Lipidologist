@@ -61,15 +61,15 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         intakeRollersStatorCurrent = intakeRollersMotor.getStatorCurrent();
         intakeRollersTemperature = intakeRollersMotor.getDeviceTemp();
 
-        // BaseStatusSignal.setUpdateFrequencyForAll(50, intakeRollersVelocity, intakeRollersAppliedVolts,
-        //         intakeRollersStatorCurrent, intakeRollersSupplyCurrent, intakeRollersTemperature);
+        BaseStatusSignal.setUpdateFrequencyForAll(50, intakeRollersVelocity, intakeRollersAppliedVolts,
+                intakeRollersStatorCurrent, intakeRollersSupplyCurrent, intakeRollersTemperature);
 
-        // intakeRollersMotor.optimizeBusUtilization();
+        intakeRollersMotor.optimizeBusUtilization();
     }
 
     public void updateInputs() {
-        // BaseStatusSignal.refreshAll(intakeRollersVelocity, intakeRollersStatorCurrent, intakeRollersSupplyCurrent,
-        //         intakeRollersAppliedVolts, intakeRollersTemperature);
+        BaseStatusSignal.refreshAll(intakeRollersVelocity, intakeRollersStatorCurrent, intakeRollersSupplyCurrent,
+                intakeRollersAppliedVolts, intakeRollersTemperature);
 
         super.velocity = intakeRollersVelocity.getValueAsDouble();
         super.voltage = intakeRollersAppliedVolts.getValueAsDouble();

@@ -35,6 +35,8 @@ public class VisionIOReal extends VisionIO {
     this.robotPoseSupplier = robotPoseSupplier;
     this.poseEstimator = new PhotonPoseEstimator(FieldConstants.AprilTags.aprilTagFieldLayout,
         constants.robotToCamera());
+
+    DogLog.log("Vision/" + constants.name() + "/robotToCamera", constants.robotToCamera());
   }
 
   @Override
@@ -67,7 +69,8 @@ public class VisionIOReal extends VisionIO {
           new PoseObservation(
             visionEst.timestampSeconds, // Timestamp
             visionEst.estimatedPose, // 3D pose estimate
-            visionEst.targetsUsed.get(0).poseAmbiguity, // Ambiguity 
+            0.1,
+            // visionEst.targetsUsed.get(0).getPoseAmbiguity(), // Ambiguity 
             visionEst.targetsUsed.size(), // Number of tags
             totalTagDistance / visionEst.targetsUsed.size())); // Average tag distance
       }

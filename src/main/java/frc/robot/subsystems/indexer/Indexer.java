@@ -33,7 +33,7 @@ public class Indexer {
   }
 
   public void updateInputs() {
-        Tracer.traceFunc("Indexer UpdateInputs", io::updateInputs);
+        Tracer.traceFunc("IndexerUpdateInputs", io::updateInputs);
     
     handleStateTransitions();
     applyStates();

@@ -8,6 +8,7 @@ import frc.robot.subsystems.vision6.VisionConstants;
 import frc.robot.subsystems.vision6.VisionIOReal;
 import frc.robot.subsystems.vision6.VisionIOSim;
 import frc.robot.util.HubShiftUtil;
+import frc.robot.util.Tracer;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsConstants;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOSim;
@@ -68,8 +69,8 @@ public class Robot extends TimedRobot {
   final CommandSwerveDrivetrain drivetrain;
   final Feeder feeder;
   final Indexer indexer;
-  final IntakeRollers intakeRollers;
-  final IntakeWrist intakeWrist;
+  // final IntakeRollers intakeRollers;
+  // final IntakeWrist intakeWrist;
   final Flywheels flywheels;
   final Hood hood;
   final Vision vision;
@@ -79,13 +80,18 @@ public class Robot extends TimedRobot {
   final AutoChooser autoChooser = new AutoChooser();
   final AutoFactory autoFactory;
   final AutoRoutines autoRoutines;
-
+  
   @Override
   protected void loopFunc() {
+    Tracer.startTrace("RobotLoop");
     super.loopFunc();
+    Tracer.endTrace();
   }
 
-  public Robot() {
+  public Robot() {    
+    Tracer.enableSingleThreadedMode();
+    Tracer.enableTracingForCurrentThread();
+
     DogLog.setOptions(
         new DogLogOptions()
             .withCaptureDs(true)
@@ -99,8 +105,8 @@ public class Robot extends TimedRobot {
         drivetrain = TunerConstants.createDrivetrain(driver);
         feeder = new Feeder(new FeederIOTalonFX());
         indexer = new Indexer(new IndexerIOTalonFX());
-        intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
-        intakeWrist = new IntakeWrist(new IntakeWristIOTalonFX());
+        // intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
+        // intakeWrist = new IntakeWrist(new IntakeWristIOTalonFX());
         flywheels = new Flywheels(new FlywheelsIOTalonFX(FlywheelsConstants.LeftFlywheel),
             new FlywheelsIOTalonFX(FlywheelsConstants.MiddleFlywheel),
             new FlywheelsIOTalonFX(FlywheelsConstants.RightFlywheel));
@@ -115,8 +121,8 @@ public class Robot extends TimedRobot {
         drivetrain = TunerConstants.createDrivetrain(driver);
         feeder = new Feeder(new FeederIOSim());
         indexer = new Indexer(new IndexerIOSim());
-        intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
-        intakeWrist = new IntakeWrist(new IntakeWristIOSim());
+        // intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
+        // intakeWrist = new IntakeWrist(new IntakeWristIOSim());
         flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
         hood = new Hood(new HoodIOSim());
         vision = new Vision(drivetrain::addVisionMeasurement,
@@ -129,8 +135,8 @@ public class Robot extends TimedRobot {
         drivetrain = TunerConstants.createDrivetrain(driver);
         feeder = new Feeder(new FeederIOSim());
         indexer = new Indexer(new IndexerIOSim());
-        intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
-        intakeWrist = new IntakeWrist(new IntakeWristIOSim());
+        // intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
+        // intakeWrist = new IntakeWrist(new IntakeWristIOSim());
         flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
         hood = new Hood(new HoodIOSim());
         vision = new Vision(drivetrain::addVisionMeasurement,
@@ -144,7 +150,7 @@ public class Robot extends TimedRobot {
         // climb,
         drivetrain,
         feeder, indexer,
-        intakeRollers, intakeWrist,
+        // intakeRollers, intakeWrist,
         flywheels, hood,
         vision, leds);
 
@@ -176,8 +182,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    Tracer.traceFunc("CommandScheduler", scheduler::run);
     flywheels.setRPS(SmartDashboard.getNumber("Flywheel Velocity", 0.0));
-    scheduler.run();
   }
 
   @Override

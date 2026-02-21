@@ -82,16 +82,16 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
         flywheelSupplyCurrent = flywheelMotor.getSupplyCurrent();
 
         // update frequency
-        // BaseStatusSignal.setUpdateFrequencyForAll(50, flywheelVelocityRPS, flywheelTemperature,
-        //         flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
+        BaseStatusSignal.setUpdateFrequencyForAll(50, flywheelVelocityRPS, flywheelTemperature,
+                flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
 
-        // flywheelMotor.optimizeBusUtilization();
+        flywheelMotor.optimizeBusUtilization();
     }
 
     @Override
     public void updateInputs() {
-        // BaseStatusSignal.refreshAll(flywheelVelocityRPS, flywheelTemperature,
-        //         flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
+        BaseStatusSignal.refreshAll(flywheelVelocityRPS, flywheelTemperature,
+                flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
 
         super.RPS = flywheelVelocityRPS.getValueAsDouble();
         super.statorCurrent = flywheelStatorCurrent.getValueAsDouble();
@@ -100,7 +100,6 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
         super.isFlywheelAtSetpoint = Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSTolerance;
 
         DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/RPS", super.RPS);
-        DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/TargetRPS", super.targetRPS);
         DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/isFlywheelAtSpeed", super.isFlywheelAtSetpoint);
         DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/statorCurrent", super.statorCurrent);
         DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/supplyCurrent", super.supplyCurrent);

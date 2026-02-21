@@ -26,14 +26,15 @@ public class Flywheels {
     }
 
     public void updateInputs() {
-        for (int i = 0; i < io.length; i++) {
-            io[i].updateInputs();
+        for (int i = 0; i < this.io.length; i++) {
+            this.io[i].updateInputs();
         }
         handleStateTransitions();
         applyStates();
 
         DogLog.log("Flywheels/WantedState", wantedState);
         DogLog.log("Flywheels/CurrentState", currentState);
+        DogLog.log("Flywheels/TargetRPS", this.targetRPS);
     }
 
     public void handleStateTransitions() {
@@ -71,27 +72,27 @@ public class Flywheels {
     }
 
     public void setRPS(double RPS) {
-        for (int i = 0; i < io.length; i++) {
-            io[i].setRPS(RPS);
+        for (int i = 0; i < this.io.length; i++) {
+            this.io[i].setRPS(RPS);
         }
     }
 
     public void stop() {
-        for (int i = 0; i < io.length; i++) {
-            io[i].stop();
+        for (int i = 0; i < this.io.length; i++) {
+            this.io[i].stop();
         }
     }
 
     public void setVoltage(double voltage) {
-        for (int i = 0; i < io.length; i++) {
-            io[i].setVoltage(voltage);
+        for (int i = 0; i < this.io.length; i++) {
+            this.io[i].setVoltage(voltage);
         }
     }
 
     public boolean atSetpoint() {
         boolean allFlywheelsAtSetpoint = true;
-        for (int i = 0; i < io.length; i++) {
-            allFlywheelsAtSetpoint = allFlywheelsAtSetpoint && io[i].isFlywheelAtSetpoint;
+        for (int i = 0; i < this.io.length; i++) {
+            allFlywheelsAtSetpoint = allFlywheelsAtSetpoint && this.io[i].isFlywheelAtSetpoint;
         }
         return allFlywheelsAtSetpoint;
     }

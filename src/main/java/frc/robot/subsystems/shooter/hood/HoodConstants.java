@@ -10,9 +10,9 @@ public class HoodConstants {
     public static final double hoodMOI = 0.1;
    
     //real PID
-    public static final double hoodRealkP = 45;
+    public static final double hoodRealkP = 110;
     public static final double hoodRealkI = 0;
-    public static final double hoodRealkD = 0;
+    public static final double hoodRealkD = 10;
     public static final double hoodRealkS = 0.48;
     public static final double hoodRealkV = Constants.kMotors.kKrakenX60Foc.kV * hoodGearRatio;
     public static final double hoodRealkG = 0;
@@ -26,7 +26,7 @@ public class HoodConstants {
     public static final double hoodSimkG = 0;
 
     public static final double hoodMaxVelocity = (12- hoodRealkS) / hoodRealkV;
-    public static final double hoodMaxAcceleration = 50;
+    public static final double hoodMaxAcceleration = hoodMaxVelocity * 2;
 
     //current limits 
     public static final double supplyCurrentLimit = 50;

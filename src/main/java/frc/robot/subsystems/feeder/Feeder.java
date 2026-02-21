@@ -30,8 +30,7 @@ public class Feeder {
   }
 
   public void updateInputs() {
-
-    Tracer.traceFunc("Feeder UpdateInputs", io::updateInputs);
+    Tracer.traceFunc("FeederUpdateInputs", io::updateInputs);
 
     handleFeederStateTransitions();
     applyStates();
