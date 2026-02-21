@@ -3,6 +3,7 @@ package frc.robot;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.shooter.hood.HoodIOSim;
 import frc.robot.subsystems.shooter.hood.HoodIOTalonFX;
+import frc.robot.subsystems.shooter.hood.Hood.HoodWantedState;
 import frc.robot.subsystems.vision6.Vision;
 import frc.robot.subsystems.vision6.VisionConstants;
 import frc.robot.subsystems.vision6.VisionIOReal;
@@ -13,6 +14,7 @@ import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsConstants;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOSim;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOTalonFX;
+import frc.robot.subsystems.shooter.flywheels.Flywheels.FlywheelWantedState;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.FlywheelConstants;
 
 import java.lang.reflect.Field;
@@ -177,13 +179,15 @@ public class Robot extends TimedRobot {
     RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
 
-    SmartDashboard.putNumber("Flywheel Velocity", 0.0);
+    // SmartDashboard.putNumber("Flywheel Velocity", 0.0);
+    // SmartDashboard.putNumber("Hood Rotations", 0.0);
   }
 
   @Override
   public void robotPeriodic() {
     Tracer.traceFunc("CommandScheduler", scheduler::run);
-    flywheels.setRPS(SmartDashboard.getNumber("Flywheel Velocity", 0.0));
+    // flywheels.setWantedState(FlywheelWantedState.SET_RPS, SmartDashboard.getNumber("Flywheel Velocity", 0.0));
+    // hood.setWantedState(HoodWantedState.SET_POSITION, SmartDashboard.getNumber("Hood Rotations", 0.0));
   }
 
   @Override

@@ -94,7 +94,7 @@ public class HoodIOTalonFX extends HoodIO {
         // status signals
         hoodVelocityRotsPerSec = hoodMotor.getVelocity();
         hoodTemperature = hoodMotor.getDeviceTemp();
-        hoodPosition = hoodMotor.getPosition();
+        hoodPosition = hoodCANCoder.getAbsolutePosition();
         hoodAppliedVolts = hoodMotor.getMotorVoltage();
         hoodStatorCurrent = hoodMotor.getStatorCurrent();
         hoodSupplyCurrent = hoodMotor.getSupplyCurrent();

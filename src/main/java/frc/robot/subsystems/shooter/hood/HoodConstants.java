@@ -43,5 +43,5 @@ public class HoodConstants {
 
     //cancoderstuff
     public static final double hoodMagnetOffset = 0.9968;
-    public static final double absoluteDiscontinuityPoint = 0.0;
+    public static final double absoluteDiscontinuityPoint = 0.56;
 }

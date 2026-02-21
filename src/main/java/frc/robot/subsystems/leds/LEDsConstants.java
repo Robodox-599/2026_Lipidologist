@@ -6,7 +6,7 @@ public class LEDsConstants {
     //LED information
     public static final int CANdleID = 23;
     public static final String CANbus = "rio";
-    public static final int maxLEDs = 50;
+    public static final int maxLEDs = 11;
 
     public static final double colorScaler = 1;
     public static final double frameRate = 6;

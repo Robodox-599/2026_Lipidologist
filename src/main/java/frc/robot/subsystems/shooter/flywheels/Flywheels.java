@@ -34,7 +34,6 @@ public class Flywheels {
 
         DogLog.log("Flywheels/WantedState", wantedState);
         DogLog.log("Flywheels/CurrentState", currentState);
-        DogLog.log("Flywheels/TargetRPS", this.targetRPS);
     }
 
     public void handleStateTransitions() {
@@ -57,7 +56,7 @@ public class Flywheels {
     private void applyStates() {
         switch (currentState) {
             case SETTING_RPS:
-                setRPS(targetRPS);
+                setRPS(this.targetRPS);
                 break;
             case IDLING:
                 setRPS(FlywheelsConstants.idleRPS);

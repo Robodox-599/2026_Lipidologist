@@ -221,7 +221,7 @@ public class Superstructure extends SubsystemBase {
 
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
@@ -235,7 +235,7 @@ public class Superstructure extends SubsystemBase {
 
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
@@ -249,7 +249,7 @@ public class Superstructure extends SubsystemBase {
 
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
-        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
@@ -263,7 +263,7 @@ public class Superstructure extends SubsystemBase {
 
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
-        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
@@ -277,7 +277,7 @@ public class Superstructure extends SubsystemBase {
 
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
@@ -291,7 +291,7 @@ public class Superstructure extends SubsystemBase {
 
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
-        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
@@ -302,10 +302,10 @@ public class Superstructure extends SubsystemBase {
     public void idling() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
-        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
         hood.setWantedState(Hood.HoodWantedState.SET_POSITION);
         leds.setWantedState(LEDs.LEDsWantedState.IDLE);
     }
@@ -313,7 +313,7 @@ public class Superstructure extends SubsystemBase {
     public void idlingAuto() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.CHOREO_TRAJECTORY);
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS);
@@ -335,16 +335,17 @@ public class Superstructure extends SubsystemBase {
     public void testing() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
-        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        // indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
-        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 75);
-        // hood.setWantedState(Hood.HoodWantedState.SET_POSITION);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 95);
+        hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.1);
     }
 
     private boolean areSystemsReadyForHubShot() {
         return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation()
-                && HubShiftUtil.isHubActive();
+            // && HubShiftUtil.isHubActive()
+            ;
     }
 
     private boolean areSystemsReadyForAllianceZoneShot() {

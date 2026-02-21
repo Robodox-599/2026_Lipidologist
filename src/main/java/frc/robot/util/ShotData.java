@@ -10,8 +10,8 @@ public class ShotData {
 
     static {
         hubShotMap.put(
-            0.15,
-            new Shot(0.05, 4000, 1.47));
+            5.0,
+            new Shot(0.01, 65, 1.47));
     }
 
     static {
