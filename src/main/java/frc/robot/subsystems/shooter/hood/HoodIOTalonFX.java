@@ -100,17 +100,17 @@ public class HoodIOTalonFX extends HoodIO {
         hoodSupplyCurrent = hoodMotor.getSupplyCurrent();
 
         // Update Frequency
-        BaseStatusSignal.setUpdateFrequencyForAll(50, hoodVelocityRotsPerSec, hoodTemperature,
-                hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
+        // BaseStatusSignal.setUpdateFrequencyForAll(50, hoodVelocityRotsPerSec, hoodTemperature,
+        //         hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
 
-        hoodMotor.optimizeBusUtilization();
-        hoodCANCoder.optimizeBusUtilization();
+        // hoodMotor.optimizeBusUtilization();
+        // hoodCANCoder.optimizeBusUtilization();
     }
 
     @Override
     public void updateInputs() {
-        BaseStatusSignal.refreshAll(hoodTemperature,
-                hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
+        // BaseStatusSignal.refreshAll(hoodTemperature,
+        //         hoodPosition, hoodAppliedVolts, hoodStatorCurrent, hoodSupplyCurrent);
 
         super.positionRotations = hoodPosition.getValueAsDouble();
         super.RPS = hoodVelocityRotsPerSec.getValueAsDouble();
@@ -147,6 +147,6 @@ public class HoodIOTalonFX extends HoodIO {
 
     @Override
     public void stop() {
-        hoodMotor.stopMotor();
+        hoodMotor.setVoltage(0);
     }
 }
