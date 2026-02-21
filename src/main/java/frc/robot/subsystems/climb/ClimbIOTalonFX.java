@@ -76,20 +76,20 @@ public class ClimbIOTalonFX extends ClimbIO {
     climbSupplyCurrent = climbMotor.getSupplyCurrent();
     climbTempCelsius = climbMotor.getDeviceTemp();
 
-    BaseStatusSignal.setUpdateFrequencyForAll(
-        50.0, climbVelocity, climbPosition,
-        climbStatorCurrent, climbSupplyCurrent, climbAppliedVolts,
-        climbTempCelsius);
+    // BaseStatusSignal.setUpdateFrequencyForAll(
+    //     50.0, climbVelocity, climbPosition,
+    //     climbStatorCurrent, climbSupplyCurrent, climbAppliedVolts,
+    //     climbTempCelsius);
 
-    climbMotor.optimizeBusUtilization();
+    // climbMotor.optimizeBusUtilization();
 
     zeroClimbPosition();
   }
 
   @Override
   public void updateInputs() {
-    BaseStatusSignal.refreshAll(climbVelocity, climbTempCelsius, climbPosition,
-        climbStatorCurrent, climbSupplyCurrent, climbAppliedVolts);
+    // BaseStatusSignal.refreshAll(climbVelocity, climbTempCelsius, climbPosition,
+    //     climbStatorCurrent, climbSupplyCurrent, climbAppliedVolts);
 
     super.positionInches = climbPosition.getValueAsDouble() * ClimbConstants.inchesPerRev;
     super.targetPositionInches = motionMagicRequest.Position * ClimbConstants.inchesPerRev;
@@ -126,7 +126,7 @@ public class ClimbIOTalonFX extends ClimbIO {
 
   @Override
   public void stopClimb() {
-    climbMotor.stopMotor();
+    climbMotor.setVoltage(0);
   }
 
   @Override
