@@ -86,7 +86,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
 
     @Override
     public void stop() {
-        intakeRollersMotor.stopMotor();
+        intakeRollersMotor.setVoltage(0);
     }
 
     @Override

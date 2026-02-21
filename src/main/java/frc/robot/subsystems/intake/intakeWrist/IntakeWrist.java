@@ -10,22 +10,22 @@ import frc.robot.util.Tracer;
 /** Add your docs here. */
 public class IntakeWrist {
     private final IntakeWristIO io;
-    private IntakeWristWantedState wantedState = IntakeWristWantedState.ZERO_MOTOR;
-    private IntakeWristCurrentState currentState = IntakeWristCurrentState.MOTOR_ZEROED;
+    private IntakeWristWantedState wantedState = IntakeWristWantedState.STOP;
+    private IntakeWristCurrentState currentState = IntakeWristCurrentState.STOPPED;
 
     public IntakeWrist(IntakeWristIO io){
         this.io = io;
     }
 
     public enum IntakeWristWantedState{
-        ZERO_MOTOR,
+        STOP,
         INTAKE_FUEL,
         STOW, //pack
         AGITATE_FUEL
     }
 
     public enum IntakeWristCurrentState{
-        MOTOR_ZEROED,
+        STOPPED,
         INTAKING_FUEL,
         STOWING, //packing
         WRIST_RETRACTING,
@@ -42,8 +42,8 @@ public class IntakeWrist {
 
     public void handleStateTransitions(){
         switch(wantedState){
-            case ZERO_MOTOR:
-                currentState = IntakeWristCurrentState.MOTOR_ZEROED;
+            case STOP:
+                currentState = IntakeWristCurrentState.STOPPED;
                 break;
             case INTAKE_FUEL:
                 currentState = IntakeWristCurrentState.INTAKING_FUEL;
@@ -69,14 +69,14 @@ public class IntakeWrist {
                 }
                 break;
             default:
-                currentState = IntakeWristCurrentState.MOTOR_ZEROED;
+                currentState = IntakeWristCurrentState.STOPPED;
                 break;
         }
     }
 
     public void applyStates(){
         switch(currentState){
-            case MOTOR_ZEROED:
+            case STOPPED:
                 stop();
                 break;
             case INTAKING_FUEL:

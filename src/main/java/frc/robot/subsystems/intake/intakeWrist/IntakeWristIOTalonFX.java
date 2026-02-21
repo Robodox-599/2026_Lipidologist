@@ -140,7 +140,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
      */
     @Override
     public void stop() {
-        intakeWristMotor.stopMotor();
+        intakeWristMotor.setVoltage(0);
     }
 
     @Override
