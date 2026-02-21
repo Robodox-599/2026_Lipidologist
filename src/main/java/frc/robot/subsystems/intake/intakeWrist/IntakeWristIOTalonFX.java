@@ -98,24 +98,22 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
         PhoenixUtil.tryUntilOk(10, () -> intakeWristCanCoder.getConfigurator().apply(canCoderConfig));
         PhoenixUtil.tryUntilOk(10, () -> intakeWristMotor.getConfigurator().apply(intakeWristConfig));
 
-        // intakeWristMotor.setNeutralMode(NeutralModeValue.Brake);
-
         intakeWristPosition = intakeWristCanCoder.getAbsolutePosition();
         intakeWristAppliedVolts = intakeWristMotor.getMotorVoltage();
         intakeWristStatorCurrent = intakeWristMotor.getStatorCurrent();
         intakeWristSupplyCurrent = intakeWristMotor.getSupplyCurrent();
         intakeWristTemperature = intakeWristMotor.getDeviceTemp();
 
-        BaseStatusSignal.setUpdateFrequencyForAll(50, intakeWristPosition, intakeWristAppliedVolts,
-                intakeWristStatorCurrent, intakeWristSupplyCurrent, intakeWristTemperature);
+        // BaseStatusSignal.setUpdateFrequencyForAll(50, intakeWristPosition, intakeWristAppliedVolts,
+        //         intakeWristStatorCurrent, intakeWristSupplyCurrent, intakeWristTemperature);
 
-        intakeWristMotor.optimizeBusUtilization();
-        intakeWristCanCoder.optimizeBusUtilization();
+        // intakeWristMotor.optimizeBusUtilization();
+        // intakeWristCanCoder.optimizeBusUtilization();
     }
 
     public void updateInputs() {
-        BaseStatusSignal.refreshAll(intakeWristPosition, intakeWristAppliedVolts, intakeWristStatorCurrent,
-                intakeWristSupplyCurrent, intakeWristTemperature);
+        // BaseStatusSignal.refreshAll(intakeWristPosition, intakeWristAppliedVolts, intakeWristStatorCurrent,
+        //         intakeWristSupplyCurrent, intakeWristTemperature);
 
         super.currentPosition = intakeWristPosition.getValueAsDouble();
         super.voltage = intakeWristAppliedVolts.getValueAsDouble();

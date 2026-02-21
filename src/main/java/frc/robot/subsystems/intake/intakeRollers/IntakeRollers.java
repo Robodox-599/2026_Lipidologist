@@ -5,21 +5,21 @@ import frc.robot.util.Tracer;
 
 public class IntakeRollers {
     private final IntakeRollersIO io;
-    private IntakeRollersWantedState wantedState = IntakeRollersWantedState.STOP;
-    private IntakeRollersCurrentState currentState = IntakeRollersCurrentState.STOPPED;
+    private IntakeRollersWantedState wantedState = IntakeRollersWantedState.ZERO_MOTOR;
+    private IntakeRollersCurrentState currentState = IntakeRollersCurrentState.MOTOR_ZEROED;
     
     public IntakeRollers(IntakeRollersIO io){
         this.io = io;
     }
 
     public enum IntakeRollersWantedState{
-        STOP,
+        ZERO_MOTOR,
         INTAKE_FUEL,
         REVERSE_FUEL
     }
 
     public enum IntakeRollersCurrentState{
-        STOPPED,
+        MOTOR_ZEROED,
         INTAKING_FUEL,
         REVERSING_FUEL
     }
@@ -34,8 +34,8 @@ public class IntakeRollers {
 
     private void handleStateTransitions(){
         switch(wantedState){
-            case STOP:
-                currentState = IntakeRollersCurrentState.STOPPED;
+            case ZERO_MOTOR:
+                currentState = IntakeRollersCurrentState.MOTOR_ZEROED;
                 break;
             case INTAKE_FUEL:
                 currentState = IntakeRollersCurrentState.INTAKING_FUEL;
@@ -44,14 +44,14 @@ public class IntakeRollers {
                 currentState = IntakeRollersCurrentState.REVERSING_FUEL;
                 break;
             default:
-                currentState = IntakeRollersCurrentState.STOPPED;
+                currentState = IntakeRollersCurrentState.MOTOR_ZEROED;
                 break;
         }
     } 
 
     private void applyStates(){
         switch(currentState){
-            case STOPPED:
+            case MOTOR_ZEROED:
                 stop();
                 break;
             case INTAKING_FUEL:
