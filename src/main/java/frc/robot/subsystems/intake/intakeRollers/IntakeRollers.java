@@ -1,6 +1,7 @@
 package frc.robot.subsystems.intake.intakeRollers; // make sure the folder name is all lowercase
 
 import dev.doglog.DogLog;
+import frc.robot.util.Tracer;
 
 public class IntakeRollers {
     private final IntakeRollersIO io;
@@ -24,7 +25,7 @@ public class IntakeRollers {
     }
 
     public void updateInputs(){
-        io.updateInputs();
+        Tracer.traceFunc("IntakeRollers UpdateInputs", io::updateInputs);
         handleStateTransitions();
         applyStates();
         DogLog.log("Intake/Rollers/WantedState", this.wantedState);

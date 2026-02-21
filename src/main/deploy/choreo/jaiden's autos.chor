@@ -39,6 +39,13 @@
      "val":0.075057
     }
    },
+   "intakeExtension":{
+    "dimension":"Length",
+    "var":{
+     "exp":"12 in",
+     "val":0.30479999999999996
+    }
+   },
    "startingFuelWidth":{
     "dimension":"Length",
     "var":{
@@ -52,9 +59,199 @@
      "exp":"4 m",
      "val":4.0
     }
+   },
+   "towerX":{
+    "dimension":"Length",
+    "var":{
+     "exp":"43.51 in - (3.5 in / 2)",
+     "val":1.060704
+    }
    }
   },
-  "poses":{}
+  "poses":{
+   "DEPOT_INSIDE":{
+    "x":{
+     "exp":"bumperRadius + intakeExtension",
+     "val":0.6921499999999999
+    },
+    "y":{
+     "exp":"(fieldWidth / 2) + 75.93 in",
+     "val":5.963122
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
+    }
+   },
+   "DEPOT_OUTSIDE":{
+    "x":{
+     "exp":"27 in + bumperRadius + intakeExtension",
+     "val":1.37795
+    },
+    "y":{
+     "exp":"(fieldWidth / 2) + 75.93 in",
+     "val":5.963122
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
+    }
+   },
+   "LMID_END":{
+    "x":{
+     "exp":"(fieldLength / 2) - bumperRadius - fuelRadius",
+     "val":7.808093
+    },
+    "y":{
+     "exp":"(fieldWidth / 2) + bumperRadius + fuelRadius",
+     "val":4.496907
+    },
+    "heading":{
+     "exp":"270 deg",
+     "val":4.71238898038469
+    }
+   },
+   "LMID_START":{
+    "x":{
+     "exp":"(fieldLength / 2) - bumperRadius - fuelRadius",
+     "val":7.808093
+    },
+    "y":{
+     "exp":"(fieldWidth / 2) + (startingFuelWidth / 2) + (fuelRadius / 2)",
+     "val":6.6882285
+    },
+    "heading":{
+     "exp":"270 deg",
+     "val":4.71238898038469
+    }
+   },
+   "LTOWER":{
+    "x":{
+     "exp":"towerX",
+     "val":1.060704
+    },
+    "y":{
+     "exp":"3.7457125999999996 m + 1.25 m",
+     "val":4.995712599999999
+    },
+    "heading":{
+     "exp":"0 rad",
+     "val":0.0
+    }
+   },
+   "LTROUGH_INTAKING":{
+    "x":{
+     "exp":"startingLine",
+     "val":4.0
+    },
+    "y":{
+     "exp":"fieldWidth - bumperRadius",
+     "val":7.681650000000001
+    },
+    "heading":{
+     "exp":"270 deg",
+     "val":4.71238898038469
+    }
+   },
+   "LTROUGH_SHOOTING":{
+    "x":{
+     "exp":"startingLine",
+     "val":4.0
+    },
+    "y":{
+     "exp":"fieldWidth - bumperRadius - intakeExtension",
+     "val":7.376850000000001
+    },
+    "heading":{
+     "exp":"90 deg",
+     "val":1.5707963267948966
+    }
+   },
+   "OUTPOST":{
+    "x":{
+     "exp":"bumperRadius + intakeExtension",
+     "val":0.6921499999999999
+    },
+    "y":{
+     "exp":"0.6659626 m",
+     "val":0.6659626
+    },
+    "heading":{
+     "exp":"0 deg",
+     "val":0.0
+    }
+   },
+   "RMID_END":{
+    "x":{
+     "exp":"(fieldLength / 2) - bumperRadius - fuelRadius",
+     "val":7.808093
+    },
+    "y":{
+     "exp":"(fieldWidth / 2) - bumperRadius - fuelRadius",
+     "val":3.572093
+    },
+    "heading":{
+     "exp":"90 deg",
+     "val":1.5707963267948966
+    }
+   },
+   "RMID_START":{
+    "x":{
+     "exp":"(fieldLength / 2) - bumperRadius - fuelRadius",
+     "val":7.808093
+    },
+    "y":{
+     "exp":"(fieldWidth / 2) - (startingFuelWidth / 2) - (fuelRadius / 2)",
+     "val":1.3807715000000005
+    },
+    "heading":{
+     "exp":"90 deg",
+     "val":1.5707963267948966
+    }
+   },
+   "RTOWER":{
+    "x":{
+     "exp":"towerX",
+     "val":1.060704
+    },
+    "y":{
+     "exp":"3.7457125999999996 m - 1.25 m",
+     "val":2.4957125999999996
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
+    }
+   },
+   "RTROUGH_INTAKING":{
+    "x":{
+     "exp":"startingLine",
+     "val":4.0
+    },
+    "y":{
+     "exp":"bumperRadius",
+     "val":0.38735
+    },
+    "heading":{
+     "exp":"90 deg",
+     "val":1.5707963267948966
+    }
+   },
+   "RTROUGH_SHOOTING":{
+    "x":{
+     "exp":"startingLine",
+     "val":4.0
+    },
+    "y":{
+     "exp":"bumperRadius + intakeExtension",
+     "val":0.6921499999999999
+    },
+    "heading":{
+     "exp":"270 deg",
+     "val":4.71238898038469
+    }
+   }
+  }
  },
  "config":{
   "frontLeft":{

@@ -6,19 +6,20 @@ package frc.robot.subsystems.feeder;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.Tracer;
 
 public class Feeder {
   private final FeederIO io;
   private FeederWantedState wantedState = FeederWantedState.STOPPED;
   private FeederCurrentState currentState = FeederCurrentState.STOPPED;
 
-  public enum FeederWantedState{
+  public enum FeederWantedState {
     STOPPED,
     FEED_FUEL,
     REVERSE,
   }
 
-  public enum FeederCurrentState{
+  public enum FeederCurrentState {
     STOPPED,
     FEEDING_FUEL,
     REVERSE,
@@ -29,8 +30,9 @@ public class Feeder {
   }
 
   public void updateInputs() {
-    io.updateInputs();
-    
+
+    Tracer.traceFunc("Feeder UpdateInputs", io::updateInputs);
+
     handleFeederStateTransitions();
     applyStates();
 
@@ -39,25 +41,25 @@ public class Feeder {
 
   }
 
-  public void handleFeederStateTransitions(){
+  public void handleFeederStateTransitions() {
     switch (wantedState) {
-        case FEED_FUEL:
-            currentState = FeederCurrentState.FEEDING_FUEL;
-            break;
-        case STOPPED:
-            currentState = FeederCurrentState.STOPPED;
-            break;
-        case REVERSE:
-            currentState = FeederCurrentState.REVERSE;
-            break;
-        default:
-            currentState = FeederCurrentState.STOPPED;
-            break;
+      case FEED_FUEL:
+        currentState = FeederCurrentState.FEEDING_FUEL;
+        break;
+      case STOPPED:
+        currentState = FeederCurrentState.STOPPED;
+        break;
+      case REVERSE:
+        currentState = FeederCurrentState.REVERSE;
+        break;
+      default:
+        currentState = FeederCurrentState.STOPPED;
+        break;
     }
   }
 
-  public void applyStates(){
-    switch(currentState){
+  public void applyStates() {
+    switch (currentState) {
       case FEEDING_FUEL:
         setFeederVelocity(3);
         break;
@@ -73,15 +75,15 @@ public class Feeder {
     }
   }
 
-  private void setFeederVelocity(double RPS){
+  private void setFeederVelocity(double RPS) {
     io.setFeederVelocity(RPS);
   }
 
-  public void stopFeeder(){
+  public void stopFeeder() {
     io.stopFeeder();
   }
 
-  public void setWantedState(Feeder.FeederWantedState wantedState){
+  public void setWantedState(Feeder.FeederWantedState wantedState) {
     this.wantedState = wantedState;
   }
 

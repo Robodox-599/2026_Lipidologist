@@ -164,15 +164,12 @@ public class Robot extends TimedRobot {
 
     /** AUTO ROUTINES */
     // COMPETITION
-    // autoChooser.addRoutine("Left Auto - 4 Coral", autoRoutines::leftAutoRoutine);
+    autoChooser.addRoutine("Left Auto", autoRoutines::leftAutoRoutine);
 
     SmartDashboard.putData("AutoChooser", autoChooser);
 
     RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
-
-    driver.rightTrigger().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.TESTING))
-        .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
 
     SmartDashboard.putNumber("Flywheel Velocity", 0.0);
   }

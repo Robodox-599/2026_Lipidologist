@@ -60,8 +60,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
       .withDriveRequestType(
           DriveRequestType.Velocity); // Use open-loop control for drive motors
 
-  private Translation2d target;
-  private Rotation2d targetRotation;
+  private Rotation2d targetRotation = new Rotation2d();
+  private Pose2d targetPose = new Pose2d();
 
   private final PIDController choreoXController = new PIDController(5, 0, 0);
   private final PIDController choreoYController = new PIDController(5, 0, 0);
@@ -75,20 +75,27 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
       .withDriveRequestType(DriveRequestType.Velocity)
       .withSteerRequestType(SteerRequestType.Position);
 
+  public static final double DRIVE_TO_POINT_STATIC_FRICTION_CONSTANT = 0.02;
+  private final double DRIVE_TO_POINT_MAX_VELOCITY_OUTPUT = 2.0;
+
   private CurrentState currentState = CurrentState.TELEOP_DRIVE;
   private WantedState wantedState = WantedState.TELEOP_DRIVE;
 
   public enum WantedState {
     TELEOP_DRIVE,
     ROTATION_LOCK,
+    DRIVE_TO_POINT,
     CHOREO_TRAJECTORY,
+    ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
     STOPPED,
   }
 
   public enum CurrentState {
     TELEOP_DRIVE,
     ROTATION_LOCK,
+    DRIVE_TO_POINT,
     CHOREO_TRAJECTORY,
+    ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
     STOPPED,
   }
 
@@ -261,10 +268,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     DogLog.log("RobotPose", getState().Pose);
   }
 
-  public void setWantedState(WantedState wantedState) {
-    this.wantedState = wantedState;
-  }
-
   private void handleStateTransitions() {
     switch (wantedState) {
       case TELEOP_DRIVE:
@@ -272,6 +275,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         break;
       case ROTATION_LOCK:
         currentState = CurrentState.ROTATION_LOCK;
+        break;
+      case DRIVE_TO_POINT:
+        currentState = CurrentState.DRIVE_TO_POINT;
         break;
       case CHOREO_TRAJECTORY:
         if (!DriverStation.isAutonomous()) {
@@ -281,8 +287,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
           currentState = CurrentState.CHOREO_TRAJECTORY;
         }
         break;
+      case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
+        if (!DriverStation.isAutonomous()) {
+          wantedState = WantedState.TELEOP_DRIVE;
+          currentState = CurrentState.TELEOP_DRIVE;
+        } else {
+          currentState = CurrentState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY;
+        }
+        break;
       case STOPPED:
         currentState = CurrentState.STOPPED;
+        break;
       default:
         currentState = CurrentState.TELEOP_DRIVE;
         break;
@@ -307,14 +322,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         DogLog.log("Drive/ControllerSpeeds", controllerSpeeds);
         break;
       case ROTATION_LOCK:
-        if (AllianceFlipUtil.shouldFlip()) {
-          targetRotation.rotateBy(kRedAlliancePerspectiveRotation.unaryMinus());
-        }
         setControl(
             driveAtAngle
                 .withVelocityX(controllerSpeeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
                 .withVelocityY(controllerSpeeds.vyMetersPerSecond) // Drive left with negative X (left)
                 .withTargetDirection(targetRotation));
+        break;
+      case DRIVE_TO_POINT:
         break;
       case CHOREO_TRAJECTORY:
         if (choreoSampleToBeApplied != null) {
@@ -345,6 +359,35 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
           setControl(drive.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
         }
         break;
+      case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
+        if (choreoSampleToBeApplied != null) {
+          SwerveSample sample = choreoSampleToBeApplied;
+          choreoSampleToBeApplied = null;
+
+          var pose = getState().Pose;
+
+          var targetSpeeds = sample.getChassisSpeeds();
+          DogLog.log("Drive/Choreo/RobotPose2d", pose);
+          DogLog.log("Drive/Choreo/SwerveSample", sample);
+          DogLog.log("Drive/Choreo/SwerveSample/ChoreoPosition", sample.getPose());
+          DogLog.log("Drive/Choreo/RealRobotPosition", pose);
+
+          targetSpeeds.vxMetersPerSecond += choreoXController.calculate(pose.getX(), sample.x);
+          targetSpeeds.vyMetersPerSecond += choreoYController.calculate(pose.getY(), sample.y);
+          targetSpeeds.omegaRadiansPerSecond += choreoThetaPID.calculate(pose.getRotation().getRadians(),
+              targetRotation.getRadians()); // not sure if this works as intended
+
+          DogLog.log("Drive/Choreo/RobotSetpointSpeedsAfterPID", targetSpeeds);
+
+          setControl(
+              m_pathApplyFieldSpeeds
+                  .withSpeeds(targetSpeeds)
+                  .withWheelForceFeedforwardsX(sample.moduleForcesX())
+                  .withWheelForceFeedforwardsY(sample.moduleForcesY()));
+        } else {
+          setControl(drive.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
+        }
+        break;
       case STOPPED:
         setControl(drive.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
         break;
@@ -353,13 +396,28 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
   }
 
-  public void setTargetRotation(Rotation2d targetRotation) {
-    setWantedState(WantedState.ROTATION_LOCK);
-    this.targetRotation = targetRotation;
+  public void setWantedState(WantedState wantedState) {
+    this.wantedState = wantedState;
   }
 
+  public void setWantedState(WantedState wantedState, Rotation2d targetRotation) {
+    this.wantedState = wantedState;
+    this.targetRotation = targetRotation;
+    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) {
+      this.targetRotation = targetRotation.rotateBy(Rotation2d.k180deg);
+    }
+  }
+
+  // public void setWantedState(WantedState wantedState, Pose2d targetPose) {
+  //   this.wantedState = wantedState;
+  //   this.targetRotation = targetRotation;
+  //   if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) {
+  //     this.targetRotation = targetRotation.rotateBy(Rotation2d.k180deg);
+  //   }
+  // }
+
   public boolean isAtTargetRotation() {
-    return driveAtAngle.HeadingController.getPositionError() < Units.degreesToRadians(10);
+    return driveAtAngle.HeadingController.getPositionError() < Units.degreesToRadians(5);
   }
 
   /* CHOREO TRAJECTORY */

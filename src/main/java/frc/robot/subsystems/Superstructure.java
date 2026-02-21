@@ -26,6 +26,7 @@ import frc.robot.util.CalculateShot;
 import frc.robot.util.HubShiftUtil;
 import frc.robot.util.HubShiftUtil.ShiftInfo;
 import frc.robot.util.ShotData;
+import frc.robot.util.Tracer;
 import frc.robot.util.CalculateShot.AdjustedShot;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.flywheels.Flywheels.FlywheelWantedState;
@@ -47,20 +48,32 @@ public class Superstructure extends SubsystemBase {
 
     public enum WantedSuperState {
         PREPARE_HUB_SHOT,
-        SHOOT_HUB,
+        PREPARE_HUB_SHOT_ALIGNED_TROUGH,
         PREPARE_ALLIANCE_ZONE_SHOT,
+        PREPARE_ALLIANCE_ZONE_SHOT_ALIGNED_TROUGH,
+        SHOOT_HUB,
+        SHOOT_HUB_AUTO,
         SHOOT_ALLIANCE_ZONE,
         IDLE,
+        IDLE_AUTO,
+        CLIMB,
         STOP,
         TESTING
     }
 
     public enum CurrentSuperState {
         PREPARING_HUB_SHOT,
-        SHOOTING_HUB,
+        PREPARING_HUB_SHOT_AUTO,
+        PREPARING_HUB_SHOT_ALIGNED_TROUGH,
         PREPARING_ALLIANCE_ZONE_SHOT,
+        SHOOTING_HUB,
+        SHOOTING_HUB_AUTO,
         SHOOTING_ALLIANCE_ZONE,
         IDLING,
+        IDLING_AUTO,
+        AUTO_ALIGN_CLIMB,
+        EXTEND_CLIMB,
+        RETRACT_CLIMB,
         STOPPED,
         TESTING
     }
@@ -78,8 +91,7 @@ public class Superstructure extends SubsystemBase {
             Flywheels flywheels,
             Hood hood,
             Vision vision,
-            LEDs leds
-            ) {
+            LEDs leds) {
         // this.climb = climb;
         this.drivetrain = drivetrain;
         this.feeder = feeder;
@@ -94,16 +106,18 @@ public class Superstructure extends SubsystemBase {
 
     @Override
     public void periodic() {
+        Tracer.startTrace("SuperstructurePeriodic");
+
         // climb.updateInputs();
-        drivetrain.updateInputs();
-        feeder.updateInputs();
-        indexer.updateInputs();
-        intakeRollers.updateInputs();
-        intakeWrist.updateInputs();
-        flywheels.updateInputs();
-        hood.updateInputs();
-        leds.updateInputs();
-        vision.updateInputs();
+        Tracer.traceFunc("Drivetrain Periodic", drivetrain::updateInputs);
+        Tracer.traceFunc("Feeder Periodic", feeder::updateInputs);
+        Tracer.traceFunc("Indexer Periodic", indexer::updateInputs);
+        Tracer.traceFunc("IntakeRollers Periodic", intakeRollers::updateInputs);
+        Tracer.traceFunc("IntakeWrist Periodic", intakeWrist::updateInputs);
+        Tracer.traceFunc("Flywheels Periodic", flywheels::updateInputs);
+        Tracer.traceFunc("Hood Periodic", hood::updateInputs);
+        Tracer.traceFunc("LEDs Periodic", leds::updateInputs);
+        Tracer.traceFunc("Vision Periodic", vision::updateInputs);
 
         ShiftInfo shiftInfo = HubShiftUtil.getShiftInfo();
         DogLog.log("HubShift", shiftInfo.currentShift());
@@ -111,8 +125,8 @@ public class Superstructure extends SubsystemBase {
         DogLog.log("HubShift/RemainingTime", shiftInfo.remainingTime());
         DogLog.log("HubShift/Active", shiftInfo.active());
 
-        handleStateTransitions();
-        applyStates();
+        Tracer.traceFunc("HandleStateTransitions", this::handleStateTransitions);
+        Tracer.traceFunc("ApplyStates", this::applyStates);
         // This method will be called once per scheduler run
         DogLog.log("Superstructure/WantedSuperState", wantedSuperState);
         DogLog.log("Superstructure/CurrentSuperState", currentSuperState);
@@ -131,6 +145,13 @@ public class Superstructure extends SubsystemBase {
                     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
                 }
                 break;
+            case SHOOT_HUB_AUTO:
+                if (areSystemsReadyForHubShot()) {
+                    currentSuperState = CurrentSuperState.SHOOTING_HUB_AUTO;
+                } else {
+                    currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT_AUTO;
+                }
+                break;
             case PREPARE_ALLIANCE_ZONE_SHOT:
                 currentSuperState = CurrentSuperState.PREPARING_ALLIANCE_ZONE_SHOT;
                 break;
@@ -143,6 +164,9 @@ public class Superstructure extends SubsystemBase {
                 break;
             case IDLE:
                 currentSuperState = CurrentSuperState.IDLING;
+                break;
+            case IDLE_AUTO:
+                currentSuperState = CurrentSuperState.IDLING_AUTO;
                 break;
             case STOP:
                 currentSuperState = CurrentSuperState.STOPPED;
@@ -159,8 +183,14 @@ public class Superstructure extends SubsystemBase {
             case PREPARING_HUB_SHOT:
                 preparingHubShot();
                 break;
+            case PREPARING_HUB_SHOT_AUTO:
+                preparingHubShotAuto();
+                break;
             case SHOOTING_HUB:
                 shootingHub();
+                break;
+            case SHOOTING_HUB_AUTO:
+                shootingHubAuto();
                 break;
             case PREPARING_ALLIANCE_ZONE_SHOT:
                 preparingAllianceZoneShot();
@@ -170,6 +200,9 @@ public class Superstructure extends SubsystemBase {
                 break;
             case IDLING:
                 idling();
+                break;
+            case IDLING_AUTO:
+                idlingAuto();
                 break;
             case STOPPED:
                 stop();
@@ -184,7 +217,21 @@ public class Superstructure extends SubsystemBase {
         AdjustedShot adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
                 drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
 
-        drivetrain.setTargetRotation(adjustedShot.targetRotation());
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
+        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
+        hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
+        leds.setWantedState(LEDs.LEDsWantedState.PREPARE_HUB_SHOT);
+    }
+
+    public void preparingHubShotAuto() {
+        AdjustedShot adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
+                drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
+
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
@@ -198,8 +245,21 @@ public class Superstructure extends SubsystemBase {
         AdjustedShot adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
                 drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
 
-        drivetrain.setTargetRotation(adjustedShot.targetRotation());
-        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
+        feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
+        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
+        hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
+        leds.setWantedState(LEDs.LEDsWantedState.SHOOT_HUB);
+    }
+
+    public void shootingHubAuto() {
+        AdjustedShot adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
+                drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
+
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
@@ -213,7 +273,7 @@ public class Superstructure extends SubsystemBase {
         AdjustedShot adjustedShot = CalculateShot.calculateAllianceZoneAdjustedShot(drivetrain.getPose(),
                 drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
 
-        drivetrain.setTargetRotation(adjustedShot.targetRotation());
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
@@ -227,7 +287,7 @@ public class Superstructure extends SubsystemBase {
         AdjustedShot adjustedShot = CalculateShot.calculateAllianceZoneAdjustedShot(drivetrain.getPose(),
                 drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
 
-        drivetrain.setTargetRotation(adjustedShot.targetRotation());
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
@@ -239,6 +299,17 @@ public class Superstructure extends SubsystemBase {
 
     public void idling() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
+        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS);
+        hood.setWantedState(Hood.HoodWantedState.SET_POSITION);
+        leds.setWantedState(LEDs.LEDsWantedState.IDLE);
+    }
+    
+    public void idlingAuto() {
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.CHOREO_TRAJECTORY);
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
@@ -270,7 +341,8 @@ public class Superstructure extends SubsystemBase {
     }
 
     private boolean areSystemsReadyForHubShot() {
-        return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation() && HubShiftUtil.isHubActive();
+        return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation()
+                && HubShiftUtil.isHubActive();
     }
 
     private boolean areSystemsReadyForAllianceZoneShot() {
@@ -282,7 +354,10 @@ public class Superstructure extends SubsystemBase {
     }
 
     public Command zeroPoseCommand() {
-        return this.runOnce(() -> {drivetrain.zeroGyro(); drivetrain.resetPose();});
+        return this.runOnce(() -> {
+            drivetrain.zeroGyro();
+            drivetrain.resetPose();
+        });
     }
 
     public Command setWantedSuperStateCommand(WantedSuperState wantedState) {

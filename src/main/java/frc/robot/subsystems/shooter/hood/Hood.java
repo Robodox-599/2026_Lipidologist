@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter.hood;
 
 import dev.doglog.DogLog;
+import frc.robot.util.Tracer;
 
 public class Hood {
     private final HoodIO io;
@@ -22,7 +23,7 @@ public class Hood {
     }
 
     public void updateInputs() {
-        io.updateInputs();
+        Tracer.traceFunc("Hood UpdateInputs", io::updateInputs);
         handleStateTransitions();
         applyStates();
 

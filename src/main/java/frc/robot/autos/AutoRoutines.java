@@ -5,115 +5,56 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.WantedSuperState;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.util.HubShiftUtil;
 
 public class AutoRoutines {
  private AutoFactory autoFactory;
-  private Superstructure superstructureCommands;
+  private Superstructure superstructure;
   private CommandSwerveDrivetrain drivetrain;
 
   public AutoRoutines(
       AutoFactory autoFactory,
-      Superstructure superstructureCommands,
+      Superstructure superstructure,
       CommandSwerveDrivetrain drivetrain) {
     this.autoFactory = autoFactory;
-    this.superstructureCommands = superstructureCommands;
+    this.superstructure = superstructure;
     this.drivetrain = drivetrain;
   }
 
-//   public AutoRoutine leftAutoRoutine() {
-//     AutoRoutine routine = autoFactory.newRoutine("leftAuto");
+  public AutoRoutine leftAutoRoutine() {
+    AutoRoutine routine = autoFactory.newRoutine("leftAuto");
 
-//     AutoTrajectory LEFTtoIBack = routine.trajectory("LEFTtoIBack");
-//     AutoTrajectory ItoHP = routine.trajectory("ItoHP");
-//     AutoTrajectory IBacktoHP = routine.trajectory("IBacktoHP");
-//     AutoTrajectory HPtoLBack = routine.trajectory("HPtoLBack");
-//     AutoTrajectory LtoHP = routine.trajectory("LtoHP");
-//     AutoTrajectory LBacktoHP = routine.trajectory("LBacktoHP");
-//     AutoTrajectory HPtoKBack = routine.trajectory("HPtoKBack");
-//     AutoTrajectory KtoHP = routine.trajectory("KtoHP");
-//     AutoTrajectory KBacktoHP = routine.trajectory("KBacktoHP");
-//     AutoTrajectory HPtoJBack = routine.trajectory("HPtoJBack");
+    AutoTrajectory LTROUGHtoLMID = routine.trajectory("LTROUGHtoLMID");
+    AutoTrajectory LMIDtoLTROUGH = routine.trajectory("LMIDtoLTROUGH");
+    AutoTrajectory LTROUGHtoDEPOT = routine.trajectory("LTROUGHtoDEPOT");
+    AutoTrajectory DEPOT_INTAKE = routine.trajectory("DEPOT_INTAKE");
+    AutoTrajectory DEPOTtoLTOWER = routine.trajectory("DEPOTtoLTOWER");
 
-//     routine
-//         .active()
-//         .onTrue(
-//             Commands.sequence(
-//                 LEFTtoIBack.resetOdometry(),
-//                 superstructureCommands.setWantedSuperStateCommand(
-//                     WantedSuperState.INTAKING_CORAL_STATION),
-//                 LEFTtoIBack.cmd()));
+    routine
+        .active()
+        .onTrue(
+            Commands.sequence(
+                LTROUGHtoLMID.resetOdometry(),
+                superstructure.setWantedSuperStateCommand(
+                    WantedSuperState.IDLE_AUTO),
+                LTROUGHtoLMID.cmd()));
 
-//     LEFTtoIBack.done()
-//         .onTrue(
-//             Commands.either(
-//                 superstructureCommands.setWantedSuperStateCommand(
-//                     WantedSuperState.AUTO_SCORE_L4_LEFT_AUTO),
-//                 IBacktoHP.cmd(),
-//                 () -> !superstructureCommands.isCoralBranchScored()));
+    LTROUGHtoLMID.done()
+        .onTrue(LMIDtoLTROUGH.cmd());
 
-//     LEFTtoIBack.recentlyDone()
-//         .and(() -> superstructureCommands.isCoralBranchScored())
-//         .and(IBacktoHP.inactive())
-//         .onTrue(
-//             Commands.sequence(
-//                 superstructureCommands.setWantedSuperStateCommand(
-//                     WantedSuperState.INTAKING_CORAL_STATION),
-//                 ItoHP.cmd()));
+    LMIDtoLTROUGH.done()
+        .onTrue(LTROUGHtoDEPOT.cmd().alongWith(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB_AUTO)));
 
-//     routine
-//         .anyDone(ItoHP, IBacktoHP)
-//         .onTrue(Commands.sequence(new WaitCommand(waitTimeAtHP), HPtoLBack.cmd()));
+    LTROUGHtoDEPOT.done().onTrue(DEPOT_INTAKE.cmd().alongWith(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO)));
 
-//     HPtoLBack.done()
-//         .onTrue(
-//             Commands.either(
-//                 superstructureCommands.setWantedSuperStateCommand(
-//                     WantedSuperState.AUTO_SCORE_L4_RIGHT_AUTO),
-//                 LBacktoHP.cmd(),
-//                 () -> !superstructureCommands.isCoralBranchScored()));
+    DEPOT_INTAKE.done().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB));
 
-//     HPtoLBack.recentlyDone()
-//         .and(() -> superstructureCommands.isCoralBranchScored())
-//         .and(LBacktoHP.inactive())
-//         .onTrue(
-//             Commands.sequence(
-//                 superstructureCommands.setWantedSuperStateCommand(
-//                     WantedSuperState.INTAKING_CORAL_STATION),
-//                 LtoHP.cmd()));
+    DEPOT_INTAKE.recentlyDone().and(new Trigger(() -> HubShiftUtil.getShiftInfo().remainingTime() < 5.0)).onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLIMB));
 
-//     routine
-//         .anyDone(LtoHP, LBacktoHP)
-//         .onTrue(Commands.sequence(new WaitCommand(waitTimeAtHP), HPtoKBack.cmd()));
-
-//     HPtoKBack.done()
-//         .onTrue(
-//             Commands.either(
-//                 superstructureCommands.setWantedSuperStateCommand(
-//                     WantedSuperState.AUTO_SCORE_L4_LEFT_AUTO),
-//                 KBacktoHP.cmd(),
-//                 () -> !superstructureCommands.isCoralBranchScored()));
-
-//     HPtoKBack.recentlyDone()
-//         .and(() -> superstructureCommands.isCoralBranchScored())
-//         .and(KBacktoHP.inactive())
-//         .onTrue(
-//             Commands.sequence(
-//                 superstructureCommands.setWantedSuperStateCommand(
-//                     WantedSuperState.INTAKING_CORAL_STATION),
-//                 KtoHP.cmd()));
-
-//     routine
-//         .anyDone(KtoHP, KBacktoHP)
-//         .onTrue(Commands.sequence(new WaitCommand(waitTimeAtHP), HPtoJBack.cmd()));
-
-//     HPtoJBack.recentlyDone()
-//         .onTrue(
-//             superstructureCommands.setWantedSuperStateCommand(
-//                 WantedSuperState.AUTO_SCORE_L4_RIGHT_AUTO));
-
-//     return routine;
-//   }
+    return routine;
+  }
 }

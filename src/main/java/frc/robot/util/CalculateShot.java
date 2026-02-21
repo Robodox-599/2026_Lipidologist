@@ -16,8 +16,8 @@ public class CalculateShot {
     public record AdjustedShot(Rotation2d targetRotation, double shootSpeed, double hoodAngle) {}
 
     final static int maxGoalPositionIterations = 5;
-    final static double LOOKAHEAD_TIME = 0.3;
-    final static double accelerationCompensation = 0.5;
+    final static double LOOKAHEAD_TIME = 0.0;
+    final static double accelerationCompensation = 0.0;
 
     public static AdjustedShot calculateHubAdjustedShot(Pose2d robotPose, ChassisSpeeds fieldRelativeRobotVelocity,
             ChassisAccelerations fieldRelativeRobotAcceleration) {

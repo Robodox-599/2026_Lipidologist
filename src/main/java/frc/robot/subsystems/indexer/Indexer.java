@@ -6,8 +6,9 @@ package frc.robot.subsystems.indexer;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.Tracer;
 
-public class Indexer extends SubsystemBase {
+public class Indexer {
   private final IndexerIO io;
   private IndexerWantedState wantedState = IndexerWantedState.STOPPED;
   private IndexerCurrentState currentState = IndexerCurrentState.STOPPING;
@@ -32,7 +33,7 @@ public class Indexer extends SubsystemBase {
   }
 
   public void updateInputs() {
-    io.updateInputs();
+        Tracer.traceFunc("Indexer UpdateInputs", io::updateInputs);
     
     handleStateTransitions();
     applyStates();

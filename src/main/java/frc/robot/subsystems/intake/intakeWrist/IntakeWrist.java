@@ -5,6 +5,7 @@
 package frc.robot.subsystems.intake.intakeWrist;
 
 import dev.doglog.DogLog;
+import frc.robot.util.Tracer;
 
 /** Add your docs here. */
 public class IntakeWrist {
@@ -32,7 +33,7 @@ public class IntakeWrist {
     }
 
     public void updateInputs(){
-        io.updateInputs();
+        Tracer.traceFunc("IntakeWrist UpdateInputs", io::updateInputs);
         handleStateTransitions();
         applyStates();
         DogLog.log("Intake/Wrist/WantedState", wantedState);

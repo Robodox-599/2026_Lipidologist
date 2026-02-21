@@ -27,20 +27,18 @@ public class Bindings extends SubsystemBase {
       CommandXboxController driver, Superstructure superstructure) {
     this.superstructure = superstructure;
 
-    driver.y().onTrue(superstructure.zeroPoseCommand());
+    driver.y().onTrue(superstructure.zeroGyroCommand());
 
+    // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
     driver.rightTrigger().whileTrue(new RepeatCommand(setShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
+    // PREPARE TO SHOOT TO EITHER HUB OR ALLIANCE ZONE
     driver.povRight().and(driver.rightTrigger().negate()).whileTrue(new RepeatCommand(setPrepareShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    // driver.povRight().whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
-
-    // driver.leftTrigger().whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    // driver.rightTrigger().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.TESTING))
+    //     .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
 
     new Trigger(() -> HubShiftUtil.isHubActiveSoon(3)).onTrue(rumbleDriverSwapping(driver, 0.5, 3));
-    
-    // driver.a().onTrue(rumbleDriverContinuous(driver, 3));
-    // driver.b().onTrue(rumbleDriverSwapping(driver, 0.5, 3));
   }
 
   public Command setShootingStateCommand() {
