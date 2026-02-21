@@ -3,13 +3,13 @@ package frc.robot.subsystems.shooter.flywheels;
 import dev.doglog.DogLog;
 
 public class Flywheels {
-    private final FlywheelsIO[] io;
+    private final FlywheelsIO io;
     private FlywheelWantedState wantedState = FlywheelWantedState.STOPPED;
     private FlywheelCurrentState currentState = FlywheelCurrentState.STOPPING;
 
     private double targetRPS = 0;
 
-    public Flywheels(FlywheelsIO... io) {
+    public Flywheels(FlywheelsIO io) {
         this.io = io;
     }
 
@@ -26,9 +26,7 @@ public class Flywheels {
     }
 
     public void updateInputs() {
-        for (int i = 0; i < io.length; i++) {
-            io[i].updateInputs();
-        }
+        io.updateInputs();
         handleStateTransitions();
         applyStates();
 
@@ -71,27 +69,23 @@ public class Flywheels {
     }
 
     public void setRPS(double RPS) {
-        for (int i = 0; i < io.length; i++) {
-            io[i].setRPS(RPS);
-        }
+        io.setRPS(RPS);
     }
 
     public void stop() {
-        for (int i = 0; i < io.length; i++) {
-            io[i].stop();
-        }
+        io.stop();
     }
 
     public void setVoltage(double voltage) {
-        for (int i = 0; i < io.length; i++) {
-            io[i].setVoltage(voltage);
-        }
+        io.setVoltage(voltage);
     }
 
     public boolean atSetpoint() {
         boolean allFlywheelsAtSetpoint = true;
-        for (int i = 0; i < io.length; i++) {
-            allFlywheelsAtSetpoint = allFlywheelsAtSetpoint && io[i].isFlywheelAtSetpoint;
+        if(io.isFlywheelAtSetpointRight && io.isFlywheelAtSetpointCenter && io.isFlywheelAtSetpointLeft) {
+            allFlywheelsAtSetpoint = true;
+        } else {
+            allFlywheelsAtSetpoint = false;
         }
         return allFlywheelsAtSetpoint;
     }

@@ -1,12 +1,28 @@
 package frc.robot.subsystems.shooter.flywheels;
 
 public class FlywheelsIO {
-    protected double position = 0;
-    protected double RPS = 0;
-    protected double statorCurrent = 0;
-    protected double supplyCurrent = 0;
-    protected double temperature = 0;
-    protected boolean isFlywheelAtSetpoint = false;
+    //right
+    protected double positionRight = 0;
+    protected double RPSRight = 0;
+    protected double statorCurrentRight = 0;
+    protected double supplyCurrentRight = 0;
+    protected double temperatureRight = 0;
+    protected boolean isFlywheelAtSetpointRight = false;
+    //center
+    protected double positionCenter = 0;
+    protected double RPSCenter = 0;
+    protected double statorCurrentCenter = 0;
+    protected double supplyCurrentCenter = 0;
+    protected double temperatureCenter = 0;
+    protected boolean isFlywheelAtSetpointCenter = false;
+    //left
+    protected double positionLeft = 0;
+    protected double RPSLeft = 0;
+    protected double statorCurrentLeft = 0;
+    protected double supplyCurrentLeft = 0;
+    protected double temperatureLeft = 0;
+    protected boolean isFlywheelAtSetpointLeft = false;
+
     protected double targetRPS = 0;
 
     public void updateInputs() {}
