@@ -343,9 +343,7 @@ public class Superstructure extends SubsystemBase {
     }
 
     private boolean areSystemsReadyForHubShot() {
-        return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation()
-            // && HubShiftUtil.isHubActive()
-            ;
+        return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation() && HubShiftUtil.isHubActive();
     }
 
     private boolean areSystemsReadyForAllianceZoneShot() {

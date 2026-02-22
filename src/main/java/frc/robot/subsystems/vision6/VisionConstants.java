@@ -13,8 +13,8 @@ public class VisionConstants {
     public static final double maxZError = 0.2; // 0.75 
     public static final double maxAmbiguity = 0.2; // 0.3
 
-    public static double linearStdDevBaseline = 0.02; // Meters (0.02)
-    public static double angularStdDevBaseline = 0.06; // Radians (0.06)
+    public static double linearStdDevBaseline = 5; // Meters (0.02)
+    public static double angularStdDevBaseline = 10; // Radians (0.06)
     public static final double singleTagMaxDistanceMeters = 5; 
 
     // public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);

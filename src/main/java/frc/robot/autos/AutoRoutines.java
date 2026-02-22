@@ -57,4 +57,29 @@ public class AutoRoutines {
 
     return routine;
   }
+  
+  public AutoRoutine sweepAutoRoutine() {
+    AutoRoutine routine = autoFactory.newRoutine("sweepAutoRoutine");
+
+    AutoTrajectory RTROUGHtoRMIDSWEEP = routine.trajectory("RTROUGHtoRMIDSWEEP");
+    AutoTrajectory RSWEEPtoRTROUGH = routine.trajectory("RSWEEPtoRTROUGH");
+    AutoTrajectory RTROUGHtoRHUBSWEEP = routine.trajectory("RTROUGHtoRHUBSWEEP");
+
+    routine
+        .active()
+        .onTrue(
+            Commands.sequence(
+                RTROUGHtoRMIDSWEEP.resetOdometry(),
+                superstructure.setWantedSuperStateCommand(
+                    WantedSuperState.IDLE_AUTO),
+                RTROUGHtoRMIDSWEEP.cmd()));
+
+    RTROUGHtoRMIDSWEEP.done()
+        .onTrue(RSWEEPtoRTROUGH.cmd());
+
+    RSWEEPtoRTROUGH.done()
+        .onTrue(RTROUGHtoRHUBSWEEP.cmd());
+
+    return routine;
+  }
 }

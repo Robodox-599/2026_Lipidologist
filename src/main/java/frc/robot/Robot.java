@@ -113,7 +113,7 @@ public class Robot extends TimedRobot {
             new FlywheelsIOTalonFX(FlywheelsConstants.MiddleFlywheel),
             new FlywheelsIOTalonFX(FlywheelsConstants.RightFlywheel));
         hood = new Hood(new HoodIOTalonFX());
-        vision = new Vision(drivetrain::addVisionMeasurement,
+        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
             new VisionIOReal(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
             new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()));
         leds = new LEDs(new LEDsIOReal());
@@ -127,7 +127,7 @@ public class Robot extends TimedRobot {
         // intakeWrist = new IntakeWrist(new IntakeWristIOSim());
         flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
         hood = new Hood(new HoodIOSim());
-        vision = new Vision(drivetrain::addVisionMeasurement,
+        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
             new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
             new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()));
             leds = new LEDs(new LEDsIO());
@@ -141,7 +141,7 @@ public class Robot extends TimedRobot {
         // intakeWrist = new IntakeWrist(new IntakeWristIOSim());
         flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
         hood = new Hood(new HoodIOSim());
-        vision = new Vision(drivetrain::addVisionMeasurement,
+        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
             new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
             new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()));
             leds = new LEDs(new LEDsIO());
@@ -173,6 +173,7 @@ public class Robot extends TimedRobot {
     /** AUTO ROUTINES */
     // COMPETITION
     autoChooser.addRoutine("Left Auto", autoRoutines::leftAutoRoutine);
+    autoChooser.addRoutine("Right Sweep Auto", autoRoutines::sweepAutoRoutine);
 
     SmartDashboard.putData("AutoChooser", autoChooser);
 

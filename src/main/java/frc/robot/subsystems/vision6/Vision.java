@@ -3,6 +3,7 @@ package frc.robot.subsystems.vision6;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -14,8 +15,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.FieldConstants;
@@ -23,13 +26,15 @@ import frc.robot.subsystems.vision6.VisionIO.PoseObservation;
 
 public class Vision {
   private final VisionConsumer consumer;
+  private final Supplier<ChassisSpeeds> robotSpeedsSupplier;
   private final VisionIOReal[] io;
 
   private final Alert[] disconnectedAlerts;
   private final Alert cameraDisconnectedAlert = new Alert("One or more cameras are disconnected.", AlertType.kWarning);
 
-  public Vision(VisionConsumer consumer, VisionIOReal... io) {
+  public Vision(VisionConsumer consumer, Supplier<ChassisSpeeds> robotSpeedsSupplier, VisionIOReal... io) {
     this.consumer = consumer;
+    this.robotSpeedsSupplier = robotSpeedsSupplier;
     this.io = io;
 
     // Initialize disconnected alerts
@@ -124,7 +129,6 @@ public class Vision {
   private boolean shouldRejectPoseObservation(PoseObservation observation) {
     // Should have at least one tag
     if (observation.tagCount() <= 0) {
-      DogLog.log("Vision/RejectReason", "No Tags");
       return true;
     }
 
@@ -133,19 +137,21 @@ public class Vision {
       // Single tag results have ambiguity which cause the estimator to pick the wrong
       // location
       if (observation.ambiguity() > VisionConstants.maxAmbiguity) {
-        DogLog.log("Vision/RejectReason", "Over Max Ambiguity");
         return true;
       }
       // Single tag results get worse at a distance
       if (observation.averageTagDistance() > VisionConstants.singleTagMaxDistanceMeters) {
-        DogLog.log("Vision/RejectReason", "Too Far");
         return true;
       }
     }
 
     // Result must not be above or below the floor
     if (Math.abs(observation.pose().getZ()) > VisionConstants.maxZError) {
-        DogLog.log("Vision/RejectReason", "Above Ground");
+      return true;
+    }
+
+    ChassisSpeeds speeds = this.robotSpeedsSupplier.get();
+    if (Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond) > 2.5 || speeds.omegaRadiansPerSecond > Units.rotationsToRadians(1)) {
       return true;
     }
 

@@ -40,8 +40,8 @@ public class VisionIOSim extends VisionIOReal {
 
         // Add sim camera
         var cameraProperties = new SimCameraProperties();
-        cameraProperties.setCalibration(1600, 1200, Rotation2d.fromDegrees(90));
-        cameraProperties.setCalibError(0.4, 0.10);
+        cameraProperties.setCalibration(1280, 800, Rotation2d.fromDegrees(70));
+        cameraProperties.setCalibError(0.3, 0.10);
         cameraProperties.setFPS(25);
         cameraProperties.setAvgLatencyMs(50);
         cameraProperties.setLatencyStdDevMs(15);
