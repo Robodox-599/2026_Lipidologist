@@ -20,81 +20,66 @@ import edu.wpi.first.units.measure.Voltage;
 import frc.robot.util.PhoenixUtil;
 
 public class FeederIOTalonFX extends FeederIO {
+    private final CANBus feederCanbus;
     private final TalonFX feederMotor;
-    private final CANBus feederBus;
-    private TalonFXConfiguration feederConfig;
+    private final TalonFXConfiguration feederConfig;
 
-    private final StatusSignal<AngularVelocity> feederVelocityRad;
-    private final StatusSignal<Temperature> feederTemperature;
-    private final StatusSignal<Voltage> feederAppliedVolts;
-    private final StatusSignal<Current> feederStatorCurrent;
-    private final StatusSignal<Current> feederSupplyCurrent;
+    private StatusSignal<AngularVelocity> feederVelocity;
+    private StatusSignal<Current> feederStatorCurrent;
+    private StatusSignal<Current> feederSupplyCurrent;
+    private StatusSignal<Voltage> feederVoltage;
+    private StatusSignal<Temperature> feederTemperature;
 
-    public FeederIOTalonFX() {
-        feederBus = new CANBus(FeederConstants.feederCANBus);
-        feederMotor = new TalonFX(FeederConstants.feederMotorID, feederBus);
-
+    private FeederIOTalonFX(){
+        feederCanbus = new CANBus(FeederConstants.feederCanbus);
+        feederMotor = new TalonFX(FeederConstants.feederMotorID, feederCanbus);
         feederConfig = new TalonFXConfiguration()
-                .withMotionMagic(
-                        new MotionMagicConfigs()
-                                .withMotionMagicCruiseVelocity(FeederConstants.maxVelocityRotsPerSec)
-                                .withMotionMagicAcceleration(FeederConstants.maxAccelerationRotationsPerSecSQ))
-                .withSlot0(
-                        new Slot0Configs()
-                                .withKP(FeederConstants.kP)
-                                .withKI(FeederConstants.kI)
-                                .withKD(FeederConstants.kD)
-                                .withKV(FeederConstants.kV)
-                                .withKS(FeederConstants.kS))
                 .withCurrentLimits(
                         new CurrentLimitsConfigs()
-                                .withStatorCurrentLimit(FeederConstants.statorCurrentLimitAmps)
-                                .withStatorCurrentLimitEnable(true)
-                                .withSupplyCurrentLimit(FeederConstants.supplyCurrentLimitAmps)
-                                .withSupplyCurrentLimitEnable(true))
-                .withMotorOutput(
-                        new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake)
-                                .withInverted(InvertedValue.Clockwise_Positive));
-
+                                .withStatorCurrentLimit(FeederConstants.statorCurrent)
+                                .withSupplyCurrentLimit(FeederConstants.supplyCurrent)
+                )
+                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Coast));
+        
         PhoenixUtil.tryUntilOk(10, () -> feederMotor.getConfigurator().apply(feederConfig, 1));
 
-        feederVelocityRad = feederMotor.getVelocity();
-        feederTemperature = feederMotor.getDeviceTemp();
-        feederAppliedVolts = feederMotor.getMotorVoltage();
+
+        feederVelocity = feederMotor.getVelocity();
         feederStatorCurrent = feederMotor.getStatorCurrent();
         feederSupplyCurrent = feederMotor.getSupplyCurrent();
+        feederVoltage = feederMotor.getMotorVoltage();
+        feederTemperature = feederMotor.getDeviceTemp();
 
-        BaseStatusSignal.setUpdateFrequencyForAll(50, feederVelocityRad,
-                feederTemperature, feederAppliedVolts, feederStatorCurrent, feederSupplyCurrent);
-
+        BaseStatusSignal.setUpdateFrequencyForAll(50, 
+                feederVelocity, feederStatorCurrent, feederSupplyCurrent, feederVoltage, feederTemperature);
+        
         feederMotor.optimizeBusUtilization();
     }
 
     @Override
-    public void updateInputs() {
-        BaseStatusSignal.refreshAll(feederVelocityRad, feederTemperature,
-                feederAppliedVolts, feederStatorCurrent, feederSupplyCurrent);
-
-        super.velocity = feederVelocityRad.getValueAsDouble();
-        super.supplyCurrent = feederSupplyCurrent.getValueAsDouble();
+    public void updateInputs(){
+        BaseStatusSignal.refreshAll(feederVelocity, feederStatorCurrent, feederSupplyCurrent, feederVoltage, feederTemperature);
+        super.velocity = feederVelocity.getValueAsDouble();
         super.statorCurrent = feederStatorCurrent.getValueAsDouble();
-        super.appliedVolts = feederAppliedVolts.getValueAsDouble();
-        super.tempCelsius = feederTemperature.getValueAsDouble();
+        super.supplyCurrent = feederSupplyCurrent.getValueAsDouble();
+        super.voltage = feederVoltage.getValueAsDouble();
+        super.temperature = feederTemperature.getValueAsDouble();
 
         DogLog.log("Feeder/Velocity", super.velocity);
-        DogLog.log("Feeder/SupplyCurrent", super.supplyCurrent);
         DogLog.log("Feeder/StatorCurrent", super.statorCurrent);
-        DogLog.log("Feeder/AppliedVolts", super.appliedVolts);
-        DogLog.log("Feeder/Temperature", super.tempCelsius);
+        DogLog.log("Feeder/SupplyCurrent", super.supplyCurrent);
+        DogLog.log("Feeder/Voltage", super.voltage);
+        DogLog.log("Feeder/Temperature", super.temperature);
     }
 
     @Override
-    public void stopFeeder() {
-        feederMotor.stopMotor();
+    public void setVoltage(double voltage){
+        feederMotor.setVoltage(voltage);
     }
 
     @Override
-    public void setFeederVoltage(double volts) {
-        feederMotor.setVoltage(volts);
+    public void stop(){
+        feederMotor.setVoltage(0);
     }
+    
 }

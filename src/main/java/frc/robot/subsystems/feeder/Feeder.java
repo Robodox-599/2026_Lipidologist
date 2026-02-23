@@ -9,79 +9,67 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Feeder {
   private final FeederIO io;
-  private FeederWantedState wantedState = FeederWantedState.STOPPED;
+  private FeederWantedState wantedState = FeederWantedState.STOP;
   private FeederCurrentState currentState = FeederCurrentState.STOPPED;
 
+  public Feeder(FeederIO io){
+    this.io = io;
+  }
+
   public enum FeederWantedState{
-    STOPPED,
-    FEED_FUEL,
+    STOP,
+    FEED,
     REVERSE,
   }
 
   public enum FeederCurrentState{
     STOPPED,
-    FEEDING_FUEL,
-    REVERSE,
+    FEEDING,
+    REVERSING
   }
 
-  public Feeder(FeederIO io) {
-    this.io = io;
-  }
-
-  public void updateInputs() {
+  public void updateInputs(){
     io.updateInputs();
-    
-    handleFeederStateTransitions();
+    handleStateTransitions();
     applyStates();
-
-    DogLog.log("Feeder/wantedState", wantedState);
-    DogLog.log("Feeder/currentState", currentState);
-
   }
 
-  public void handleFeederStateTransitions(){
-    switch (wantedState) {
-        case FEED_FUEL:
-            currentState = FeederCurrentState.FEEDING_FUEL;
-            break;
-        case STOPPED:
-            currentState = FeederCurrentState.STOPPED;
-            break;
-        case REVERSE:
-            currentState = FeederCurrentState.REVERSE;
-            break;
-        default:
-            currentState = FeederCurrentState.STOPPED;
-            break;
+  public void handleStateTransitions(){
+    switch(wantedState){
+      case STOP:
+        currentState = FeederCurrentState.STOPPED;
+        break;
+      case FEED:
+        currentState = FeederCurrentState.FEEDING;
+        break;
+      case REVERSE:
+        currentState = FeederCurrentState.REVERSING;
+        break;
+      default:
+        currentState = FeederCurrentState.STOPPED;
+        break;
     }
   }
 
   public void applyStates(){
     switch(currentState){
-      case FEEDING_FUEL:
-        setFeederVoltage(3);
-        break;
       case STOPPED:
-        stopFeeder();
+        stop();
         break;
-      case REVERSE:
-        setFeederVoltage(-3.0);
-      default:
-        stopFeeder();
+      case FEEDING:
+        setVoltage(0);
+        break;
+      case REVERSING:
+        setVoltage(0);
         break;
     }
   }
 
-  public void setFeederVoltage(double volts){
-    io.setFeederVoltage(volts);
+  private void stop(){
+    io.stop();
   }
 
-  public void stopFeeder(){
-    io.stopFeeder();
+  private void setVoltage(double voltage){
+    io.setVoltage(voltage);
   }
-
-  public void setWantedState(Feeder.FeederWantedState wantedState){
-    this.wantedState = wantedState;
-  }
-
 }
