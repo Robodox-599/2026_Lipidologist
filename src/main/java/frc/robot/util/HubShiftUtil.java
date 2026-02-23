@@ -119,12 +119,12 @@ public class HubShiftUtil {
   public static boolean isHubPredictedActive(double flightTime) {
     ShiftInfo shiftInfo = getShiftInfo();
     if (shiftInfo.active()) {
-      return flightTime < (shiftInfo.remainingTime() + 3.0); 
+      return flightTime < (shiftInfo.remainingTime() + 3.0); // true if hub is active and flight time is less than remaining time + 3 seconds
     } else {
-      if (shiftInfo.remainingTime() < flightTime) {
+      if (shiftInfo.remainingTime() < flightTime) { // true if hub is inactive and flight time is greater than the time until hub is active 
         return true;
       } 
-      if (shiftInfo.elapsedTime() + flightTime < 3.0) {
+      if (shiftInfo.elapsedTime() + flightTime < 3.0) { // true if hub is inactive and flight time + elapsed time is less than 3 seconds
         return true;
       }
       return false;

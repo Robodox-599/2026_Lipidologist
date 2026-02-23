@@ -318,8 +318,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withVelocityY(controllerSpeeds.vyMetersPerSecond) // Drive left with negative X (left)
                 .withRotationalRate(controllerSpeeds.omegaRadiansPerSecond)); // Drive counterclockwise with negative X
                                                                               // (left));
-
-        DogLog.log("Drive/ControllerSpeeds/vxMetersPerSecond", -controllerSpeeds.vxMetersPerSecond);
         DogLog.log("Drive/ControllerSpeeds", controllerSpeeds);
         break;
       case ROTATION_LOCK:
@@ -404,8 +402,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   public void setWantedState(WantedState wantedState, Rotation2d targetRotation) {
     this.wantedState = wantedState;
     this.targetRotation = targetRotation;
-    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) {
-      this.targetRotation = targetRotation.rotateBy(Rotation2d.k180deg);
+    if (DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Red) {
+      this.targetRotation = targetRotation.rotateBy(kRedAlliancePerspectiveRotation);
     }
   }
 
