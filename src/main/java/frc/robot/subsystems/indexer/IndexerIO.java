@@ -6,4 +6,9 @@ public abstract class IndexerIO {
     protected double supplyCurrent = 0.0;
     protected double voltage = 0.0;
     protected double temperature = 0.0;
+
+    public void updateInputs(){}
+    public void stop(){}
+    public void setVoltage(double voltage){}
+    public void pulse(boolean pulse){}
 }

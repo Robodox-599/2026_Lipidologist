@@ -37,10 +37,10 @@ public class IntakeRollersIOSim extends IntakeRollersIO {
         intakeRollersMotorSim.setInputVoltage(MathUtil.clamp(voltage, -12, 12));
     }
 
-    @Override
-    public void setVelocity(double velocity) {
-        intakeRollersMotorSim.setAngularVelocity(velocity);
-    }
+    // @Override
+    // public void setVelocity(double velocity) {
+    //     intakeRollersMotorSim.setAngularVelocity(velocity);
+    // }
 
     @Override
     public void stop(){

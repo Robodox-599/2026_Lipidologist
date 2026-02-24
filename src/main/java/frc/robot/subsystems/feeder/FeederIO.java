@@ -7,8 +7,8 @@ public abstract class FeederIO {
     protected double voltage = 0.0;
     protected double temperature = 0.0;
 
-    public abstract void setVoltage(double voltage);
 
+    public void setVelocity(double velocity){};
     public void updateInputs(){};
     public void stop(){};
 }

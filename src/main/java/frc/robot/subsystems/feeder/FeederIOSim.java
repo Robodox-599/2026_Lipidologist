@@ -9,36 +9,6 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
-public class FeederIOSim extends FeederIO {
-  private final DCMotorSim feederSimMotor;
-
-  /** Creates a new IndexerIOSim. */
-  public FeederIOSim() {
-    feederSimMotor = new DCMotorSim(LinearSystemId.createDCMotorSystem
-      (DCMotor.getKrakenX60Foc(1), FeederConstants.feederMOI, 
-        FeederConstants.feederGearRatio), DCMotor.getKrakenX60Foc(1));
-  }
-
-  @Override
-  public void updateInputs(){
-    feederSimMotor.update(0.02);
-
-    super.velocity = feederSimMotor.getAngularVelocityRPM() / 60.0; // converting minutes to seconds
-    super.appliedVolts = feederSimMotor.getInputVoltage();
-    super.tempCelsius = 25.0;
-
-    DogLog.log("Feeder/Velocity", super.velocity);
-    DogLog.log("Feeder/AppliedVolts", super.appliedVolts);
-    DogLog.log("Feeder/Temperature", super.tempCelsius);
-  }
-
-  @Override
-  public void stopFeeder(){
-    feederSimMotor.setInputVoltage(0);
-  }
-
-  @Override
-  public void setFeederVoltage(double volts){
-    feederSimMotor.setInputVoltage(volts);
-  }  
+public class FeederIOSim{
+  
 }

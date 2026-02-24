@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -30,6 +31,7 @@ public class FeederIOTalonFX extends FeederIO {
     private StatusSignal<Voltage> feederVoltage;
     private StatusSignal<Temperature> feederTemperature;
 
+    //set certain velocity of 5000 rpm
     private FeederIOTalonFX(){
         feederCanbus = new CANBus(FeederConstants.feederCanbus);
         feederMotor = new TalonFX(FeederConstants.feederMotorID, feederCanbus);
@@ -39,7 +41,7 @@ public class FeederIOTalonFX extends FeederIO {
                                 .withStatorCurrentLimit(FeederConstants.statorCurrent)
                                 .withSupplyCurrentLimit(FeederConstants.supplyCurrent)
                 )
-                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Coast));
+                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Brake));
         
         PhoenixUtil.tryUntilOk(10, () -> feederMotor.getConfigurator().apply(feederConfig, 1));
 
@@ -73,13 +75,13 @@ public class FeederIOTalonFX extends FeederIO {
     }
 
     @Override
-    public void setVoltage(double voltage){
-        feederMotor.setVoltage(voltage);
+    public void setVelocity(double velocity){
+        feederMotor.setControl(new VelocityDutyCycle(velocity));
     }
 
     @Override
     public void stop(){
-        feederMotor.setVoltage(0);
+        feederMotor.setVelocity(0);
     }
     
 }
