@@ -32,6 +32,9 @@ public class Feeder {
     io.updateInputs();
     handleStateTransitions();
     applyStates();
+    
+    DogLog.log("Feeder/WantedState", wantedState);
+    DogLog.log("Feeder/CurrentState", currentState);
   }
 
   public void handleStateTransitions(){
