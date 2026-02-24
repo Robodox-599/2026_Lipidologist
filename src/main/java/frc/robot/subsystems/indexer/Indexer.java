@@ -8,5 +8,45 @@ import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Indexer extends SubsystemBase {
+  IndexerIO io;
+  private IndexerWantedState wantedState = IndexerWantedState.STOP;
+  private IndexerCurrentState currentState = IndexerCurrentState.STOPPED;
+
+  public enum IndexerWantedState{
+    STOP,
+    INDEX,
+    REVERSE,
+    PULSE,
+
+  }
+
+  public enum IndexerCurrentState{
+    STOPPED,
+    INDEXING,
+    REVERSING,
+    PULSING
+  }
+
+  public Indexer(IndexerIO io){
+    this.io = io;
+  }
+
+  public void updateInputs(){
+    io.updateInputs();
+    handleStateTransitions();
+    applyStates();
+  }
+
+  private void handleStateTransitions(){
+    switch(wantedState){
+      case STOP:
+        
+    }
+  }
   
+  private void applyStates(){
+    switch(currentState){
+
+    }
+  }
 }

@@ -37,6 +37,8 @@ public class IndexerIOTalonFX extends IndexerIO {
     indexerConfig = new TalonFXConfiguration()
       .withCurrentLimits(
         new CurrentLimitsConfigs()
+          .withStatorCurrentLimitEnable(true)
+          .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimit(IndexerConstants.statorCurrent)
           .withSupplyCurrentLimit(IndexerConstants.supplyCurrent)
       ).withMotorOutput(
@@ -81,11 +83,5 @@ public class IndexerIOTalonFX extends IndexerIO {
   @Override
   public void setVoltage(double voltage){
     indexerMotor.setVoltage(voltage);
-  }
-
-  @Override
-  public void pulse(boolean pulse){
-    //activates and deactives motor again and again
-    
   }
 }

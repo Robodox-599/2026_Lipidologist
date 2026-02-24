@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -38,10 +39,21 @@ public class FeederIOTalonFX extends FeederIO {
         feederConfig = new TalonFXConfiguration()
                 .withCurrentLimits(
                         new CurrentLimitsConfigs()
+                                .withStatorCurrentLimitEnable(true)
+                                .withSupplyCurrentLimitEnable(true)
                                 .withStatorCurrentLimit(FeederConstants.statorCurrent)
                                 .withSupplyCurrentLimit(FeederConstants.supplyCurrent)
+
                 )
-                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Brake));
+                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Brake))
+                .withSlot0(
+                        new Slot0Configs()
+                                .withKP(FeederConstants.kP)
+                                .withKI(FeederConstants.kI)
+                                .withKD(FeederConstants.kD)
+                                .withKV(FeederConstants.kV)
+                                .withKS(FeederConstants.kS)
+                );
         
         PhoenixUtil.tryUntilOk(10, () -> feederMotor.getConfigurator().apply(feederConfig, 1));
 
@@ -76,12 +88,12 @@ public class FeederIOTalonFX extends FeederIO {
 
     @Override
     public void setVelocity(double velocity){
-        feederMotor.setControl(new VelocityDutyCycle(velocity));
+        feederMotor.setControl(new VelocityVoltage(velocity));
     }
 
     @Override
     public void stop(){
-        feederMotor.setVelocity(0);
+        feederMotor.setControl(new VelocityVoltage(0));
     }
     
 }

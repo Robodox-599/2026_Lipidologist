@@ -37,7 +37,7 @@ public class Feeder {
     DogLog.log("Feeder/CurrentState", currentState);
   }
 
-  public void handleStateTransitions(){
+  private void handleStateTransitions(){
     switch(wantedState){
       case STOP:
         currentState = FeederCurrentState.STOPPED;
@@ -54,17 +54,19 @@ public class Feeder {
     }
   }
 
-  public void applyStates(){
+  private void applyStates(){
     switch(currentState){
       case STOPPED:
         stop();
         break;
       case FEEDING:
-        setVoltage(0);
+        setVelocity(0);
         break;
       case REVERSING:
-        setVoltage(0);
+        setVelocity(0);
         break;
+      default:
+        setVelocity(0);
     }
   }
 
@@ -72,7 +74,7 @@ public class Feeder {
     io.stop();
   }
 
-  private void setVoltage(double voltage){
-    io.setVoltage(voltage);
+  private void setVelocity(double velocity){
+    io.setVelocity(velocity);
   }
 }

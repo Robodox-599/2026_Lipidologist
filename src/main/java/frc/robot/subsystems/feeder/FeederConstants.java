@@ -5,9 +5,15 @@
 package frc.robot.subsystems.feeder;
 
 public class FeederConstants {
-    public static final String feederCanbus  = "rio"; 
-    public static final int feederMotorID = 0;
+  public static final String feederCanbus  = "rio"; 
+  public static final int feederMotorID = 0;
 
-    public static final double supplyCurrent = 0.0;
-    public static final double statorCurrent = 0.0;
+  public static final double kP = 0.0;
+  public static final double kI = 0.0;
+  public static final double kD = 0.0;
+  public static final double kV = 0.0;
+  public static final double kS = 0.0;
+
+  public static final double supplyCurrent = 0.0;
+  public static final double statorCurrent = 0.0;
 }
