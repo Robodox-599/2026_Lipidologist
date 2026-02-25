@@ -44,6 +44,9 @@ public class IndexerIOTalonFX extends IndexerIO {
       ).withMotorOutput(
         new MotorOutputConfigs()
           .withInverted(InvertedValue.Clockwise_Positive)
+      ).withMotorOutput(
+        new MotorOutputConfigs()
+          .withNeutralMode(NeutralModeValue.Coast)
       );
     
     PhoenixUtil.tryUntilOk(10, () -> indexerMotor.getConfigurator().apply(indexerConfig));

@@ -8,6 +8,8 @@ public class IndexerConstants {
   public static String indexerCanbus = "rio";
   public static int indexerMotorID = 0;
 
+  public static double pulseTime = 0.0;
+
   public static double statorCurrent = 0.0;
   public static double supplyCurrent = 0.0;
 }
