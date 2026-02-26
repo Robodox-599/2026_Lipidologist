@@ -24,6 +24,8 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -41,6 +43,7 @@ import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.leds.LEDsIO;
 import frc.robot.subsystems.leds.LEDsIOReal;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist.IntakeWristWantedState;
+import frc.robot.FieldConstants.LeftTrench;
 import frc.robot.autos.AutoRoutines;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.WantedSuperState;
@@ -186,13 +189,19 @@ public class Robot extends TimedRobot {
 
     // SmartDashboard.putNumber("Flywheel Velocity", 0.0);
     // SmartDashboard.putNumber("Hood Rotations", 0.0);
+
+    DogLog.log("LeftTrenchZone", FieldConstants.LeftTrench.trenchZone);
+    DogLog.log("RightTrenchZone", FieldConstants.RightTrench.trenchZone);
+
   }
 
   @Override
   public void robotPeriodic() {
     Tracer.traceFunc("CommandScheduler", scheduler::run);
-    // flywheels.setWantedState(FlywheelWantedState.SET_RPS, SmartDashboard.getNumber("Flywheel Velocity", 0.0));
-    // hood.setWantedState(HoodWantedState.SET_POSITION, SmartDashboard.getNumber("Hood Rotations", 0.0));
+    // flywheels.setWantedState(FlywheelWantedState.SET_RPS,
+    // SmartDashboard.getNumber("Flywheel Velocity", 0.0));
+    // hood.setWantedState(HoodWantedState.SET_POSITION,
+    // SmartDashboard.getNumber("Hood Rotations", 0.0));
     // feeder.setWantedState(FeederWantedState.FEED_FUEL);
     // indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
     // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);

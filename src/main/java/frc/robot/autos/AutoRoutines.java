@@ -40,16 +40,16 @@ public class AutoRoutines {
             Commands.sequence(
                 LTROUGHtoLMID.resetOdometry(),
                 superstructure.setWantedSuperStateCommand(
-                    WantedSuperState.IDLE_AUTO),
+                    WantedSuperState.IDLE),
                 LTROUGHtoLMID.cmd()));
 
     LTROUGHtoLMID.done()
         .onTrue(LMIDtoLTROUGH.cmd());
 
     LMIDtoLTROUGH.done()
-        .onTrue(LTROUGHtoDEPOT.cmd().alongWith(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB_AUTO)));
+        .onTrue(LTROUGHtoDEPOT.cmd().alongWith(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB)));
 
-    LTROUGHtoDEPOT.done().onTrue(DEPOT_INTAKE.cmd().alongWith(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO)));
+    LTROUGHtoDEPOT.done().onTrue(DEPOT_INTAKE.cmd().alongWith(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE)));
 
     DEPOT_INTAKE.done().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB));
 
@@ -71,7 +71,7 @@ public class AutoRoutines {
             Commands.sequence(
                 RTROUGHtoRMIDSWEEP.resetOdometry(),
                 superstructure.setWantedSuperStateCommand(
-                    WantedSuperState.IDLE_AUTO),
+                    WantedSuperState.IDLE),
                 RTROUGHtoRMIDSWEEP.cmd()));
 
     RTROUGHtoRMIDSWEEP.done()

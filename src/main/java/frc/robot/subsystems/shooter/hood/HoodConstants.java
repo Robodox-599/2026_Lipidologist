@@ -8,6 +8,9 @@ public class HoodConstants {
     public static final int hoodCANCoderID = 19;
     public static final double hoodGearRatio = 51;
     public static final double hoodMOI = 0.1;
+
+    //positions
+    public static final double stowPosition = 0.0;
    
     //real PID
     public static final double hoodRealkP = 110;

@@ -31,7 +31,6 @@ public class ClimbIOTalonFX extends ClimbIO {
   private final MotionMagicVoltage motionMagicRequest;
 
   private final StatusSignal<Angle> climbPosition;
-  private final StatusSignal<AngularVelocity> climbVelocity;
   private final StatusSignal<Voltage> climbAppliedVolts;
   private final StatusSignal<Current> climbStatorCurrent;
   private final StatusSignal<Current> climbSupplyCurrent;
@@ -70,7 +69,6 @@ public class ClimbIOTalonFX extends ClimbIO {
     PhoenixUtil.tryUntilOk(10, () -> climbMotor.getConfigurator().apply(climbConfig, 1));
 
     climbPosition = climbMotor.getPosition();
-    climbVelocity = climbMotor.getVelocity();
     climbAppliedVolts = climbMotor.getMotorVoltage();
     climbStatorCurrent = climbMotor.getStatorCurrent();
     climbSupplyCurrent = climbMotor.getSupplyCurrent();
@@ -93,7 +91,6 @@ public class ClimbIOTalonFX extends ClimbIO {
 
     super.positionInches = climbPosition.getValueAsDouble() * ClimbConstants.inchesPerRev;
     super.targetPositionInches = motionMagicRequest.Position * ClimbConstants.inchesPerRev;
-    super.velocityInchesPerSec = climbVelocity.getValueAsDouble() * ClimbConstants.inchesPerRev;
     super.appliedVolts = climbAppliedVolts.getValueAsDouble();
     super.statorCurrent = climbStatorCurrent.getValueAsDouble();
     super.supplyCurrent = climbSupplyCurrent.getValueAsDouble();

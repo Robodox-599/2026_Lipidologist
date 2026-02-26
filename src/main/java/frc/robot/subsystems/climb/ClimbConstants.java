@@ -27,12 +27,11 @@ public class ClimbConstants {
   public static final double simKV = 0;
   public static final double simKG = 0.0;
 
-  public static final double supplyCurrentLimit = 40;
-  public static final double maxVelocityRotsPerSec = (12-kS)/kV;
+  public static final double maxVelocityRotsPerSec = (12 - kS) / kV;
   public static final double maxAccelerationRotationsPerSecSQ = maxVelocityRotsPerSec;
 
-  public static final double statorCurrentLimitAmps = 30;
-  public static final double supplyCurrentLimitAmps = 120;
+  public static final double statorCurrentLimitAmps = 20;
+  public static final double supplyCurrentLimitAmps = 70;
   public static final double inchesPerRev = 1.0;
   public static final double climbLowerLimit = 0.0;
   public static final double climbUpperLimit = 100.0;

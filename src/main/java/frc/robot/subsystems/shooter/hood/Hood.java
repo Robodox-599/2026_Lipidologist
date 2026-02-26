@@ -14,11 +14,13 @@ public class Hood {
 
     public enum HoodWantedState {
         SET_POSITION,
+        STOW,
         STOPPED
     }
 
     public enum HoodCurrentState {
         SETTING_POSITION,
+        STOWING,
         STOPPING
     }
 
@@ -36,6 +38,9 @@ public class Hood {
             case SET_POSITION:
                 currentState = HoodCurrentState.SETTING_POSITION;
                 break;
+            case STOW:
+                currentState = HoodCurrentState.STOWING;
+                break;
             case STOPPED:
                 currentState = HoodCurrentState.STOPPING;
                 break;
@@ -49,6 +54,9 @@ public class Hood {
         switch (currentState) {
             case SETTING_POSITION:
                 setPosition(io.targetPositionRots);
+                break;
+            case STOWING:
+                setPosition(HoodConstants.stowPosition);
                 break;
             case STOPPING:
                 stop();

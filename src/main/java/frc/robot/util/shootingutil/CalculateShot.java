@@ -33,7 +33,7 @@ public class CalculateShot {
         for (int i = 0; i < maxGoalPositionIterations; i++) {
             adjustedHubTranslation = new Translation2d(
                     hubTranslation.getX() - (fieldRelativeRobotVelocity.vxMetersPerSecond * flightTime
-                            + 0.5 * fieldRelativeRobotAcceleration.axMetersPerSecondSquared * flightTime * flightTime * accelerationCompensation), // vt + 0.5at^2 
+                            + 0.5 * fieldRelativeRobotAcceleration.axMetersPerSecondSquared * flightTime * flightTime * accelerationCompensation), // vt + 0.5at^2, acceleration compensation may not be needed
                     hubTranslation.getY() - (fieldRelativeRobotVelocity.vyMetersPerSecond * flightTime
                             + 0.5 * fieldRelativeRobotAcceleration.ayMetersPerSecondSquared * flightTime * flightTime * accelerationCompensation));
             double newDistance = robotTranslation.getDistance(adjustedHubTranslation);
