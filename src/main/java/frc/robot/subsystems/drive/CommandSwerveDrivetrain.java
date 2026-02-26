@@ -281,20 +281,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         currentState = CurrentState.DRIVE_TO_POINT;
         break;
       case CHOREO_TRAJECTORY:
-        if (!DriverStation.isAutonomous()) {
-          wantedState = WantedState.TELEOP_DRIVE;
-          currentState = CurrentState.TELEOP_DRIVE;
-        } else {
-          currentState = CurrentState.CHOREO_TRAJECTORY;
-        }
+        // if (!DriverStation.isAutonomous()) {
+        //   wantedState = WantedState.TELEOP_DRIVE;
+        //   currentState = CurrentState.TELEOP_DRIVE;
+        // } else {
+        //   currentState = CurrentState.CHOREO_TRAJECTORY;
+        // }
+        currentState = CurrentState.CHOREO_TRAJECTORY;
         break;
       case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
-        if (!DriverStation.isAutonomous()) {
-          wantedState = WantedState.TELEOP_DRIVE;
-          currentState = CurrentState.TELEOP_DRIVE;
-        } else {
-          currentState = CurrentState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY;
-        }
+        // if (!DriverStation.isAutonomous()) {
+        //   wantedState = WantedState.TELEOP_DRIVE;
+        //   currentState = CurrentState.TELEOP_DRIVE;
+        // } else {
+        //   currentState = CurrentState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY;
+        // }
+        currentState = CurrentState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY;
         break;
       case STOPPED:
         currentState = CurrentState.STOPPED;
@@ -416,7 +418,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   // }
 
   public boolean isAtTargetRotation() {
-    return driveAtAngle.HeadingController.getPositionError() < Units.degreesToRadians(5);
+    return driveAtAngle.HeadingController.getPositionError() < Units.degreesToRadians(3);
   }
 
   /* CHOREO TRAJECTORY */
