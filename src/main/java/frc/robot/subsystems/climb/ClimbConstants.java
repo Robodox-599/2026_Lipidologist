@@ -5,38 +5,15 @@
 package frc.robot.subsystems.climb;
 
 public class ClimbConstants {
-  public static final int climbMotorID = 67;
-  public static final String climbMotorCANbus = "rio";
-  
-  public static final double climbGearRatio = 2;
-  public static final double climbMOI = 0.01;
+  public static String climbCanbus = "rio";
+  public static int climbMotorID = 0;
 
-  public static final double kP = 0.45;
-  public static final double kI = 0;
-  public static final double kD = 0;
-  public static final double kS = 0.03;
-  public static final double kV = 0.124 * climbGearRatio;
-  public static final double kG = 0.0;
+  public static double kP = 0.0;
+  public static double kI = 0.0;
+  public static double kD = 0.0;
+  public static double kV = 0.0;
+  public static double kS = 0.0; 
 
-  public static final double simKP = 0.35;//0.45
-  public static final double simKI = 0;
-  public static final double simKD = 0.0;
-  public static final double simKS = 0.0;
-  public static final double simKV = 0;
-  public static final double simKG = 0.0;
-
-  public static final double supplyCurrentLimit = 40;
-  public static final double maxVelocityRotsPerSec = 100;
-  public static final double maxAccelerationRotationsPerSecSQ = maxVelocityRotsPerSec / 2;
-
-  public static final double statorCurrentLimitAmps = 0;
-  public static final double supplyCurrentLimitAmps = 0;
-  public static final double inchesPerRev = 1.0;
-  public static final double climbLowerLimit = 0.0;
-  public static final double climbUpperLimit = 100.0;
-  public static final double positionToleranceInches = 0.5;
-
-  public static double convertToTicks(double height) {
-    return height / inchesPerRev;
+  public static double statorCurrent = 0.0;
+  public static double supplyCurrent = 0.0;
   }
-}

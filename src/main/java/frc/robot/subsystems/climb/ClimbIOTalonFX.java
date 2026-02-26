@@ -24,118 +24,61 @@ import edu.wpi.first.units.measure.Voltage;
 import frc.robot.util.PhoenixUtil;
 
 public class ClimbIOTalonFX extends ClimbIO {
-  private final TalonFX climbMotor;
-  private final CANBus climbBus;
+  private TalonFX climbMotor;
+  private CANBus climbCanbus;
   private TalonFXConfiguration climbConfig;
+  private StatusSignal<Angle> climbPosition;
+  private StatusSignal<AngularVelocity> climbVelocity;
+  private StatusSignal<Current> climbStatorCurrent;
+  private StatusSignal<Current> climbSupplyCurrent;
+  private StatusSignal<Voltage> climbVoltage;
+  private StatusSignal<Temperature> climbTemperature;
 
-  private final MotionMagicVoltage motionMagicRequest;
-
-  private final StatusSignal<Angle> climbPosition;
-  private final StatusSignal<AngularVelocity> climbVelocity;
-  private final StatusSignal<Voltage> climbAppliedVolts;
-  private final StatusSignal<Current> climbStatorCurrent;
-  private final StatusSignal<Current> climbSupplyCurrent;
-  private final StatusSignal<Temperature> climbTempCelsius;
-
-  public ClimbIOTalonFX() {
-    climbBus = new CANBus(ClimbConstants.climbMotorCANbus);
-    climbMotor = new TalonFX(ClimbConstants.climbMotorID, climbBus);
-
-    motionMagicRequest = new MotionMagicVoltage(0).withSlot(0).withEnableFOC(true);
-
+  public void ClimbIOTalonFX(){
+    climbCanbus = new CANBus(ClimbConstants.climbCanbus);
+    climbMotor = new TalonFX(ClimbConstants.climbMotorID, climbCanbus);
     climbConfig = new TalonFXConfiguration()
-        .withMotionMagic(
-          new MotionMagicConfigs()
-            .withMotionMagicCruiseVelocity(ClimbConstants.maxVelocityRotsPerSec)
-            .withMotionMagicAcceleration(ClimbConstants.maxAccelerationRotationsPerSecSQ))
-        .withSlot0(
-          new Slot0Configs()
-            .withKP(ClimbConstants.kP)
-            .withKI(ClimbConstants.kI)
-            .withKD(ClimbConstants.kD)
-            .withKV(ClimbConstants.kV)
-            .withKS(ClimbConstants.kS)
-            .withKG(ClimbConstants.kG)
-            .withGravityType(GravityTypeValue.Elevator_Static))
-        .withCurrentLimits(
-          new CurrentLimitsConfigs()
-            .withStatorCurrentLimit(ClimbConstants.statorCurrentLimitAmps)
-            .withStatorCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(ClimbConstants.supplyCurrentLimitAmps)
-            .withSupplyCurrentLimitEnable(true))
-        .withMotorOutput(
-          new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake)
-            .withInverted(InvertedValue.Clockwise_Positive));
+      .withCurrentLimits(
+        new CurrentLimitsConfigs()
+          .withStatorCurrentLimitEnable(true)
+          .withSupplyCurrentLimitEnable(true)
+          .withStatorCurrentLimit(ClimbConstants.statorCurrent)
+          .withSupplyCurrentLimit(ClimbConstants.supplyCurrent)
+      )
+      .withMotorOutput(
+        new MotorOutputConfigs()
+          .withNeutralMode(NeutralModeValue.Coast)
+          .withInverted(InvertedValue.Clockwise_Positive)
+      )
+      .withSlot0(
+        new Slot0Configs()
+          .withKP(ClimbConstants.kP)
+          .withKI(ClimbConstants.kI)
+          .withKD(ClimbConstants.kD)
+          .withKV(ClimbConstants.kV)
+          .withKS(ClimbConstants.kS)
+      );
 
-    PhoenixUtil.tryUntilOk(10, () -> climbMotor.getConfigurator().apply(climbConfig, 1));
+      climbPosition = climbMotor.getPosition();
+      climbVelocity = climbMotor.getVelocity();
+      climbStatorCurrent = climbMotor.getStatorCurrent();
+      climbSupplyCurrent = climbMotor.getSupplyCurrent();
+      climbVoltage = climbMotor.getMotorVoltage();
+      climbTemperature = climbMotor.getDeviceTemp();
 
-    climbPosition = climbMotor.getPosition();
-    climbVelocity = climbMotor.getVelocity();
-    climbAppliedVolts = climbMotor.getMotorVoltage();
-    climbStatorCurrent = climbMotor.getStatorCurrent();
-    climbSupplyCurrent = climbMotor.getSupplyCurrent();
-    climbTempCelsius = climbMotor.getDeviceTemp();
+      BaseStatusSignal.setUpdateFrequencyForAll(50, climbPosition, climbVelocity,
+         climbStatorCurrent, climbSupplyCurrent, climbVoltage, climbTemperature);
 
-    BaseStatusSignal.setUpdateFrequencyForAll(
-        50.0, climbVelocity, climbPosition,
-        climbStatorCurrent, climbSupplyCurrent, climbAppliedVolts,
-        climbTempCelsius);
-
-    climbMotor.optimizeBusUtilization();
-
-    zeroClimbPosition();
+      climbMotor.optimizeBusUtilization();
   }
 
-  @Override
-  public void updateInputs() {
-    BaseStatusSignal.refreshAll(climbVelocity, climbTempCelsius, climbPosition,
-        climbStatorCurrent, climbSupplyCurrent, climbAppliedVolts);
+  public void updateInputs(){
+    BaseStatusSignal.refreshAll(climbPosition, climbVelocity, climbStatorCurrent, climbSupplyCurrent, climbVoltage, climbTemperature);
 
-    super.positionInches = climbPosition.getValueAsDouble() * ClimbConstants.inchesPerRev;
-    super.targetPositionInches = motionMagicRequest.Position * ClimbConstants.inchesPerRev;
-    super.velocityInchesPerSec = climbVelocity.getValueAsDouble() * ClimbConstants.inchesPerRev;
-    super.appliedVolts = climbAppliedVolts.getValueAsDouble();
-    super.statorCurrent = climbStatorCurrent.getValueAsDouble();
-    super.supplyCurrent = climbSupplyCurrent.getValueAsDouble();
-    super.tempCelsius = climbTempCelsius.getValueAsDouble();
-
-    DogLog.log("Climb/PositionInches", super.positionInches);
-    DogLog.log("Climb/TargetPositionInches", super.targetPositionInches);
-    DogLog.log("Climb/VelocityInchesPerSec", super.velocityInchesPerSec);
-    DogLog.log("Climb/StatorCurrent", super.statorCurrent);
-    DogLog.log("Climb/SupplyCurrent", super.supplyCurrent);
-    DogLog.log("Climb/AppliedVoltage", super.appliedVolts);
-    DogLog.log("Climb/TempCelcius", super.tempCelsius);
+    super.position = climbPosition.getValueAsDouble();
+    super.velocity = climbVelocity.getValue
+    
   }
 
-  /*
-   * This method is used to make the motor go to whatever position we set it to in
-   * the command layer, while
-   * also clamping the range of positions it can go to
-   * 
-   * @param height A double representing a quantity of inches.
-   */
-  @Override
-  public void setClimbHeight(double height) {
-    double position = MathUtil.clamp(ClimbConstants.convertToTicks(height), ClimbConstants.climbLowerLimit,
-        ClimbConstants.climbUpperLimit);
 
-    motionMagicRequest.Position = position;
-    climbMotor.setControl(motionMagicRequest);
-  }
-
-  @Override
-  public void stopClimb() {
-    climbMotor.stopMotor();
-  }
-
-  @Override
-  public void setClimbVoltage(double voltage) {
-    climbMotor.setControl(new VoltageOut(voltage));
-  }
-
-  @Override
-  public void zeroClimbPosition() {
-    climbMotor.setPosition(0);
-  }
 }
