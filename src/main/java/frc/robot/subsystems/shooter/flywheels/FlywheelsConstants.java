@@ -25,12 +25,13 @@ public class FlywheelsConstants {
         // public static final double flywheelSimkS = 0;
         // public static final double flywheelSimkV = 0;
 
+        // sim 
         public static final double flywheelMaxVelocity = 100;
         public static final double flywheelMaxAcceleration = 50;
 
         // current limits
-        public static final double supplyCurrentLimit = 50;
-        public static final double statorCurrentLimit = 50;
+        public static final double supplyCurrentLimit = 70;
+        public static final double statorCurrentLimit = 120;
 
         // velocity tolerance
         public static final double RPSTolerance = 1;
