@@ -451,7 +451,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
 
   public void resetPose() {
-    resetPose(new Pose2d(0, 0, new Rotation2d()));
+    resetPose(new Pose2d(13, 5, new Rotation2d()));
   }
 
   public Command zeroGyroCommand() {

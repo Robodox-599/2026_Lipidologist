@@ -27,7 +27,7 @@ public class Bindings extends SubsystemBase {
       CommandXboxController driver, Superstructure superstructure) {
     this.superstructure = superstructure;
 
-    driver.y().onTrue(superstructure.zeroGyroCommand());
+    driver.y().onTrue(superstructure.zeroPoseCommand());
 
     // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
     driver.rightTrigger().whileTrue(new RepeatCommand(setShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));

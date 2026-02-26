@@ -97,6 +97,12 @@ public class FeederIOTalonFX extends FeederIO {
 
     @Override
     public void setFeederVelocity(double RPS) {
+        super.targetRPS = RPS;
         feederMotor.setControl(new VelocityVoltage(RPS));
+    }
+
+    @Override
+    public void setVoltage(double voltage) {
+        feederMotor.setVoltage(voltage);
     }
 }

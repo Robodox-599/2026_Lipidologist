@@ -52,21 +52,22 @@ public class IntakeWrist {
                 currentState = IntakeWristCurrentState.STOWING;
                 break;
             case AGITATE_FUEL:
-                if (currentState == IntakeWristCurrentState.WRIST_RETRACTING){
-                    if (atSetpoint()){
-                        currentState = IntakeWristCurrentState.WRIST_EXTENDING;
-                    } else{
-                        currentState = IntakeWristCurrentState.WRIST_RETRACTING;
-                    }
-                } else if(currentState == IntakeWristCurrentState.WRIST_EXTENDING){
-                    if (atSetpoint()){
-                        currentState = IntakeWristCurrentState.WRIST_RETRACTING;
-                    } else{
-                        currentState = IntakeWristCurrentState.WRIST_EXTENDING;
-                    } 
-                } else {
-                    currentState = IntakeWristCurrentState.WRIST_EXTENDING;
-                }
+                // if (currentState == IntakeWristCurrentState.WRIST_RETRACTING){
+                //     if (atSetpoint()){
+                //         currentState = IntakeWristCurrentState.WRIST_EXTENDING;
+                //     } else{
+                //         currentState = IntakeWristCurrentState.WRIST_RETRACTING;
+                //     }
+                // } else if(currentState == IntakeWristCurrentState.WRIST_EXTENDING){
+                //     if (atSetpoint()){
+                //         currentState = IntakeWristCurrentState.WRIST_RETRACTING;
+                //     } else{
+                //         currentState = IntakeWristCurrentState.WRIST_EXTENDING;
+                //     } 
+                // } else {
+                //     currentState = IntakeWristCurrentState.WRIST_EXTENDING;
+                // }
+                currentState = IntakeWristCurrentState.WRIST_RETRACTING;
                 break;
             default:
                 currentState = IntakeWristCurrentState.STOPPED;

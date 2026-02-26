@@ -13,4 +13,6 @@ public abstract class FeederIO {
     public void setFeederVelocity(double RPS) {}
 
     public void stopFeeder() {}
+
+    public void setVoltage(double voltage) {}
 }

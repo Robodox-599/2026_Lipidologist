@@ -36,20 +36,20 @@ public class FlywheelsConstants {
         public static final double RPSTolerance = 1;
 
         // setpoints
-        public static final double idleRPS = 60;
+        public static final double idleRPS = 45;
 
         public record FlywheelConstants(String name, int motorID, String CANBus, double kP, double kI, double kD,
                         double kS,
                         double kV, InvertedValue invert) {
         }
 
-        public static final FlywheelConstants LeftFlywheel = new FlywheelConstants("LeftFlywheel", 20, "rio", 0.65, 0, 0,
+        public static final FlywheelConstants LeftFlywheel = new FlywheelConstants("LeftFlywheel", 20, "rio", 0.5, 0, 0,
                         .26, 0.119,
                         InvertedValue.Clockwise_Positive);
         public static final FlywheelConstants MiddleFlywheel = new FlywheelConstants("MiddleFlywheel", 21, "rio", 0.5, 0,
                         0, 0.27,
                         0.12, InvertedValue.CounterClockwise_Positive);
-        public static final FlywheelConstants RightFlywheel = new FlywheelConstants("RightFlywheel", 22, "rio", 0.6, 0, 0,
+        public static final FlywheelConstants RightFlywheel = new FlywheelConstants("RightFlywheel", 22, "rio", 0.5, 0, 0,
                         0.45,
                         0.119, InvertedValue.CounterClockwise_Positive);
 
