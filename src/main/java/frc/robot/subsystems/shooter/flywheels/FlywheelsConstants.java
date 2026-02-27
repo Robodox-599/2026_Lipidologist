@@ -44,15 +44,15 @@ public class FlywheelsConstants {
                         double kV, InvertedValue invert) {
         }
 
-        public static final FlywheelConstants LeftFlywheel = new FlywheelConstants("LeftFlywheel", 20, "rio", 0.5, 0, 0,
+        public static final FlywheelConstants LeftFlywheel = new FlywheelConstants("LeftFlywheel", 20, "rio", 0.45, 0, 0,
                         .26, 0.119,
                         InvertedValue.Clockwise_Positive);
-        public static final FlywheelConstants MiddleFlywheel = new FlywheelConstants("MiddleFlywheel", 21, "rio", 0.5, 0,
+        public static final FlywheelConstants MiddleFlywheel = new FlywheelConstants("MiddleFlywheel", 21, "rio", 0.45, 0,
                         0, 0.27,
-                        0.12, InvertedValue.CounterClockwise_Positive);
-        public static final FlywheelConstants RightFlywheel = new FlywheelConstants("RightFlywheel", 22, "rio", 0.5, 0, 0,
-                        0.45,
                         0.119, InvertedValue.CounterClockwise_Positive);
+        public static final FlywheelConstants RightFlywheel = new FlywheelConstants("RightFlywheel", 22, "rio", 0.45, 0, 0,
+                        0.29,
+                        0.12, InvertedValue.CounterClockwise_Positive);
 
         public static final FlywheelConstants LeftFlywheelSim = new FlywheelConstants("LeftFlywheel", 20, "rio", 1.25,
                         0, 0, 0, 0,

@@ -74,10 +74,11 @@ public class Superstructure extends SubsystemBase {
         RETRACT_CLIMB,
         STOPPED,
         TESTING
+
     }
 
-    private WantedSuperState wantedSuperState = WantedSuperState.IDLE;
-    private CurrentSuperState currentSuperState = CurrentSuperState.IDLING;
+    private WantedSuperState wantedSuperState = WantedSuperState.STOP;
+    private CurrentSuperState currentSuperState = CurrentSuperState.STOPPED;
     private AdjustedShot adjustedShot = new AdjustedShot(new Rotation2d(), 0, 0, 0);
 
     public Superstructure(
@@ -145,10 +146,15 @@ public class Superstructure extends SubsystemBase {
                 this.adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
                 // if (areSystemsReadyForHubShot(this.adjustedShot.flightTime())) {
-                    currentSuperState = CurrentSuperState.SHOOTING_HUB;
+                //     currentSuperState = CurrentSuperState.SHOOTING_HUB;
                 // } else {
                 //     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
                 // }
+                if (areSystemsReadyForAllianceZoneShot()) {
+                    currentSuperState = CurrentSuperState.SHOOTING_HUB;
+                } else {
+                    currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
+                }
                 break;
             case PREPARE_ALLIANCE_ZONE_SHOT:
                 this.adjustedShot = CalculateShot.calculateAllianceZoneAdjustedShot(drivetrain.getPose(),

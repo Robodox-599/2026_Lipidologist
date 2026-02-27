@@ -190,6 +190,9 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Flywheel Velocity", 0.0);
     // SmartDashboard.putNumber("Hood Rotations", 0.0);
 
+    SmartDashboard.putNumber("VisionLinearStdDev", 0.05);
+    SmartDashboard.putNumber("VisionAngularStdDev", 0.01);
+
     DogLog.log("LeftTrenchZone", FieldConstants.LeftTrench.trenchZone);
     DogLog.log("RightTrenchZone", FieldConstants.RightTrench.trenchZone);
 
@@ -198,6 +201,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Tracer.traceFunc("CommandScheduler", scheduler::run);
+    VisionConstants.linearStdDevBaseline = SmartDashboard.getNumber("VisionLinearStdDev", 0.0);
+    VisionConstants.angularStdDevBaseline = SmartDashboard.getNumber("VisionAngularStdDev", 0.0);
     // flywheels.setWantedState(FlywheelWantedState.SET_RPS,
     // SmartDashboard.getNumber("Flywheel Velocity", 0.0));
     // hood.setWantedState(HoodWantedState.SET_POSITION,

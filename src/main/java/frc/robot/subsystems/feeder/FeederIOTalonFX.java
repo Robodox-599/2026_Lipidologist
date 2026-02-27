@@ -31,8 +31,6 @@ public class FeederIOTalonFX extends FeederIO {
     private final StatusSignal<Current> feederStatorCurrent;
     private final StatusSignal<Current> feederSupplyCurrent;
 
-    
-
     public FeederIOTalonFX() {
         feederBus = new CANBus(FeederConstants.feederCANBus);
         feederMotor = new TalonFX(FeederConstants.feederMotorID, feederBus);
