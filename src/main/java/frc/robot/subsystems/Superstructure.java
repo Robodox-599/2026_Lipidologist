@@ -45,7 +45,6 @@ public class Superstructure extends SubsystemBase {
     final Hood hood;
     final LEDs leds;
     final Vision vision;
-    private final ShotData shotCalculator = new ShotData();
 
     public boolean firstDeploy = false;
 
