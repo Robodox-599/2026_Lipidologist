@@ -150,10 +150,10 @@ public class Vision {
       return true;
     }
 
-    ChassisSpeeds speeds = this.robotSpeedsSupplier.get();
-    if (Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond) > 2.5 || speeds.omegaRadiansPerSecond > Units.rotationsToRadians(1)) {
-      return true;
-    }
+    // ChassisSpeeds speeds = this.robotSpeedsSupplier.get();
+    // if (Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond) > 2.5 || speeds.omegaRadiansPerSecond > Units.rotationsToRadians(1)) {
+    //   return true;
+    // }
 
     // Result must be within field
     return observation.pose().getX() < 0.0

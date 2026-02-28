@@ -10,11 +10,11 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 
 public class VisionConstants {
-    public static final double maxZError = 0.2; // 0.75 
+    public static final double maxZError = 0.75; // 0.75 
     public static final double maxAmbiguity = 0.2; // 0.3
 
-    public static double linearStdDevBaseline = 0.1; // Meters 
-    public static double angularStdDevBaseline = 0.25; // Radians 
+    public static double linearStdDevBaseline = 0.4; // Meters (0.4)
+    public static double angularStdDevBaseline = 0.4; // Radians (0.4)
     public static final double singleTagMaxDistanceMeters = 5; 
 
     // public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);

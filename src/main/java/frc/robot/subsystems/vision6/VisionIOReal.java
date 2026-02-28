@@ -69,7 +69,7 @@ public class VisionIOReal extends VisionIO {
           new PoseObservation(
             visionEst.timestampSeconds, // Timestamp
             visionEst.estimatedPose, // 3D pose estimate
-            visionEst.targetsUsed.get(0).getPoseAmbiguity(), // Ambiguity 
+            result.getBestTarget().getPoseAmbiguity(), // Ambiguity 
             visionEst.targetsUsed.size(), // Number of tags
             totalTagDistance / visionEst.targetsUsed.size())); // Average tag distance
       }
