@@ -330,7 +330,7 @@ public class Superstructure extends SubsystemBase {
     public Command zeroPoseCommand() {
         return this.runOnce(() -> {
             drivetrain.zeroGyro();
-            drivetrain.resetPose();
+            drivetrain.resetPose(new Pose2d(0, 0, new Rotation2d(0)));
         });
     }
 
