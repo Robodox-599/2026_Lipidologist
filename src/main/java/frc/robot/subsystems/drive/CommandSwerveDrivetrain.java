@@ -3,6 +3,8 @@ package frc.robot.subsystems.drive;
 import static edu.wpi.first.units.Units.*;
 
 import choreo.trajectory.SwerveSample;
+import choreo.trajectory.Trajectory;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
@@ -27,6 +29,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -39,6 +42,7 @@ import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.ChassisAccelerations;
 import frc.robot.util.Tracer;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -47,26 +51,30 @@ import java.util.function.Supplier;
  * be used in command-based projects.
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
+  private final double CHOREO_MAX_ERROR_MARGIN = 0.04;
+  public static final double DRIVE_TO_POINT_STATIC_FRICTION_CONSTANT = 0.02;
+  private final double DRIVE_TO_POINT_MAX_VELOCITY_OUTPUT = 2.0;
 
+  CommandXboxController driver;
+
+  private final PIDController choreoXController = new PIDController(5, 0, 0);
+  private final PIDController choreoYController = new PIDController(5, 0, 0);
+  private final PIDController choreoThetaPID = new PIDController(5, 0, 0);
+  
   private ChassisSpeeds prevFieldRelVelocities = new ChassisSpeeds();
 
-  private final Telemetry telemetry = new Telemetry(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond));
-  CommandXboxController driver;
-  private double MaxAngularRate = RotationsPerSecond.of(0.75)
-      .in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+  private Rotation2d targetRotation = new Rotation2d();
+  private Pose2d targetPose = new Pose2d();
+
+  private Trajectory<SwerveSample> desiredChoreoTrajectory;
+  private Optional<SwerveSample> choreoSampleToBeApplied;
+  private final Timer choreoTimer = new Timer();
+
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(0)
       .withRotationalDeadband(0) // Add a 10% deadband
       .withDriveRequestType(
           DriveRequestType.Velocity); // Use open-loop control for drive motors
-
-  private Rotation2d targetRotation = new Rotation2d();
-  private Pose2d targetPose = new Pose2d();
-
-  private final PIDController choreoXController = new PIDController(5, 0, 0);
-  private final PIDController choreoYController = new PIDController(5, 0, 0);
-  private final PIDController choreoThetaPID = new PIDController(5, 0, 0);
-  private SwerveSample choreoSampleToBeApplied;
 
   private final SwerveRequest.FieldCentricFacingAngle driveAtAngle = new SwerveRequest.FieldCentricFacingAngle()
       .withDriveRequestType(SwerveModule.DriveRequestType.Velocity);
@@ -74,9 +82,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   private final SwerveRequest.ApplyFieldSpeeds m_pathApplyFieldSpeeds = new SwerveRequest.ApplyFieldSpeeds()
       .withDriveRequestType(DriveRequestType.Velocity)
       .withSteerRequestType(SteerRequestType.Position);
-
-  public static final double DRIVE_TO_POINT_STATIC_FRICTION_CONSTANT = 0.02;
-  private final double DRIVE_TO_POINT_MAX_VELOCITY_OUTPUT = 2.0;
 
   private CurrentState currentState = CurrentState.TELEOP_DRIVE;
   private WantedState wantedState = WantedState.TELEOP_DRIVE;
@@ -99,9 +104,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     STOPPED,
   }
 
-  private static final double kSimLoopPeriod = 0.005; // 5 ms
-  private Notifier m_simNotifier = null;
-  private double m_lastSimTime;
+  private final Telemetry telemetry = new Telemetry(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond));
+  private double MaxAngularRate = RotationsPerSecond.of(0.75)
+      .in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
   /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
   private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -110,6 +115,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   /* Keep track if we've ever applied the operator perspective before or not */
   private boolean m_hasAppliedOperatorPerspective = false;
 
+  private static final double kSimLoopPeriod = 0.005; // 5 ms
+  private Notifier m_simNotifier = null;
+  private double m_lastSimTime;
   /* Swerve requests to apply during SysId characterization */
   private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
   private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
@@ -332,9 +340,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
       case DRIVE_TO_POINT:
         break;
       case CHOREO_TRAJECTORY:
-        if (choreoSampleToBeApplied != null) {
-          SwerveSample sample = choreoSampleToBeApplied;
-          choreoSampleToBeApplied = null;
+        choreoSampleToBeApplied = desiredChoreoTrajectory.sampleAt(choreoTimer.get(), false);
+        if (choreoSampleToBeApplied.isPresent()) {
+          SwerveSample sample = choreoSampleToBeApplied.get();
 
           var pose = getState().Pose;
 
@@ -356,14 +364,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                   .withSpeeds(targetSpeeds)
                   .withWheelForceFeedforwardsX(sample.moduleForcesX())
                   .withWheelForceFeedforwardsY(sample.moduleForcesY()));
-        } else {
-          setControl(drive.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
         }
         break;
       case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
-        if (choreoSampleToBeApplied != null) {
-          SwerveSample sample = choreoSampleToBeApplied;
-          choreoSampleToBeApplied = null;
+        choreoSampleToBeApplied = desiredChoreoTrajectory.sampleAt(choreoTimer.get(), false);
+        if (choreoSampleToBeApplied.isPresent()) {
+          SwerveSample sample = choreoSampleToBeApplied.get();
 
           var pose = getState().Pose;
 
@@ -385,8 +391,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                   .withSpeeds(targetSpeeds)
                   .withWheelForceFeedforwardsX(sample.moduleForcesX())
                   .withWheelForceFeedforwardsY(sample.moduleForcesY()));
-        } else {
-          setControl(drive.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
         }
         break;
       case STOPPED:
@@ -410,11 +414,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
 
   // public void setWantedState(WantedState wantedState, Pose2d targetPose) {
-  //   this.wantedState = wantedState;
-  //   this.targetRotation = targetRotation;
-  //   if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) {
-  //     this.targetRotation = targetRotation.rotateBy(Rotation2d.k180deg);
-  //   }
+  // this.wantedState = wantedState;
+  // this.targetRotation = targetRotation;
+  // if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) {
+  // this.targetRotation = targetRotation.rotateBy(Rotation2d.k180deg);
+  // }
   // }
 
   public boolean isAtTargetRotation() {
@@ -422,9 +426,24 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
 
   /* CHOREO TRAJECTORY */
-  public void setDesiredChoreoTrajectory(SwerveSample sample) {
-    this.choreoSampleToBeApplied = sample;
+  public void setDesiredChoreoTrajectory(Trajectory<SwerveSample> trajectory, boolean start) {
+    if (start) {
+      resetPose(trajectory.getInitialSample(AllianceFlipUtil.shouldFlip()).get().getPose());
+    }
+    this.desiredChoreoTrajectory = trajectory;
     this.wantedState = WantedState.CHOREO_TRAJECTORY;
+    choreoTimer.reset();
+  }
+
+  public boolean isAtEndOfChoreoTrajectory() {
+    if (desiredChoreoTrajectory != null) {
+      return MathUtil.isNear(desiredChoreoTrajectory.getFinalPose(false).get().getX(), getPose().getX(),
+          CHOREO_MAX_ERROR_MARGIN)
+          && MathUtil.isNear(desiredChoreoTrajectory.getFinalPose(false).get().getX(), getPose().getY(),
+              CHOREO_MAX_ERROR_MARGIN);
+    } else {
+      return false;
+    }
   }
 
   /* DATA */
@@ -450,10 +469,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   /* GYRO */
   public void zeroGyro() {
     resetRotation(new Rotation2d(0.0));
-  }
-
-  public void resetPose() {
-    resetPose(new Pose2d(13, 5, new Rotation2d()));
   }
 
   public Command zeroGyroCommand() {
