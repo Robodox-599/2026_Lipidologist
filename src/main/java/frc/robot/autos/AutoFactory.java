@@ -1,9 +1,9 @@
 package frc.robot.autos;
 
+import java.util.List;
 import java.util.Optional;
 
 import choreo.Choreo;
-import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
@@ -21,11 +21,13 @@ import frc.robot.subsystems.Superstructure.WantedSuperState;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.util.HubShiftUtil;
 
-public class AutoCommands {
+public class AutoFactory {
 
-    private static final Alert missingTrajectoryAlert = new Alert("One or more trajectories are missing!", AlertType.kWarning);
+    private static final Alert missingTrajectoryAlert = new Alert("One or more trajectories are missing!",
+            AlertType.kWarning);
 
-    public static Command followTrajectory(String name, boolean start, CommandSwerveDrivetrain drivetrain) {
+    public static Command followTrajectory(String name, boolean start, CommandSwerveDrivetrain drivetrain,
+            Superstructure superstructure) {
         Optional<Trajectory<SwerveSample>> optionalTrajectory = Choreo.loadTrajectory(name);
         if (optionalTrajectory.isPresent()) {
             Trajectory<SwerveSample> trajectory = optionalTrajectory.get();
@@ -40,13 +42,13 @@ public class AutoCommands {
             Superstructure superstructure) {
         return Commands
                 .parallel(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                        followTrajectory(name, start, drivetrain))
+                        followTrajectory(name, start, drivetrain, superstructure))
                 .andThen(new WaitUntilCommand(drivetrain::isAtEndOfChoreoTrajectory));
     }
 
     public static Command followTrajectoryThenScore(String name, boolean start, double maxTime,
             CommandSwerveDrivetrain drivetrain, Superstructure superstructure) {
-        return followTrajectory(name, start, drivetrain)
+        return followTrajectory(name, start, drivetrain, superstructure)
                 .andThen(new WaitUntilCommand(drivetrain::isAtEndOfChoreoTrajectory))
                 .andThen(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB))
                 .andThen(new WaitUntilCommand(maxTime));

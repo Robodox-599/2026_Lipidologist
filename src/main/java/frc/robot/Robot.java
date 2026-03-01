@@ -31,6 +31,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -45,7 +46,6 @@ import frc.robot.subsystems.leds.LEDsIO;
 import frc.robot.subsystems.leds.LEDsIOReal;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist.IntakeWristWantedState;
 import frc.robot.FieldConstants.LeftTrench;
-import frc.robot.autos.AutoCommands;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.WantedSuperState;
 import frc.robot.subsystems.climb.Climb;
@@ -71,6 +71,7 @@ import frc.robot.subsystems.intake.intakeWrist.IntakeWristIOTalonFX;
 
 public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
+  private Command autonomousCommand;
 
   final CommandXboxController driver = new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
   // final CommandXboxController operator = new CommandXboxController(
@@ -200,6 +201,16 @@ public class Robot extends TimedRobot {
   private void configureAutos(CommandSwerveDrivetrain drivetrain, Superstructure superstructure) {
     AutoBuilder autoBuilder = new AutoBuilder(drivetrain, superstructure);
 
+
+
+  }
+
+  public Superstructure getSuperstructure() {
+    return superstructure;
+  }
+
+  public CommandSwerveDrivetrain getDrivetrain() {
+    return drivetrain;
   }
 
   @Override
@@ -237,6 +248,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    // autonomousCommand = AutoBuilder.leftFarMidDepotAuto();
+
+    if (autonomousCommand != null) {
+      CommandScheduler.getInstance().schedule(autonomousCommand);
+    }
   }
 
   @Override
