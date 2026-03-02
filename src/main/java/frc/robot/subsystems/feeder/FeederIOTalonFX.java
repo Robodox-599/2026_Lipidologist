@@ -4,11 +4,9 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -25,6 +23,8 @@ public class FeederIOTalonFX extends FeederIO {
     private final CANBus feederCanbus;
     private final TalonFX feederMotor;
     private final TalonFXConfiguration feederConfig;
+
+    private final VelocityVoltage m_request;
 
     private StatusSignal<AngularVelocity> feederVelocity;
     private StatusSignal<Current> feederStatorCurrent;
@@ -54,6 +54,7 @@ public class FeederIOTalonFX extends FeederIO {
                                 .withKV(FeederConstants.kV)
                                 .withKS(FeederConstants.kS)
                 );
+        m_request = new VelocityVoltage(0);
         
         PhoenixUtil.tryUntilOk(10, () -> feederMotor.getConfigurator().apply(feederConfig, 1));
 
@@ -88,12 +89,12 @@ public class FeederIOTalonFX extends FeederIO {
 
     @Override
     public void setVelocity(double velocity){
-        feederMotor.setControl(new VelocityVoltage(velocity));
+        feederMotor.setControl(m_request.withVelocity(velocity));
     }
 
     @Override
     public void stop(){
-        feederMotor.setControl(new VelocityVoltage(0));
+        feederMotor.setControl(m_request.withVelocity(0));
     }
     
 }

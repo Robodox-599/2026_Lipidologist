@@ -8,7 +8,11 @@ public abstract class ClimbIO {
   protected double voltage = 0.0;
   protected double temperature = 0.0;
 
+  protected double targetPosition = 0.0;
+  protected boolean atSetpoint = false;
 
+  public void setPosition(double position){}
+  public void stop(){}
 
 
 }

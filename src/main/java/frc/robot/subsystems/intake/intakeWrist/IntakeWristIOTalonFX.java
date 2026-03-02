@@ -57,9 +57,9 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
                 .withCurrentLimits(
                         new CurrentLimitsConfigs()
                                 .withStatorCurrentLimit(IntakeWristConstants.supplyCurrentLimit)
-                                .withSupplyCurrentLimitEnable(true)
-                                .withStatorCurrentLimit(IntakeWristConstants.statorCurrentLimit)
-                                .withStatorCurrentLimitEnable(true))
+                                .withStatorCurrentLimitEnable(true)
+                                .withSupplyCurrentLimit(IntakeWristConstants.statorCurrentLimit)
+                                .withSupplyCurrentLimitEnable(true))
                 .withSlot0(
                         new Slot0Configs()
                                 .withKP(IntakeWristConstants.kP)

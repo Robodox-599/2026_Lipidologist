@@ -16,7 +16,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import dev.doglog.DogLog;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
@@ -28,6 +27,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
     private final TalonFX intakeRollersMotor;
     private final CANBus intakeRollersCanBus;
     private final TalonFXConfiguration intakeRollersMotorConfig;
+    private final VoltageOut m_request;
 
     private final StatusSignal<AngularVelocity> intakeRollersVelocity;
     private final StatusSignal<Voltage> intakeRollersAppliedVolts;
@@ -46,6 +46,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
                         .withStatorCurrentLimit(IntakeRollersConstants.statorCurrentLimit)
                         .withStatorCurrentLimitEnable(true)
                 ).withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Brake));
+        m_request = new VoltageOut(0);
 
         // intakeRollersConfig.Slot0.kP = IntakeRollersConstants.kP;
         // intakeRollersConfig.Slot0.kI = IntakeRollersConstants.kI;
@@ -91,6 +92,6 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
 
     @Override
     public void setVoltage(double voltage) {
-        intakeRollersMotor.setControl(new VoltageOut(voltage));
+        intakeRollersMotor.setControl(m_request.withOutput(voltage));
     }
 }
