@@ -13,6 +13,6 @@ public abstract class ClimbIO {
 
   public void setPosition(double position){}
   public void stop(){}
-
+  public void updateInputs(){}
 
 }

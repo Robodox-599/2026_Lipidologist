@@ -74,6 +74,7 @@ public class ClimbIOTalonFX extends ClimbIO {
       climbMotor.optimizeBusUtilization();
   }
 
+  @Override
   public void updateInputs(){
     BaseStatusSignal.refreshAll(climbPosition, climbVelocity, climbStatorCurrent, climbSupplyCurrent, climbVoltage, climbTemperature);
 
