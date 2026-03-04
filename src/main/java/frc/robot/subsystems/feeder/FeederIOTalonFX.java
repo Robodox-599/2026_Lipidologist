@@ -24,6 +24,7 @@ public class FeederIOTalonFX extends FeederIO {
     private final TalonFX feederMotor;
     private final CANBus feederBus;
     private TalonFXConfiguration feederConfig;
+    private VelocityVoltage velocityVoltage;
 
     private final StatusSignal<AngularVelocity> feederVelocityRPS;
     private final StatusSignal<Temperature> feederTemperature;
@@ -56,6 +57,8 @@ public class FeederIOTalonFX extends FeederIO {
                 .withMotorOutput(
                         new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake)
                                 .withInverted(InvertedValue.CounterClockwise_Positive));
+
+        velocityVoltage = new VelocityVoltage(super.targetRPS);
 
         PhoenixUtil.tryUntilOk(10, () -> feederMotor.getConfigurator().apply(feederConfig, 1));
 
@@ -96,7 +99,7 @@ public class FeederIOTalonFX extends FeederIO {
     @Override
     public void setFeederVelocity(double RPS) {
         super.targetRPS = RPS;
-        feederMotor.setControl(new VelocityVoltage(RPS));
+        feederMotor.setControl(velocityVoltage);
     }
 
     @Override
