@@ -17,12 +17,12 @@ public class IntakeWristConstants {
 
     public static final double gearRatio = (44.0/12.0) * (44.0/18.0) * (36.0/12.0);
 
-    public static final double kP = 60;
-    public static final double kI = 0;
+    public static final double kP = 60.0;
+    public static final double kI = 0.0;
     public static final double kD = 1.5;
     public static final double kV = (Constants.kMotors.kKrakenX60Foc.kV * gearRatio);
     public static final double kS = 0.35;
-    public static final double kG = .435;
+    public static final double kG = 0.435;
 
     public static final double maxVelocity = (12 - kS - kG) / kV;
     public static final double maxAcceleration = maxVelocity;
@@ -30,22 +30,23 @@ public class IntakeWristConstants {
     public static final double magnetOffset = 0.486572265625;
     public static final double supplyCurrentLimit = 70.0;
     public static final double statorCurrentLimit = 120.0;
-    public static final double minAngleRotations = 0;
-    public static final double maxAngleRotations = 0;
-    public static final double startAngleRad = 0;
+    public static final double minAngleRotations = 0.0;
+    public static final double maxAngleRotations = 0.0;
+    public static final double startAngleRad = 0.0;
 
-    public static final double kPSim = 1; //1.28
-    public static final double kISim = 0;
-    public static final double kDSim = 0;
+    public static final double kPSim = 1.0; //1.28
+    public static final double kISim = 0.0;
+    public static final double kDSim = 0.0;
 
     public static final double kVSim = 0.0;
     public static final double kSSim = 0.0;
     public static final double kGSim = 0.0;
-    public static final double maxVelocitySim = 100;
-    public static final double maxAccelerationSim = 16;
+    public static final double maxVelocitySim = 100.0;
+    public static final double maxAccelerationSim = 16.0;
 
     public static final double wristLengthMeters = 0.5;
-    public static final double wristMassKg = 5;
+    public static final double wristMassKg = 5.0;
+    public static final double agitationTime = 0.0;
 
 
 }

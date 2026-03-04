@@ -5,6 +5,7 @@
 package frc.robot.subsystems.intake.intakeWrist;
 
 import dev.doglog.DogLog;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.util.Tracer;
 
 /** Add your docs here. */
@@ -12,9 +13,11 @@ public class IntakeWrist {
     private final IntakeWristIO io;
     private IntakeWristWantedState wantedState = IntakeWristWantedState.STOP;
     private IntakeWristCurrentState currentState = IntakeWristCurrentState.STOPPED;
+    private Timer agitationTimer;
 
     public IntakeWrist(IntakeWristIO io){
         this.io = io;
+        agitationTimer = new Timer();
     }
 
     public enum IntakeWristWantedState{
@@ -67,7 +70,17 @@ public class IntakeWrist {
                 // } else {
                 //     currentState = IntakeWristCurrentState.WRIST_EXTENDING;
                 // }
-                currentState = IntakeWristCurrentState.WRIST_RETRACTING;
+                // currentState = IntakeWristCurrentState.WRIST_RETRACTING;
+
+                if (agitationTimer.get() > IntakeWristConstants.agitationTime){
+                    if (currentState == IntakeWristCurrentState.WRIST_RETRACTING){
+                        currentState = IntakeWristCurrentState.WRIST_EXTENDING;
+                        agitationTimer.reset();
+                    } else if (currentState == IntakeWristCurrentState.WRIST_EXTENDING){
+                        currentState = IntakeWristCurrentState.WRIST_RETRACTING;
+                        agitationTimer.reset();
+                    }
+                }
                 break;
             default:
                 currentState = IntakeWristCurrentState.STOPPED;
