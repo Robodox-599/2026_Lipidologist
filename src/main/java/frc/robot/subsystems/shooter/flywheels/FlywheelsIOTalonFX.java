@@ -31,6 +31,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     private final CANBus flywheelCANBus;
     private final TalonFX flywheelMotor;
     TalonFXConfiguration flywheelConfiguration;
+    private final VelocityVoltage velocityVoltage;
 
     // status signals
     private final StatusSignal<AngularVelocity> flywheelVelocityRPS;
@@ -69,6 +70,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
                                 .withKV(this.flywheelConstants.kV()))
                 .withMotorOutput(new MotorOutputConfigs().withInverted(this.flywheelConstants.invert())
                         .withNeutralMode(NeutralModeValue.Coast));
+
+        velocityVoltage = new VelocityVoltage(super.targetRPS);
 
         // Applying configuration
         PhoenixUtil.tryUntilOk(10, () -> flywheelMotor.getConfigurator().apply(flywheelConfiguration, 1));
@@ -110,7 +113,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     @Override
     public void setRPS(double RPS) {
         super.targetRPS = RPS;
-        flywheelMotor.setControl(new VelocityVoltage(super.targetRPS));
+        flywheelMotor.setControl(velocityVoltage);
     }
 
     @Override

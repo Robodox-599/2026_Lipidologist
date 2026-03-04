@@ -87,6 +87,8 @@ public class HoodIOTalonFX extends HoodIO {
                         .withSensorDirection(SensorDirectionValue.Clockwise_Positive)
                         .withAbsoluteSensorDiscontinuityPoint(HoodConstants.absoluteDiscontinuityPoint));
 
+        motionMagic = new MotionMagicVoltage(targetPositionRots).withSlot(0).withEnableFOC(true);
+
         // applying configuration
         PhoenixUtil.tryUntilOk(10, () -> hoodMotor.getConfigurator().apply(hoodConfiguration, 1));
         PhoenixUtil.tryUntilOk(10, () -> hoodCANCoder.getConfigurator().apply(CANCoderConfig, 1));
@@ -134,8 +136,6 @@ public class HoodIOTalonFX extends HoodIO {
                 HoodConstants.hoodMaxAngleRotations);
 
         super.targetPositionRots = targetPositionRots;
-
-        motionMagic = new MotionMagicVoltage(position).withSlot(0).withEnableFOC(true);
 
         hoodMotor.setControl(motionMagic);
     }

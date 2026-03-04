@@ -58,7 +58,8 @@ public class Superstructure extends SubsystemBase {
         IDLE,
         CLIMB,
         STOP,
-        TESTING
+        TEST,
+        STOW
     }
 
     public enum CurrentSuperState {
@@ -72,8 +73,8 @@ public class Superstructure extends SubsystemBase {
         EXTEND_CLIMB,
         RETRACT_CLIMB,
         STOPPED,
-        TESTING
-
+        TESTING,
+        STOWING
     }
 
     private WantedSuperState wantedSuperState = WantedSuperState.STOP;
@@ -175,8 +176,11 @@ public class Superstructure extends SubsystemBase {
             case STOP:
                 currentSuperState = CurrentSuperState.STOPPED;
                 break;
-            case TESTING:
+            case TEST:
                 currentSuperState = CurrentSuperState.TESTING;
+                break;
+            case STOW:
+                currentSuperState = CurrentSuperState.STOWING;
                 break;
         }
     }
@@ -205,6 +209,8 @@ public class Superstructure extends SubsystemBase {
             case TESTING:
                 testing();
                 break;
+            case STOWING:
+                stowing();
         }
     }
 
@@ -306,6 +312,16 @@ public class Superstructure extends SubsystemBase {
         // flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 95);
         // hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.1);
     }
+
+    public void stowing() {
+       drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
+       feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+       indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+       intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.STOP);
+       intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+       flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 0);
+       hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.1);
+}
 
     private boolean areSystemsReadyForHubShot(double flightTime) {
         return flywheels.atSetpoint() && hood.atSetpoint() && drivetrain.isAtTargetRotation()
