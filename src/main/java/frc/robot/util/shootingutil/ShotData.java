@@ -10,32 +10,32 @@ public class ShotData {
 
     static {
         hubShotMap.put(
-            1.385,
-            new Shot(0.00, 46, 1.02));
+            1.430,
+            new Shot(0.00, 47, 0.97));
         hubShotMap.put(
-            1.77,
-            new Shot(0.005, 48, 1.04));
+            1.825,
+            new Shot(0.005, 50, 1.04));
         hubShotMap.put(
-            2.26,
-            new Shot(0.01, 50, 1.1));
+            2.210,
+            new Shot(0.008, 53, 1.14));
         hubShotMap.put(
-            2.69,
-            new Shot(0.015, 52, 1.13));
+            2.605,
+            new Shot(0.01, 55, 1.2));
         hubShotMap.put(
-            3.13,
-            new Shot(0.018, 55, 1.21));
+            3.050,
+            new Shot(0.013, 57, 1.25));
         hubShotMap.put(
-            3.55,
-            new Shot(0.02, 58, 1.24));
+            3.520,
+            new Shot(0.016, 61, 1.33));
         hubShotMap.put(
-            4.18,
-            new Shot(0.023, 62, 1.32));
+            4.050,
+            new Shot(0.02, 64, 1.37));
         hubShotMap.put(
-            4.62,
-            new Shot(0.025, 64, 1.33));
+            4.620,
+            new Shot(0.023, 67, 1.39));
         hubShotMap.put(
-            5.1,
-            new Shot(0.028, 66, 1.34));
+            5.464,
+            new Shot(0.024, 74, 1.48));
     }
 
     static {

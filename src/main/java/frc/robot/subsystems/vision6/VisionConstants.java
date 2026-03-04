@@ -67,25 +67,25 @@ public class VisionConstants {
     public static final double sideLeftCameraPoseYaw = Units.degreesToRadians(90-27.555); // 102.0 - 90.0 (left/right rotation)
 
     // FRONT RIGHT CAMERA
-//     public static final String frontRightCameraName = "FR_Camera";
+    public static final String frontRightCameraName = "FR_Camera";
 
 //     // CAMERA 3 POSE (X)
-//     public static final double frontRightCameraPoseX = Units.inchesToMeters(-11.354); // -11.354 (Y value in CAD)
+    public static final double frontRightCameraPoseX = Units.inchesToMeters(-11.354); // -11.354 (Y value in CAD)
 
 //     // CAMERA 3 POSE (Y)
-//     public static final double frontRightCameraPoseY = Units.inchesToMeters(-8.487); // -8.487 (X value in CAD)
+    public static final double frontRightCameraPoseY = Units.inchesToMeters(-8.487); // -8.487 (X value in CAD)
 
 //     // CAMERA 3 POSE (Z)
-//     public static final double frontRightCameraPoseZ = Units.inchesToMeters(18.369); // 18.369 (Z value in CAD)
+    public static final double frontRightCameraPoseZ = Units.inchesToMeters(18.369); // 18.369 (Z value in CAD)
 
 //     // CAMERA 3 POSE (ROLL)
-//     public static final double frontRightCameraPoseRoll = Units.degreesToRadians(4.4670); // -4.4670
+    public static final double frontRightCameraPoseRoll = Units.degreesToRadians(4.4670); // -4.4670
 
 //     // CAMERA 3 POSE (PITCH)
-//     public static final double frontRightCameraPosePitch = Units.degreesToRadians(68.5050-90); // 90 - 68.5050 (up/down rotation)
+    public static final double frontRightCameraPosePitch = Units.degreesToRadians(68.5050-90); // 90 - 68.5050 (up/down rotation)
 
 //     // CAMERA 3 POSE (YAW)
-//     public static final double frontRightCameraPoseYaw = Units.degreesToRadians(180-12); // 90.0 - 102.0 (left/right rotation)
+    public static final double frontRightCameraPoseYaw = Units.degreesToRadians(180-12); // 90.0 - 102.0 (left/right rotation)
 
     // SIDE RIGHT CAMERA
     public static final String sideRightCameraName = "SR_Camera";
@@ -162,13 +162,13 @@ public class VisionConstants {
                     new Rotation3d(
                             sideLeftCameraPoseRoll, sideLeftCameraPosePitch, sideLeftCameraPoseYaw)));
 
-//     public static final CameraConstants frontRightCameraConstants = new CameraConstants(
-//             frontRightCameraName,
-//             new Transform3d(
-//                     new Translation3d(
-//                             frontRightCameraPoseX, frontRightCameraPoseY, frontRightCameraPoseZ),
-//                     new Rotation3d(
-//                             frontRightCameraPoseRoll, frontRightCameraPosePitch, frontRightCameraPoseYaw)));
+    public static final CameraConstants frontRightCameraConstants = new CameraConstants(
+            frontRightCameraName,
+            new Transform3d(
+                    new Translation3d(
+                            frontRightCameraPoseX, frontRightCameraPoseY, frontRightCameraPoseZ),
+                    new Rotation3d(
+                            frontRightCameraPoseRoll, frontRightCameraPosePitch, frontRightCameraPoseYaw)));
 
      public static final CameraConstants sideRightCameraConstants = new CameraConstants(
             sideRightCameraName,

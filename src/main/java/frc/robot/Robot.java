@@ -76,7 +76,7 @@ public class Robot extends TimedRobot {
   final CommandXboxController driver = new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
   // final CommandXboxController operator = new CommandXboxController(
   // Constants.ControllerConstants.kOperatorControllerPort);
-  final Climb climb;
+  // final Climb climb;
   final CommandSwerveDrivetrain drivetrain;
   final Feeder feeder;
   final Indexer indexer;
@@ -112,7 +112,7 @@ public class Robot extends TimedRobot {
 
     switch (Constants.currentMode) {
       case REAL:
-        climb = new Climb(new ClimbIOTalonFX());
+        // climb = new Climb(new ClimbIOTalonFX());
         drivetrain = TunerConstants.createDrivetrain(driver);
         feeder = new Feeder(new FeederIOTalonFX());
         indexer = new Indexer(new IndexerIOTalonFX());
@@ -125,12 +125,12 @@ public class Robot extends TimedRobot {
         vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
             new VisionIOReal(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
             new VisionIOReal(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
-            // new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
+            new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
             new VisionIOReal(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose()));
         leds = new LEDs(new LEDsIOReal());
         break;
       case SIM:
-        climb = new Climb(new ClimbIOSim());
+        // climb = new Climb(new ClimbIOSim());
         drivetrain = TunerConstants.createDrivetrain(driver);
         feeder = new Feeder(new FeederIOSim());
         indexer = new Indexer(new IndexerIOSim());
@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
         leds = new LEDs(new LEDsIO());
         break;
       default: // defaults to sim
-        climb = new Climb(new ClimbIOSim());
+        // climb = new Climb(new ClimbIOSim());
         drivetrain = TunerConstants.createDrivetrain(driver);
         feeder = new Feeder(new FeederIOSim());
         indexer = new Indexer(new IndexerIOSim());
@@ -164,7 +164,7 @@ public class Robot extends TimedRobot {
     }
 
     superstructure = new Superstructure(
-        climb,
+        // climb,
         drivetrain,
         feeder, indexer,
         intakeRollers, intakeWrist,
@@ -196,19 +196,14 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Flywheel Velocity", 0.0);
     // SmartDashboard.putNumber("Hood Rotations", 0.0);
 
-    SmartDashboard.putNumber("VisionLinearStdDev", 0.05);
-    SmartDashboard.putNumber("VisionAngularStdDev", 0.01);
-
     DogLog.log("LeftTrenchZone", FieldConstants.LeftTrench.trenchZone);
     DogLog.log("RightTrenchZone", FieldConstants.RightTrench.trenchZone);
 
+    driver.a().onTrue(Commands.runOnce(() -> drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK))).onFalse(Commands.runOnce(() -> drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE)));
   }
 
   private void configureAutos(CommandSwerveDrivetrain drivetrain, Superstructure superstructure) {
     AutoBuilder autoBuilder = new AutoBuilder(drivetrain, superstructure);
-
-
-
   }
 
   public Superstructure getSuperstructure() {
@@ -222,8 +217,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Tracer.traceFunc("CommandScheduler", scheduler::run);
-    VisionConstants.linearStdDevBaseline = SmartDashboard.getNumber("VisionLinearStdDev", 0.0);
-    VisionConstants.angularStdDevBaseline = SmartDashboard.getNumber("VisionAngularStdDev", 0.0);
     // flywheels.setWantedState(FlywheelWantedState.SET_RPS,
     // SmartDashboard.getNumber("Flywheel Velocity", 0.0));
     // hood.setWantedState(HoodWantedState.SET_POSITION,
@@ -232,11 +225,16 @@ public class Robot extends TimedRobot {
     // indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
     // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
 
-    Translation2d robotTranslation = drivetrain.getPose().getTranslation();
-    Translation2d hubTranslation = AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
+    // Translation2d robotTranslation = drivetrain.getPose().getTranslation();
+    // Translation2d hubTranslation = AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
 
-    double distance = robotTranslation.getDistance(hubTranslation);
-    DogLog.log("DistanceToHub", distance);
+    // Rotation2d targetRotation = Rotation2d
+    //             .fromRadians(Math.atan2(robotTranslation.getY() - hubTranslation.getY(),
+    //                     robotTranslation.getX() - hubTranslation.getX()));
+
+    // drivetrain.setTargetRotation(targetRotation);
+    // double distance = robotTranslation.getDistance(hubTranslation);
+    // DogLog.log("DistanceToHub", distance);
   }
 
   @Override

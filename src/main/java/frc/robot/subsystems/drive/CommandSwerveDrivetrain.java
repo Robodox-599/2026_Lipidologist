@@ -413,6 +413,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
   }
 
+  public void setTargetRotation(Rotation2d targetRotation) {
+    this.targetRotation = targetRotation;
+    if (DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Red) {
+      this.targetRotation = targetRotation.rotateBy(kRedAlliancePerspectiveRotation);
+    }
+  }
+
   // public void setWantedState(WantedState wantedState, Pose2d targetPose) {
   // this.wantedState = wantedState;
   // this.targetRotation = targetRotation;
