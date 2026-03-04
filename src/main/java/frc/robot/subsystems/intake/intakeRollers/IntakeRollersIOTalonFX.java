@@ -29,6 +29,8 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
     private final CANBus intakeRollersCanBus;
     private final TalonFXConfiguration intakeRollersMotorConfig;
 
+    private final VoltageOut v_request;
+
     private final StatusSignal<AngularVelocity> intakeRollersVelocity;
     private final StatusSignal<Voltage> intakeRollersAppliedVolts;
     private final StatusSignal<Current> intakeRollersSupplyCurrent;
@@ -46,6 +48,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
                         .withStatorCurrentLimit(IntakeRollersConstants.statorCurrentLimit)
                         .withStatorCurrentLimitEnable(true)
                 ).withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Brake));
+        v_request = new VoltageOut(voltage);
 
         // intakeRollersConfig.Slot0.kP = IntakeRollersConstants.kP;
         // intakeRollersConfig.Slot0.kI = IntakeRollersConstants.kI;
@@ -91,6 +94,6 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
 
     @Override
     public void setVoltage(double voltage) {
-        intakeRollersMotor.setControl(new VoltageOut(voltage));
+        intakeRollersMotor.setControl(v_request.withOutput(voltage));
     }
 }
