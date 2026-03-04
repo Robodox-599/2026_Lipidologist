@@ -12,6 +12,7 @@ public abstract class ClimbIO {
   protected boolean atSetpoint = false;
 
   public void setPosition(double position){}
+  public void zeroClimb(){}
   public void stop(){}
   public void updateInputs(){}
 

@@ -16,4 +16,6 @@ public class ClimbConstants {
 
   public static double statorCurrent = 0.0;
   public static double supplyCurrent = 0.0;
+
+  public static double tripStatorCurrent = 0.0;
   }

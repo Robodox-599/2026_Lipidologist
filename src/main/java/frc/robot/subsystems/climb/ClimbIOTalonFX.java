@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -25,9 +26,9 @@ public class ClimbIOTalonFX extends ClimbIO {
   private TalonFXConfiguration climbConfig;
 
   private MotionMagicVoltage m_request;
+  private VoltageOut v_request;
 
   private StatusSignal<Angle> climbPosition;
-  private StatusSignal<AngularVelocity> climbVelocity;
   private StatusSignal<Current> climbStatorCurrent;
   private StatusSignal<Current> climbSupplyCurrent;
   private StatusSignal<Voltage> climbVoltage;
@@ -58,17 +59,17 @@ public class ClimbIOTalonFX extends ClimbIO {
           .withKS(ClimbConstants.kS)
       );
     m_request = new MotionMagicVoltage(0);
+    v_request = new VoltageOut(-1);
 
     PhoenixUtil.tryUntilOk(10, () -> climbMotor.getConfigurator().apply(climbConfig));
 
       climbPosition = climbMotor.getPosition();
-      climbVelocity = climbMotor.getVelocity();
       climbStatorCurrent = climbMotor.getStatorCurrent();
       climbSupplyCurrent = climbMotor.getSupplyCurrent();
       climbVoltage = climbMotor.getMotorVoltage();
       climbTemperature = climbMotor.getDeviceTemp();
 
-      BaseStatusSignal.setUpdateFrequencyForAll(50, climbPosition, climbVelocity,
+      BaseStatusSignal.setUpdateFrequencyForAll(50, climbPosition,
          climbStatorCurrent, climbSupplyCurrent, climbVoltage, climbTemperature);
 
       climbMotor.optimizeBusUtilization();
@@ -76,10 +77,9 @@ public class ClimbIOTalonFX extends ClimbIO {
 
   @Override
   public void updateInputs(){
-    BaseStatusSignal.refreshAll(climbPosition, climbVelocity, climbStatorCurrent, climbSupplyCurrent, climbVoltage, climbTemperature);
+    BaseStatusSignal.refreshAll(climbPosition, climbStatorCurrent, climbSupplyCurrent, climbVoltage, climbTemperature);
 
     super.position = climbPosition.getValueAsDouble();
-    super.velocity = climbVelocity.getValueAsDouble();
     super.statorCurrent = climbStatorCurrent.getValueAsDouble();
     super.supplyCurrent = climbSupplyCurrent.getValueAsDouble();
     super.voltage = climbVoltage.getValueAsDouble();
@@ -106,5 +106,14 @@ public class ClimbIOTalonFX extends ClimbIO {
   @Override
   public void stop(){
     climbMotor.stopMotor();
+  }
+
+  @Override
+  public void zeroClimb(){
+    if (super.statorCurrent > ClimbConstants.tripStatorCurrent){
+      climbMotor.setPosition(0.0);
+    } else{
+      climbMotor.setControl(v_request);
+    }
   }
 }
