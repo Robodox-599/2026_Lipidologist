@@ -26,30 +26,35 @@ public class AutoFactory {
     private static final Alert missingTrajectoryAlert = new Alert("One or more trajectories are missing!",
             AlertType.kWarning);
 
-    public static Command followTrajectory(String name, boolean start, CommandSwerveDrivetrain drivetrain,
+    private static Command followTrajectory(String name, boolean start, CommandSwerveDrivetrain drivetrain,
             Superstructure superstructure) {
         Optional<Trajectory<SwerveSample>> optionalTrajectory = Choreo.loadTrajectory(name);
         if (optionalTrajectory.isPresent()) {
             Trajectory<SwerveSample> trajectory = optionalTrajectory.get();
-            return Commands.runOnce(() -> drivetrain.setDesiredChoreoTrajectory(trajectory, start));
+            return Commands.runOnce(() -> drivetrain.setDesiredChoreoTrajectory(trajectory, start)).andThen(new WaitUntilCommand(drivetrain::isAtEndOfChoreoTrajectory));
         } else {
             missingTrajectoryAlert.set(true);
             return Commands.none();
         }
     }
 
+    public static Command followTrajectoryWhileIdle(String name, boolean start, CommandSwerveDrivetrain drivetrain,
+            Superstructure superstructure) {
+        return Commands
+                .parallel(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE),
+                        followTrajectory(name, start, drivetrain, superstructure));
+    }
+
     public static Command followTrajectoryWhileScoring(String name, boolean start, CommandSwerveDrivetrain drivetrain,
             Superstructure superstructure) {
         return Commands
                 .parallel(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                        followTrajectory(name, start, drivetrain, superstructure))
-                .andThen(new WaitUntilCommand(drivetrain::isAtEndOfChoreoTrajectory));
+                        followTrajectory(name, start, drivetrain, superstructure));
     }
 
     public static Command followTrajectoryThenScore(String name, boolean start, double maxTime,
             CommandSwerveDrivetrain drivetrain, Superstructure superstructure) {
         return followTrajectory(name, start, drivetrain, superstructure)
-                .andThen(new WaitUntilCommand(drivetrain::isAtEndOfChoreoTrajectory))
                 .andThen(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB))
                 .andThen(new WaitUntilCommand(maxTime));
     }

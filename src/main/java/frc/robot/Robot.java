@@ -17,7 +17,6 @@ import frc.robot.subsystems.shooter.flywheels.FlywheelsIOSim;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOTalonFX;
 import frc.robot.subsystems.shooter.flywheels.Flywheels.FlywheelWantedState;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.FlywheelConstants;
-import frc.robot.autos.AutoBuilder;
 
 import java.lang.reflect.Field;
 
@@ -46,6 +45,7 @@ import frc.robot.subsystems.leds.LEDsIO;
 import frc.robot.subsystems.leds.LEDsIOReal;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist.IntakeWristWantedState;
 import frc.robot.FieldConstants.LeftTrench;
+import frc.robot.autos.AutoBuilder;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.WantedSuperState;
 import frc.robot.subsystems.climb.Climb;
@@ -201,10 +201,13 @@ public class Robot extends TimedRobot {
     DogLog.log("RightTrenchZone", FieldConstants.RightTrench.trenchZone);
 
     driver.a().onTrue(Commands.runOnce(() -> drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK))).onFalse(Commands.runOnce(() -> drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE)));
+
+    configureAutos(drivetrain, superstructure);
   }
 
   private void configureAutos(CommandSwerveDrivetrain drivetrain, Superstructure superstructure) {
     AutoBuilder autoBuilder = new AutoBuilder(drivetrain, superstructure);
+    autonomousCommand = autoBuilder.leftFarMidDepotAuto();
   }
 
   public Superstructure getSuperstructure() {
@@ -253,8 +256,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    // autonomousCommand = AutoBuilder.leftFarMidDepotAuto();
-
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(autonomousCommand);
     }

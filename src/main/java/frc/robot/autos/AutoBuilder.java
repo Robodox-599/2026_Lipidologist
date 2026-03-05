@@ -17,9 +17,10 @@ public class AutoBuilder {
 
     public Command leftFarMidDepotAuto() {
         return Commands.sequence(
-                AutoFactory.followTrajectory("LTRENCHtoLMID", true, drivetrain, superstructure),
-                AutoFactory.followTrajectory("LMIDtoLTRENCH", false, drivetrain, superstructure),
-                AutoFactory.followTrajectoryWhileScoring("LTRENCHtoDEPOT", false, drivetrain, superstructure),
-                AutoFactory.followTrajectory("LTRENCHtoDEPOT", false, drivetrain, superstructure));
+                AutoFactory.followTrajectoryWhileIdle("LTRENCHtoLMID", true, this.drivetrain, this.superstructure),
+                AutoFactory.followTrajectoryWhileIdle("LMIDtoLTRENCH", false, this.drivetrain, this.superstructure),
+                AutoFactory.followTrajectoryWhileScoring("LTRENCHtoDEPOT", false, this.drivetrain, this.superstructure),
+                AutoFactory.followTrajectoryWhileIdle("DEPOT_INTAKE", false, this.drivetrain, this.superstructure),
+                AutoFactory.followTrajectoryWhileIdle("DEPOTtoLTOWER", false, this.drivetrain, this.superstructure));
     }
 }
