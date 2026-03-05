@@ -93,6 +93,10 @@ public class Climb {
   public void zeroClimb(){
     io.zeroClimb();
   }
+
+    public void setWantedState(Climb.ClimbWantedState wantedState) {
+    this.wantedState = wantedState;
+  }
 }
 
 
