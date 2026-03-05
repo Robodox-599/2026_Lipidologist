@@ -1,14 +1,14 @@
-// package frc.robot.subsystems.climb;
+package frc.robot.subsystems.climb;
 
-// import dev.doglog.DogLog;
-// import edu.wpi.first.math.MathUtil;
-// import edu.wpi.first.math.controller.ProfiledPIDController;
-// import edu.wpi.first.math.system.plant.DCMotor;
-// import edu.wpi.first.math.system.plant.LinearSystemId;
-// import edu.wpi.first.math.trajectory.TrapezoidProfile;
-// import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import dev.doglog.DogLog;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
-// public class ClimbIOSim extends ClimbIO {
+public class ClimbIOSim extends ClimbIO {
 //   private final ProfiledPIDController positionController;
 //   private double targetPositionInches = 0.0;
 
@@ -25,7 +25,7 @@
 //       (climbGearbox, ClimbConstants.climbMOI, ClimbConstants.climbGearRatio), climbGearbox);
 
 //     positionController.setTolerance(ClimbConstants.positionToleranceInches);
-//   }
+  }
 
 //   @Override
 //   public void updateInputs() {

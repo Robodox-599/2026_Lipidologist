@@ -43,6 +43,7 @@ public class Superstructure extends SubsystemBase {
     final IntakeWrist intakeWrist;
     final Flywheels flywheels;
     final Hood hood;
+    final Climb climb;
     final LEDs leds;
     final Vision vision;
 
@@ -56,7 +57,7 @@ public class Superstructure extends SubsystemBase {
         SHOOT_HUB,
         SHOOT_ALLIANCE_ZONE,
         IDLE,
-        CLIMB,
+        EXTEND_CLIMB_WHILE_HUB_SHOT,
         STOP,
         TEST,
         STOW
@@ -90,9 +91,9 @@ public class Superstructure extends SubsystemBase {
             IntakeWrist intakeWrist,
             Flywheels flywheels,
             Hood hood,
+            Climb climb,
             Vision vision,
             LEDs leds) {
-        // this.climb = climb;
         this.drivetrain = drivetrain;
         this.feeder = feeder;
         this.indexer = indexer;
@@ -100,6 +101,7 @@ public class Superstructure extends SubsystemBase {
         this.intakeWrist = intakeWrist;
         this.flywheels = flywheels;
         this.hood = hood;
+        this.climb = climb;
         this.vision = vision;
         this.leds = leds;
     }
@@ -338,6 +340,10 @@ public class Superstructure extends SubsystemBase {
                 || FieldConstants.LeftTrench.oppTrenchZone.contains(drivetrain.getPose().getTranslation())
                 || FieldConstants.RightTrench.oppTrenchZone.contains(drivetrain.getPose().getTranslation());
     }
+
+    // private boolean isClimbReady() {
+    //     return climb.atSetpoint() && drivetrain.isAtTargetRotation();
+    // }
 
     public Command zeroGyroCommand() {
         return this.runOnce(() -> drivetrain.zeroGyro());

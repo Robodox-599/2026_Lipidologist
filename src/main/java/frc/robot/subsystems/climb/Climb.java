@@ -1,19 +1,11 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
-
 package frc.robot.subsystems.climb;
 
-
 import dev.doglog.DogLog;
-
 
 public class Climb {
   private final ClimbIO io;
   public ClimbWantedState wantedState = ClimbWantedState.STOP;
   public ClimbCurrentState currentState = ClimbCurrentState.STOPPED;
-
 
   public Climb(ClimbIO io) {
     this.io = io;
@@ -49,7 +41,7 @@ public class Climb {
   }
 
 
-  private void handleStateTransitions() {
+  public void handleStateTransitions() {
     switch (wantedState) {
       case STOP:
         currentState = ClimbCurrentState.STOPPED;
@@ -66,7 +58,7 @@ public class Climb {
   }
 
 
-  private void applyStates() {
+  public void applyStates() {
     switch (currentState) {
       case STOPPED:
         stop();
@@ -93,7 +85,7 @@ public class Climb {
   }
 
 
-  private void setPosition(double position) {
+  public void setPosition(double position) {
     io.setPosition(position);
   }
 

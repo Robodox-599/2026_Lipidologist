@@ -64,7 +64,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   private ChassisSpeeds prevFieldRelVelocities = new ChassisSpeeds();
 
   private Rotation2d targetRotation = new Rotation2d();
-  private Pose2d targetPose = new Pose2d();
+  private Pose2d targetPosition = new Pose2d();
 
   private Trajectory<SwerveSample> desiredChoreoTrajectory;
   private Optional<SwerveSample> choreoSampleToBeApplied;
@@ -410,6 +410,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     this.targetRotation = targetRotation;
     if (DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Red) {
       this.targetRotation = targetRotation.rotateBy(kRedAlliancePerspectiveRotation);
+    }
+  }
+
+  public void setWantedState(WantedState wantedState, Pose2d targetPosition) {
+    this.wantedState = wantedState;
+    this.targetPosition = targetPosition;
+    if (DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Red) {
+      this.targetPosition = targetPosition.rotateBy(kRedAlliancePerspectiveRotation);
     }
   }
 

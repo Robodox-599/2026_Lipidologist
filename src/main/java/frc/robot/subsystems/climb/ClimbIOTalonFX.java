@@ -39,7 +39,7 @@ public class ClimbIOTalonFX extends ClimbIO {
   private StatusSignal<Temperature> climbTemperature;
 
 
-  private ClimbIOTalonFX(){
+  public ClimbIOTalonFX(){
     climbCanbus = new CANBus(ClimbConstants.climbCanbus);
     climbMotor = new TalonFX(ClimbConstants.climbMotorID, climbCanbus);
     climbConfig = new TalonFXConfiguration()

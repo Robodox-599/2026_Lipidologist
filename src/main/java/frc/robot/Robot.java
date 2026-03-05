@@ -76,7 +76,6 @@ public class Robot extends TimedRobot {
   final CommandXboxController driver = new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
   // final CommandXboxController operator = new CommandXboxController(
   // Constants.ControllerConstants.kOperatorControllerPort);
-  // final Climb climb;
   final CommandSwerveDrivetrain drivetrain;
   final Feeder feeder;
   final Indexer indexer;
@@ -84,6 +83,7 @@ public class Robot extends TimedRobot {
   final IntakeWrist intakeWrist;
   final Flywheels flywheels;
   final Hood hood;
+  final Climb climb;
   final Vision vision;
   final LEDs leds;
   final Superstructure superstructure;
@@ -112,7 +112,7 @@ public class Robot extends TimedRobot {
 
     switch (Constants.currentMode) {
       case REAL:
-        // climb = new Climb(new ClimbIOTalonFX());
+        climb = new Climb(new ClimbIOTalonFX());
         drivetrain = TunerConstants.createDrivetrain(driver);
         feeder = new Feeder(new FeederIOTalonFX());
         indexer = new Indexer(new IndexerIOTalonFX());
@@ -130,7 +130,7 @@ public class Robot extends TimedRobot {
         leds = new LEDs(new LEDsIOReal());
         break;
       case SIM:
-        // climb = new Climb(new ClimbIOSim());
+        climb = new Climb(new ClimbIOSim());
         drivetrain = TunerConstants.createDrivetrain(driver);
         feeder = new Feeder(new FeederIOSim());
         indexer = new Indexer(new IndexerIOSim());
@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
         leds = new LEDs(new LEDsIO());
         break;
       default: // defaults to sim
-        // climb = new Climb(new ClimbIOSim());
+        climb = new Climb(new ClimbIOSim());
         drivetrain = TunerConstants.createDrivetrain(driver);
         feeder = new Feeder(new FeederIOSim());
         indexer = new Indexer(new IndexerIOSim());
@@ -164,11 +164,10 @@ public class Robot extends TimedRobot {
     }
 
     superstructure = new Superstructure(
-        // climb,
         drivetrain,
         feeder, indexer,
         intakeRollers, intakeWrist,
-        flywheels, hood,
+        flywheels, hood, climb,
         vision, leds);
 
     new Bindings(driver, superstructure);
