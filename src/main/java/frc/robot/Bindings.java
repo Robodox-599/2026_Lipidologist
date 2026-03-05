@@ -29,14 +29,14 @@ public class Bindings extends SubsystemBase {
 
     driver.y().onTrue(superstructure.zeroPoseCommand());
 
-    // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
-    driver.rightTrigger().whileTrue(new RepeatCommand(setShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    // // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
+    // driver.rightTrigger().whileTrue(new RepeatCommand(setShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    // PREPARE TO SHOOT TO EITHER HUB OR ALLIANCE ZONE
-    driver.povRight().and(driver.rightTrigger().negate()).whileTrue(new RepeatCommand(setPrepareShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    // // PREPARE TO SHOOT TO EITHER HUB OR ALLIANCE ZONE
+    // driver.povRight().and(driver.rightTrigger().negate()).whileTrue(new RepeatCommand(setPrepareShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    // driver.rightTrigger().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.TESTING))
-    //     .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    driver.rightTrigger().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.TESTING))
+        .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
     new Trigger(() -> HubShiftUtil.isHubActiveSoon(3)).onTrue(rumbleDriverSwapping(driver, 0.5, 3));
   }
