@@ -55,31 +55,35 @@ public class IntakeWrist {
                 currentState = IntakeWristCurrentState.STOWING;
                 break;
             case AGITATE_FUEL:
-                if (currentState == IntakeWristCurrentState.WRIST_RETRACTING){
-                    if (atSetpoint()){
+                // if (currentState == IntakeWristCurrentState.WRIST_RETRACTING){
+                //     if (atSetpoint()){
+                //         currentState = IntakeWristCurrentState.WRIST_EXTENDING;
+                //     } else{
+                //         currentState = IntakeWristCurrentState.WRIST_RETRACTING;
+                //     }
+                // } else if(currentState == IntakeWristCurrentState.WRIST_EXTENDING){
+                //     if (atSetpoint()){
+                //         currentState = IntakeWristCurrentState.WRIST_RETRACTING;
+                //     } else{
+                //         currentState = IntakeWristCurrentState.WRIST_EXTENDING;
+                //     } 
+                // } else {
+                //     currentState = IntakeWristCurrentState.WRIST_EXTENDING;
+                // }
+
+                if (agitationTimer.get() > IntakeWristConstants.agitationTime){
+                    if (currentState == IntakeWristCurrentState.WRIST_RETRACTING){
                         currentState = IntakeWristCurrentState.WRIST_EXTENDING;
-                    } else{
+                        agitationTimer.reset();
+                    } else {
                         currentState = IntakeWristCurrentState.WRIST_RETRACTING;
+                        agitationTimer.reset();
                     }
-                } else if(currentState == IntakeWristCurrentState.WRIST_EXTENDING){
-                    if (atSetpoint()){
-                        currentState = IntakeWristCurrentState.WRIST_RETRACTING;
-                    } else{
-                        currentState = IntakeWristCurrentState.WRIST_EXTENDING;
-                    } 
-                } else {
+                } else if (currentState == IntakeWristCurrentState.WRIST_RETRACTING){
+                    currentState = IntakeWristCurrentState.WRIST_RETRACTING;
+                } else{
                     currentState = IntakeWristCurrentState.WRIST_EXTENDING;
                 }
-
-                // if (agitationTimer.get() > IntakeWristConstants.agitationTime){
-                //     if (currentState == IntakeWristCurrentState.WRIST_RETRACTING){
-                //         currentState = IntakeWristCurrentState.WRIST_EXTENDING;
-                //         agitationTimer.reset();
-                //     } else if (currentState == IntakeWristCurrentState.WRIST_EXTENDING){
-                //         currentState = IntakeWristCurrentState.WRIST_RETRACTING;
-                //         agitationTimer.reset();
-                //     }
-                // }
                 break;
             default:
                 currentState = IntakeWristCurrentState.STOPPED;
