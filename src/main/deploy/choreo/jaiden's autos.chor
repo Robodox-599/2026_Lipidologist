@@ -155,12 +155,12 @@
    },
    "LTROUGH_SHOOTING":{
     "x":{
-     "exp":"startingLine",
-     "val":4.0
+     "exp":"startingLine - bumperRadius",
+     "val":3.61265
     },
     "y":{
-     "exp":"fieldWidth - bumperRadius - intakeExtension",
-     "val":7.376850000000001
+     "exp":"fieldWidth - bumperRadius - intakeExtension - 3 in",
+     "val":7.300650000000001
     },
     "heading":{
      "exp":"90 deg",
@@ -239,12 +239,12 @@
    },
    "RTROUGH_SHOOTING":{
     "x":{
-     "exp":"startingLine",
-     "val":4.0
+     "exp":"startingLine - bumperRadius",
+     "val":3.61265
     },
     "y":{
-     "exp":"bumperRadius + intakeExtension",
-     "val":0.6921499999999999
+     "exp":"bumperRadius + intakeExtension + 3 in",
+     "val":0.7683499999999999
     },
     "heading":{
      "exp":"270 deg",

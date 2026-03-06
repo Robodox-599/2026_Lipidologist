@@ -19,7 +19,7 @@ public class CalculateShot {
 
     final static int maxGoalPositionIterations = 5;
     final static double LOOKAHEAD_TIME = 0.0;
-    final static double accelerationCompensation = 0.0;
+    final static double fuelDragCoefficient = 0.5;
 
     public static AdjustedShot calculateHubAdjustedShot(Pose2d robotPose, ChassisSpeeds fieldRelativeRobotVelocity,
             ChassisAccelerations fieldRelativeRobotAcceleration) {
@@ -27,17 +27,15 @@ public class CalculateShot {
         Translation2d hubTranslation = AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
 
         double distance = robotTranslation.getDistance(hubTranslation);
-        double flightTime = ShotData.getHubFlightTime(distance);
+        double flightTime = applyFuelDragCoefficient(ShotData.getHubFlightTime(distance));
 
         Translation2d adjustedHubTranslation = new Translation2d();
         for (int i = 0; i < maxGoalPositionIterations; i++) {
             adjustedHubTranslation = new Translation2d(
-                    hubTranslation.getX() - (fieldRelativeRobotVelocity.vxMetersPerSecond * flightTime
-                            + 0.5 * fieldRelativeRobotAcceleration.axMetersPerSecondSquared * flightTime * flightTime * accelerationCompensation), // vt + 0.5at^2, acceleration compensation may not be needed
-                    hubTranslation.getY() - (fieldRelativeRobotVelocity.vyMetersPerSecond * flightTime
-                            + 0.5 * fieldRelativeRobotAcceleration.ayMetersPerSecondSquared * flightTime * flightTime * accelerationCompensation));
+                    hubTranslation.getX() - (fieldRelativeRobotVelocity.vxMetersPerSecond * flightTime), // vt + 0.5at^2, acceleration compensation may not be needed
+                    hubTranslation.getY() - (fieldRelativeRobotVelocity.vyMetersPerSecond * flightTime));
             double newDistance = robotTranslation.getDistance(adjustedHubTranslation);
-            double newFlightTime = ShotData.getHubFlightTime(newDistance);
+            double newFlightTime = applyFuelDragCoefficient(ShotData.getHubFlightTime(newDistance));
 
             if (Math.abs(newFlightTime - flightTime) <= 0.01) {
                 flightTime = newFlightTime;
@@ -85,5 +83,9 @@ public class CalculateShot {
         DogLog.log("ShotCalculator/AdjustedShot", adjustedShot);
         DogLog.log("ShotCalculator/AllianceZoneTarget", new Pose2d(allianceZoneTarget.getX(), allianceZoneTarget.getY(), new Rotation2d()));
         return adjustedShot;
+    }
+
+    public static double applyFuelDragCoefficient(double flightTime) {
+        return (1-Math.pow(Math.E, -(fuelDragCoefficient * flightTime))) / fuelDragCoefficient;
     }
 }

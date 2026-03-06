@@ -20,7 +20,6 @@ import frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.FlywheelConstan
 
 import java.lang.reflect.Field;
 
-import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
@@ -46,6 +45,7 @@ import frc.robot.subsystems.leds.LEDsIOReal;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist.IntakeWristWantedState;
 import frc.robot.FieldConstants.LeftTrench;
 import frc.robot.autos.AutoBuilder;
+import frc.robot.autos.AutoChooser;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.WantedSuperState;
 import frc.robot.subsystems.climb.Climb;
@@ -87,9 +87,8 @@ public class Robot extends TimedRobot {
   final LEDs leds;
   final Superstructure superstructure;
 
-  // final AutoChooser autoChooser = new AutoChooser();
-  // final AutoFactory autoFactory;
-  // final AutoCommands autoRoutines;
+  final AutoBuilder autoBuilder;
+  final AutoChooser autoChooser;
 
   @Override
   protected void loopFunc() {
@@ -200,14 +199,14 @@ public class Robot extends TimedRobot {
     DogLog.log("LeftTrenchZone", FieldConstants.LeftTrench.trenchZone);
     DogLog.log("RightTrenchZone", FieldConstants.RightTrench.trenchZone);
 
-    driver.a().onTrue(Commands.runOnce(() -> drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK))).onFalse(Commands.runOnce(() -> drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE)));
-
+    autoBuilder = new AutoBuilder(drivetrain, superstructure);
+    autoChooser = new AutoChooser(autoBuilder);
     configureAutos(drivetrain, superstructure);
   }
 
   private void configureAutos(CommandSwerveDrivetrain drivetrain, Superstructure superstructure) {
-    AutoBuilder autoBuilder = new AutoBuilder(drivetrain, superstructure);
-    autonomousCommand = autoBuilder.leftFarMidDepotAuto();
+    SmartDashboard.putData("Routine Chooser", autoChooser.getRoutineChooser());
+    SmartDashboard.putData("Starting Location Chooser", autoChooser.getStartingLocationChooser());
   }
 
   public Superstructure getSuperstructure() {
@@ -256,6 +255,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    autonomousCommand = autoChooser.getSelectedCommand();
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(autonomousCommand);
     }
