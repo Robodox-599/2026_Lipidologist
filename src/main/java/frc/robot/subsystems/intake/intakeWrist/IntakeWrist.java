@@ -13,11 +13,11 @@ public class IntakeWrist {
     private final IntakeWristIO io;
     private IntakeWristWantedState wantedState = IntakeWristWantedState.STOP;
     private IntakeWristCurrentState currentState = IntakeWristCurrentState.STOPPED;
-    private Timer agitationTimer;
+    private Timer agitationTimer = new Timer();
 
     public IntakeWrist(IntakeWristIO io){
         this.io = io;
-        agitationTimer = new Timer();
+        agitationTimer.start();
     }
 
     public enum IntakeWristWantedState{

@@ -31,7 +31,6 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
 
     private final TalonFX intakeRollersMotorTwo;
     private final CANBus intakeRollersCanBusTwo;
-    private final TalonFXConfiguration intakeRollersMotorConfigTwo;
 
     private final VoltageOut v_request;
 
@@ -62,17 +61,10 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
                         .withStatorCurrentLimit(IntakeRollersConstants.statorCurrentLimit)
                         .withStatorCurrentLimitEnable(true)
                 ).withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Brake));
-        intakeRollersMotorConfigTwo = new TalonFXConfiguration()
-                .withCurrentLimits(
-                    new CurrentLimitsConfigs()
-                    .withSupplyCurrentLimit(IntakeRollersConstants.supplyCurrentLimit)
-                    .withSupplyCurrentLimitEnable(true)
-                    .withStatorCurrentLimit(IntakeRollersConstants.statorCurrentLimit)
-                ).withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Brake));
         v_request = new VoltageOut(0);
 
         PhoenixUtil.tryUntilOk(10, () -> intakeRollersMotorOne.getConfigurator().apply(intakeRollersMotorConfigOne, 1));
-        PhoenixUtil.tryUntilOk(10, () -> intakeRollersMotorTwo.getConfigurator().apply(intakeRollersMotorConfigTwo, 1));
+        PhoenixUtil.tryUntilOk(10, () -> intakeRollersMotorTwo.getConfigurator().apply(intakeRollersMotorConfigOne, 1));
 
         intakeRollersOneVelocity = intakeRollersMotorOne.getVelocity();
         intakeRollersOneAppliedVolts = intakeRollersMotorOne.getMotorVoltage();
