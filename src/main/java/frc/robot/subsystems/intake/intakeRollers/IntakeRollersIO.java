@@ -6,11 +6,17 @@ package frc.robot.subsystems.intake.intakeRollers;
 
 /** Add your docs here. */
 public abstract class IntakeRollersIO {
-    protected double velocity = 0.0;
-    protected double voltage = 0.0;
-    protected double supplyCurrent = 0.0;
-    protected double statorCurrent = 0.0;
-    protected double temperature = 0.0;
+    protected double intakeRollersOneVelocity = 0.0;
+    protected double intakeRollersOneVoltage = 0.0;
+    protected double intakeRollersOneSupplyCurrent = 0.0;
+    protected double intakeRollersOneStatorCurrent = 0.0;
+    protected double intakeRollersOneTemperature = 0.0;
+
+    protected double intakeRollersTwoVelocity = 0.0;
+    protected double intakeRollersTwoVoltage = 0.0;
+    protected double intakeRollersTwoSupplyCurrent = 0.0;
+    protected double intakeRollersTwoStatorCurrent = 0.0;
+    protected double intakeRollersTwoTemperature = 0.0;
 
 
     public void updateInputs(){}
