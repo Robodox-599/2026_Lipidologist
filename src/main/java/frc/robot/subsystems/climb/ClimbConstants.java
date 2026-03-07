@@ -18,6 +18,7 @@ public class ClimbConstants {
   public static double kD = 0.0;
   public static double kV = Constants.kMotors.kKrakenX60Foc.kV * climbGearRatio;;
   public static double kS = 0.0;
+  public static double kG= 0.0;
 
   public static final double simKP = 0.35;//0.45
   public static final double simKI = 0;
@@ -29,8 +30,8 @@ public class ClimbConstants {
   public static double statorCurrent = 20.0;
   public static double supplyCurrent = 70.0;
 
-  // public static final double maxVelocity = (12 - kS) / kV;
-  // public static final double maxAcceleration = maxVelocity;
+  public static final double maxVelocity = (12 - kS) / kV;
+  public static final double maxAcceleration = maxVelocity;
 
   public static double tripStatorCurrent = 0.0;
   }

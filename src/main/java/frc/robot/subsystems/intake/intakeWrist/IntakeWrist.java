@@ -74,10 +74,10 @@ public class IntakeWrist {
                 if (agitationTimer.get() > IntakeWristConstants.agitationTime){
                     if (currentState == IntakeWristCurrentState.WRIST_RETRACTING){
                         currentState = IntakeWristCurrentState.WRIST_EXTENDING;
-                        agitationTimer.reset();
+                        agitationTimer.restart();
                     } else {
                         currentState = IntakeWristCurrentState.WRIST_RETRACTING;
-                        agitationTimer.reset();
+                        agitationTimer.restart();
                     }
                 } else if (currentState == IntakeWristCurrentState.WRIST_RETRACTING){
                     currentState = IntakeWristCurrentState.WRIST_RETRACTING;

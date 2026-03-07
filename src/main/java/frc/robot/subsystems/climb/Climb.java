@@ -14,9 +14,10 @@ public class Climb {
 
   public enum ClimbWantedState {
     STOP,
-    EXTENDING,
-    RETRACTING,
-    ZERO_CLIMB
+    EXTEND,
+    RETRACT,
+    ZERO_CLIMB,
+    STOW
   }
 
 
@@ -24,7 +25,8 @@ public class Climb {
     STOPPED,
     EXTENDING,
     RETRACTING,
-    ZEROING_CLIMB
+    ZEROING_CLIMB,
+    STOWED
   }
 
 
@@ -36,27 +38,34 @@ public class Climb {
 
     DogLog.log("Climb/WantedState", wantedState);
     DogLog.log("Climb/CurrentState", currentState);
-
-
   }
-
 
   public void handleStateTransitions() {
     switch (wantedState) {
       case STOP:
         currentState = ClimbCurrentState.STOPPED;
         break;
-      case EXTENDING:
+      case EXTEND:
         currentState = ClimbCurrentState.EXTENDING;
         break;
-      case RETRACTING:
-        currentState = ClimbCurrentState.RETRACTING;
+      case RETRACT:
+        if (atSetpoint(0)){
+          currentState = ClimbCurrentState.STOWED;
+        } else{
+          currentState = ClimbCurrentState.RETRACTING;
+        }
         break;
       case ZERO_CLIMB:
         currentState = ClimbCurrentState.ZEROING_CLIMB;
+        break;
+      case STOW:
+        currentState = ClimbCurrentState.STOWED;
+        break;
+      default:
+        currentState = ClimbCurrentState.STOPPED;
+        break;
     }
   }
-
 
   public void applyStates() {
     switch (currentState) {
@@ -71,6 +80,12 @@ public class Climb {
         break;
       case ZEROING_CLIMB:
         zeroClimb();
+        break;
+      case STOWED:
+        setPosition(0);
+        break;
+      default:
+        stop();
     }
   }
 
@@ -80,7 +95,8 @@ public class Climb {
   }
 
 
-  public boolean atSetpoint() {
+  public boolean atSetpoint(double targetPosition) {
+    io.atSetpoint = Math.abs(targetPosition - io.position) < 0.02;
     return io.atSetpoint;
   }
 
@@ -94,7 +110,8 @@ public class Climb {
     io.zeroClimb();
   }
 
-    public void setWantedState(Climb.ClimbWantedState wantedState) {
+
+  public void setWantedState(Climb.ClimbWantedState wantedState) {
     this.wantedState = wantedState;
   }
 }

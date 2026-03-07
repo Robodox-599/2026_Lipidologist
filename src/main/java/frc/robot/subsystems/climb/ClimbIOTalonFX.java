@@ -5,12 +5,14 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
@@ -62,9 +64,18 @@ public class ClimbIOTalonFX extends ClimbIO {
           .withKD(ClimbConstants.kD)
           .withKV(ClimbConstants.kV)
           .withKS(ClimbConstants.kS)
-      );
+          .withKG(ClimbConstants.kG)
+          .withGravityType(GravityTypeValue.Elevator_Static)
+      )
+      .withMotionMagic(
+        new MotionMagicConfigs()
+          .withMotionMagicCruiseVelocity(ClimbConstants.maxVelocity)
+          .withMotionMagicAcceleration(ClimbConstants.maxAcceleration)
+      )
+      
+      ;
     m_request = new MotionMagicVoltage(0);
-    v_request = new VoltageOut(-1);
+    v_request = new VoltageOut(0);
 
 
     PhoenixUtil.tryUntilOk(10, () -> climbMotor.getConfigurator().apply(climbConfig));
@@ -109,28 +120,23 @@ public class ClimbIOTalonFX extends ClimbIO {
     DogLog.log("Climb/AtSetpoint", super.atSetpoint);
   }
 
-
   @Override
   public void setPosition(double position){
     super.targetPosition = position;
-
-
     climbMotor.setControl(m_request.withPosition(position));
   }
-
 
   @Override
   public void stop(){
     climbMotor.stopMotor();
   }
 
-
   @Override
   public void zeroClimb(){
     if (super.statorCurrent > ClimbConstants.tripStatorCurrent){
-      climbMotor.setPosition(0.0);
+      setPosition(0); 
     } else{
-      climbMotor.setControl(v_request);
+      climbMotor.setControl(v_request.withOutput(-1)); //voltage change may be needed
     }
   }
 }
