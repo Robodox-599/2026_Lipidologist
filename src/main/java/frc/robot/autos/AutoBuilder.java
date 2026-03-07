@@ -39,4 +39,13 @@ public class AutoBuilder {
                 AutoFactory.followTrajectoryWhileIdle("DEPOT_INTAKE", false, this.drivetrain, this.superstructure),
                 AutoFactory.followTrajectoryWhileIdle("DEPOTtoLTOWER", false, this.drivetrain, this.superstructure));
     }
+
+    public Command rightFarMidOutpostAuto() {
+        return Commands.sequence(
+                AutoFactory.followTrajectoryWhileIdle("RTRENCHtoRMID", true, this.drivetrain, this.superstructure),
+                AutoFactory.followTrajectoryThenScore("RMIDtoRTRENCH", false, 5, this.drivetrain, this.superstructure));
+                // AutoFactory.followTrajectoryWhileScoring("RTRENCHtoOUTPOST", false, this.drivetrain, this.superstructure));
+                // AutoFactory.followTrajectoryWhileIdle("DEPOT_INTAKE", false, this.drivetrain, this.superstructure),
+                // AutoFactory.followTrajectoryWhileIdle("DEPOTtoLTOWER", false, this.drivetrain, this.superstructure));
+    }
 }

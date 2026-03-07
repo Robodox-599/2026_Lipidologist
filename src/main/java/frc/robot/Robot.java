@@ -59,9 +59,12 @@ import frc.robot.subsystems.feeder.FeederIOSim;
 import frc.robot.subsystems.feeder.FeederIOTalonFX;
 import frc.robot.subsystems.feeder.Feeder.FeederWantedState;
 import frc.robot.subsystems.indexer.Indexer;
+// import frc.robot.subsystems.indexer.Indexer;
+// import frc.robot.subsystems.indexer.IndexerIOSim;
+// import frc.robot.subsystems.indexer.IndexerIOTalonFX;
+import frc.robot.subsystems.indexer.Indexer.IndexerWantedState;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.indexer.IndexerIOTalonFX;
-import frc.robot.subsystems.indexer.Indexer.IndexerWantedState;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOSim;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollersIOTalonFX;
@@ -77,13 +80,14 @@ public class Robot extends TimedRobot {
   // final CommandXboxController operator = new CommandXboxController(
   // Constants.ControllerConstants.kOperatorControllerPort);
   final CommandSwerveDrivetrain drivetrain;
-  // final Feeder feeder;
+  final Feeder feeder;
   final Indexer indexer;
   final IntakeRollers intakeRollers;
   final IntakeWrist intakeWrist;
-  // final Flywheels flywheels;
-  // final Climb climb;
-  // final Vision vision;
+  final Flywheels flywheels;
+  final Climb climb;
+  final Hood hood;
+  final Vision vision;
   final LEDs leds;
   final Superstructure superstructure;
 
@@ -110,64 +114,64 @@ public class Robot extends TimedRobot {
 
     switch (Constants.currentMode) {
       case REAL:
-      //   climb = new Climb(new ClimbIOTalonFX());
+        climb = new Climb(new ClimbIOTalonFX());
         drivetrain = TunerConstants.createDrivetrain(driver);
-      //   feeder = new Feeder(new FeederIOTalonFX());
+        feeder = new Feeder(new FeederIOTalonFX());
         indexer = new Indexer(new IndexerIOTalonFX());
         intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
         intakeWrist = new IntakeWrist(new IntakeWristIOTalonFX());
-      //   flywheels = new Flywheels(new FlywheelsIOTalonFX(FlywheelsConstants.LeftFlywheel),
-      //       new FlywheelsIOTalonFX(FlywheelsConstants.MiddleFlywheel),
-      //       new FlywheelsIOTalonFX(FlywheelsConstants.RightFlywheel));
-      //   hood = new Hood(new HoodIOTalonFX());
-      //   vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
-      //       new VisionIOReal(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-      //       new VisionIOReal(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
-      //       new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
-      //       new VisionIOReal(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose()));
+        flywheels = new Flywheels(new FlywheelsIOTalonFX(FlywheelsConstants.LeftFlywheel),
+            new FlywheelsIOTalonFX(FlywheelsConstants.MiddleFlywheel),
+            new FlywheelsIOTalonFX(FlywheelsConstants.RightFlywheel));
+        hood = new Hood(new HoodIOTalonFX());
+        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
+            new VisionIOReal(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
+            new VisionIOReal(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
+            new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
+            new VisionIOReal(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose()));
         leds = new LEDs(new LEDsIOReal());
         break;
       case SIM:
-      //   climb = new Climb(new ClimbIOSim());
+        climb = new Climb(new ClimbIOSim());
         drivetrain = TunerConstants.createDrivetrain(driver);
-      //   feeder = new Feeder(new FeederIOSim());
+        feeder = new Feeder(new FeederIOSim());
         indexer = new Indexer(new IndexerIOSim());
         intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
         intakeWrist = new IntakeWrist(new IntakeWristIOSim());
-        // flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
-        // hood = new Hood(new HoodIOSim());
-        // vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
-        //     new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-        //     new VisionIOSim(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
-        //     // new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
-        //     new VisionIOSim(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose()));
+        flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
+        hood = new Hood(new HoodIOSim());
+        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
+            new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
+            new VisionIOSim(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
+            new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
+            new VisionIOSim(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose()));
         leds = new LEDs(new LEDsIO());
         break;
       default: // defaults to sim
-        // climb = new Climb(new ClimbIOSim());
+        climb = new Climb(new ClimbIOSim());
         drivetrain = TunerConstants.createDrivetrain(driver);
-        // feeder = new Feeder(new FeederIOSim());
+        feeder = new Feeder(new FeederIOSim());
         indexer = new Indexer(new IndexerIOSim());
         intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
         intakeWrist = new IntakeWrist(new IntakeWristIOSim());
-        // flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
-        // hood = new Hood(new HoodIOSim());
-        // vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
-        //     new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-        //     new VisionIOSim(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
-        //     // new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
-        //     new VisionIOSim(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose()));
+        flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
+        hood = new Hood(new HoodIOSim());
+        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
+            new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
+            new VisionIOSim(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
+            new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
+            new VisionIOSim(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose()));
         leds = new LEDs(new LEDsIO());
         break;
     }
 
     superstructure = new Superstructure(
         drivetrain,
-        // feeder, 
+        feeder, 
         indexer,
         intakeRollers, intakeWrist,
-        // ,flywheels, hood, climb,
-        // vision, 
+        flywheels, hood, 
+        vision, climb,
         leds
         );
 
@@ -202,6 +206,8 @@ public class Robot extends TimedRobot {
     autoBuilder = new AutoBuilder(drivetrain, superstructure);
     autoChooser = new AutoChooser(autoBuilder);
     configureAutos(drivetrain, superstructure);
+
+    // intakeRollers.setWantedState(IntakeRollersWantedState.INTAKE_FUEL);
   }
 
   private void configureAutos(CommandSwerveDrivetrain drivetrain, Superstructure superstructure) {

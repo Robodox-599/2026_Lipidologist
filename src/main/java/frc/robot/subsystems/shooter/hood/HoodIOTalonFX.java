@@ -137,7 +137,7 @@ public class HoodIOTalonFX extends HoodIO {
 
         super.targetPositionRots = targetPositionRots;
 
-        hoodMotor.setControl(motionMagic);
+        hoodMotor.setControl(motionMagic.withPosition(position));
     }
 
     @Override

@@ -11,7 +11,6 @@ public class Climb {
     this.io = io;
   }
 
-
   public enum ClimbWantedState {
     STOP,
     EXTEND,
@@ -19,7 +18,6 @@ public class Climb {
     ZERO_CLIMB,
     STOW
   }
-
 
   public enum ClimbCurrentState {
     STOPPED,
@@ -29,12 +27,10 @@ public class Climb {
     STOWED
   }
 
-
   public void updateInputs() {
     io.updateInputs();
     handleStateTransitions();
     applyStates();
-
 
     DogLog.log("Climb/WantedState", wantedState);
     DogLog.log("Climb/CurrentState", currentState);
@@ -49,9 +45,9 @@ public class Climb {
         currentState = ClimbCurrentState.EXTENDING;
         break;
       case RETRACT:
-        if (atSetpoint(0)){
+        if (atSetpoint(0)) {
           currentState = ClimbCurrentState.STOWED;
-        } else{
+        } else {
           currentState = ClimbCurrentState.RETRACTING;
         }
         break;
@@ -89,31 +85,27 @@ public class Climb {
     }
   }
 
-
   private void stop() {
     io.stop();
   }
 
-
-  public boolean atSetpoint(double targetPosition) {
-    io.atSetpoint = Math.abs(targetPosition - io.position) < 0.02;
+  public boolean atSetpoint() {
     return io.atSetpoint;
   }
 
+  public boolean atSetpoint(double targetPosition) {
+    return Math.abs(targetPosition - io.position) < 0.02;
+  }
 
   public void setPosition(double position) {
     io.setPosition(position);
   }
 
-
-  public void zeroClimb(){
+  public void zeroClimb() {
     io.zeroClimb();
   }
-
 
   public void setWantedState(Climb.ClimbWantedState wantedState) {
     this.wantedState = wantedState;
   }
 }
-
-

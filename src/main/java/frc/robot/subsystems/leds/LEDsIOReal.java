@@ -29,7 +29,7 @@ public LEDsIOReal() {
         .withLED(
             new LEDConfigs()
                 .withBrightnessScalar(LEDsConstants.colorScaler)
-                .withStripType(StripTypeValue.RGBW)
+                .withStripType(StripTypeValue.RGB)
                 .withLossOfSignalBehavior(LossOfSignalBehaviorValue.DisableLEDs));
     
     candleReal.getConfigurator().apply(candleConfig);

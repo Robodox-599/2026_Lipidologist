@@ -54,6 +54,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   private final double CHOREO_MAX_ERROR_MARGIN = 0.04;
   public static final double DRIVE_TO_POINT_STATIC_FRICTION_CONSTANT = 0.02;
   private final double DRIVE_TO_POINT_MAX_VELOCITY_OUTPUT = 2.0;
+  private final double DRIVE_TO_POINT_LINEAR_ERROR_MARGIN = 0.05;
+  private final double DRIVE_TO_POINT_ANGULAR_ERROR_MARGIN = 0.05;
 
   CommandXboxController driver;
 
@@ -416,9 +418,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
             targetSpeeds.vxMetersPerSecond += choreoXController.calculate(pose.getX(), sample.x);
             targetSpeeds.vyMetersPerSecond += choreoYController.calculate(pose.getY(), sample.y);
-            targetSpeeds.omegaRadiansPerSecond += choreoRotationLockPID.calculate(pose.getRotation().getRadians(), AllianceFlipUtil.shouldFlip() ?
-                this.targetRotation.rotateBy(kRedAlliancePerspectiveRotation).getRadians() : this.targetRotation.getRadians()); // not sure if this works as intended
-
+            targetSpeeds.omegaRadiansPerSecond += choreoRotationLockPID.calculate(pose.getRotation().getRadians(),
+                AllianceFlipUtil.shouldFlip()
+                    ? this.targetRotation.rotateBy(kRedAlliancePerspectiveRotation).getRadians()
+                    : this.targetRotation.getRadians()); // not sure if this works as intended
 
             DogLog.log("Drive/Choreo/RobotSetpointSpeedsAfterPID", targetSpeeds);
 
@@ -475,6 +478,24 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
   public boolean isAtTargetRotation() {
     return driveAtAngle.HeadingController.getPositionError() < Units.degreesToRadians(3);
+  }
+
+  public boolean isAtTargetPose() {
+    return MathUtil.isNear(0.0, this.targetPosition.getTranslation().minus(getState().Pose.getTranslation()).getNorm(),
+        DRIVE_TO_POINT_LINEAR_ERROR_MARGIN)
+        && MathUtil.isNear(
+            getState().Pose.getRotation().getRadians(),
+            this.targetPosition.getRotation().getRadians(),
+            DRIVE_TO_POINT_ANGULAR_ERROR_MARGIN);
+  }
+
+  public boolean isAtTargetPose(Pose2d targetPose) {
+    return MathUtil.isNear(0.0, targetPose.getTranslation().minus(getState().Pose.getTranslation()).getNorm(),
+        DRIVE_TO_POINT_LINEAR_ERROR_MARGIN)
+        && MathUtil.isNear(
+            getState().Pose.getRotation().getRadians(),
+            targetPose.getRotation().getRadians(),
+            DRIVE_TO_POINT_ANGULAR_ERROR_MARGIN);
   }
 
   /* CHOREO TRAJECTORY */

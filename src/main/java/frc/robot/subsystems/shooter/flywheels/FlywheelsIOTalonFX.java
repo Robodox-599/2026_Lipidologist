@@ -113,7 +113,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     @Override
     public void setRPS(double RPS) {
         super.targetRPS = RPS;
-        flywheelMotor.setControl(velocityVoltage);
+        flywheelMotor.setControl(velocityVoltage.withVelocity(RPS));
     }
 
     @Override
