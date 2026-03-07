@@ -20,7 +20,7 @@ public class VisionConstants {
     // public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
     // public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);
 
-    public record CameraConstants(String name, Transform3d robotToCamera) {
+    public record CameraConstants(String name, Transform3d robotToCamera, double stdDevFactor) {
     }
 
     // /* VISION */
@@ -153,14 +153,14 @@ public class VisionConstants {
             new Transform3d(
                     new Translation3d(frontLeftCameraPoseX, frontLeftCameraPoseY, frontLeftCameraPoseZ),
                     new Rotation3d(
-                            frontLeftCameraPoseRoll, frontLeftCameraPosePitch, frontLeftCameraPoseYaw)));
+                            frontLeftCameraPoseRoll, frontLeftCameraPosePitch, frontLeftCameraPoseYaw)), 1);
      public static final CameraConstants sideLeftCameraConstants = new CameraConstants(
             sideLeftCameraName,
             new Transform3d(
                     new Translation3d(
                             sideLeftCameraPoseX, sideLeftCameraPoseY, sideLeftCameraPoseZ),
                     new Rotation3d(
-                            sideLeftCameraPoseRoll, sideLeftCameraPosePitch, sideLeftCameraPoseYaw)));
+                            sideLeftCameraPoseRoll, sideLeftCameraPosePitch, sideLeftCameraPoseYaw)), 2.5);
 
     public static final CameraConstants frontRightCameraConstants = new CameraConstants(
             frontRightCameraName,
@@ -168,7 +168,7 @@ public class VisionConstants {
                     new Translation3d(
                             frontRightCameraPoseX, frontRightCameraPoseY, frontRightCameraPoseZ),
                     new Rotation3d(
-                            frontRightCameraPoseRoll, frontRightCameraPosePitch, frontRightCameraPoseYaw)));
+                            frontRightCameraPoseRoll, frontRightCameraPosePitch, frontRightCameraPoseYaw)), 1);
 
      public static final CameraConstants sideRightCameraConstants = new CameraConstants(
             sideRightCameraName,
@@ -176,7 +176,7 @@ public class VisionConstants {
                     new Translation3d(
                             sideRightCameraPoseX, sideRightCameraPoseY, sideRightCameraPoseZ),
                     new Rotation3d(
-                            sideRightCameraPoseRoll, sideRightCameraPosePitch, sideRightCameraPoseYaw)));
+                            sideRightCameraPoseRoll, sideRightCameraPosePitch, sideRightCameraPoseYaw)), 2.5);
 
     // public static final CameraConstants backCameraConstants =
     // new CameraConstants(

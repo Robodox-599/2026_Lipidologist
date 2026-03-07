@@ -200,8 +200,8 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Flywheel Velocity", 0.0);
     // SmartDashboard.putNumber("Hood Rotations", 0.0);
 
-    DogLog.log("LeftTrenchZone", FieldConstants.LeftTrench.trenchZone);
-    DogLog.log("RightTrenchZone", FieldConstants.RightTrench.trenchZone);
+    // DogLog.log("LeftTrenchZone", FieldConstants.LeftTrench.trenchZone);
+    // DogLog.log("RightTrenchZone", FieldConstants.RightTrench.trenchZone);
 
     autoBuilder = new AutoBuilder(drivetrain, superstructure);
     autoChooser = new AutoChooser(autoBuilder);
@@ -225,6 +225,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    
+    DogLog.log("OuterClimbPose", AllianceFlipUtil.apply(FieldConstants.Tower.leftOuterTowerPose));
+    SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
     Tracer.traceFunc("CommandScheduler", scheduler::run);
     // flywheels.setWantedState(FlywheelWantedState.SET_RPS,
     // SmartDashboard.getNumber("Flywheel Velocity", 0.0));

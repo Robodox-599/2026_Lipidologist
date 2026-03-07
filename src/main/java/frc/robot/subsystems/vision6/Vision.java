@@ -100,6 +100,12 @@ public class Vision {
           angularStdDev = 1000.0;
         }
 
+        if (robotSpeedsSupplier.get().vxMetersPerSecond > 0.5 || robotSpeedsSupplier.get().vyMetersPerSecond > 0.5) {
+          linearStdDev *= 2;
+        }
+
+        linearStdDev *= io[cameraIndex].constants.stdDevFactor();
+
         consumer.accept(observation.pose().toPose2d(), observation.timestamp(),
             VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
       }

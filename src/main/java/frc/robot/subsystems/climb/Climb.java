@@ -69,7 +69,7 @@ public class Climb {
         stop();
         break;
       case EXTENDING:
-        setPosition(0);
+        setPosition(ClimbConstants.climbExtensionPosition);
         break;
       case RETRACTING:
         setPosition(0);
@@ -95,6 +95,14 @@ public class Climb {
 
   public boolean atSetpoint(double targetPosition) {
     return Math.abs(targetPosition - io.position) < 0.02;
+  }
+  
+  public boolean atExtensionSetpoint() {
+    return Math.abs(ClimbConstants.climbExtensionPosition - io.position) < 0.02;
+  }
+
+  public boolean atStowSetpoint() {
+    return Math.abs(io.position) < 0.02;
   }
 
   public void setPosition(double position) {

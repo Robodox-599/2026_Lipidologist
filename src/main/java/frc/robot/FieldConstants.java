@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.climb.ClimbConstants;
 import frc.robot.subsystems.drive.constants.TunerConstants;
 
 public class FieldConstants {
@@ -247,13 +248,22 @@ public class FieldConstants {
                                                 - Units.inchesToMeters(0.75));
 
                 public static final Pose2d leftOuterTowerPose = new Pose2d(frontFaceX - Units.inchesToMeters(3.5 / 2),
-                                3.7457125999999996 + 1.25, new Rotation2d(Units.degreesToRadians(0)));
+                                leftUpright.getY()+ Units.inchesToMeters(0.75) +
+                                               Units.inchesToMeters(6) + Units.inchesToMeters(3), // +3 in tolerance
+                                new Rotation2d(Units.degreesToRadians(0))).transformBy(ClimbConstants.climbTransform);
                 public static final Pose2d leftInnerTowerPose = new Pose2d(frontFaceX - Units.inchesToMeters(3.5 / 2),
-                                leftUpright.getY() + TunerConstants.bumperRadius + Units.inchesToMeters(0.75), new Rotation2d(Units.degreesToRadians(0)));
+                                leftUpright.getY() + Units.inchesToMeters(0.75),
+                                new Rotation2d(Units.degreesToRadians(0))).transformBy(ClimbConstants.climbTransform);
                 public static final Pose2d rightOuterTowerPose = new Pose2d(frontFaceX - Units.inchesToMeters(3.5 / 2),
-                                3.7457125999999996 - 1.25, new Rotation2d(Units.degreesToRadians(180)));
+                                rightUpright.getY() - Units.inchesToMeters(0.75)
+                                                - Units.inchesToMeters(6) - Units.inchesToMeters(3), // +3 in tolerance
+                                new Rotation2d(Units.degreesToRadians(180))).transformBy(ClimbConstants.climbTransform);
                 public static final Pose2d rightInnerTowerPose = new Pose2d(frontFaceX - Units.inchesToMeters(3.5 / 2),
-                                rightUpright.getY() - TunerConstants.bumperRadius - Units.inchesToMeters(0.75), new Rotation2d(Units.degreesToRadians(180)));
+                                rightUpright.getY() + Units.inchesToMeters(0.75),
+                                new Rotation2d(Units.degreesToRadians(180))).transformBy(ClimbConstants.climbTransform);
+                public static final Rectangle2d towerZone = new Rectangle2d(
+                                new Translation2d(leftOuterTowerPose.getX(), leftOuterTowerPose.getY()),
+                                new Translation2d(rightOuterTowerPose.getX(), rightOuterTowerPose.getY()));
         }
 
         public static class Depot {
