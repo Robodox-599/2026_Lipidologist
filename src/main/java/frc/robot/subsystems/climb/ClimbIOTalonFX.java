@@ -16,6 +16,8 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -32,6 +34,7 @@ public class ClimbIOTalonFX extends ClimbIO {
 
   private MotionMagicVoltage m_request;
   private VoltageOut v_request;
+  private final Debouncer stallDebouncer;
 
 
   private StatusSignal<Angle> climbPosition;
@@ -76,6 +79,7 @@ public class ClimbIOTalonFX extends ClimbIO {
       ;
     m_request = new MotionMagicVoltage(0);
     v_request = new VoltageOut(0);
+    stallDebouncer = new Debouncer(ClimbConstants.debounceTripStatorCurrent, Debouncer.DebounceType.kRising);
 
 
     PhoenixUtil.tryUntilOk(10, () -> climbMotor.getConfigurator().apply(climbConfig));
@@ -133,7 +137,7 @@ public class ClimbIOTalonFX extends ClimbIO {
 
   @Override
   public void zeroClimb(){
-    if (super.statorCurrent > ClimbConstants.tripStatorCurrent){
+    if (stallDebouncer.calculate(super.statorCurrent > ClimbConstants.tripStatorCurrent )){
       setPosition(0); 
     } else{
       climbMotor.setControl(v_request.withOutput(-1)); //voltage change may be needed

@@ -38,7 +38,8 @@ public class ClimbConstants {
   public static final double maxVelocity = (12 - kS) / kV;
   public static final double maxAcceleration = maxVelocity;
 
-  public static double tripStatorCurrent = 0.0;
+  public static double tripStatorCurrent = 18.0;
+  public static double debounceTripStatorCurrent = 0.2;
 
   public static final Transform2d climbTransform = new Transform2d(new Translation2d(Units.inchesToMeters(3.546),
       Units.inchesToMeters(13.568)), new Rotation2d());
