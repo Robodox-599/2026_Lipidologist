@@ -46,7 +46,7 @@ public class IntakeWristConstants {
 
     public static final double wristLengthMeters = 0.5;
     public static final double wristMassKg = 5.0;
-    public static final double agitationTime = 0.0;
+    public static final double agitationTime = 0.5;
 
 
 }
