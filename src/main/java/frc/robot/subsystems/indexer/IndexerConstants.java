@@ -25,6 +25,6 @@ public class IndexerConstants {
   public static final double maxVelocityRotsPerSec = 100;
   public static final double maxAccelerationRotationsPerSecSQ = maxVelocityRotsPerSec / 2;
 
-  public static final double statorCurrentLimitAmps = 120;
-  public static final double supplyCurrentLimitAmps = 30;
+  public static final double supplyCurrentLimitAmps = 25;
+  public static final double statorCurrentLimitAmps = 80;
 }

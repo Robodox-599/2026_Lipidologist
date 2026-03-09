@@ -75,6 +75,7 @@ import frc.robot.subsystems.intake.intakeWrist.IntakeWristIOTalonFX;
 public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
   private Command autonomousCommand;
+  private Command prevAutonomousCommand;
 
   final CommandXboxController driver = new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
   // final CommandXboxController operator = new CommandXboxController(
@@ -167,27 +168,26 @@ public class Robot extends TimedRobot {
 
     superstructure = new Superstructure(
         drivetrain,
-        feeder, 
+        feeder,
         indexer,
         intakeRollers, intakeWrist,
-        flywheels, hood, 
+        flywheels, hood,
         vision, climb,
-        leds
-        );
+        leds);
 
     new Bindings(driver, superstructure);
 
     // autoFactory = new AutoFactory(
-    //     drivetrain::getPose,
-    //     drivetrain::resetPose,
-    //     drivetrain::setDesiredChoreoTrajectory,
-    //     true,
-    //     drivetrain);
+    // drivetrain::getPose,
+    // drivetrain::resetPose,
+    // drivetrain::setDesiredChoreoTrajectory,
+    // true,
+    // drivetrain);
 
     // autoRoutines = new AutoRoutines(autoFactory, superstructure, drivetrain);
     // Auto chooser setup
     // RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
-    
+
     // /** AUTO ROUTINES */
     // // COMPETITION
     // autoChooser.addRoutine("Left Auto", autoRoutines::leftAutoRoutine);
@@ -225,7 +225,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    
+
     DogLog.log("OuterClimbPose", AllianceFlipUtil.apply(FieldConstants.Tower.leftOuterTowerPose));
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
     Tracer.traceFunc("CommandScheduler", scheduler::run);
@@ -238,11 +238,12 @@ public class Robot extends TimedRobot {
     // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
 
     // Translation2d robotTranslation = drivetrain.getPose().getTranslation();
-    // Translation2d hubTranslation = AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
+    // Translation2d hubTranslation =
+    // AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
 
     // Rotation2d targetRotation = Rotation2d
-    //             .fromRadians(Math.atan2(robotTranslation.getY() - hubTranslation.getY(),
-    //                     robotTranslation.getX() - hubTranslation.getX()));
+    // .fromRadians(Math.atan2(robotTranslation.getY() - hubTranslation.getY(),
+    // robotTranslation.getX() - hubTranslation.getX()));
 
     // drivetrain.setTargetRotation(targetRotation);
     // double distance = robotTranslation.getDistance(hubTranslation);
@@ -255,6 +256,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
+    autonomousCommand = autoChooser.getSelectedCommand();
   }
 
   @Override
@@ -264,7 +266,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    autonomousCommand = autoChooser.getSelectedCommand();
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(autonomousCommand);
     }
