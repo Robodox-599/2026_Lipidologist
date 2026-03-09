@@ -23,5 +23,5 @@ public class FeederConstants {
   public static final double maxAccelerationRotationsPerSecSQ = maxVelocityRotsPerSec;
 
   public static final double supplyCurrentLimitAmps = 40;
-  public static final double statorCurrentLimitAmps = 60;
+  public static final double statorCurrentLimitAmps = 80;
 }
