@@ -7,8 +7,8 @@
    "bumperRadius":{
     "dimension":"Length",
     "var":{
-     "exp":"30.5 in / 2",
-     "val":0.38735
+     "exp":"35.25 in / 2",
+     "val":0.447675
     }
    },
    "centerLine":{
@@ -72,7 +72,7 @@
    "DEPOT_INSIDE":{
     "x":{
      "exp":"bumperRadius + intakeExtension",
-     "val":0.6921499999999999
+     "val":0.752475
     },
     "y":{
      "exp":"(fieldWidth / 2) + 75.93 in",
@@ -86,7 +86,7 @@
    "DEPOT_OUTSIDE":{
     "x":{
      "exp":"27 in + bumperRadius + intakeExtension",
-     "val":1.37795
+     "val":1.438275
     },
     "y":{
      "exp":"(fieldWidth / 2) + 75.93 in",
@@ -100,11 +100,11 @@
    "LMID_END":{
     "x":{
      "exp":"(fieldLength / 2) - bumperRadius - fuelRadius",
-     "val":7.808093
+     "val":7.747768
     },
     "y":{
      "exp":"(fieldWidth / 2) + bumperRadius + fuelRadius",
-     "val":4.496907
+     "val":4.557232000000001
     },
     "heading":{
      "exp":"270 deg",
@@ -114,7 +114,7 @@
    "LMID_START":{
     "x":{
      "exp":"(fieldLength / 2) - bumperRadius - fuelRadius",
-     "val":7.808093
+     "val":7.747768
     },
     "y":{
      "exp":"(fieldWidth / 2) + (startingFuelWidth / 2) + (fuelRadius / 2)",
@@ -146,7 +146,7 @@
     },
     "y":{
      "exp":"fieldWidth - bumperRadius",
-     "val":7.681650000000001
+     "val":7.621325000000001
     },
     "heading":{
      "exp":"270 deg",
@@ -155,12 +155,12 @@
    },
    "LTROUGH_SHOOTING":{
     "x":{
-     "exp":"startingLine - bumperRadius",
-     "val":3.61265
+     "exp":"startingLine - bumperRadius - 6 in",
+     "val":3.399925
     },
     "y":{
      "exp":"fieldWidth - bumperRadius - intakeExtension - 3 in",
-     "val":7.300650000000001
+     "val":7.240325
     },
     "heading":{
      "exp":"90 deg",
@@ -170,7 +170,7 @@
    "OUTPOST":{
     "x":{
      "exp":"bumperRadius + intakeExtension",
-     "val":0.6921499999999999
+     "val":0.752475
     },
     "y":{
      "exp":"0.6659626 m",
@@ -184,11 +184,11 @@
    "RMID_END":{
     "x":{
      "exp":"(fieldLength / 2) - bumperRadius - fuelRadius",
-     "val":7.808093
+     "val":7.747768
     },
     "y":{
      "exp":"(fieldWidth / 2) - bumperRadius - fuelRadius",
-     "val":3.572093
+     "val":3.5117680000000004
     },
     "heading":{
      "exp":"90 deg",
@@ -198,7 +198,7 @@
    "RMID_START":{
     "x":{
      "exp":"(fieldLength / 2) - bumperRadius - fuelRadius",
-     "val":7.808093
+     "val":7.747768
     },
     "y":{
      "exp":"(fieldWidth / 2) - (startingFuelWidth / 2) - (fuelRadius / 2)",
@@ -230,7 +230,7 @@
     },
     "y":{
      "exp":"bumperRadius",
-     "val":0.38735
+     "val":0.447675
     },
     "heading":{
      "exp":"90 deg",
@@ -240,11 +240,11 @@
    "RTROUGH_SHOOTING":{
     "x":{
      "exp":"startingLine - bumperRadius",
-     "val":3.61265
+     "val":3.552325
     },
     "y":{
      "exp":"bumperRadius + intakeExtension + 3 in",
-     "val":0.7683499999999999
+     "val":0.8286749999999999
     },
     "heading":{
      "exp":"270 deg",
@@ -304,16 +304,16 @@
   },
   "bumper":{
    "front":{
-    "exp":"15.25 in + 12 in",
-    "val":0.6921499999999999
+    "exp":"17.625 in + 12 in",
+    "val":0.752475
    },
    "side":{
-    "exp":"15.25 in",
-    "val":0.38735
+    "exp":"17.625 in",
+    "val":0.447675
    },
    "back":{
-    "exp":"15.25 in",
-    "val":0.38735
+    "exp":"17.625 in",
+    "val":0.447675
    }
   },
   "differentialTrackWidth":{

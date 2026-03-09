@@ -20,8 +20,8 @@ public class AutoBuilder {
                 AutoFactory.followTrajectoryWhileIdle("LTRENCHtoLMID", true, this.drivetrain, this.superstructure),
                 AutoFactory.followTrajectoryWhileIdle("LMIDtoLTRENCH", false, this.drivetrain, this.superstructure),
                 AutoFactory.followTrajectoryWhileScoring("LTRENCHtoDEPOT", false, this.drivetrain, this.superstructure),
-                AutoFactory.followTrajectoryWhileIdle("DEPOT_INTAKE", false, this.drivetrain, this.superstructure),
-                AutoFactory.followTrajectoryWhileIdle("DEPOTtoLTOWER", false, this.drivetrain, this.superstructure));
+                AutoFactory.followTrajectoryThenScore("DEPOT_INTAKE", false, 10, this.drivetrain, this.superstructure));
+                // AutoFactory.followTrajectoryWhileIdle("DEPOTtoLTOWER", false, this.drivetrain, this.superstructure));
     }
     
     public Command rightDoubleDouble() {

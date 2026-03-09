@@ -33,7 +33,7 @@ public class ClimbConstants {
   public static final double simKG = 0.0;
 
   public static double statorCurrent = 20.0;
-  public static double supplyCurrent = 70.0;
+  public static double supplyCurrent = 20.0;
 
   public static final double maxVelocity = (12 - kS) / kV;
   public static final double maxAcceleration = maxVelocity;

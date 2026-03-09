@@ -67,7 +67,7 @@ public class VisionConstants {
     public static final double sideLeftCameraPoseYaw = Units.degreesToRadians(90-27.555); // 102.0 - 90.0 (left/right rotation)
 
     // FRONT RIGHT CAMERA
-    public static final String frontRightCameraName = "FR_Camera";
+    public static final String frontRightCameraName = "FR_Camera_2";
 
 //     // CAMERA 3 POSE (X)
     public static final double frontRightCameraPoseX = Units.inchesToMeters(-11.354); // -11.354 (Y value in CAD)

@@ -9,6 +9,7 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -59,8 +60,9 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
                         .withSupplyCurrentLimit(IntakeRollersConstants.supplyCurrentLimit)
                         .withSupplyCurrentLimitEnable(true)
                         .withStatorCurrentLimit(IntakeRollersConstants.statorCurrentLimit)
-                        .withStatorCurrentLimitEnable(true)
-                ).withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Brake));
+                        .withStatorCurrentLimitEnable(true))
+                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Brake))
+        .withOpenLoopRamps(new OpenLoopRampsConfigs().withVoltageOpenLoopRampPeriod(1.0));
         v_request = new VoltageOut(0);
 
         PhoenixUtil.tryUntilOk(10, () -> intakeRollersMotorOne.getConfigurator().apply(intakeRollersMotorConfigOne, 1));
@@ -93,15 +95,14 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
 
     public void updateInputs() {
         BaseStatusSignal.refreshAll(
-            //intake rollers 1
-            intakeRollersOneVelocity, intakeRollersOneStatorCurrent, intakeRollersOneSupplyCurrent,
-            intakeRollersOneAppliedVolts, intakeRollersOneTemperature
-            //intake rollers 2
-            , intakeRollersTwoVelocity, intakeRollersTwoStatorCurrent, intakeRollersTwoSupplyCurrent,
-            intakeRollersTwoAppliedVolts, intakeRollersTwoTemperature
-        );
+                // intake rollers 1
+                intakeRollersOneVelocity, intakeRollersOneStatorCurrent, intakeRollersOneSupplyCurrent,
+                intakeRollersOneAppliedVolts, intakeRollersOneTemperature
+                // intake rollers 2
+                , intakeRollersTwoVelocity, intakeRollersTwoStatorCurrent, intakeRollersTwoSupplyCurrent,
+                intakeRollersTwoAppliedVolts, intakeRollersTwoTemperature);
 
-        //intake rollers 1
+        // intake rollers 1
         super.intakeRollersOneVelocity = intakeRollersOneVelocity.getValueAsDouble();
         super.intakeRollersOneVoltage = intakeRollersOneAppliedVolts.getValueAsDouble();
         super.intakeRollersOneStatorCurrent = intakeRollersOneStatorCurrent.getValueAsDouble();
@@ -114,7 +115,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         DogLog.log("Intake/IntakeRollersOne/SupplyCurrent", super.intakeRollersOneSupplyCurrent);
         DogLog.log("Intake/IntakeRollersOne/Temperature", super.intakeRollersOneTemperature);
 
-        //intake rollers 2
+        // intake rollers 2
         super.intakeRollersTwoVelocity = intakeRollersTwoVelocity.getValueAsDouble();
         super.intakeRollersTwoVoltage = intakeRollersTwoAppliedVolts.getValueAsDouble();
         super.intakeRollersTwoStatorCurrent = intakeRollersTwoStatorCurrent.getValueAsDouble();
@@ -136,7 +137,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
 
     @Override
     public void setVoltage(double voltage) {
-        intakeRollersMotorOne.setControl(v_request.withOutput(voltage));
-        intakeRollersMotorTwo.setControl(v_request.withOutput(voltage));
+        intakeRollersMotorOne.setControl(v_request.withOutput(voltage).withEnableFOC(true));
+        intakeRollersMotorTwo.setControl(v_request.withOutput(voltage).withEnableFOC(true));
     }
 }

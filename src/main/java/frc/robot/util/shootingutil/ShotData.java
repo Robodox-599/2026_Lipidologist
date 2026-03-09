@@ -41,10 +41,10 @@ public class ShotData {
     static {
         allianceZoneShotMap.put(
             1.0,
-            new Shot(Units.degreesToRadians(45), 3.0, 3.0));
+            new Shot(0.04, 60, 1));
         allianceZoneShotMap.put(
-            2.0,
-            new Shot(Units.degreesToRadians(90), 3.0, 3.0));
+            9.0,
+            new Shot(0.07, 60, 1));
     }
 
     public static double getHubHoodAngle(double distance) {

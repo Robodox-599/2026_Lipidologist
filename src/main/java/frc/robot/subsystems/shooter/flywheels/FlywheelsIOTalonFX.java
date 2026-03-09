@@ -5,6 +5,7 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TorqueCurrentConfigs;
@@ -113,7 +114,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     @Override
     public void setRPS(double RPS) {
         super.targetRPS = RPS;
-        flywheelMotor.setControl(velocityVoltage.withVelocity(RPS));
+        flywheelMotor.setControl(velocityVoltage.withVelocity(RPS).withEnableFOC(true));
     }
 
     @Override

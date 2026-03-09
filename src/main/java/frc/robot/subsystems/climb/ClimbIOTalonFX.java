@@ -1,6 +1,5 @@
 package frc.robot.subsystems.climb;
 
-
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
@@ -25,17 +24,14 @@ import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.util.PhoenixUtil;
 
-
 public class ClimbIOTalonFX extends ClimbIO {
   private TalonFX climbMotor;
   private CANBus climbCanbus;
   private TalonFXConfiguration climbConfig;
 
-
   private MotionMagicVoltage m_request;
   private VoltageOut v_request;
   private final Debouncer stallDebouncer;
-
 
   private StatusSignal<Angle> climbPosition;
   private StatusSignal<Current> climbStatorCurrent;
@@ -43,67 +39,58 @@ public class ClimbIOTalonFX extends ClimbIO {
   private StatusSignal<Voltage> climbVoltage;
   private StatusSignal<Temperature> climbTemperature;
 
-
-  public ClimbIOTalonFX(){
+  public ClimbIOTalonFX() {
     climbCanbus = new CANBus(ClimbConstants.climbCanbus);
     climbMotor = new TalonFX(ClimbConstants.climbMotorID, climbCanbus);
     climbConfig = new TalonFXConfiguration()
-      .withCurrentLimits(
-        new CurrentLimitsConfigs()
-          .withStatorCurrentLimitEnable(true)
-          .withStatorCurrentLimit(ClimbConstants.statorCurrent)
-          .withSupplyCurrentLimitEnable(true)
-          .withSupplyCurrentLimit(ClimbConstants.supplyCurrent)
-      )
-      .withMotorOutput(
-        new MotorOutputConfigs()
-          .withNeutralMode(NeutralModeValue.Brake)
-          .withInverted(InvertedValue.Clockwise_Positive)
-      )
-      .withSlot0(
-        new Slot0Configs()
-          .withKP(ClimbConstants.kP)
-          .withKI(ClimbConstants.kI)
-          .withKD(ClimbConstants.kD)
-          .withKV(ClimbConstants.kV)
-          .withKS(ClimbConstants.kS)
-          .withKG(ClimbConstants.kG)
-          .withGravityType(GravityTypeValue.Elevator_Static)
-      )
-      .withMotionMagic(
-        new MotionMagicConfigs()
-          .withMotionMagicCruiseVelocity(ClimbConstants.maxVelocity)
-          .withMotionMagicAcceleration(ClimbConstants.maxAcceleration)
-      )
-      
-      ;
+        .withCurrentLimits(
+            new CurrentLimitsConfigs()
+                .withStatorCurrentLimitEnable(true)
+                .withStatorCurrentLimit(ClimbConstants.statorCurrent)
+                .withSupplyCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(ClimbConstants.supplyCurrent)
+                .withSupplyCurrentLowerLimit(20)
+                .withSupplyCurrentLowerTime(0.5))
+        .withMotorOutput(
+            new MotorOutputConfigs()
+                .withNeutralMode(NeutralModeValue.Brake)
+                .withInverted(InvertedValue.Clockwise_Positive))
+        .withSlot0(
+            new Slot0Configs()
+                .withKP(ClimbConstants.kP)
+                .withKI(ClimbConstants.kI)
+                .withKD(ClimbConstants.kD)
+                .withKV(ClimbConstants.kV)
+                .withKS(ClimbConstants.kS)
+                .withKG(ClimbConstants.kG)
+                .withGravityType(GravityTypeValue.Elevator_Static))
+        .withMotionMagic(
+            new MotionMagicConfigs()
+                .withMotionMagicCruiseVelocity(ClimbConstants.maxVelocity)
+                .withMotionMagicAcceleration(ClimbConstants.maxAcceleration))
+
+    ;
     m_request = new MotionMagicVoltage(0);
     v_request = new VoltageOut(0);
     stallDebouncer = new Debouncer(ClimbConstants.debounceTripStatorCurrent, Debouncer.DebounceType.kRising);
 
-
     PhoenixUtil.tryUntilOk(10, () -> climbMotor.getConfigurator().apply(climbConfig));
 
+    climbPosition = climbMotor.getPosition();
+    climbStatorCurrent = climbMotor.getStatorCurrent();
+    climbSupplyCurrent = climbMotor.getSupplyCurrent();
+    climbVoltage = climbMotor.getMotorVoltage();
+    climbTemperature = climbMotor.getDeviceTemp();
 
-      climbPosition = climbMotor.getPosition();
-      climbStatorCurrent = climbMotor.getStatorCurrent();
-      climbSupplyCurrent = climbMotor.getSupplyCurrent();
-      climbVoltage = climbMotor.getMotorVoltage();
-      climbTemperature = climbMotor.getDeviceTemp();
+    BaseStatusSignal.setUpdateFrequencyForAll(50, climbPosition,
+        climbStatorCurrent, climbSupplyCurrent, climbVoltage, climbTemperature);
 
-
-      BaseStatusSignal.setUpdateFrequencyForAll(50, climbPosition,
-         climbStatorCurrent, climbSupplyCurrent, climbVoltage, climbTemperature);
-
-
-      climbMotor.optimizeBusUtilization();
+    climbMotor.optimizeBusUtilization();
   }
 
-
   @Override
-  public void updateInputs(){
+  public void updateInputs() {
     BaseStatusSignal.refreshAll(climbPosition, climbStatorCurrent, climbSupplyCurrent, climbVoltage, climbTemperature);
-
 
     super.position = climbPosition.getValueAsDouble();
     super.statorCurrent = climbStatorCurrent.getValueAsDouble();
@@ -111,9 +98,7 @@ public class ClimbIOTalonFX extends ClimbIO {
     super.voltage = climbVoltage.getValueAsDouble();
     super.temperature = climbTemperature.getValueAsDouble();
 
-
     super.atSetpoint = Math.abs(super.targetPosition - super.position) < 0.02;
-
 
     DogLog.log("Climb/Position", super.position);
     DogLog.log("Climb/Velocity", super.velocity);
@@ -125,13 +110,13 @@ public class ClimbIOTalonFX extends ClimbIO {
   }
 
   @Override
-  public void setPosition(double position){
+  public void setPosition(double position) {
     super.targetPosition = position;
     climbMotor.setControl(m_request.withPosition(position));
   }
 
   @Override
-  public void stop(){
+  public void stop() {
     climbMotor.stopMotor();
   }
 

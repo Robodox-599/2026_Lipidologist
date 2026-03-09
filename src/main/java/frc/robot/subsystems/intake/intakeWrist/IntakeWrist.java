@@ -97,16 +97,16 @@ public class IntakeWrist {
                 stop();
                 break;
             case INTAKING_FUEL:
-                setPosition(-0.01);
+                setPosition(0.0);
                 break;
             case STOWING:
                 setPosition(.33);
                 break;
             case WRIST_RETRACTING:
-                setPosition(0.19);
+                setPosition(0.14);
                 break;
             case WRIST_EXTENDING:
-                setPosition(-0.01);
+                setPosition(0.0);
                 break;
             default:
                 stop();

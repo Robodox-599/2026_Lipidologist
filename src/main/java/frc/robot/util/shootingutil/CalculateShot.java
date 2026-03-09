@@ -86,6 +86,7 @@ public class CalculateShot {
     }
 
     public static double applyFuelDragCoefficient(double flightTime) {
-        return (1-Math.pow(Math.E, -(fuelDragCoefficient * flightTime))) / fuelDragCoefficient;
+        // return (1-Math.pow(Math.E, -(fuelDragCoefficient * flightTime))) / fuelDragCoefficient;
+        return flightTime;
     }
 }

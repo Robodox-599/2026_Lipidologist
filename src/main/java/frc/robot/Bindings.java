@@ -35,13 +35,13 @@ public class Bindings extends SubsystemBase {
     // PREPARE TO SHOOT TO EITHER HUB OR ALLIANCE ZONE
     driver.povRight().and(driver.rightTrigger().negate()).whileTrue(new RepeatCommand(setPrepareShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    // AUTOMATICALLY CLIMB
-    driver.a().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLIMB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    // // AUTOMATICALLY CLIMB
+    // driver.a().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLIMB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
     // driver.rightTrigger().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.TESTING))
     //     .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    driver.a().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLIMB));
+    // driver.a().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLIMB));
 
     new Trigger(() -> HubShiftUtil.isHubActiveSoon(3)).onTrue(rumbleDriverSwapping(driver, 0.5, 3));
   }
