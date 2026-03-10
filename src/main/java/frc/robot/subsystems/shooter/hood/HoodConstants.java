@@ -32,7 +32,7 @@ public class HoodConstants {
     public static final double hoodMaxAcceleration = hoodMaxVelocity * 2;
 
     //current limits 
-    public static final double supplyCurrentLimit = 50; 
+    public static final double supplyCurrentLimit = 20; 
     public static final double statorCurrentLimit = 50; // reduce if overshooting too much
 
     //sim stuff

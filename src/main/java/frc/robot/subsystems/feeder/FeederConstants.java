@@ -18,7 +18,6 @@ public class FeederConstants {
   public static final double kS = 0.39;
   public static final double kV = 0.117;
 
-  public static final double supplyCurrentLimit = 40;
   public static final double maxVelocityRotsPerSec = (12 - kS) / kV;
   public static final double maxAccelerationRotationsPerSecSQ = maxVelocityRotsPerSec;
 

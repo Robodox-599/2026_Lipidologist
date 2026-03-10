@@ -69,10 +69,10 @@ public class Indexer {
         stopIndexer();
         break;
       case TRANSFERING_FUEL:
-        setIndexerVoltage(5);
+        setIndexerVoltage(12);
         break;
       case PULSING_FUEL:
-        indexerPulseFuel(1);;
+        indexerPulseFuel(1);
         break;
       case REVERSING:
         setIndexerVoltage(-0.5);
