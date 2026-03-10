@@ -60,7 +60,7 @@ public class Feeder {
   public void applyStates() {
     switch (currentState) {
       case FEEDING_FUEL:
-        setFeederVelocity(50);
+        setFeederVelocity(100);
         break;
       case STOPPED:
         stopFeeder();

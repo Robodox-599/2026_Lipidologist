@@ -66,6 +66,13 @@
      "exp":"43.51 in - (3.5 in / 2)",
      "val":1.060704
     }
+   },
+   "trenchOpeningWidth":{
+    "dimension":"Length",
+    "var":{
+     "exp":"50.34 in",
+     "val":1.278636
+    }
    }
   },
   "poses":{
@@ -139,7 +146,7 @@
      "val":0.0
     }
    },
-   "LTROUGH_INTAKING":{
+   "LTRENCH_INTAKING":{
     "x":{
      "exp":"startingLine",
      "val":4.0
@@ -153,18 +160,32 @@
      "val":4.71238898038469
     }
    },
-   "LTROUGH_SHOOTING":{
+   "LTRENCH_SHOOTING":{
+    "x":{
+     "exp":"LTRENCH_THRU.x - 1 m",
+     "val":2.399925
+    },
+    "y":{
+     "exp":"7 m",
+     "val":7.0
+    },
+    "heading":{
+     "exp":"120 deg",
+     "val":2.0943951023931953
+    }
+   },
+   "LTRENCH_THRU":{
     "x":{
      "exp":"startingLine - bumperRadius - 6 in",
      "val":3.399925
     },
     "y":{
-     "exp":"fieldWidth - bumperRadius - intakeExtension - 3 in",
-     "val":7.240325
+     "exp":"fieldWidth - (trenchOpeningWidth / 2) - 2 in",
+     "val":7.378882000000001
     },
     "heading":{
-     "exp":"90 deg",
-     "val":1.5707963267948966
+     "exp":"180 deg",
+     "val":3.141592653589793
     }
    },
    "OUTPOST":{

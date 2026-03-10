@@ -127,10 +127,12 @@ public class Robot extends TimedRobot {
         hood = new Hood(new HoodIOTalonFX());
         vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
             new VisionIOReal(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-            // new VisionIOReal(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
+            // new VisionIOReal(VisionConstants.sideLeftCameraConstants, () ->
+            // drivetrain.getPose()),
             new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
-            // new VisionIOReal(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose())
-            );
+        // new VisionIOReal(VisionConstants.sideRightCameraConstants, () ->
+        // drivetrain.getPose())
+        );
         leds = new LEDs(new LEDsIOReal());
         break;
       case SIM:
@@ -144,10 +146,12 @@ public class Robot extends TimedRobot {
         hood = new Hood(new HoodIOSim());
         vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
             new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-            // new VisionIOSim(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
+            // new VisionIOSim(VisionConstants.sideLeftCameraConstants, () ->
+            // drivetrain.getPose()),
             new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
-            // new VisionIOSim(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose())
-            );
+        // new VisionIOSim(VisionConstants.sideRightCameraConstants, () ->
+        // drivetrain.getPose())
+        );
         leds = new LEDs(new LEDsIO());
         break;
       default: // defaults to sim
@@ -161,10 +165,12 @@ public class Robot extends TimedRobot {
         hood = new Hood(new HoodIOSim());
         vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
             new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-            // new VisionIOSim(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
+            // new VisionIOSim(VisionConstants.sideLeftCameraConstants, () ->
+            // drivetrain.getPose()),
             new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
-            // new VisionIOSim(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose())
-            );
+        // new VisionIOSim(VisionConstants.sideRightCameraConstants, () ->
+        // drivetrain.getPose())
+        );
         leds = new LEDs(new LEDsIO());
         break;
     }
@@ -174,11 +180,10 @@ public class Robot extends TimedRobot {
         feeder,
         indexer,
         intakeRollers, intakeWrist,
-        flywheels, hood, 
-        vision, 
+        flywheels, hood,
+        vision,
         // climb,
-        leds
-        );
+        leds);
 
     new Bindings(driver, superstructure);
 
@@ -213,6 +218,15 @@ public class Robot extends TimedRobot {
     configureAutos(drivetrain, superstructure);
 
     // intakeRollers.setWantedState(IntakeRollersWantedState.INTAKE_FUEL);
+    // driver.rightTrigger().onTrue(Commands.runOnce(() -> {
+    //   feeder.setWantedState(FeederWantedState.FEED_FUEL);
+    //   indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
+    //   intakeWrist.setWantedState(IntakeWristWantedState.AGITATE_FUEL);
+    // })).onFalse(Commands.runOnce(() -> {
+    //   feeder.setWantedState(FeederWantedState.STOPPED);
+    //   indexer.setWantedState(IndexerWantedState.STOPPED);
+    //   intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
+    // }));
   }
 
   private void configureAutos(CommandSwerveDrivetrain drivetrain, Superstructure superstructure) {
@@ -230,27 +244,25 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-
-    DogLog.log("OuterClimbPose", AllianceFlipUtil.apply(FieldConstants.Tower.leftOuterTowerPose));
+    // DogLog.log("OuterClimbPose", AllianceFlipUtil.apply(FieldConstants.Tower.leftOuterTowerPose));
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
     Tracer.traceFunc("CommandScheduler", scheduler::run);
     // flywheels.setWantedState(FlywheelWantedState.SET_RPS,
-    // SmartDashboard.getNumber("Flywheel Velocity", 0.0));
+    //     SmartDashboard.getNumber("Flywheel Velocity", 0.0));
     // hood.setWantedState(HoodWantedState.SET_POSITION,
-    // SmartDashboard.getNumber("Hood Rotations", 0.0));
-    // feeder.setWantedState(FeederWantedState.FEED_FUEL);
-    // indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
+    //     SmartDashboard.getNumber("Hood Rotations", 0.0));
+    // // feeder.setWantedState(FeederWantedState.FEED_FUEL);
+    // // indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
     // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
 
     // Translation2d robotTranslation = drivetrain.getPose().getTranslation();
-    // Translation2d hubTranslation =
-    // AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
+    // Translation2d hubTranslation = AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
 
     // Rotation2d targetRotation = Rotation2d
-    // .fromRadians(Math.atan2(robotTranslation.getY() - hubTranslation.getY(),
-    // robotTranslation.getX() - hubTranslation.getX()));
+    //     .fromRadians(Math.atan2(robotTranslation.getY() - hubTranslation.getY(),
+    //         robotTranslation.getX() - hubTranslation.getX()));
 
-    // drivetrain.setTargetRotation(targetRotation);
+    // drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, targetRotation);
     // double distance = robotTranslation.getDistance(hubTranslation);
     // DogLog.log("DistanceToHub", distance);
   }

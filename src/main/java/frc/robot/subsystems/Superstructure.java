@@ -122,8 +122,8 @@ public class Superstructure extends SubsystemBase {
         Tracer.traceFunc("Drivetrain Periodic", drivetrain::updateInputs);
         Tracer.traceFunc("FeederPeriodic", feeder::updateInputs);
         Tracer.traceFunc("IndexerPeriodic", indexer::updateInputs);
-        Tracer.traceFunc("IntakeRollers Periodic", intakeRollers::updateInputs);
-        Tracer.traceFunc("IntakeWrist Periodic", intakeWrist::updateInputs);
+        // Tracer.traceFunc("IntakeRollers Periodic", intakeRollers::updateInputs);
+        // Tracer.traceFunc("IntakeWrist Periodic", intakeWrist::updateInputs);
         Tracer.traceFunc("FlywheelsPeriodic", flywheels::updateInputs);
         Tracer.traceFunc("HoodPeriodic", hood::updateInputs);
         Tracer.traceFunc("LEDsPeriodic", leds::updateInputs);
@@ -158,7 +158,7 @@ public class Superstructure extends SubsystemBase {
             case SHOOT_HUB:
                 this.adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
-                if (areSystemsReadyForHubShot(this.adjustedShot.flightTime())) {
+                if (areSystemsReadyForHubShot()) {
                     currentSuperState = CurrentSuperState.SHOOTING_HUB;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
