@@ -206,7 +206,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
     this.driver = driver;
 
-    driveAtAngle.HeadingController = new PhoenixPIDController(7, 0, 0);
+    driveAtAngle.HeadingController = new PhoenixPIDController(5, 0, 0);
     driveAtAngle.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
     choreoThetaPID.enableContinuousInput(-Math.PI, Math.PI);
@@ -342,6 +342,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withVelocityX(controllerSpeeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
                 .withVelocityY(controllerSpeeds.vyMetersPerSecond) // Drive left with negative X (left)
                 .withTargetDirection(targetRotation));
+        DogLog.log("Drive/RotationLock/TargetRotation", new Rotation2d(targetRotation.getRadians() + Math.PI));
         break;
       case DRIVE_TO_POINT:
         Translation2d translationToTarget = this.targetPosition.getTranslation()

@@ -123,7 +123,7 @@ public class Superstructure extends SubsystemBase {
         Tracer.traceFunc("FeederPeriodic", feeder::updateInputs);
         Tracer.traceFunc("IndexerPeriodic", indexer::updateInputs);
         // Tracer.traceFunc("IntakeRollers Periodic", intakeRollers::updateInputs);
-        // Tracer.traceFunc("IntakeWrist Periodic", intakeWrist::updateInputs);
+        Tracer.traceFunc("IntakeWrist Periodic", intakeWrist::updateInputs);
         Tracer.traceFunc("FlywheelsPeriodic", flywheels::updateInputs);
         Tracer.traceFunc("HoodPeriodic", hood::updateInputs);
         Tracer.traceFunc("LEDsPeriodic", leds::updateInputs);

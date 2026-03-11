@@ -111,7 +111,8 @@ public class Robot extends TimedRobot {
             .withCaptureDs(true)
             .withCaptureNt(true)
             .withNtPublish(true)
-            .withCaptureConsole(true));
+            .withCaptureConsole(true)
+            .withUseLogThread(false));
 
     switch (Constants.currentMode) {
       case REAL:
