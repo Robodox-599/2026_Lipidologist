@@ -86,8 +86,8 @@ public class Superstructure extends SubsystemBase {
         STOWING
     }
 
-    private WantedSuperState wantedSuperState = WantedSuperState.STOP;
-    private CurrentSuperState currentSuperState = CurrentSuperState.STOPPED;
+    private WantedSuperState wantedSuperState = WantedSuperState.IDLE;
+    private CurrentSuperState currentSuperState = CurrentSuperState.IDLING;
     private AdjustedShot adjustedShot = new AdjustedShot(new Rotation2d(), 0, 0, 0);
     private Debouncer readyToShootDebouncer = new Debouncer(0.1, DebounceType.kFalling);
 
@@ -292,8 +292,13 @@ public class Superstructure extends SubsystemBase {
     }
 
     public void preparingHubShot() {
-        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK,
-                this.adjustedShot.targetRotation());
+        if (DriverStation.isAutonomous()) {
+            drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
+                    this.adjustedShot.targetRotation());
+        } else {
+            drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK,
+                    this.adjustedShot.targetRotation());
+        }
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
         indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);

@@ -126,11 +126,11 @@ public class Robot extends TimedRobot {
             new FlywheelsIOTalonFX(FlywheelsConstants.MiddleFlywheel),
             new FlywheelsIOTalonFX(FlywheelsConstants.RightFlywheel));
         hood = new Hood(new HoodIOTalonFX());
-        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
-            new VisionIOReal(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
+        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds()
+            // new VisionIOReal(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
             // new VisionIOReal(VisionConstants.sideLeftCameraConstants, () ->
             // drivetrain.getPose()),
-            new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
+            // new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
         // new VisionIOReal(VisionConstants.sideRightCameraConstants, () ->
         // drivetrain.getPose())
         );
@@ -145,11 +145,11 @@ public class Robot extends TimedRobot {
         intakeWrist = new IntakeWrist(new IntakeWristIOSim());
         flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
         hood = new Hood(new HoodIOSim());
-        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
-            new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
+        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds()
+            // new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
             // new VisionIOSim(VisionConstants.sideLeftCameraConstants, () ->
             // drivetrain.getPose()),
-            new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
+            // new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
         // new VisionIOSim(VisionConstants.sideRightCameraConstants, () ->
         // drivetrain.getPose())
         );
@@ -274,7 +274,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    autonomousCommand = autoChooser.getSelectedCommand();
+    autoChooser.updateAutoChooser();
   }
 
   @Override
@@ -284,6 +284,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    autoChooser.updateAutoChooser();
+    autonomousCommand = autoChooser.getSelectedAutoCommand();
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(autonomousCommand);
     }

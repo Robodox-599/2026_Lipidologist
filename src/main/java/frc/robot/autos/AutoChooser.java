@@ -1,5 +1,8 @@
 package frc.robot.autos;
 
+import java.util.ArrayList;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -19,6 +22,9 @@ public class AutoChooser {
     private final SendableChooser<AutoMode> routineChooser = new SendableChooser<>();
     private final SendableChooser<StartLocation> startingLocationChooser = new SendableChooser<>();
     private final AutoBuilder autoBuilder;
+    private AutoMode autoMode = AutoMode.NOTHING;
+    private StartLocation startLocation = StartLocation.LEFT;
+    private Command autoCommand = Commands.none();
 
     public AutoChooser(AutoBuilder autoBuilder) {
         this.autoBuilder = autoBuilder;
@@ -39,18 +45,40 @@ public class AutoChooser {
         return startingLocationChooser;
     }
 
-    public Command getSelectedCommand() {
-        AutoMode selected = routineChooser.getSelected();
+    public Command getSelectedAutoCommand() {
+        return autoCommand;
+    }
 
-        if (selected == null) {
-            selected = AutoMode.NOTHING;
+    public void updateAutoChooser() {
+        // Update the list of questions
+        AutoMode chosenAutoMode = routineChooser.getSelected();
+        StartLocation chosenStartLocation = startingLocationChooser.getSelected();
+
+        if (chosenAutoMode == null) {
+            chosenAutoMode = AutoMode.NOTHING;
         }
-        switch (selected) {
+        if (chosenStartLocation == null) {
+            chosenStartLocation = StartLocation.LEFT;
+        }
+
+        if (chosenAutoMode != this.autoMode || chosenStartLocation != this.startLocation || autoCommand == null) {
+            this.autoMode = chosenAutoMode;
+            this.startLocation = chosenStartLocation;
+            autoCommand = getSelectedCommand(this.autoMode, this.startLocation);
+        }
+    }
+
+    private Command getSelectedCommand(AutoMode chosenAutoMode, StartLocation chosenStartLocation) {
+        switch (chosenAutoMode) {
             case DOUBLE_DOUBLE:
-                return (startingLocationChooser.getSelected() == StartLocation.LEFT) ? autoBuilder.leftDoubleDouble() : autoBuilder.rightDoubleDouble();
+                return (chosenStartLocation == StartLocation.LEFT)
+                        ? autoBuilder.leftDoubleDouble()
+                        : autoBuilder.rightDoubleDouble();
             case CHEESEBURGER_WITH_ONIONS:
-                return (startingLocationChooser.getSelected() == StartLocation.LEFT) ? autoBuilder.leftCheeseBurgerWithOnions() : autoBuilder.leftCheeseBurgerWithOnions();
-            case NOTHING: 
+                return (chosenStartLocation == StartLocation.LEFT)
+                        ? autoBuilder.leftCheeseBurger()
+                        : autoBuilder.rightCheeseBurger();
+            case NOTHING:
                 return Commands.none();
             default:
                 return Commands.none();
