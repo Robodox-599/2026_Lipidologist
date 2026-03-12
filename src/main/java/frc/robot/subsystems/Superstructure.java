@@ -122,7 +122,7 @@ public class Superstructure extends SubsystemBase {
         Tracer.traceFunc("Drivetrain Periodic", drivetrain::updateInputs);
         Tracer.traceFunc("FeederPeriodic", feeder::updateInputs);
         Tracer.traceFunc("IndexerPeriodic", indexer::updateInputs);
-        // Tracer.traceFunc("IntakeRollers Periodic", intakeRollers::updateInputs);
+        Tracer.traceFunc("IntakeRollers Periodic", intakeRollers::updateInputs);
         Tracer.traceFunc("IntakeWrist Periodic", intakeWrist::updateInputs);
         Tracer.traceFunc("FlywheelsPeriodic", flywheels::updateInputs);
         Tracer.traceFunc("HoodPeriodic", hood::updateInputs);
@@ -299,8 +299,8 @@ public class Superstructure extends SubsystemBase {
             drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK,
                     this.adjustedShot.targetRotation());
         }
-        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
@@ -345,8 +345,8 @@ public class Superstructure extends SubsystemBase {
 
     public void preparingAllianceZoneShot() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
-        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
@@ -389,8 +389,8 @@ public class Superstructure extends SubsystemBase {
         } else {
             drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
         }
-        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
@@ -412,8 +412,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.DRIVE_TO_POINT,
                 AllianceFlipUtil.shouldFlip() ? AllianceFlipUtil.apply(FieldConstants.Tower.leftOuterTowerPose)
                         : FieldConstants.Tower.leftOuterTowerPose);
-        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
@@ -431,8 +431,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.DRIVE_TO_POINT,
                 AllianceFlipUtil.shouldFlip() ? AllianceFlipUtil.apply(FieldConstants.Tower.leftInnerTowerPose)
                         : FieldConstants.Tower.leftInnerTowerPose);
-        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
@@ -450,8 +450,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.DRIVE_TO_POINT,
                 AllianceFlipUtil.shouldFlip() ? AllianceFlipUtil.apply(FieldConstants.Tower.rightOuterTowerPose)
                         : FieldConstants.Tower.rightOuterTowerPose);
-        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
@@ -469,8 +469,8 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.DRIVE_TO_POINT,
                 AllianceFlipUtil.shouldFlip() ? AllianceFlipUtil.apply(FieldConstants.Tower.rightInnerTowerPose)
                         : FieldConstants.Tower.rightInnerTowerPose);
-        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
@@ -486,8 +486,8 @@ public class Superstructure extends SubsystemBase {
 
     public void climb() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.STOPPED);
-        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-        indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
@@ -537,8 +537,8 @@ public class Superstructure extends SubsystemBase {
             indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
             intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         } else {
-            feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-            indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+            feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+            indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
             intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         }
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);

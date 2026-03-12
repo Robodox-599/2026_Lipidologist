@@ -51,7 +51,7 @@ import java.util.function.Supplier;
  * be used in command-based projects.
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
-  private final double CHOREO_MAX_ERROR_MARGIN = 0.04;
+  private final double CHOREO_MAX_ERROR_MARGIN = 0.08;
   public static final double DRIVE_TO_POINT_STATIC_FRICTION_CONSTANT = 0.1;
   private final double DRIVE_TO_POINT_MAX_VELOCITY_OUTPUT = 2.0;
   private final double DRIVE_TO_POINT_LINEAR_ERROR_MARGIN = 0.05;
@@ -60,9 +60,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   CommandXboxController driver;
 
   private final PIDController driveToPointController = new PIDController(3, 0.0, 0.0); // P: 3.0/3.6, D: 0.1  |  TODO: change to profiled PID controller
-  private final PIDController choreoXController = new PIDController(5, 0, 0);
-  private final PIDController choreoYController = new PIDController(5, 0, 0);
-  private final PIDController choreoThetaPID = new PIDController(5, 0, 0);
+  private final PIDController choreoXController = new PIDController(1.4, 0, 0);
+  private final PIDController choreoYController = new PIDController(1.4, 0, 0);
+  private final PIDController choreoThetaPID = new PIDController(1.5, 0, 0);
   private final PIDController choreoRotationLockPID = new PIDController(8, 0, 0);
 
   private ChassisSpeeds prevFieldRelVelocities = new ChassisSpeeds();

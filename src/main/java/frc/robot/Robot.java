@@ -126,11 +126,11 @@ public class Robot extends TimedRobot {
             new FlywheelsIOTalonFX(FlywheelsConstants.MiddleFlywheel),
             new FlywheelsIOTalonFX(FlywheelsConstants.RightFlywheel));
         hood = new Hood(new HoodIOTalonFX());
-        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds()
-            // new VisionIOReal(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
+        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
+            new VisionIOReal(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
             // new VisionIOReal(VisionConstants.sideLeftCameraConstants, () ->
             // drivetrain.getPose()),
-            // new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
+            new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
         // new VisionIOReal(VisionConstants.sideRightCameraConstants, () ->
         // drivetrain.getPose())
         );
