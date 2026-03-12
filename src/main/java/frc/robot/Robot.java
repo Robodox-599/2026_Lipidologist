@@ -146,10 +146,12 @@ public class Robot extends TimedRobot {
         flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
         hood = new Hood(new HoodIOSim());
         vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds()
-            // new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-            // new VisionIOSim(VisionConstants.sideLeftCameraConstants, () ->
-            // drivetrain.getPose()),
-            // new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
+        // new VisionIOSim(VisionConstants.frontLeftCameraConstants, () ->
+        // drivetrain.getPose()),
+        // new VisionIOSim(VisionConstants.sideLeftCameraConstants, () ->
+        // drivetrain.getPose()),
+        // new VisionIOSim(VisionConstants.frontRightCameraConstants, () ->
+        // drivetrain.getPose())
         // new VisionIOSim(VisionConstants.sideRightCameraConstants, () ->
         // drivetrain.getPose())
         );
@@ -220,13 +222,13 @@ public class Robot extends TimedRobot {
 
     // intakeRollers.setWantedState(IntakeRollersWantedState.INTAKE_FUEL);
     // driver.rightTrigger().onTrue(Commands.runOnce(() -> {
-    //   feeder.setWantedState(FeederWantedState.FEED_FUEL);
-    //   indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
-    //   intakeWrist.setWantedState(IntakeWristWantedState.AGITATE_FUEL);
+    // feeder.setWantedState(FeederWantedState.FEED_FUEL);
+    // indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
+    // intakeWrist.setWantedState(IntakeWristWantedState.AGITATE_FUEL);
     // })).onFalse(Commands.runOnce(() -> {
-    //   feeder.setWantedState(FeederWantedState.STOPPED);
-    //   indexer.setWantedState(IndexerWantedState.STOPPED);
-    //   intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
+    // feeder.setWantedState(FeederWantedState.STOPPED);
+    // indexer.setWantedState(IndexerWantedState.STOPPED);
+    // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
     // }));
   }
 
@@ -245,27 +247,30 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    // DogLog.log("OuterClimbPose", AllianceFlipUtil.apply(FieldConstants.Tower.leftOuterTowerPose));
+    // DogLog.log("OuterClimbPose",
+    // AllianceFlipUtil.apply(FieldConstants.Tower.leftOuterTowerPose));
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
     Tracer.traceFunc("CommandScheduler", scheduler::run);
     // flywheels.setWantedState(FlywheelWantedState.SET_RPS,
     //     SmartDashboard.getNumber("Flywheel Velocity", 0.0));
     // hood.setWantedState(HoodWantedState.SET_POSITION,
     //     SmartDashboard.getNumber("Hood Rotations", 0.0));
-    // // feeder.setWantedState(FeederWantedState.FEED_FUEL);
-    // // indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
+    // feeder.setWantedState(FeederWantedState.FEED_FUEL);
+    // indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
     // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
 
-    // Translation2d robotTranslation = drivetrain.getPose().getTranslation();
-    // Translation2d hubTranslation = AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
+    Translation2d robotTranslation = drivetrain.getPose().getTranslation();
+    Translation2d allianceZoneTarget = new Translation2d(
+        AllianceFlipUtil.applyX(FieldConstants.LinesVertical.starting - 1), robotTranslation.getY());
 
-    // Rotation2d targetRotation = Rotation2d
-    //     .fromRadians(Math.atan2(robotTranslation.getY() - hubTranslation.getY(),
-    //         robotTranslation.getX() - hubTranslation.getX()));
+    double distance = robotTranslation.getDistance(allianceZoneTarget);
+
+    Rotation2d targetRotation = Rotation2d
+        .fromRadians(Math.atan2(robotTranslation.getY() - allianceZoneTarget.getY(),
+            robotTranslation.getX() - allianceZoneTarget.getX()));
 
     // drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, targetRotation);
-    // double distance = robotTranslation.getDistance(hubTranslation);
-    // DogLog.log("DistanceToHub", distance);
+    DogLog.log("DistanceToAllianceZoneTarget", distance);
   }
 
   @Override

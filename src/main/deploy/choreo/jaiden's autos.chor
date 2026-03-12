@@ -42,8 +42,8 @@
    "hubSweepMidExtension":{
     "dimension":"Length",
     "var":{
-     "exp":"0.5 m",
-     "val":0.5
+     "exp":"0.7 m",
+     "val":0.7
     }
    },
    "intakeExtension":{
@@ -113,30 +113,30 @@
    },
    "LMID_END":{
     "x":{
-     "exp":"(fieldLength / 2) - bumperRadius - fuelRadius",
-     "val":7.747768
+     "exp":"(fieldLength / 2) - 6 in",
+     "val":8.1181
     },
     "y":{
      "exp":"(fieldWidth / 2) + bumperRadius + fuelRadius",
      "val":4.557232000000001
     },
     "heading":{
-     "exp":"270 deg",
-     "val":4.71238898038469
+     "exp":"270 deg - 15 deg",
+     "val":4.4505895925855405
     }
    },
    "LMID_START":{
     "x":{
-     "exp":"(fieldLength / 2) - bumperRadius - fuelRadius",
-     "val":7.747768
+     "exp":"(fieldLength / 2)",
+     "val":8.2705
     },
     "y":{
      "exp":"(fieldWidth / 2) + (startingFuelWidth / 2) + (fuelRadius / 2)",
      "val":6.6882285
     },
     "heading":{
-     "exp":"270 deg",
-     "val":4.71238898038469
+     "exp":"270 deg + 5 deg",
+     "val":4.799655442984406
     }
    },
    "LTOWER":{
@@ -163,8 +163,8 @@
      "val":7.378882000000001
     },
     "heading":{
-     "exp":"0 deg",
-     "val":0.0
+     "exp":"180 deg",
+     "val":3.141592653589793
     }
    },
    "LTRENCH_HUB_END":{
@@ -233,8 +233,8 @@
      "val":7.378882000000001
     },
     "heading":{
-     "exp":"0 deg",
-     "val":0.0
+     "exp":"180 deg",
+     "val":3.141592653589793
     }
    },
    "OUTPOST":{
@@ -254,29 +254,29 @@
    "RMID_END":{
     "x":{
      "exp":"LMID_END.x",
-     "val":7.747768
+     "val":8.1181
     },
     "y":{
      "exp":"fieldWidth - LMID_END.y",
      "val":3.511768
     },
     "heading":{
-     "exp":"90 deg",
-     "val":1.5707963267948966
+     "exp":"90 deg + 15 deg",
+     "val":1.832595714594046
     }
    },
    "RMID_START":{
     "x":{
      "exp":"LMID_START.x",
-     "val":7.747768
+     "val":8.2705
     },
     "y":{
      "exp":"fieldWidth - LMID_START.y",
      "val":1.3807715000000007
     },
     "heading":{
-     "exp":"90 deg",
-     "val":1.5707963267948966
+     "exp":"90 deg - 10 deg",
+     "val":1.3962634015954636
     }
    },
    "RTOWER":{
@@ -303,8 +303,8 @@
      "val":0.690118
     },
     "heading":{
-     "exp":"0 deg",
-     "val":0.0
+     "exp":"180 deg",
+     "val":3.141592653589793
     }
    },
    "RTRENCH_HUB_END":{
@@ -373,8 +373,8 @@
      "val":0.690118
     },
     "heading":{
-     "exp":"0 deg",
-     "val":0.0
+     "exp":"180 deg",
+     "val":3.141592653589793
     }
    }
   }
@@ -401,12 +401,12 @@
    }
   },
   "mass":{
-   "exp":"150 lbs",
-   "val":68.0388555
+   "exp":"140 lbs",
+   "val":63.502931800000006
   },
   "inertia":{
-   "exp":"8 kg m ^ 2",
-   "val":8.0
+   "exp":"7 kg m ^ 2",
+   "val":7.0
   },
   "gearing":{
    "exp":"7.03125",
@@ -421,8 +421,8 @@
    "val":502.65482457436696
   },
   "tmax":{
-   "exp":"0.8 N * m",
-   "val":0.8
+   "exp":"0.7 N * m",
+   "val":0.7
   },
   "cof":{
    "exp":"1",

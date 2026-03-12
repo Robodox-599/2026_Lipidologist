@@ -60,9 +60,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   CommandXboxController driver;
 
   private final PIDController driveToPointController = new PIDController(3, 0.0, 0.0); // P: 3.0/3.6, D: 0.1  |  TODO: change to profiled PID controller
-  private final PIDController choreoXController = new PIDController(1.4, 0, 0);
-  private final PIDController choreoYController = new PIDController(1.4, 0, 0);
-  private final PIDController choreoThetaPID = new PIDController(1.5, 0, 0);
+  private final PIDController choreoXController = new PIDController(3, 0, 0);
+  private final PIDController choreoYController = new PIDController(3, 0, 0);
+  private final PIDController choreoThetaPID = new PIDController(3, 0, 0);
   private final PIDController choreoRotationLockPID = new PIDController(8, 0, 0);
 
   private ChassisSpeeds prevFieldRelVelocities = new ChassisSpeeds();
@@ -388,13 +388,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
           if (this.choreoSampleToBeApplied.isPresent()) {
             SwerveSample sample = this.choreoSampleToBeApplied.get();
 
-            var pose = getState().Pose;
+            Pose2d pose = getState().Pose;
 
-            var targetSpeeds = sample.getChassisSpeeds();
+            ChassisSpeeds targetSpeeds = sample.getChassisSpeeds();
             DogLog.log("Drive/Choreo/SwerveSample", sample);
             DogLog.log("Drive/Choreo/SwerveSample/ChoreoPosition", sample.getPose());
             DogLog.log("Drive/Choreo/FinalRobotPose",
                 desiredChoreoTrajectory.getFinalPose(AllianceFlipUtil.shouldFlip()).get());
+
+            DogLog.log("Drive/Choreo/PoseError", pose.getTranslation().minus(sample.getPose().getTranslation()));
+            DogLog.log("Drive/Choreo/TranslationalError", Math.hypot(Math.abs(pose.getX() - sample.x), Math.abs(pose.getY() - sample.y)));
+            DogLog.log("Drive/Choreo/XError", Math.abs(pose.getX() - sample.x));
+            DogLog.log("Drive/Choreo/YError", Math.abs(pose.getY() - sample.y));
+            DogLog.log("Drive/Choreo/AngularError", Math.abs(pose.getRotation().getRadians() - sample.heading));
 
             targetSpeeds.vxMetersPerSecond += choreoXController.calculate(pose.getX(), sample.x);
             targetSpeeds.vyMetersPerSecond += choreoYController.calculate(pose.getY(), sample.y);

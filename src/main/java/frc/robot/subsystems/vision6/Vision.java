@@ -40,9 +40,8 @@ public class Vision {
     // Initialize disconnected alerts
     this.disconnectedAlerts = new Alert[io.length];
     for (int i = 0; i < io.length; i++) {
-      disconnectedAlerts[i] =
-          new Alert(
-              "Vision camera " + Integer.toString(i) + " is disconnected.", AlertType.kWarning);
+      disconnectedAlerts[i] = new Alert(
+          "Vision camera " + Integer.toString(i) + " is disconnected.", AlertType.kWarning);
     }
   }
 
@@ -100,11 +99,15 @@ public class Vision {
           angularStdDev = 1000.0;
         }
 
-        if (robotSpeedsSupplier.get().vxMetersPerSecond > 0.5 || robotSpeedsSupplier.get().vyMetersPerSecond > 0.5) {
-          linearStdDev *= 2;
-        }
+        ChassisSpeeds speeds = robotSpeedsSupplier.get();
+        linearStdDev *= VisionConstants.LINEAR_VELOCITY_STD_DEV_COEFFICIENT.lerp(
+            Math.sqrt(
+                Math.pow(speeds.vxMetersPerSecond, 2)
+                    + Math.pow(speeds.vyMetersPerSecond, 2)));
+        angularStdDev *= VisionConstants.ANGULAR_VELOCITY_STD_DEV_COEFFICIENT.lerp(
+            speeds.omegaRadiansPerSecond);
 
-        linearStdDev *= io[cameraIndex].constants.stdDevFactor();
+        // linearStdDev *= io[cameraIndex].constants.stdDevFactor();
 
         consumer.accept(observation.pose().toPose2d(), observation.timestamp(),
             VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
@@ -157,8 +160,9 @@ public class Vision {
     }
 
     // ChassisSpeeds speeds = this.robotSpeedsSupplier.get();
-    // if (Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond) > 2.5 || speeds.omegaRadiansPerSecond > Units.rotationsToRadians(1)) {
-    //   return true;
+    // if (Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond) > 2.5 ||
+    // speeds.omegaRadiansPerSecond > Units.rotationsToRadians(1)) {
+    // return true;
     // }
 
     // Result must be within field

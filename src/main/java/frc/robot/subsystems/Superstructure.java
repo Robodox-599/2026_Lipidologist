@@ -88,7 +88,7 @@ public class Superstructure extends SubsystemBase {
 
     private WantedSuperState wantedSuperState = WantedSuperState.IDLE;
     private CurrentSuperState currentSuperState = CurrentSuperState.IDLING;
-    private AdjustedShot adjustedShot = new AdjustedShot(new Rotation2d(), 0, 0, 0);
+    private AdjustedShot adjustedShot = new AdjustedShot(Rotation2d.kZero, 0, 0, 0);
     private Debouncer readyToShootDebouncer = new Debouncer(0.1, DebounceType.kFalling);
 
     public Superstructure(
@@ -288,6 +288,7 @@ public class Superstructure extends SubsystemBase {
                 break;
             case STOWING:
                 stowing();
+                break;
         }
     }
 
