@@ -32,8 +32,12 @@ public class Bindings extends SubsystemBase {
     // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
     driver.rightTrigger().whileTrue(new RepeatCommand(setShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    // PREPARE TO SHOOT TO EITHER HUB OR ALLIANCE ZONE
-    driver.povRight().and(driver.rightTrigger().negate()).whileTrue(new RepeatCommand(setPrepareShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    
+    // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
+    driver.leftTrigger().whileTrue(new RepeatCommand(superstructure.setWantedSuperStateCommand(WantedSuperState.OUTTAKE))).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+
+    // // PREPARE TO SHOOT TO EITHER HUB OR ALLIANCE ZONE
+    // driver.povRight().and(driver.rightTrigger().negate()).whileTrue(new RepeatCommand(setPrepareShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
     // // AUTOMATICALLY CLIMB
     // driver.a().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLIMB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));

@@ -410,11 +410,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 desiredChoreoTrajectory.getFinalPose(AllianceFlipUtil.shouldFlip()).get());
 
             DogLog.log("Drive/Choreo/PoseError", pose.getTranslation().minus(sample.getPose().getTranslation()));
-            DogLog.log("Drive/Choreo/TranslationalError",
-                Math.hypot(Math.abs(pose.getX() - sample.x), Math.abs(pose.getY() - sample.y)));
-            DogLog.log("Drive/Choreo/XError", Math.abs(pose.getX() - sample.x));
-            DogLog.log("Drive/Choreo/YError", Math.abs(pose.getY() - sample.y));
-            DogLog.log("Drive/Choreo/AngularError", Math.abs(pose.getRotation().getRadians() - sample.heading));
+            DogLog.log("Drive/Choreo/XError", pose.getX() - sample.x);
+            DogLog.log("Drive/Choreo/YError", pose.getY() - sample.y);
+            DogLog.log("Drive/Choreo/AngularError", pose.getRotation().getRadians() - sample.heading);
 
             targetSpeeds.vxMetersPerSecond += choreoXController.calculate(pose.getX(), sample.x);
             targetSpeeds.vyMetersPerSecond += choreoYController.calculate(pose.getY(), sample.y);
@@ -425,9 +423,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
             setControl(
                 m_pathApplyFieldSpeeds
-                    .withSpeeds(targetSpeeds)
-                    .withWheelForceFeedforwardsX(sample.moduleForcesX())
-                    .withWheelForceFeedforwardsY(sample.moduleForcesY()));
+                    .withSpeeds(targetSpeeds));
           } else {
             setControl(m_pathApplyFieldSpeeds.withSpeeds(new ChassisSpeeds(0, 0, 0)));
           }
@@ -547,17 +543,18 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
 
   public boolean isAtEndOfChoreoTrajectory() {
-    if (desiredChoreoTrajectory != null) {
-      return MathUtil.isNear(desiredChoreoTrajectory.getFinalPose(AllianceFlipUtil.shouldFlip()).get().getX(),
-          getPose().getX(),
-          CHOREO_MAX_ERROR_MARGIN)
-          && MathUtil.isNear(desiredChoreoTrajectory.getFinalPose(AllianceFlipUtil.shouldFlip()).get().getY(),
-              getPose().getY(),
-              CHOREO_MAX_ERROR_MARGIN)
-          && choreoTimer.get() >= 0.5;
-    } else {
-      return false;
-    }
+    // if (desiredChoreoTrajectory != null) {
+    //   return MathUtil.isNear(desiredChoreoTrajectory.getFinalPose(AllianceFlipUtil.shouldFlip()).get().getX(),
+    //       getPose().getX(),
+    //       CHOREO_MAX_ERROR_MARGIN)
+    //       && MathUtil.isNear(desiredChoreoTrajectory.getFinalPose(AllianceFlipUtil.shouldFlip()).get().getY(),
+    //           getPose().getY(),
+    //           CHOREO_MAX_ERROR_MARGIN)
+    //       && choreoTimer.get() >= 0.5;
+    // } else {
+    //   return false;
+    // }
+    return choreoTimer.get() >= desiredChoreoTrajectory.getTotalTime();
   }
 
   /* DATA */

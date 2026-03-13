@@ -23,7 +23,7 @@ public class AutoBuilder {
         return Commands.sequence(
                 AutoFactory.followTrajectoryWhileIdle("LTRENCHtoLMID", true, this.drivetrain, this.superstructure),
                 AutoFactory.followTrajectoryWhileIdleThenScore("LMIDtoLTRENCH", false, 20.0 - totalTrajTime - finalShootTime, this.drivetrain, this.superstructure),
-                AutoFactory.followTrajectoryWhileIdleThenScore("LTRENCHtoHUBSWEEP", false, finalShootTime, this.drivetrain, this.superstructure));
+                AutoFactory.followTrajectoryWhileIdleThenScore("LTRENCHtoHUBSWEEP", false, 10.0, this.drivetrain, this.superstructure));
     }
     
     public Command rightDoubleDouble() {
@@ -32,7 +32,7 @@ public class AutoBuilder {
         return Commands.sequence(
                 AutoFactory.followTrajectoryWhileIdle("RTRENCHtoRMID", true, this.drivetrain, this.superstructure),
                 AutoFactory.followTrajectoryWhileIdleThenScore("RMIDtoRTRENCH", false, 3, this.drivetrain, this.superstructure),
-                AutoFactory.followTrajectoryWhileIdleThenScore("RTRENCHtoHUBSWEEP", false, 10, this.drivetrain, this.superstructure));
+                AutoFactory.followTrajectoryWhileIdleThenScore("RTRENCHtoHUBSWEEP", false, 10.0, this.drivetrain, this.superstructure));
     }
 
     public Command leftCheeseBurger() {
