@@ -10,117 +10,132 @@ import frc.robot.subsystems.Superstructure.WantedSuperState;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
 public class AutoRoutines {
-    private AutoFactory autoFactory;
-    private Superstructure superstructureCommands;
-    private CommandSwerveDrivetrain drivetrain;
+        private AutoFactory autoFactory;
+        private Superstructure superstructureCommands;
+        private CommandSwerveDrivetrain drivetrain;
 
-    public AutoRoutines(
-            AutoFactory autoFactory,
-            Superstructure superstructureCommands,
-            CommandSwerveDrivetrain drivetrain) {
-        this.autoFactory = autoFactory;
-        this.superstructureCommands = superstructureCommands;
-        this.drivetrain = drivetrain;
-    }
+        public AutoRoutines(
+                        AutoFactory autoFactory,
+                        Superstructure superstructureCommands,
+                        CommandSwerveDrivetrain drivetrain) {
+                this.autoFactory = autoFactory;
+                this.superstructureCommands = superstructureCommands;
+                this.drivetrain = drivetrain;
+        }
 
-    public AutoRoutine leftDoubleDouble() {
-        AutoRoutine routine = autoFactory.newRoutine("leftDoubleDouble");
+        public AutoRoutine leftDoubleDouble() {
+                AutoRoutine routine = autoFactory.newRoutine("leftDoubleDouble");
 
-        AutoTrajectory LTRENCHtoLMID = routine.trajectory("LTRENCHtoLMID");
-        AutoTrajectory LMIDtoLTRENCH = routine.trajectory("LMIDtoLTRENCH");
-        AutoTrajectory LTRENCHtoHUBSWEEP = routine.trajectory("LTRENCHtoHUBSWEEP");
+                AutoTrajectory LTRENCHtoLMID = routine.trajectory("LTRENCHtoLMID");
+                AutoTrajectory LMIDtoLTRENCH = routine.trajectory("LMIDtoLTRENCH");
+                AutoTrajectory LTRENCHtoHUBSWEEP = routine.trajectory("LTRENCHtoHUBSWEEP");
 
-        routine.active().onTrue(Commands.sequence(LTRENCHtoLMID.resetOdometry(),
-                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO), LTRENCHtoLMID.cmd()));
+                routine.active().onTrue(Commands.sequence(LTRENCHtoLMID.resetOdometry(),
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                LTRENCHtoLMID.cmd()));
 
-        LTRENCHtoLMID.done().onTrue(LMIDtoLTRENCH.cmd());
+                LTRENCHtoLMID.done().onTrue(LMIDtoLTRENCH.cmd());
 
-        LMIDtoLTRENCH.done()
-                .onTrue(Commands.sequence(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                        new WaitCommand(4),
-                        superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                        LTRENCHtoHUBSWEEP.cmd()));
+                LMIDtoLTRENCH.done()
+                                .onTrue(Commands.sequence(
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+                                                new WaitCommand(4),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                                LTRENCHtoHUBSWEEP.cmd()));
 
-        LTRENCHtoHUBSWEEP.done().onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB));
+                LTRENCHtoHUBSWEEP.done()
+                                .onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB));
 
-        return routine;
-    }
+                return routine;
+        }
 
-    public AutoRoutine rightDoubleDouble() {
-        AutoRoutine routine = autoFactory.newRoutine("rightDoubleDouble");
+        public AutoRoutine rightDoubleDouble() {
+                AutoRoutine routine = autoFactory.newRoutine("rightDoubleDouble");
 
-        AutoTrajectory RTRENCHtoRMID = routine.trajectory("RTRENCHtoRMID");
-        AutoTrajectory RMIDtoRTRENCH = routine.trajectory("RMIDtoRTRENCH");
-        AutoTrajectory RTRENCHtoHUBSWEEP = routine.trajectory("RTRENCHtoHUBSWEEP");
+                AutoTrajectory RTRENCHtoRMID = routine.trajectory("RTRENCHtoRMID");
+                AutoTrajectory RMIDtoRTRENCH = routine.trajectory("RMIDtoRTRENCH");
+                AutoTrajectory RTRENCHtoHUBSWEEP = routine.trajectory("RTRENCHtoHUBSWEEP");
 
-        routine.active().onTrue(Commands.sequence(RTRENCHtoRMID.resetOdometry(),
-                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO), RTRENCHtoRMID.cmd()));
+                routine.active().onTrue(Commands.sequence(RTRENCHtoRMID.resetOdometry(),
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                RTRENCHtoRMID.cmd()));
 
-        RTRENCHtoRMID.done().onTrue(RMIDtoRTRENCH.cmd());
+                RTRENCHtoRMID.done().onTrue(RMIDtoRTRENCH.cmd());
 
-        RMIDtoRTRENCH.done()
-                .onTrue(Commands.sequence(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                        new WaitCommand(4),
-                        superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                        RTRENCHtoHUBSWEEP.cmd()));
+                RMIDtoRTRENCH.done()
+                                .onTrue(Commands.sequence(
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+                                                new WaitCommand(4),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                                RTRENCHtoHUBSWEEP.cmd()));
 
-        RTRENCHtoHUBSWEEP.done().onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB));
+                RTRENCHtoHUBSWEEP.done()
+                                .onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB));
 
-        return routine;
-    }
+                return routine;
+        }
 
-    public AutoRoutine leftCheeseburger() {
-        AutoRoutine routine = autoFactory.newRoutine("leftCheeseburger");
+        public AutoRoutine leftCheeseburger() {
+                AutoRoutine routine = autoFactory.newRoutine("leftCheeseburger");
 
-        AutoTrajectory LTRENCHtoLMID = routine.trajectory("LTRENCHtoLMID");
-        AutoTrajectory LMIDtoLTRENCH = routine.trajectory("LMIDtoLTRENCH");
-        AutoTrajectory LTRENCHtoDEPOT = routine.trajectory("LTRENCHtoDEPOT");
-        AutoTrajectory DEPOT_INTAKE = routine.trajectory("DEPOT_INTAKE");
+                AutoTrajectory LTRENCHtoLMID = routine.trajectory("LTRENCHtoLMID");
+                AutoTrajectory LMIDtoLTRENCH = routine.trajectory("LMIDtoLTRENCH");
+                AutoTrajectory LTRENCHtoDEPOT = routine.trajectory("LTRENCHtoDEPOT");
+                AutoTrajectory DEPOT_INTAKE = routine.trajectory("DEPOT_INTAKE");
 
-        routine.active().onTrue(Commands.sequence(LTRENCHtoLMID.resetOdometry(),
-                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO), LTRENCHtoLMID.cmd()));
+                routine.active().onTrue(Commands.sequence(LTRENCHtoLMID.resetOdometry(),
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                LTRENCHtoLMID.cmd()));
 
-        LTRENCHtoLMID.done().onTrue(LMIDtoLTRENCH.cmd());
+                LTRENCHtoLMID.done().onTrue(LMIDtoLTRENCH.cmd());
 
-        LMIDtoLTRENCH.done().onTrue(LTRENCHtoDEPOT.cmd()
-                .alongWith(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SOTM_HUB_AUTO)));
+                LMIDtoLTRENCH.done().onTrue(LTRENCHtoDEPOT.cmd()
+                                .alongWith(superstructureCommands
+                                                .setWantedSuperStateCommand(WantedSuperState.SOTM_HUB_AUTO)));
 
-        LTRENCHtoDEPOT.done().onTrue(
-                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO)
-                        .andThen(DEPOT_INTAKE.cmd()));
+                LTRENCHtoDEPOT.done().onTrue(
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO)
+                                                .andThen(DEPOT_INTAKE.cmd()));
 
-        DEPOT_INTAKE.done().onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB));
+                DEPOT_INTAKE.done()
+                                .onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB));
 
-        return routine;
-    }
+                return routine;
+        }
 
-    public AutoRoutine rightCheeseburger() {
-        AutoRoutine routine = autoFactory.newRoutine("rightCheeseburger");
+        public AutoRoutine rightCheeseburger() {
+                AutoRoutine routine = autoFactory.newRoutine("rightCheeseburger");
 
-        AutoTrajectory RTRENCHtoRMID = routine.trajectory("RTRENCHtoRMID");
-        AutoTrajectory RMIDtoRTRENCH = routine.trajectory("RMIDtoRTRENCH");
-        AutoTrajectory RTRENCHtoOUTPOST = routine.trajectory("RTRENCHtoOUTPOST");
-        AutoTrajectory OUTPOSTtoRTRENCH = routine.trajectory("OUTPOSTtoRTRENCH");
+                AutoTrajectory RTRENCHtoRMID = routine.trajectory("RTRENCHtoRMID");
+                AutoTrajectory RMIDtoRTRENCH = routine.trajectory("RMIDtoRTRENCH");
+                AutoTrajectory RTRENCHtoOUTPOST = routine.trajectory("RTRENCHtoOUTPOST");
+                AutoTrajectory OUTPOSTtoRTRENCH = routine.trajectory("OUTPOSTtoRTRENCH");
 
-        routine.active().onTrue(Commands.sequence(RTRENCHtoRMID.resetOdometry(),
-                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO), RTRENCHtoRMID.cmd()));
+                routine.active().onTrue(Commands.sequence(RTRENCHtoRMID.resetOdometry(),
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                RTRENCHtoRMID.cmd()));
 
-        RTRENCHtoRMID.done().onTrue(RMIDtoRTRENCH.cmd());
+                RTRENCHtoRMID.done().onTrue(RMIDtoRTRENCH.cmd());
 
-        RMIDtoRTRENCH.done()
-                .onTrue(Commands.sequence(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                        new WaitCommand(4),
-                        superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                        RTRENCHtoOUTPOST.cmd()));
+                RMIDtoRTRENCH.done()
+                                .onTrue(Commands.sequence(
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+                                                new WaitCommand(4),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                                RTRENCHtoOUTPOST.cmd()));
 
-        RTRENCHtoOUTPOST.done()
-                .onTrue(Commands.sequence(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE),
-                        new WaitCommand(2),
-                        superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                        OUTPOSTtoRTRENCH.cmd()));
+                RTRENCHtoOUTPOST.done()
+                                .onTrue(OUTPOSTtoRTRENCH.cmd());
 
-        OUTPOSTtoRTRENCH.done().onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB));
+                OUTPOSTtoRTRENCH.done()
+                                .onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB));
 
-        return routine;
-    }
+                return routine;
+        }
 }
