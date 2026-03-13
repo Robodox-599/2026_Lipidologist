@@ -28,12 +28,11 @@ public class AutoBuilder {
     
     public Command rightDoubleDouble() {
         double totalTrajTime = AutoFactory.getTotalTrajectoryTime("RTRENCHtoRMID", "RMIDtoRTRENCH", "RTRENCHtoHUBSWEEP");
-        double finalShootTime = 5.0;
         DogLog.log("Auto/totalTrajectoryTime", totalTrajTime);
         return Commands.sequence(
                 AutoFactory.followTrajectoryWhileIdle("RTRENCHtoRMID", true, this.drivetrain, this.superstructure),
-                AutoFactory.followTrajectoryWhileIdleThenScore("RMIDtoRTRENCH", false, 20.0 - totalTrajTime - finalShootTime, this.drivetrain, this.superstructure),
-                AutoFactory.followTrajectoryWhileIdleThenScore("RTRENCHtoHUBSWEEP", false, finalShootTime, this.drivetrain, this.superstructure));
+                AutoFactory.followTrajectoryWhileIdleThenScore("RMIDtoRTRENCH", false, 3, this.drivetrain, this.superstructure),
+                AutoFactory.followTrajectoryWhileIdleThenScore("RTRENCHtoHUBSWEEP", false, 10, this.drivetrain, this.superstructure));
     }
 
     public Command leftCheeseBurger() {

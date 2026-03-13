@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.feeder;
 
+import java.util.spi.CurrencyNameProvider;
+
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Tracer;
@@ -17,12 +19,14 @@ public class Feeder {
     STOPPED,
     FEED_FUEL,
     REVERSE,
+    OUTAKE,
   }
 
   public enum FeederCurrentState {
     STOPPED,
     FEEDING_FUEL,
     REVERSE,
+    OUTAKING,
   }
 
   public Feeder(FeederIO io) {
@@ -51,6 +55,9 @@ public class Feeder {
       case REVERSE:
         currentState = FeederCurrentState.REVERSE;
         break;
+      case OUTAKE:
+        currentState = FeederCurrentState.OUTAKING;
+        break;
       default:
         currentState = FeederCurrentState.STOPPED;
         break;
@@ -67,6 +74,9 @@ public class Feeder {
         break;
       case REVERSE:
         setVoltage(-5);
+        break;
+      case OUTAKING:
+        setVoltage(-20);
         break;
       default:
         stopFeeder();

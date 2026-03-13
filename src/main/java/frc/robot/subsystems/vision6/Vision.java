@@ -99,13 +99,13 @@ public class Vision {
           angularStdDev = 1000.0;
         }
 
-        ChassisSpeeds speeds = robotSpeedsSupplier.get();
-        linearStdDev *= VisionConstants.LINEAR_VELOCITY_STD_DEV_COEFFICIENT.lerp(
-            Math.sqrt(
-                Math.pow(speeds.vxMetersPerSecond, 2)
-                    + Math.pow(speeds.vyMetersPerSecond, 2)));
-        angularStdDev *= VisionConstants.ANGULAR_VELOCITY_STD_DEV_COEFFICIENT.lerp(
-            speeds.omegaRadiansPerSecond);
+        // ChassisSpeeds speeds = robotSpeedsSupplier.get();
+        // linearStdDev *= VisionConstants.LINEAR_VELOCITY_STD_DEV_COEFFICIENT.lerp(
+        //     Math.sqrt(
+        //         Math.pow(speeds.vxMetersPerSecond, 2)
+        //             + Math.pow(speeds.vyMetersPerSecond, 2)));
+        // angularStdDev *= VisionConstants.ANGULAR_VELOCITY_STD_DEV_COEFFICIENT.lerp(
+        //     speeds.omegaRadiansPerSecond);
 
         // linearStdDev *= io[cameraIndex].constants.stdDevFactor();
 

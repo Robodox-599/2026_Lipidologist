@@ -17,6 +17,7 @@ public class Indexer {
     TRANSFER_FUEL,
     PULSE_FUEL,
     REVERSE,
+    OUTAKE,
     STOPPED,
   }
 
@@ -24,6 +25,7 @@ public class Indexer {
     TRANSFERING_FUEL,
     PULSING_FUEL,
     REVERSING,
+    OUTAKING,
     STOPPING,
   }
 
@@ -57,6 +59,9 @@ public class Indexer {
         case REVERSE:
             currentState = IndexerCurrentState.REVERSING;
             break;
+        case OUTAKE:
+            currentState = IndexerCurrentState.OUTAKING;
+            break;
         default:
             currentState = IndexerCurrentState.STOPPING;
             break;
@@ -76,6 +81,9 @@ public class Indexer {
         break;
       case REVERSING:
         setIndexerVoltage(-0.5);
+        break;
+      case OUTAKING:
+        setIndexerVoltage(-5);
         break;
       default:
         stopIndexer();

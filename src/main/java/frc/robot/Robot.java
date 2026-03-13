@@ -259,18 +259,18 @@ public class Robot extends TimedRobot {
     // indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
     // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
 
-    Translation2d robotTranslation = drivetrain.getPose().getTranslation();
-    Translation2d allianceZoneTarget = new Translation2d(
-        AllianceFlipUtil.applyX(FieldConstants.LinesVertical.starting - 1), robotTranslation.getY());
+    // Translation2d robotTranslation = drivetrain.getPose().getTranslation();
+    // Translation2d allianceZoneTarget = new Translation2d(
+    //     AllianceFlipUtil.applyX(FieldConstants.LinesVertical.starting - 1), robotTranslation.getY());
 
-    double distance = robotTranslation.getDistance(allianceZoneTarget);
+    // double distance = robotTranslation.getDistance(allianceZoneTarget);
 
-    Rotation2d targetRotation = Rotation2d
-        .fromRadians(Math.atan2(robotTranslation.getY() - allianceZoneTarget.getY(),
-            robotTranslation.getX() - allianceZoneTarget.getX()));
+    // Rotation2d targetRotation = Rotation2d
+    //     .fromRadians(Math.atan2(robotTranslation.getY() - allianceZoneTarget.getY(),
+    //         robotTranslation.getX() - allianceZoneTarget.getX()));
 
     // drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, targetRotation);
-    DogLog.log("DistanceToAllianceZoneTarget", distance);
+    // DogLog.log("DistanceToAllianceZoneTarget", distance);
   }
 
   @Override

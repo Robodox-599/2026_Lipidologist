@@ -54,6 +54,7 @@ public class Superstructure extends SubsystemBase {
     final Vision vision;
 
     public enum WantedSuperState {
+        OUTTAKE,
         PREPARE_HUB_SHOT,
         PREPARE_HUB_SHOT_ALIGNED_TROUGH,
         PREPARE_ALLIANCE_ZONE_SHOT,
@@ -69,6 +70,7 @@ public class Superstructure extends SubsystemBase {
     }
 
     public enum CurrentSuperState {
+        OUTTAKING,
         PREPARING_HUB_SHOT,
         PREPARING_HUB_SHOT_ALIGNED_TROUGH,
         PREPARING_ALLIANCE_ZONE_SHOT,
@@ -86,8 +88,8 @@ public class Superstructure extends SubsystemBase {
         STOWING
     }
 
-    private WantedSuperState wantedSuperState = WantedSuperState.IDLE;
-    private CurrentSuperState currentSuperState = CurrentSuperState.IDLING;
+    private WantedSuperState wantedSuperState = WantedSuperState.STOP;
+    private CurrentSuperState currentSuperState = CurrentSuperState.STOPPED;
     private AdjustedShot adjustedShot = new AdjustedShot(Rotation2d.kZero, 0, 0, 0);
     private Debouncer readyToShootDebouncer = new Debouncer(0.1, DebounceType.kFalling);
 
@@ -150,6 +152,9 @@ public class Superstructure extends SubsystemBase {
     private void handleStateTransitions() {
         switch (wantedSuperState) {
             default:
+            case OUTTAKE:
+                currentSuperState = CurrentSuperState.OUTTAKING;
+                break;
             case PREPARE_HUB_SHOT:
                 this.adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
@@ -183,55 +188,62 @@ public class Superstructure extends SubsystemBase {
                 break;
             case CLIMB:
                 // if (AllianceFlipUtil.shouldFlip()) { // if red alliance
-                //     if (drivetrain.getPose().getY() >= AllianceFlipUtil.apply(FieldConstants.Tower.centerPoint)
-                //             .getY()) {
-                //         if (isReadyToClimb(AllianceFlipUtil.apply(FieldConstants.Tower.rightInnerTowerPose))
-                //                 || currentSuperState == CurrentSuperState.CLIMB) {
-                //             currentSuperState = CurrentSuperState.CLIMB;
-                //         } else if (isReadyToAdvanceToInnerTower(AllianceFlipUtil.apply(FieldConstants.Tower.rightOuterTowerPose))
-                //                 || currentSuperState == CurrentSuperState.ALIGN_INNER_RIGHT_TOWER) {
-                //             currentSuperState = CurrentSuperState.ALIGN_INNER_RIGHT_TOWER;
-                //         } else {
-                //             currentSuperState = CurrentSuperState.ALIGN_OUTER_RIGHT_TOWER;
-                //         }
-                //     } else {
-                //         if (isReadyToClimb(AllianceFlipUtil.apply(FieldConstants.Tower.leftInnerTowerPose))
-                //                 || currentSuperState == CurrentSuperState.CLIMB) {
-                //             currentSuperState = CurrentSuperState.CLIMB;
-                //         } else if (isReadyToAdvanceToInnerTower(AllianceFlipUtil.apply(FieldConstants.Tower.leftOuterTowerPose))
-                //                 || currentSuperState == CurrentSuperState.ALIGN_INNER_LEFT_TOWER) {
-                //             currentSuperState = CurrentSuperState.ALIGN_INNER_LEFT_TOWER;
-                //         } else {
-                //             currentSuperState = CurrentSuperState.ALIGN_OUTER_LEFT_TOWER;
-                //         }
-                //     }
+                // if (drivetrain.getPose().getY() >=
+                // AllianceFlipUtil.apply(FieldConstants.Tower.centerPoint)
+                // .getY()) {
+                // if
+                // (isReadyToClimb(AllianceFlipUtil.apply(FieldConstants.Tower.rightInnerTowerPose))
+                // || currentSuperState == CurrentSuperState.CLIMB) {
+                // currentSuperState = CurrentSuperState.CLIMB;
+                // } else if
+                // (isReadyToAdvanceToInnerTower(AllianceFlipUtil.apply(FieldConstants.Tower.rightOuterTowerPose))
+                // || currentSuperState == CurrentSuperState.ALIGN_INNER_RIGHT_TOWER) {
+                // currentSuperState = CurrentSuperState.ALIGN_INNER_RIGHT_TOWER;
+                // } else {
+                // currentSuperState = CurrentSuperState.ALIGN_OUTER_RIGHT_TOWER;
+                // }
+                // } else {
+                // if
+                // (isReadyToClimb(AllianceFlipUtil.apply(FieldConstants.Tower.leftInnerTowerPose))
+                // || currentSuperState == CurrentSuperState.CLIMB) {
+                // currentSuperState = CurrentSuperState.CLIMB;
+                // } else if
+                // (isReadyToAdvanceToInnerTower(AllianceFlipUtil.apply(FieldConstants.Tower.leftOuterTowerPose))
+                // || currentSuperState == CurrentSuperState.ALIGN_INNER_LEFT_TOWER) {
+                // currentSuperState = CurrentSuperState.ALIGN_INNER_LEFT_TOWER;
+                // } else {
+                // currentSuperState = CurrentSuperState.ALIGN_OUTER_LEFT_TOWER;
+                // }
+                // }
                 // } else { // if blue alliance
-                //     if (drivetrain.getPose().getY() >= FieldConstants.Tower.centerPoint.getY()) {
-                //         if (isReadyToClimb(FieldConstants.Tower.leftInnerTowerPose)
-                //                 || currentSuperState == CurrentSuperState.CLIMB) {
-                //             currentSuperState = CurrentSuperState.CLIMB;
-                //         } else if (isReadyToAdvanceToInnerTower(FieldConstants.Tower.leftOuterTowerPose)
-                //                 || currentSuperState == CurrentSuperState.ALIGN_INNER_LEFT_TOWER) {
-                //             currentSuperState = CurrentSuperState.ALIGN_INNER_LEFT_TOWER;
-                //         } else {
-                //             currentSuperState = CurrentSuperState.ALIGN_OUTER_LEFT_TOWER;
-                //         }
-                //     } else {
-                //         if (isReadyToClimb(FieldConstants.Tower.rightInnerTowerPose)
-                //                 || currentSuperState == CurrentSuperState.CLIMB) {
-                //             currentSuperState = CurrentSuperState.CLIMB;
-                //         } else if (isReadyToAdvanceToInnerTower(FieldConstants.Tower.rightOuterTowerPose)
-                //                 || currentSuperState == CurrentSuperState.ALIGN_INNER_RIGHT_TOWER) {
-                //             currentSuperState = CurrentSuperState.ALIGN_INNER_RIGHT_TOWER;
-                //         } else {
-                //             currentSuperState = CurrentSuperState.ALIGN_OUTER_RIGHT_TOWER;
-                //         }
-                //     }
+                // if (drivetrain.getPose().getY() >= FieldConstants.Tower.centerPoint.getY()) {
+                // if (isReadyToClimb(FieldConstants.Tower.leftInnerTowerPose)
+                // || currentSuperState == CurrentSuperState.CLIMB) {
+                // currentSuperState = CurrentSuperState.CLIMB;
+                // } else if
+                // (isReadyToAdvanceToInnerTower(FieldConstants.Tower.leftOuterTowerPose)
+                // || currentSuperState == CurrentSuperState.ALIGN_INNER_LEFT_TOWER) {
+                // currentSuperState = CurrentSuperState.ALIGN_INNER_LEFT_TOWER;
+                // } else {
+                // currentSuperState = CurrentSuperState.ALIGN_OUTER_LEFT_TOWER;
+                // }
+                // } else {
+                // if (isReadyToClimb(FieldConstants.Tower.rightInnerTowerPose)
+                // || currentSuperState == CurrentSuperState.CLIMB) {
+                // currentSuperState = CurrentSuperState.CLIMB;
+                // } else if
+                // (isReadyToAdvanceToInnerTower(FieldConstants.Tower.rightOuterTowerPose)
+                // || currentSuperState == CurrentSuperState.ALIGN_INNER_RIGHT_TOWER) {
+                // currentSuperState = CurrentSuperState.ALIGN_INNER_RIGHT_TOWER;
+                // } else {
+                // currentSuperState = CurrentSuperState.ALIGN_OUTER_RIGHT_TOWER;
+                // }
+                // }
                 // }
                 break;
             // case DESCEND_CLIMB:
-            //     currentSuperState = CurrentSuperState.DESCEND_CLIMB;
-                // break;
+            // currentSuperState = CurrentSuperState.DESCEND_CLIMB;
+            // break;
             case STOP:
                 currentSuperState = CurrentSuperState.STOPPED;
                 break;
@@ -247,6 +259,8 @@ public class Superstructure extends SubsystemBase {
     private void applyStates() {
         switch (currentSuperState) {
             default:
+            case OUTTAKING:
+                outaking();
             case PREPARING_HUB_SHOT:
                 preparingHubShot();
                 break;
@@ -275,8 +289,8 @@ public class Superstructure extends SubsystemBase {
                 climb();
                 break;
             // case DESCEND_CLIMB:
-            //     descendClimb();
-                // break;
+            // descendClimb();
+            // break;
             case IDLING:
                 idling();
                 break;
@@ -292,14 +306,26 @@ public class Superstructure extends SubsystemBase {
         }
     }
 
+    public void outaking() {
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
+        feeder.setWantedState(Feeder.FeederWantedState.OUTAKE);
+        indexer.setWantedState(Indexer.IndexerWantedState.OUTAKE);
+        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
+                this.adjustedShot.shootSpeed());
+        hood.setWantedState(Hood.HoodWantedState.STOW);
+        leds.setWantedState(LEDs.LEDsWantedState.IDLE);
+    }
+
     public void preparingHubShot() {
-        if (DriverStation.isAutonomous()) {
-            drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
-                    this.adjustedShot.targetRotation());
-        } else {
-            drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK,
-                    this.adjustedShot.targetRotation());
-        }
+        // if (DriverStation.isAutonomous()) {
+        // drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
+        // this.adjustedShot.targetRotation());
+        // } else {
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK,
+                this.adjustedShot.targetRotation());
+        // }
         feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
         indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
@@ -314,20 +340,20 @@ public class Superstructure extends SubsystemBase {
         }
         leds.setWantedState(LEDs.LEDsWantedState.PREPARE_HUB_SHOT);
         // if (!isReadyToStowClimb() && !climb.atStowSetpoint()) {
-        //     climb.setWantedState(ClimbWantedState.EXTEND);
+        // climb.setWantedState(ClimbWantedState.EXTEND);
         // } else {
-        //     climb.setWantedState(ClimbWantedState.STOW);
+        // climb.setWantedState(ClimbWantedState.STOW);
         // }
     }
 
     public void shootingHub() {
-        if (DriverStation.isAutonomous()) {
-            drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
-                    this.adjustedShot.targetRotation());
-        } else {
-            drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK,
-                    this.adjustedShot.targetRotation());
-        }
+        // if (DriverStation.isAutonomous()) {
+        // drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
+        // this.adjustedShot.targetRotation());
+        // } else {
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK,
+                this.adjustedShot.targetRotation());
+        // }
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
@@ -338,9 +364,9 @@ public class Superstructure extends SubsystemBase {
                 this.adjustedShot.hoodAngle());
         leds.setWantedState(LEDs.LEDsWantedState.SHOOT_HUB);
         // if (!isReadyToStowClimb() && !climb.atStowSetpoint()) {
-        //     climb.setWantedState(ClimbWantedState.EXTEND);
+        // climb.setWantedState(ClimbWantedState.EXTEND);
         // } else {
-        //     climb.setWantedState(ClimbWantedState.STOW);
+        // climb.setWantedState(ClimbWantedState.STOW);
         // }
     }
 
@@ -360,9 +386,9 @@ public class Superstructure extends SubsystemBase {
         }
         leds.setWantedState(LEDs.LEDsWantedState.PREPARE_ALLIANCE_ZONE_SHOT);
         // if (!isReadyToStowClimb() && !climb.atStowSetpoint()) {
-        //     climb.setWantedState(ClimbWantedState.EXTEND);
+        // climb.setWantedState(ClimbWantedState.EXTEND);
         // } else {
-        //     climb.setWantedState(ClimbWantedState.STOW);
+        // climb.setWantedState(ClimbWantedState.STOW);
         // }
     }
 
@@ -378,9 +404,9 @@ public class Superstructure extends SubsystemBase {
                 adjustedShot.hoodAngle());
         leds.setWantedState(LEDs.LEDsWantedState.SHOOT_ALLIANCE_ZONE);
         // if (!isReadyToStowClimb() && !climb.atStowSetpoint()) {
-        //     climb.setWantedState(ClimbWantedState.EXTEND);
+        // climb.setWantedState(ClimbWantedState.EXTEND);
         // } else {
-        //     climb.setWantedState(ClimbWantedState.STOW);
+        // climb.setWantedState(ClimbWantedState.STOW);
         // }
     }
 
@@ -395,17 +421,12 @@ public class Superstructure extends SubsystemBase {
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
-        if (isHoodUnsafe()) {
             hood.setWantedState(Hood.HoodWantedState.STOW);
-        } else {
-            hood.setWantedState(Hood.HoodWantedState.SET_POSITION,
-                    this.adjustedShot.hoodAngle());
-        }
         leds.setWantedState(LEDs.LEDsWantedState.IDLE);
         // if (!isReadyToStowClimb() && !climb.atStowSetpoint()) {
-        //     climb.setWantedState(ClimbWantedState.EXTEND);
+        // climb.setWantedState(ClimbWantedState.EXTEND);
         // } else {
-        //     climb.setWantedState(ClimbWantedState.STOW);
+        // climb.setWantedState(ClimbWantedState.STOW);
         // }
     }
 
@@ -427,7 +448,7 @@ public class Superstructure extends SubsystemBase {
         leds.setWantedState(LEDs.LEDsWantedState.IDLE);
         // climb.setWantedState(ClimbWantedState.EXTEND);
     }
-    
+
     public void alignInnerLeftTower() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.DRIVE_TO_POINT,
                 AllianceFlipUtil.shouldFlip() ? AllianceFlipUtil.apply(FieldConstants.Tower.leftInnerTowerPose)
@@ -501,22 +522,22 @@ public class Superstructure extends SubsystemBase {
         leds.setWantedState(LEDs.LEDsWantedState.IDLE);
         // climb.setWantedState(ClimbWantedState.RETRACT);
     }
-    
+
     // public void descendClimb() {
-    //     drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
-    //     feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
-    //     indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
-    //     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
-    //     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
-    //     flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
-    //     if (isHoodUnsafe()) {
-    //         hood.setWantedState(Hood.HoodWantedState.STOW);
-    //     } else {
-    //         hood.setWantedState(Hood.HoodWantedState.SET_POSITION,
-    //                 this.adjustedShot.hoodAngle());
-    //     }
-    //     leds.setWantedState(LEDs.LEDsWantedState.IDLE);
-    //     climb.setWantedState(ClimbWantedState.EXTEND);
+    // drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
+    // feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+    // indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+    // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+    // intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+    // flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
+    // if (isHoodUnsafe()) {
+    // hood.setWantedState(Hood.HoodWantedState.STOW);
+    // } else {
+    // hood.setWantedState(Hood.HoodWantedState.SET_POSITION,
+    // this.adjustedShot.hoodAngle());
+    // }
+    // leds.setWantedState(LEDs.LEDsWantedState.IDLE);
+    // climb.setWantedState(ClimbWantedState.EXTEND);
     // }
 
     public void stop() {
@@ -581,11 +602,13 @@ public class Superstructure extends SubsystemBase {
     }
 
     // private boolean isReadyToAdvanceToInnerTower(Pose2d outerTowerPose) {
-    //     return climb.atExtensionSetpoint() && drivetrain.isAtTargetPose(outerTowerPose);
+    // return climb.atExtensionSetpoint() &&
+    // drivetrain.isAtTargetPose(outerTowerPose);
     // }
 
     // private boolean isReadyToClimb(Pose2d innerTowerPose) {
-    //     return climb.atExtensionSetpoint() && drivetrain.isAtTargetPose(innerTowerPose);
+    // return climb.atExtensionSetpoint() &&
+    // drivetrain.isAtTargetPose(innerTowerPose);
     // }
 
     private boolean isReadyToStowClimb() {
