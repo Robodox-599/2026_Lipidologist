@@ -52,7 +52,7 @@ import java.util.function.Supplier;
  * be used in command-based projects.
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
-  private final double CHOREO_MAX_ERROR_MARGIN = 0.15;
+  private final double CHOREO_MAX_ERROR_MARGIN = 0.05;
   public static final double DRIVE_TO_POINT_STATIC_FRICTION_CONSTANT = 0.1;
   private final double DRIVE_TO_POINT_MAX_VELOCITY_OUTPUT = 2.0;
   private final double DRIVE_TO_POINT_LINEAR_ERROR_MARGIN = 0.05;
@@ -63,18 +63,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   private final PIDController driveToPointController = new PIDController(3, 0.0, 0.0); // P: 3.0/3.6, D: 0.1 | TODO:
                                                                                        // change to profiled PID
                                                                                        // controller
-  private final PIDController choreoXController = new PIDController(1.2, 0, 0);
-  private final PIDController choreoYController = new PIDController(1.2, 0, 0);
-  private final PIDController choreoThetaPID = new PIDController(2, 0, 0);
-  private final PIDController choreoRotationLockPID = new PIDController(8, 0, 0);
+  private final PIDController choreoXController = new PIDController(5, 0, 0);
+  private final PIDController choreoYController = new PIDController(5, 0, 0);
+  private final PIDController choreoThetaPID = new PIDController(5, 0, 0);
+  private final PIDController choreoRotationLockPID = new PIDController(5, 0, 0);
 
   private ChassisSpeeds prevFieldRelVelocities = new ChassisSpeeds();
 
   private Rotation2d targetRotation = new Rotation2d();
   private Pose2d targetPosition = new Pose2d();
 
-  private Trajectory<SwerveSample> desiredChoreoTrajectory;
-  private final Timer choreoTimer = new Timer();
+  private SwerveSample choreoSampleToBeApplied;
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(0)
@@ -96,7 +95,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     ROTATION_LOCK,
     DRIVE_TO_POINT,
     CHOREO_TRAJECTORY,
-    // ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
+    ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
     STOPPED,
   }
 
@@ -105,7 +104,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     ROTATION_LOCK,
     DRIVE_TO_POINT,
     CHOREO_TRAJECTORY,
-    // ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
+    ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
     STOPPED,
   }
 
@@ -303,20 +302,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         // } else {
         // currentState = CurrentState.CHOREO_TRAJECTORY;
         // }
-        if (currentState != CurrentState.CHOREO_TRAJECTORY) {
-          choreoTimer.restart();
-        }
         currentState = CurrentState.CHOREO_TRAJECTORY;
         break;
-      // case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
-      // // if (!DriverStation.isAutonomous()) {
-      // // wantedState = WantedState.TELEOP_DRIVE;
-      // // currentState = CurrentState.TELEOP_DRIVE;
-      // // } else {
-      // // currentState = CurrentState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY;
-      // // }
-      // currentState = CurrentState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY;
-      // break;
+      case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
+        // // if (!DriverStation.isAutonomous()) {
+        // // wantedState = WantedState.TELEOP_DRIVE;
+        // // currentState = CurrentState.TELEOP_DRIVE;
+        // // } else {
+        // // currentState = CurrentState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY;
+        // // }
+        currentState = CurrentState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY;
+        break;
       case STOPPED:
         currentState = CurrentState.STOPPED;
         break;
@@ -342,19 +338,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                                                               // (left));
         break;
       case ROTATION_LOCK:
-        if (DriverStation.isAutonomous()) {
-          setControl(
-              driveAtAngle
-                  .withVelocityX(0) // Drive forward with negative Y (forward)
-                  .withVelocityY(0) // Drive left with negative X (left)
-                  .withTargetDirection(targetRotation));
-        } else {
-          setControl(
-              driveAtAngle
-                  .withVelocityX(controllerSpeeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
-                  .withVelocityY(controllerSpeeds.vyMetersPerSecond) // Drive left with negative X (left)
-                  .withTargetDirection(targetRotation));
-        }
+        setControl(
+            driveAtAngle
+                .withVelocityX(controllerSpeeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
+                .withVelocityY(controllerSpeeds.vyMetersPerSecond) // Drive left with negative X (left)
+                .withTargetDirection(targetRotation));
         DogLog.log("Drive/RotationLock/TargetRotation", new Rotation2d(targetRotation.getRadians() + Math.PI));
         break;
       case DRIVE_TO_POINT:
@@ -394,78 +382,61 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withTargetDirection(rotation));
         break;
       case CHOREO_TRAJECTORY:
-        if (desiredChoreoTrajectory != null) {
-          Optional<SwerveSample> choreoSampleToBeApplied = desiredChoreoTrajectory.sampleAt(choreoTimer.get(),
-              AllianceFlipUtil.shouldFlip());
-          DogLog.log("Drive/Choreo/Timer Value", choreoTimer.get());
-          if (choreoSampleToBeApplied.isPresent()) {
-            SwerveSample sample = choreoSampleToBeApplied.get();
+        if (choreoSampleToBeApplied != null) {
+          SwerveSample sample = choreoSampleToBeApplied;
+          choreoSampleToBeApplied = null;
 
-            Pose2d pose = getState().Pose;
+          Pose2d pose = getState().Pose;
 
-            ChassisSpeeds targetSpeeds = sample.getChassisSpeeds();
-            DogLog.log("Drive/Choreo/SwerveSample", sample);
-            DogLog.log("Drive/Choreo/SwerveSample/ChoreoPosition", sample.getPose());
-            DogLog.log("Drive/Choreo/FinalRobotPose",
-                desiredChoreoTrajectory.getFinalPose(AllianceFlipUtil.shouldFlip()).get());
+          ChassisSpeeds targetSpeeds = sample.getChassisSpeeds();
+          DogLog.log("Drive/Choreo/SwerveSample", sample);
+          DogLog.log("Drive/Choreo/SwerveSample/ChoreoPosition", sample.getPose());
 
-            DogLog.log("Drive/Choreo/PoseError", pose.getTranslation().minus(sample.getPose().getTranslation()));
-            DogLog.log("Drive/Choreo/XError", pose.getX() - sample.x);
-            DogLog.log("Drive/Choreo/YError", pose.getY() - sample.y);
-            DogLog.log("Drive/Choreo/AngularError", pose.getRotation().getRadians() - sample.heading);
+          DogLog.log("Drive/Choreo/PoseError", pose.getTranslation().minus(sample.getPose().getTranslation()));
+          DogLog.log("Drive/Choreo/XError", pose.getX() - sample.x);
+          DogLog.log("Drive/Choreo/YError", pose.getY() - sample.y);
+          DogLog.log("Drive/Choreo/AngularError", pose.getRotation().getRadians() - sample.heading);
 
-            targetSpeeds.vxMetersPerSecond += choreoXController.calculate(pose.getX(), sample.x);
-            targetSpeeds.vyMetersPerSecond += choreoYController.calculate(pose.getY(), sample.y);
-            targetSpeeds.omegaRadiansPerSecond += choreoThetaPID.calculate(pose.getRotation().getRadians(),
-                sample.heading);
+          targetSpeeds.vxMetersPerSecond += choreoXController.calculate(pose.getX(), sample.x);
+          targetSpeeds.vyMetersPerSecond += choreoYController.calculate(pose.getY(), sample.y);
+          targetSpeeds.omegaRadiansPerSecond += choreoThetaPID.calculate(pose.getRotation().getRadians(),
+              sample.heading);
 
-            DogLog.log("Drive/Choreo/RobotSetpointSpeedsAfterPID", targetSpeeds);
+          DogLog.log("Drive/Choreo/RobotSetpointSpeedsAfterPID", targetSpeeds);
 
-            setControl(
-                m_pathApplyFieldSpeeds
-                    .withSpeeds(targetSpeeds));
-          } else {
-            setControl(m_pathApplyFieldSpeeds.withSpeeds(new ChassisSpeeds(0, 0, 0)));
-          }
+          setControl(
+              m_pathApplyFieldSpeeds
+                  .withSpeeds(targetSpeeds));
         }
         break;
-      // case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
-      // if (desiredChoreoTrajectory != null) {
-      // Optional<SwerveSample> choreoSampleToBeApplied =
-      // desiredChoreoTrajectory.sampleAt(choreoTimer.get(),
-      // AllianceFlipUtil.shouldFlip());
-      // DogLog.log("Drive/Choreo/Timer Value", choreoTimer.get());
-      // if (choreoSampleToBeApplied.isPresent()) {
-      // SwerveSample sample = choreoSampleToBeApplied.get();
+      case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
+        if (choreoSampleToBeApplied != null) {
+          SwerveSample sample = choreoSampleToBeApplied;
+          choreoSampleToBeApplied = null;
 
-      // var pose = getState().Pose;
+          var pose = getState().Pose;
 
-      // var targetSpeeds = sample.getChassisSpeeds();
-      // DogLog.log("Drive/Choreo/SwerveSample", sample);
-      // DogLog.log("Drive/Choreo/SwerveSample/ChoreoPosition", sample.getPose());
-      // DogLog.log("Drive/Choreo/FinalRobotPose",
-      // desiredChoreoTrajectory.getFinalPose(AllianceFlipUtil.shouldFlip()).get());
+          var targetSpeeds = sample.getChassisSpeeds();
+          DogLog.log("Drive/Choreo/SwerveSample", sample);
+          DogLog.log("Drive/Choreo/SwerveSample/ChoreoPosition", sample.getPose());
+          targetSpeeds.vxMetersPerSecond += choreoXController.calculate(pose.getX(),
+              sample.x);
+          targetSpeeds.vyMetersPerSecond += choreoYController.calculate(pose.getY(),
+              sample.y);
+          targetSpeeds.omegaRadiansPerSecond += choreoRotationLockPID.calculate(pose.getRotation().getRadians(),
+              AllianceFlipUtil.shouldFlip()
+                  ? this.targetRotation.rotateBy(kRedAlliancePerspectiveRotation).getRadians()
+                  : this.targetRotation.getRadians()); // not sure if this works as intended
 
-      // targetSpeeds.vxMetersPerSecond += choreoXController.calculate(pose.getX(),
-      // sample.x);
-      // targetSpeeds.vyMetersPerSecond += choreoYController.calculate(pose.getY(),
-      // sample.y);
-      // targetSpeeds.omegaRadiansPerSecond +=
-      // choreoRotationLockPID.calculate(pose.getRotation().getRadians(),
-      // AllianceFlipUtil.shouldFlip()
-      // ? this.targetRotation.rotateBy(kRedAlliancePerspectiveRotation).getRadians()
-      // : this.targetRotation.getRadians()); // not sure if this works as intended
+          DogLog.log("Drive/Choreo/RobotSetpointSpeedsAfterPID", targetSpeeds);
 
-      // DogLog.log("Drive/Choreo/RobotSetpointSpeedsAfterPID", targetSpeeds);
-
-      // setControl(
-      // m_pathApplyFieldSpeeds
-      // .withSpeeds(targetSpeeds)
-      // .withWheelForceFeedforwardsX(sample.moduleForcesX())
-      // .withWheelForceFeedforwardsY(sample.moduleForcesY()));
-      // }
-      // }
-      // break;
+          setControl(
+              m_pathApplyFieldSpeeds
+                  .withSpeeds(targetSpeeds)
+                  .withWheelForceFeedforwardsX(sample.moduleForcesX())
+                  .withWheelForceFeedforwardsY(sample.moduleForcesY()));
+        }
+        break;
       case STOPPED:
         setControl(drive.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
         break;
@@ -533,28 +504,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
 
   /* CHOREO TRAJECTORY */
-  public void setDesiredChoreoTrajectory(Trajectory<SwerveSample> trajectory, boolean start) {
-    if (start) {
-      resetPose(trajectory.getInitialSample(AllianceFlipUtil.shouldFlip()).get().getPose());
-    }
-    this.desiredChoreoTrajectory = trajectory;
-    this.wantedState = WantedState.CHOREO_TRAJECTORY;
-    this.choreoTimer.restart();
-  }
-
-  public boolean isAtEndOfChoreoTrajectory() {
-    // if (desiredChoreoTrajectory != null) {
-    //   return MathUtil.isNear(desiredChoreoTrajectory.getFinalPose(AllianceFlipUtil.shouldFlip()).get().getX(),
-    //       getPose().getX(),
-    //       CHOREO_MAX_ERROR_MARGIN)
-    //       && MathUtil.isNear(desiredChoreoTrajectory.getFinalPose(AllianceFlipUtil.shouldFlip()).get().getY(),
-    //           getPose().getY(),
-    //           CHOREO_MAX_ERROR_MARGIN)
-    //       && choreoTimer.get() >= 0.5;
-    // } else {
-    //   return false;
-    // }
-    return choreoTimer.get() >= desiredChoreoTrajectory.getTotalTime();
+  public void setDesiredChoreoTrajectory(SwerveSample sample) {
+    this.choreoSampleToBeApplied = sample;
   }
 
   /* DATA */

@@ -215,8 +215,8 @@
      "val":4.0
     },
     "y":{
-     "exp":"fieldWidth - bumperRadius",
-     "val":7.621325000000001
+     "exp":"fieldWidth - bumperRadius - 0.02 m",
+     "val":7.601325000000001
     },
     "heading":{
      "exp":"270 deg",
@@ -355,8 +355,8 @@
      "val":4.0
     },
     "y":{
-     "exp":"bumperRadius",
-     "val":0.447675
+     "exp":"bumperRadius + 0.02 m",
+     "val":0.46767500000000006
     },
     "heading":{
      "exp":"90 deg",
@@ -401,8 +401,8 @@
    }
   },
   "mass":{
-   "exp":"150 lbs",
-   "val":68.0388555
+   "exp":"135 lbs",
+   "val":61.23496995
   },
   "inertia":{
    "exp":"8 kg m ^ 2",

@@ -21,6 +21,7 @@ import frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.FlywheelConstan
 import java.lang.reflect.Field;
 
 import choreo.auto.AutoFactory;
+import choreo.auto.AutoChooser;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -44,8 +45,7 @@ import frc.robot.subsystems.leds.LEDsIO;
 import frc.robot.subsystems.leds.LEDsIOReal;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist.IntakeWristWantedState;
 import frc.robot.FieldConstants.LeftTrench;
-import frc.robot.autos.AutoBuilder;
-import frc.robot.autos.AutoChooser;
+import frc.robot.autos.AutoRoutines;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.WantedSuperState;
 import frc.robot.subsystems.climb.Climb;
@@ -75,7 +75,6 @@ import frc.robot.subsystems.intake.intakeWrist.IntakeWristIOTalonFX;
 public class Robot extends TimedRobot {
   private final CommandScheduler scheduler = CommandScheduler.getInstance();
   private Command autonomousCommand;
-  private Command prevAutonomousCommand;
 
   final CommandXboxController driver = new CommandXboxController(Constants.ControllerConstants.kDriverControllerPort);
   // final CommandXboxController operator = new CommandXboxController(
@@ -92,8 +91,12 @@ public class Robot extends TimedRobot {
   final LEDs leds;
   final Superstructure superstructure;
 
-  final AutoBuilder autoBuilder;
-  final AutoChooser autoChooser;
+  // final AutoBuilder autoBuilder;
+  // final AutoChooser autoChooser;
+
+  final AutoFactory autoFactory;
+  final AutoRoutines autoRoutines;
+  final AutoChooser autoChooser = new AutoChooser();
 
   @Override
   protected void loopFunc() {
@@ -190,22 +193,23 @@ public class Robot extends TimedRobot {
 
     new Bindings(driver, superstructure);
 
-    // autoFactory = new AutoFactory(
-    // drivetrain::getPose,
-    // drivetrain::resetPose,
-    // drivetrain::setDesiredChoreoTrajectory,
-    // true,
-    // drivetrain);
+    autoFactory = new AutoFactory(
+    drivetrain::getPose,
+    drivetrain::resetPose,
+    drivetrain::setDesiredChoreoTrajectory,
+    true,
+    drivetrain);
 
-    // autoRoutines = new AutoRoutines(autoFactory, superstructure, drivetrain);
-    // Auto chooser setup
-    // RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+    autoRoutines = new AutoRoutines(autoFactory, superstructure, drivetrain);
+    RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
 
-    // /** AUTO ROUTINES */
-    // // COMPETITION
-    // autoChooser.addRoutine("Left Auto", autoRoutines::leftAutoRoutine);
-    // autoChooser.addRoutine("Right Sweep Auto", autoRoutines::sweepAutoRoutine);
-    // SmartDashboard.putData("AutoChooser", autoChooser);
+    /** AUTO ROUTINES */
+    // COMPETITION
+    autoChooser.addRoutine("Left Double Double", autoRoutines::leftDoubleDouble);
+    autoChooser.addRoutine("Right Double Double", autoRoutines::rightDoubleDouble);
+    autoChooser.addRoutine("Left Cheeseburger", autoRoutines::leftCheeseburger);
+    autoChooser.addRoutine("Right Cheeseburger", autoRoutines::rightCheeseburger);
+    SmartDashboard.putData("AutoChooser", autoChooser);
 
     RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
@@ -216,9 +220,9 @@ public class Robot extends TimedRobot {
     // DogLog.log("LeftTrenchZone", FieldConstants.LeftTrench.trenchZone);
     // DogLog.log("RightTrenchZone", FieldConstants.RightTrench.trenchZone);
 
-    autoBuilder = new AutoBuilder(drivetrain, superstructure);
-    autoChooser = new AutoChooser(autoBuilder);
-    configureAutos(drivetrain, superstructure);
+    // autoBuilder = new AutoBuilder(drivetrain, superstructure);
+    // autoChooser = new AutoChooser(autoBuilder);
+    // configureAutos(drivetrain, superstructure);
 
     // intakeRollers.setWantedState(IntakeRollersWantedState.INTAKE_FUEL);
     // driver.rightTrigger().onTrue(Commands.runOnce(() -> {
@@ -232,10 +236,10 @@ public class Robot extends TimedRobot {
     // }));
   }
 
-  private void configureAutos(CommandSwerveDrivetrain drivetrain, Superstructure superstructure) {
-    SmartDashboard.putData("Routine Chooser", autoChooser.getRoutineChooser());
-    SmartDashboard.putData("Starting Location Chooser", autoChooser.getStartingLocationChooser());
-  }
+  // private void configureAutos(CommandSwerveDrivetrain drivetrain, Superstructure superstructure) {
+  //   SmartDashboard.putData("Routine Chooser", autoChooser.getRoutineChooser());
+  //   SmartDashboard.putData("Starting Location Chooser", autoChooser.getStartingLocationChooser());
+  // }
 
   public Superstructure getSuperstructure() {
     return superstructure;
@@ -279,7 +283,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    autoChooser.updateAutoChooser();
   }
 
   @Override
@@ -289,11 +292,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    autoChooser.updateAutoChooser();
-    autonomousCommand = autoChooser.getSelectedAutoCommand();
-    if (autonomousCommand != null) {
-      CommandScheduler.getInstance().schedule(autonomousCommand);
-    }
   }
 
   @Override
@@ -303,6 +301,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousExit() {
     scheduler.cancelAll();
+    superstructure.setWantedSuperState(WantedSuperState.IDLE);
   }
 
   @Override
