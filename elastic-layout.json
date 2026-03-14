@@ -8,9 +8,9 @@
         "layouts": [
           {
             "title": "WantedSuperState",
-            "x": 384.0,
-            "y": 0.0,
-            "width": 256.0,
+            "x": 0.0,
+            "y": 256.0,
+            "width": 384.0,
             "height": 256.0,
             "type": "List Layout",
             "properties": {
@@ -42,9 +42,9 @@
           },
           {
             "title": "CurrentSuperState",
-            "x": 640.0,
-            "y": 0.0,
-            "width": 256.0,
+            "x": 384.0,
+            "y": 256.0,
+            "width": 384.0,
             "height": 256.0,
             "type": "List Layout",
             "properties": {
@@ -77,35 +77,9 @@
         ],
         "containers": [
           {
-            "title": "Routine Chooser",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 384.0,
-            "height": 128.0,
-            "type": "ComboBox Chooser",
-            "properties": {
-              "topic": "/SmartDashboard/Routine Chooser",
-              "period": 0.06,
-              "sort_options": false
-            }
-          },
-          {
-            "title": "Starting Location Chooser",
-            "x": 0.0,
-            "y": 128.0,
-            "width": 384.0,
-            "height": 128.0,
-            "type": "ComboBox Chooser",
-            "properties": {
-              "topic": "/SmartDashboard/Starting Location Chooser",
-              "period": 0.06,
-              "sort_options": false
-            }
-          },
-          {
             "title": "ReadyToShootAllianceZone",
-            "x": 896.0,
-            "y": 384.0,
+            "x": 768.0,
+            "y": 256.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Boolean Box",
@@ -121,7 +95,7 @@
           },
           {
             "title": "ReadyToShootHub",
-            "x": 896.0,
+            "x": 1024.0,
             "y": 256.0,
             "width": 256.0,
             "height": 128.0,
@@ -138,10 +112,10 @@
           },
           {
             "title": "RemainingTime",
-            "x": 384.0,
-            "y": 384.0,
-            "width": 512.0,
-            "height": 128.0,
+            "x": 512.0,
+            "y": 0.0,
+            "width": 768.0,
+            "height": 256.0,
             "type": "Match Time",
             "properties": {
               "topic": "/Robot/HubShift/RemainingTime",
@@ -154,10 +128,10 @@
           },
           {
             "title": "Active",
-            "x": 384.0,
-            "y": 256.0,
+            "x": 0.0,
+            "y": 0.0,
             "width": 512.0,
-            "height": 128.0,
+            "height": 256.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/Robot/HubShift/Active",
@@ -171,10 +145,10 @@
           },
           {
             "title": "Match Time",
-            "x": 0.0,
-            "y": 256.0,
-            "width": 384.0,
-            "height": 256.0,
+            "x": 768.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
             "type": "Match Time",
             "properties": {
               "topic": "/SmartDashboard/Match Time",
@@ -184,15 +158,21 @@
               "red_start_time": 15,
               "yellow_start_time": 30
             }
+          },
+          {
+            "title": "AutoChooser",
+            "x": 1024.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/AutoChooser",
+              "period": 0.06,
+              "sort_options": false
+            }
           }
         ]
-      }
-    },
-    {
-      "name": "Autonomous",
-      "grid_layout": {
-        "layouts": [],
-        "containers": []
       }
     }
   ]
