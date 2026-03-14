@@ -43,8 +43,8 @@ public class IntakeWrist {
     public void updateInputs(){
         Tracer.traceFunc("IntakeWrist UpdateInputs", io::updateInputs);
         
-        this.isWristJammed = wristStallDebouncer.calculate(io.statorCurrent > 20);
-        
+        this.isWristJammed = wristStallDebouncer.calculate(io.statorCurrent > 60);
+
         handleStateTransitions();
         applyStates();
 
