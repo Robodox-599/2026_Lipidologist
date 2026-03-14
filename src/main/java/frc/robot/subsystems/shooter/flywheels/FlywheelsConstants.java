@@ -30,14 +30,14 @@ public class FlywheelsConstants {
         public static final double flywheelMaxAcceleration = 50;
 
         // current limits
-        public static final double supplyCurrentLimit = 40;
-        public static final double statorCurrentLimit = 120;
+        public static final double supplyCurrentLimit = 30;
+        public static final double statorCurrentLimit = 80;
 
         // velocity tolerance
         public static final double RPSTolerance = 3;
 
         // setpoints
-        public static final double idleRPS = 0;
+        public static final double idleRPS = 45;
 
         public record FlywheelConstants(String name, int motorID, String CANBus, double kP, double kI, double kD,
                         double kS,
