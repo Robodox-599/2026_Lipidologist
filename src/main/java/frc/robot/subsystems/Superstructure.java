@@ -61,6 +61,7 @@ public class Superstructure extends SubsystemBase {
         SHOOT_HUB,
         SHOOT_HUB_AND_AGITATE,
         SOTM_HUB_AUTO,
+        SHOOT_HUB_MANUAL,
         SHOOT_ALLIANCE_ZONE,
         SHOOT_ALLIANCE_ZONE_AND_AGITATE,
         // CLIMB,
@@ -96,8 +97,8 @@ public class Superstructure extends SubsystemBase {
         // STOWING
     }
 
-    private WantedSuperState wantedSuperState = WantedSuperState.STOP;
-    private CurrentSuperState currentSuperState = CurrentSuperState.STOPPED;
+    private WantedSuperState wantedSuperState = WantedSuperState.IDLE;
+    private CurrentSuperState currentSuperState = CurrentSuperState.IDLING;
     private AdjustedShot adjustedShot = new AdjustedShot(Rotation2d.kZero, 0, 0, 0);
 
     public Superstructure(
@@ -192,6 +193,14 @@ public class Superstructure extends SubsystemBase {
                     currentSuperState = CurrentSuperState.SOTMING_HUB_AUTO;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_SOTM_HUB_AUTO;
+                }
+                break;
+            case SHOOT_HUB_MANUAL:
+                this.adjustedShot = CalculateShot.calculateManualShot();
+                if (areSystemsReadyForHubShot()) {
+                    currentSuperState = CurrentSuperState.SHOOTING_HUB;
+                } else {
+                    currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
                 }
                 break;
             // case PREPARE_ALLIANCE_ZONE_SHOT:

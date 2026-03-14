@@ -155,8 +155,8 @@
    },
    "LTRENCH_ALIGN":{
     "x":{
-     "exp":"6.1 m",
-     "val":6.1
+     "exp":"5.9 m",
+     "val":5.9
     },
     "y":{
      "exp":"LTRENCH_THRU.y",
@@ -170,29 +170,29 @@
    "LTRENCH_HUB_END":{
     "x":{
      "exp":"LTRENCH_HUB_START.x",
-     "val":6.1
+     "val":5.9
     },
     "y":{
      "exp":"6.4 m",
      "val":6.4
     },
     "heading":{
-     "exp":"(2 / 3) PI rad",
-     "val":2.0943951023931953
+     "exp":"90 deg",
+     "val":1.5707963267948966
     }
    },
    "LTRENCH_HUB_START":{
     "x":{
-     "exp":"6.1 m",
-     "val":6.1
+     "exp":"5.9 m",
+     "val":5.9
     },
     "y":{
      "exp":"3.45 m",
      "val":3.45
     },
     "heading":{
-     "exp":"(2 / 3) PI rad",
-     "val":2.0943951023931953
+     "exp":"90 deg",
+     "val":1.5707963267948966
     }
    },
    "LTRENCH_SHOOTING":{
@@ -296,7 +296,7 @@
    "RTRENCH_ALIGN":{
     "x":{
      "exp":"LTRENCH_ALIGN.x",
-     "val":6.1
+     "val":5.9
     },
     "y":{
      "exp":"fieldWidth - LTRENCH_THRU.y",
@@ -310,29 +310,29 @@
    "RTRENCH_HUB_END":{
     "x":{
      "exp":"LTRENCH_HUB_END.x",
-     "val":6.1
+     "val":5.9
     },
     "y":{
      "exp":"fieldWidth - LTRENCH_HUB_END.y",
      "val":1.6690000000000005
     },
     "heading":{
-     "exp":"-(2 / 3) PI rad",
-     "val":-2.0943951023931953
+     "exp":"270 deg",
+     "val":4.71238898038469
     }
    },
    "RTRENCH_HUB_START":{
     "x":{
      "exp":"LTRENCH_HUB_START.x",
-     "val":6.1
+     "val":5.9
     },
     "y":{
      "exp":"fieldWidth - LTRENCH_HUB_START.y",
      "val":4.619000000000001
     },
     "heading":{
-     "exp":"-(2 / 3) PI rad",
-     "val":-2.0943951023931953
+     "exp":"270 deg",
+     "val":4.71238898038469
     }
    },
    "RTRENCH_SHOOTING":{

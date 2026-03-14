@@ -7,6 +7,7 @@ package frc.robot.subsystems.intake.intakeWrist;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.util.Tracer;
 
@@ -59,7 +60,7 @@ public class IntakeWrist {
                 currentState = IntakeWristCurrentState.STOPPED;
                 break;
             case INTAKE_FUEL:
-                if (this.isWristJammed) {
+                if (this.isWristJammed && DriverStation.isAutonomous()) {
                     currentState = IntakeWristCurrentState.UNJAM;
                 } else {
                     currentState = IntakeWristCurrentState.INTAKING_FUEL;

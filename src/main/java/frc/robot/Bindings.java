@@ -30,12 +30,15 @@ public class Bindings {
     driver.y().onTrue(superstructure.zeroPoseCommand());
 
     // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
-    driver.rightTrigger().and(driver.leftTrigger().negate()).whileTrue(new RepeatCommand(setShootingStateCommand()))
+    driver.rightTrigger().and(driver.leftTrigger().negate()).whileTrue(new RepeatCommand(setAgitatingShootingStateCommand()))
         .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
     // AUTOMATICALLY SHOOT WHILE AGITATING WHEN READY TO EITHER HUB OR ALLIANCE ZONE
-    driver.leftTrigger().whileTrue(new RepeatCommand(setAgitatingShootingStateCommand())).onFalse(Commands.either(
+    driver.leftTrigger().whileTrue(new RepeatCommand(setShootingStateCommand())).onFalse(Commands.either(
         Commands.none(), superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE), driver.rightTrigger()));
+
+    driver.a().and(driver.leftTrigger().negate()).and(driver.rightTrigger().negate()).whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB_MANUAL))
+        .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
     // // PREPARE TO SHOOT TO EITHER HUB OR ALLIANCE ZONE
     // driver.povRight().and(driver.rightTrigger().negate()).whileTrue(new

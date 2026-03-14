@@ -47,19 +47,19 @@ public class ShotData {
     static {
         allianceZoneShotMap.put(
             2.765,
-            new Shot(0.014, 48, 1));
+            new Shot(0.014, 50, 1));
         allianceZoneShotMap.put(
             4.054,
-            new Shot(0.022, 55, 1));
+            new Shot(0.022, 57, 1));
         allianceZoneShotMap.put(
             5.58,
-            new Shot(0.042, 61, 1));
+            new Shot(0.042, 63, 1));
         allianceZoneShotMap.put(
             6.19,
-            new Shot(0.048, 65, 1));
+            new Shot(0.048, 68, 1));
         allianceZoneShotMap.put(
             7.8,
-            new Shot(0.063, 72, 1));
+            new Shot(0.063, 75, 1));
         allianceZoneShotMap.put(
             10.155,
             new Shot(0.08, 80, 1));
