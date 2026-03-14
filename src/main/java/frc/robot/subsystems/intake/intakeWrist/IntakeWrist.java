@@ -118,7 +118,7 @@ public class IntakeWrist {
                 setPosition(.33);
                 break;
             case WRIST_RETRACTING:
-                setPosition(0.14);
+                setPosition(0.1);
                 break;
             case WRIST_EXTENDING:
                 setPosition(0.003);

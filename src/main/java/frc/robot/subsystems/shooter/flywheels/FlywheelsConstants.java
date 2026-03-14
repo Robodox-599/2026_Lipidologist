@@ -37,7 +37,7 @@ public class FlywheelsConstants {
         public static final double RPSTolerance = 3;
 
         // setpoints
-        public static final double idleRPS = 45;
+        public static final double idleRPS = 0;
 
         public record FlywheelConstants(String name, int motorID, String CANBus, double kP, double kI, double kD,
                         double kS,

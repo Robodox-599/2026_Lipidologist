@@ -73,10 +73,10 @@ public class Feeder {
         stopFeeder();
         break;
       case REVERSE:
-        setVoltage(-5);
+        setVoltage(-3);
         break;
       case OUTAKING:
-        setVoltage(-20);
+        setVoltage(-5);
         break;
       default:
         stopFeeder();
