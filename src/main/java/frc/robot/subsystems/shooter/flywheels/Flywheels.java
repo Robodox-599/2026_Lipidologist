@@ -1,6 +1,8 @@
 package frc.robot.subsystems.shooter.flywheels;
 
 import dev.doglog.DogLog;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 
 public class Flywheels {
     private final FlywheelsIO[] io;
@@ -8,6 +10,8 @@ public class Flywheels {
     private FlywheelCurrentState currentState = FlywheelCurrentState.STOPPING;
 
     private double targetRPS = 0;
+    private Debouncer rpmDebouncer = new Debouncer(0.1, DebounceType.kFalling);
+    private boolean atTargetRPS = false;
 
     public Flywheels(FlywheelsIO... io) {
         this.io = io;
@@ -32,8 +36,11 @@ public class Flywheels {
         handleStateTransitions();
         applyStates();
 
+        this.atTargetRPS = rpmDebouncer.calculate(allFlywheelsAtSetpoint());
+
         DogLog.log("Flywheels/WantedState", wantedState);
         DogLog.log("Flywheels/CurrentState", currentState);
+        DogLog.log("Flywheels/areAllFlywheelsAtTargetRPS", this.atTargetRPS);
     }
 
     public void handleStateTransitions() {
@@ -89,6 +96,10 @@ public class Flywheels {
     }
 
     public boolean atSetpoint() {
+        return this.atTargetRPS;
+    }
+
+    private boolean allFlywheelsAtSetpoint() {
         boolean allFlywheelsAtSetpoint = true;
         for (int i = 0; i < this.io.length; i++) {
             allFlywheelsAtSetpoint = allFlywheelsAtSetpoint && this.io[i].isFlywheelAtSetpoint;

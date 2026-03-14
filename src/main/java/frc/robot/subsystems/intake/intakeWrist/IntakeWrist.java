@@ -5,6 +5,8 @@
 package frc.robot.subsystems.intake.intakeWrist;
 
 import dev.doglog.DogLog;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.util.Tracer;
 
@@ -14,6 +16,8 @@ public class IntakeWrist {
     private IntakeWristWantedState wantedState = IntakeWristWantedState.STOP;
     private IntakeWristCurrentState currentState = IntakeWristCurrentState.STOPPED;
     private Timer agitationTimer = new Timer();
+    private Debouncer wristStallDebouncer = new Debouncer(0.5, DebounceType.kBoth);
+    private boolean isWristJammed = false;
 
     public IntakeWrist(IntakeWristIO io){
         this.io = io;
@@ -24,7 +28,7 @@ public class IntakeWrist {
         STOP,
         INTAKE_FUEL,
         STOW, //pack
-        AGITATE_FUEL
+        AGITATE_FUEL,
     }
 
     public enum IntakeWristCurrentState{
@@ -32,15 +36,20 @@ public class IntakeWrist {
         INTAKING_FUEL,
         STOWING, //packing
         WRIST_RETRACTING,
-        WRIST_EXTENDING
+        WRIST_EXTENDING,
+        UNJAM
     }
 
     public void updateInputs(){
         Tracer.traceFunc("IntakeWrist UpdateInputs", io::updateInputs);
         handleStateTransitions();
         applyStates();
+
+        this.isWristJammed = wristStallDebouncer.calculate(io.statorCurrent > 20);
+
         DogLog.log("Intake/Wrist/WantedState", wantedState);
         DogLog.log("Intake/Wrist/CurrentState", currentState);
+        DogLog.log("Intake/Wrist/IsWristJammed", isWristJammed);
     }
 
     public void handleStateTransitions(){
@@ -49,7 +58,11 @@ public class IntakeWrist {
                 currentState = IntakeWristCurrentState.STOPPED;
                 break;
             case INTAKE_FUEL:
-                currentState = IntakeWristCurrentState.INTAKING_FUEL;
+                if (this.isWristJammed) {
+                    currentState = IntakeWristCurrentState.UNJAM;
+                } else {
+                    currentState = IntakeWristCurrentState.INTAKING_FUEL;
+                }
                 break;
             case STOW:
                 currentState = IntakeWristCurrentState.STOWING;
@@ -107,6 +120,9 @@ public class IntakeWrist {
                 break;
             case WRIST_EXTENDING:
                 setPosition(0.003);
+                break;
+            case UNJAM:
+                setPosition(0.3);
                 break;
             default:
                 stop();

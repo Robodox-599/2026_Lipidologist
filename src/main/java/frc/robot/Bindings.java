@@ -19,7 +19,7 @@ import frc.robot.subsystems.Superstructure.WantedSuperState;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.HubShiftUtil;
 
-public class Bindings extends SubsystemBase {
+public class Bindings {
 
   private final Superstructure superstructure;
 
@@ -30,22 +30,22 @@ public class Bindings extends SubsystemBase {
     driver.y().onTrue(superstructure.zeroPoseCommand());
 
     // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
-    driver.rightTrigger().whileTrue(new RepeatCommand(setShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    driver.rightTrigger().and(driver.leftTrigger().negate()).whileTrue(new RepeatCommand(setShootingStateCommand()))
+        .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    
-    // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
-    driver.leftTrigger().whileTrue(new RepeatCommand(superstructure.setWantedSuperStateCommand(WantedSuperState.OUTTAKE))).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    // AUTOMATICALLY SHOOT WHILE AGITATING WHEN READY TO EITHER HUB OR ALLIANCE ZONE
+    driver.leftTrigger().whileTrue(new RepeatCommand(setAgitatingShootingStateCommand())).onFalse(Commands.either(
+        Commands.none(), superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE), driver.rightTrigger()));
 
     // // PREPARE TO SHOOT TO EITHER HUB OR ALLIANCE ZONE
-    // driver.povRight().and(driver.rightTrigger().negate()).whileTrue(new RepeatCommand(setPrepareShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    // driver.povRight().and(driver.rightTrigger().negate()).whileTrue(new
+    // RepeatCommand(setPrepareShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
     // // AUTOMATICALLY CLIMB
     // driver.a().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLIMB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
     // driver.rightTrigger().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.TESTING))
-    //     .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
-
-    // driver.a().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLIMB));
+    // .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
     new Trigger(() -> HubShiftUtil.isHubActiveSoon(3)).onTrue(rumbleDriverSwapping(driver, 0.5, 3));
   }
@@ -56,11 +56,18 @@ public class Bindings extends SubsystemBase {
         Set.of(superstructure));
   }
 
-  public Command setPrepareShootingStateCommand() {
+  public Command setAgitatingShootingStateCommand() {
     return Commands.defer(
-        () -> superstructure.setWantedSuperStateCommand(returnPrepareShootingState()),
+        () -> superstructure.setWantedSuperStateCommand(returnAgitatingShootingState()),
         Set.of(superstructure));
   }
+
+  // public Command setPrepareShootingStateCommand() {
+  // return Commands.defer(
+  // () ->
+  // superstructure.setWantedSuperStateCommand(returnPrepareShootingState()),
+  // Set.of(superstructure));
+  // }
 
   public WantedSuperState returnShootingState() {
     if (AllianceFlipUtil.shouldFlip()) { // if red
@@ -78,21 +85,39 @@ public class Bindings extends SubsystemBase {
     }
   }
 
-  public WantedSuperState returnPrepareShootingState() {
+  public WantedSuperState returnAgitatingShootingState() {
     if (AllianceFlipUtil.shouldFlip()) { // if red
       if (superstructure.getPose().getX() > AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
-        return WantedSuperState.PREPARE_HUB_SHOT;
+        return WantedSuperState.SHOOT_HUB_AND_AGITATE;
       } else {
-        return WantedSuperState.PREPARE_ALLIANCE_ZONE_SHOT;
+        return WantedSuperState.SHOOT_ALLIANCE_ZONE_AND_AGITATE;
       }
     } else {
       if (superstructure.getPose().getX() < AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
-        return WantedSuperState.PREPARE_HUB_SHOT;
+        return WantedSuperState.SHOOT_HUB_AND_AGITATE;
       } else {
-        return WantedSuperState.PREPARE_ALLIANCE_ZONE_SHOT;
+        return WantedSuperState.SHOOT_ALLIANCE_ZONE_AND_AGITATE;
       }
     }
   }
+
+  // public WantedSuperState returnPrepareShootingState() {
+  // if (AllianceFlipUtil.shouldFlip()) { // if red
+  // if (superstructure.getPose().getX() >
+  // AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
+  // return WantedSuperState.PREPARE_HUB_SHOT;
+  // } else {
+  // return WantedSuperState.PREPARE_ALLIANCE_ZONE_SHOT;
+  // }
+  // } else {
+  // if (superstructure.getPose().getX() <
+  // AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
+  // return WantedSuperState.PREPARE_HUB_SHOT;
+  // } else {
+  // return WantedSuperState.PREPARE_ALLIANCE_ZONE_SHOT;
+  // }
+  // }
+  // }
 
   public Command rumbleDriverContinuous(CommandXboxController driver, double totalTime) {
     return new StartEndCommand(

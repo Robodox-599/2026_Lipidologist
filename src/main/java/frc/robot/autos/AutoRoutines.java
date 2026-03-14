@@ -40,13 +40,23 @@ public class AutoRoutines {
                                 .onTrue(Commands.sequence(
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                                                new WaitCommand(4),
+                                                new WaitCommand(2),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE),
+                                                new WaitCommand(2),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 LTRENCHtoHUBSWEEP.cmd()));
 
                 LTRENCHtoHUBSWEEP.done()
-                                .onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB));
+                                .onTrue(Commands.sequence(
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+                                                new WaitCommand(2),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE)));
 
                 return routine;
         }
@@ -68,13 +78,23 @@ public class AutoRoutines {
                                 .onTrue(Commands.sequence(
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                                                new WaitCommand(4),
+                                                new WaitCommand(2),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE),
+                                                new WaitCommand(2),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 RTRENCHtoHUBSWEEP.cmd()));
 
                 RTRENCHtoHUBSWEEP.done()
-                                .onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB));
+                                .onTrue(Commands.sequence(
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+                                                new WaitCommand(2),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE)));
 
                 return routine;
         }
@@ -102,7 +122,13 @@ public class AutoRoutines {
                                                 .andThen(DEPOT_INTAKE.cmd()));
 
                 DEPOT_INTAKE.done()
-                                .onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB));
+                                .onTrue(Commands.sequence(
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+                                                new WaitCommand(3),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE)));
 
                 return routine;
         }
@@ -125,7 +151,11 @@ public class AutoRoutines {
                                 .onTrue(Commands.sequence(
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                                                new WaitCommand(4),
+                                                new WaitCommand(2),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE),
+                                                new WaitCommand(2),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 RTRENCHtoOUTPOST.cmd()));
@@ -134,7 +164,13 @@ public class AutoRoutines {
                                 .onTrue(OUTPOSTtoRTRENCH.cmd());
 
                 OUTPOSTtoRTRENCH.done()
-                                .onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB));
+                                .onTrue(Commands.sequence(
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+                                                new WaitCommand(3),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE)));
 
                 return routine;
         }
