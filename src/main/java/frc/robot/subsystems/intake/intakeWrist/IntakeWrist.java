@@ -42,10 +42,11 @@ public class IntakeWrist {
 
     public void updateInputs(){
         Tracer.traceFunc("IntakeWrist UpdateInputs", io::updateInputs);
+        
+        this.isWristJammed = wristStallDebouncer.calculate(io.statorCurrent > 20);
+        
         handleStateTransitions();
         applyStates();
-
-        this.isWristJammed = wristStallDebouncer.calculate(io.statorCurrent > 20);
 
         DogLog.log("Intake/Wrist/WantedState", wantedState);
         DogLog.log("Intake/Wrist/CurrentState", currentState);
