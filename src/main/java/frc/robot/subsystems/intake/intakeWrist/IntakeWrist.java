@@ -124,7 +124,7 @@ public class IntakeWrist {
                 setPosition(0.003);
                 break;
             case UNJAM:
-                setPosition(0.3);
+                setPosition(0.33);
                 break;
             default:
                 stop();
