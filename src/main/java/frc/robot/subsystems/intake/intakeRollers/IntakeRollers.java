@@ -16,14 +16,14 @@ public class IntakeRollers {
         STOP,
         INTAKE_FUEL,
         AGITATE_FUEL,
-        REVERSE_FUEL
+        OUTAKE
     }
 
     public enum IntakeRollersCurrentState{
         STOPPED,
         INTAKING_FUEL,
         AGITATING_FUEL,
-        REVERSING_FUEL
+        OUTAKING
     }
 
     public void updateInputs(){
@@ -45,8 +45,8 @@ public class IntakeRollers {
             case AGITATE_FUEL:
                 currentState = IntakeRollersCurrentState.AGITATING_FUEL;
                 break;
-            case REVERSE_FUEL:
-                currentState = IntakeRollersCurrentState.REVERSING_FUEL;
+            case OUTAKE:
+                currentState = IntakeRollersCurrentState.OUTAKING;
                 break;
             default:
                 currentState = IntakeRollersCurrentState.STOPPED;
@@ -65,8 +65,8 @@ public class IntakeRollers {
             case AGITATING_FUEL:
                 setVoltage(2);
                 break;
-            case REVERSING_FUEL:
-                setVoltage(0);
+            case OUTAKING:
+                setVoltage(-7);
                 break;
             default:
                 stop();

@@ -99,8 +99,8 @@
    },
    "DEPOT_OUTSIDE":{
     "x":{
-     "exp":"27 in + bumperRadius + intakeExtension + 6 in",
-     "val":1.489075
+     "exp":"27 in + bumperRadius + intakeExtension + 12 in",
+     "val":1.641475
     },
     "y":{
      "exp":"(fieldWidth / 2) + 75.93 in",

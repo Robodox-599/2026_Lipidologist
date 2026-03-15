@@ -40,7 +40,7 @@ public class AutoRoutines {
                                 .onTrue(Commands.sequence(
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                                                new WaitCommand(2),
+                                                new WaitCommand(0.5),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
                                                                                 WantedSuperState.SHOOT_HUB_AND_AGITATE),
@@ -53,7 +53,7 @@ public class AutoRoutines {
                                 .onTrue(Commands.sequence(
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                                                new WaitCommand(2),
+                                                new WaitCommand(0.5),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
                                                                                 WantedSuperState.SHOOT_HUB_AND_AGITATE)));
@@ -78,7 +78,7 @@ public class AutoRoutines {
                                 .onTrue(Commands.sequence(
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                                                new WaitCommand(2),
+                                                new WaitCommand(0.5),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
                                                                                 WantedSuperState.SHOOT_HUB_AND_AGITATE),
@@ -91,7 +91,7 @@ public class AutoRoutines {
                                 .onTrue(Commands.sequence(
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                                                new WaitCommand(2),
+                                                new WaitCommand(0.5),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
                                                                                 WantedSuperState.SHOOT_HUB_AND_AGITATE)));
@@ -125,7 +125,7 @@ public class AutoRoutines {
                                 .onTrue(Commands.sequence(
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                                                new WaitCommand(2),
+                                                new WaitCommand(0.5),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
                                                                                 WantedSuperState.SHOOT_HUB_AND_AGITATE)));
@@ -151,7 +151,7 @@ public class AutoRoutines {
                                 .onTrue(Commands.sequence(
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                                                new WaitCommand(2),
+                                                new WaitCommand(0.5),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
                                                                                 WantedSuperState.SHOOT_HUB_AND_AGITATE),
@@ -167,7 +167,7 @@ public class AutoRoutines {
                                 .onTrue(Commands.sequence(
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                                                new WaitCommand(2),
+                                                new WaitCommand(0.5),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
                                                                                 WantedSuperState.SHOOT_HUB_AND_AGITATE)));

@@ -76,7 +76,7 @@ public class Feeder {
         setVoltage(-3);
         break;
       case OUTAKING:
-        setVoltage(-5);
+        setVoltage(-12);
         break;
       default:
         stopFeeder();

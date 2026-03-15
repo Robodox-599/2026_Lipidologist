@@ -83,7 +83,7 @@ public class Indexer {
         setIndexerVoltage(-0.5);
         break;
       case OUTAKING:
-        setIndexerVoltage(-5);
+        setIndexerVoltage(-12);
         break;
       default:
         stopIndexer();
