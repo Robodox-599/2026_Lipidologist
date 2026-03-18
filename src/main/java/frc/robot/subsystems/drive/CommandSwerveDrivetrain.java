@@ -296,21 +296,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         currentState = CurrentState.DRIVE_TO_POINT;
         break;
       case CHOREO_TRAJECTORY:
-        // if (!DriverStation.isAutonomous()) {
-        // wantedState = WantedState.TELEOP_DRIVE;
-        // currentState = CurrentState.TELEOP_DRIVE;
-        // } else {
-        // currentState = CurrentState.CHOREO_TRAJECTORY;
-        // }
         currentState = CurrentState.CHOREO_TRAJECTORY;
         break;
       case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
-        // // if (!DriverStation.isAutonomous()) {
-        // // wantedState = WantedState.TELEOP_DRIVE;
-        // // currentState = CurrentState.TELEOP_DRIVE;
-        // // } else {
-        // // currentState = CurrentState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY;
-        // // }
         currentState = CurrentState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY;
         break;
       case STOPPED:
@@ -323,120 +311,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
 
   private void applyStates() {
-    ChassisSpeeds controllerSpeeds = new ChassisSpeeds(
-        -joystickDeadbandApply(driver.getLeftY()) * TunerConstants.MaxSpeed,
-        -joystickDeadbandApply(driver.getLeftX()) * TunerConstants.MaxSpeed,
-        joystickDeadbandApply(-driver.getRightX()) * MaxAngularRate);
-    DogLog.log("Drive/ControllerSpeeds", controllerSpeeds);
     switch (currentState) {
-      case TELEOP_DRIVE:
-        setControl(
-            drive
-                .withVelocityX(controllerSpeeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
-                .withVelocityY(controllerSpeeds.vyMetersPerSecond) // Drive left with negative X (left)
-                .withRotationalRate(controllerSpeeds.omegaRadiansPerSecond)); // Drive counterclockwise with negative X
-                                                                              // (left));
-        break;
-      case ROTATION_LOCK:
-        setControl(
-            driveAtAngle
-                .withVelocityX(controllerSpeeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
-                .withVelocityY(controllerSpeeds.vyMetersPerSecond) // Drive left with negative X (left)
-                .withTargetDirection(targetRotation));
-        DogLog.log("Drive/RotationLock/TargetRotation", new Rotation2d(targetRotation.getRadians() + Math.PI));
-        break;
-      case DRIVE_TO_POINT:
-        Translation2d translationToTarget = this.targetPosition.getTranslation()
-            .minus(getState().Pose.getTranslation());
-
-        Rotation2d rotation = this.targetPosition.getRotation();
-
-        if (AllianceFlipUtil.shouldFlip()) {
-          translationToTarget = translationToTarget.rotateBy(kRedAlliancePerspectiveRotation.unaryMinus());
-          rotation = rotation.rotateBy(kRedAlliancePerspectiveRotation.unaryMinus());
-        }
-
-        double linearDistance = translationToTarget.getNorm();
-        double frictionConstant = 0.0;
-        if (linearDistance >= 0.02) {
-          frictionConstant = DRIVE_TO_POINT_STATIC_FRICTION_CONSTANT * TunerConstants.MaxSpeed;
-        }
-
-        Rotation2d direction = translationToTarget.getAngle();
-        double velocityOutput = Math.min(
-            Math.abs(driveToPointController.calculate(linearDistance, 0)) + frictionConstant,
-            DRIVE_TO_POINT_MAX_VELOCITY_OUTPUT);
-
-        double xVelocity = velocityOutput * direction.getCos();
-        double yVelocity = velocityOutput * direction.getSin();
-
-        DogLog.log("Drive/DriveToPose/TargetPoseForDriveToPoint", this.targetPosition);
-        DogLog.log("Drive/DriveToPose/VelocityOutput", velocityOutput);
-        DogLog.log("Drive/DriveToPose/XVelocity", xVelocity);
-        DogLog.log("Drive/DriveToPose/YVelocity", yVelocity);
-
-        setControl(
-            driveAtAngle
-                .withVelocityX(xVelocity)
-                .withVelocityY(yVelocity)
-                .withTargetDirection(rotation));
-        break;
-      case CHOREO_TRAJECTORY:
-        if (choreoSampleToBeApplied != null) {
-          SwerveSample sample = choreoSampleToBeApplied;
-          choreoSampleToBeApplied = null;
-
-          Pose2d pose = getState().Pose;
-
-          ChassisSpeeds targetSpeeds = sample.getChassisSpeeds();
-          DogLog.log("Drive/Choreo/SwerveSample", sample);
-          DogLog.log("Drive/Choreo/SwerveSample/ChoreoPosition", sample.getPose());
-
-          DogLog.log("Drive/Choreo/PoseError", pose.getTranslation().minus(sample.getPose().getTranslation()));
-          DogLog.log("Drive/Choreo/XError", pose.getX() - sample.x);
-          DogLog.log("Drive/Choreo/YError", pose.getY() - sample.y);
-          DogLog.log("Drive/Choreo/AngularError", pose.getRotation().getRadians() - sample.heading);
-
-          targetSpeeds.vxMetersPerSecond += choreoXController.calculate(pose.getX(), sample.x);
-          targetSpeeds.vyMetersPerSecond += choreoYController.calculate(pose.getY(), sample.y);
-          targetSpeeds.omegaRadiansPerSecond += choreoThetaPID.calculate(pose.getRotation().getRadians(),
-              sample.heading);
-
-          DogLog.log("Drive/Choreo/RobotSetpointSpeedsAfterPID", targetSpeeds);
-
-          setControl(
-              m_pathApplyFieldSpeeds
-                  .withSpeeds(targetSpeeds));
-        }
-        break;
-      case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
-        if (choreoSampleToBeApplied != null) {
-          SwerveSample sample = choreoSampleToBeApplied;
-          choreoSampleToBeApplied = null;
-
-          var pose = getState().Pose;
-
-          var targetSpeeds = sample.getChassisSpeeds();
-          DogLog.log("Drive/Choreo/SwerveSample", sample);
-          DogLog.log("Drive/Choreo/SwerveSample/ChoreoPosition", sample.getPose());
-          targetSpeeds.vxMetersPerSecond += choreoXController.calculate(pose.getX(),
-              sample.x);
-          targetSpeeds.vyMetersPerSecond += choreoYController.calculate(pose.getY(),
-              sample.y);
-          targetSpeeds.omegaRadiansPerSecond += choreoRotationLockPID.calculate(pose.getRotation().getRadians(),
-              AllianceFlipUtil.shouldFlip()
-                  ? this.targetRotation.rotateBy(kRedAlliancePerspectiveRotation).getRadians()
-                  : this.targetRotation.getRadians()); // not sure if this works as intended
-
-          DogLog.log("Drive/Choreo/RobotSetpointSpeedsAfterPID", targetSpeeds);
-
-          setControl(
-              m_pathApplyFieldSpeeds
-                  .withSpeeds(targetSpeeds)
-                  .withWheelForceFeedforwardsX(sample.moduleForcesX())
-                  .withWheelForceFeedforwardsY(sample.moduleForcesY()));
-        }
-        break;
+      
       case STOPPED:
         setControl(drive.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
         break;
