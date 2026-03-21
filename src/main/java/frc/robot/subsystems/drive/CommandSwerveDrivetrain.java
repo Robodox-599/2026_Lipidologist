@@ -374,7 +374,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         // we know that there are 2 sides on the feild, this must mean that depending on which side the robot is on, however, we only "flip"
         // when the robot is on the red alliance
         if (AllianceFlipUtil.shouldFlip()){ //shouldFlip returns true if the robot is on the red alliance
-          targetTranslation2d = targetTranslation2d.rotateBy(kRedAlliancePerspectiveRotation.times(-1));
+          targetTranslation2d = targetTranslation2d.rotateBy(kRedAlliancePerspectiveRotation);
         }
 
         // this tells the robot how faw away it is in a straight line using pythagorean theorm.
@@ -408,6 +408,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
           .withVelocityY(yVelocity)
           .withTargetDirection(rotation2d)
         );
+        break;
+      case CHOREO_TRAJECTORY:
+        if (choreoSampleToBeApplied){}
+        }
+
       default:
         break;
     }
