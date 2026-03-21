@@ -18,13 +18,16 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.util.PhoenixUtil;
-
+ 
 public class FeederIOTalonFX extends FeederIO {
     private final TalonFX feederMotor;
     private final CANBus feederBus;
     private TalonFXConfiguration feederConfig;
     private VelocityVoltage velocityVoltage;
+
+    private final Timer timer = new Timer();
 
     private final StatusSignal<AngularVelocity> feederVelocityRPS;
     private final StatusSignal<Temperature> feederTemperature;
@@ -83,11 +86,17 @@ public class FeederIOTalonFX extends FeederIO {
         super.supplyCurrent = feederSupplyCurrent.getValueAsDouble();
         super.statorCurrent = feederStatorCurrent.getValueAsDouble();
         super.tempCelsius = feederTemperature.getValueAsDouble();
+        if(super.statorCurrent >= FeederConstants.stallingStatorCurrentAmps) {
+                super.isFeederStalling = true;
+        } else {
+                super.isFeederStalling = false;
+        }
 
         DogLog.log("Feeder/RPS", super.RPS);
         DogLog.log("Feeder/TargetRPS", super.targetRPS);
         DogLog.log("Feeder/SupplyCurrent", super.supplyCurrent);
         DogLog.log("Feeder/StatorCurrent", super.statorCurrent);
+        DogLog.log("Feeder/isFeederStalling", super.isFeederStalling);
         DogLog.log("Feeder/Temperature", super.tempCelsius);
     }
 
@@ -100,6 +109,19 @@ public class FeederIOTalonFX extends FeederIO {
     public void setFeederVelocity(double RPS) {
         super.targetRPS = RPS;
         feederMotor.setControl(velocityVoltage.withVelocity(RPS));
+    }
+
+    @Override
+    public void clearFuel() {
+      timer.start();
+
+      if(timer.get() < FeederConstants.reverseTimeInterval) {
+        super.clearingFuel = true;
+        feederMotor.setVoltage(-3);
+      } else {
+        super.clearingFuel = false;
+        timer.reset();
+      }
     }
 
     @Override
