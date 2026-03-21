@@ -7,14 +7,10 @@ public abstract class FeederIO {
     protected double supplyCurrent = 0.0;
     // protected double appliedVolts = 0.0;
     protected double tempCelsius = 0.0;
-    protected boolean isFeederStalling = false;
-    protected boolean clearingFuel = false;
 
     public void updateInputs() {}
 
     public void setFeederVelocity(double RPS) {}
-
-    public void clearFuel() {}
 
     public void stopFeeder() {}
 

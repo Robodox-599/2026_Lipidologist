@@ -18,7 +18,6 @@ public class Feeder {
   public enum FeederWantedState {
     STOPPED,
     FEED_FUEL,
-    CLEAR_JAMMED_FUEL,
     REVERSE,
     OUTAKE,
   }
@@ -26,7 +25,6 @@ public class Feeder {
   public enum FeederCurrentState {
     STOPPED,
     FEEDING_FUEL,
-    CLEARING_JAMMED_FUEL,
     REVERSE,
     OUTAKING,
   }
@@ -49,18 +47,7 @@ public class Feeder {
   public void handleFeederStateTransitions() {
     switch (wantedState) {
       case FEED_FUEL:
-        if(isFeederStalling()) {
-          currentState = FeederCurrentState.CLEARING_JAMMED_FUEL;
-        } else {
-          currentState = FeederCurrentState.FEEDING_FUEL;
-        }
-        break;
-      case CLEAR_JAMMED_FUEL:
-        if(clearingFuel()) {
-          currentState = FeederCurrentState.FEEDING_FUEL;
-        } else {
-          currentState = FeederCurrentState.CLEARING_JAMMED_FUEL;
-        }
+        currentState = FeederCurrentState.FEEDING_FUEL;
         break;
       case STOPPED:
         currentState = FeederCurrentState.STOPPED;
@@ -82,9 +69,6 @@ public class Feeder {
       case FEEDING_FUEL:
         setFeederVelocity(100);
         break;
-      case CLEARING_JAMMED_FUEL:
-        clearFuel();
-        break;
       case STOPPED:
         stopFeeder();
         break;
@@ -104,10 +88,6 @@ public class Feeder {
     io.setFeederVelocity(RPS);
   }
 
-  private void clearFuel() {
-    io.clearFuel();
-  }
-
   private void setVoltage(double voltage) {
     io.setVoltage(voltage);
   }
@@ -118,14 +98,6 @@ public class Feeder {
 
   public void setWantedState(Feeder.FeederWantedState wantedState) {
     this.wantedState = wantedState;
-  }
-
-  public boolean isFeederStalling() {
-    return io.isFeederStalling;
-  }
-
-  public boolean clearingFuel() {
-    return io.clearingFuel;
   }
 
 }
