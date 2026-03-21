@@ -18,8 +18,8 @@ public class CalculateShot {
     public record AdjustedShot(Rotation2d targetRotation, double shootSpeed, double hoodAngle, double flightTime) {}
 
     final static int maxGoalPositionIterations = 5;
-    final static double LOOKAHEAD_TIME = 0.0;
-    final static double fuelDragCoefficient = 0.5;
+    final static double LOOKAHEAD_TIME = 0.05;
+    final static double fuelDragCoefficient = 0.1;
 
     public static AdjustedShot calculateHubAdjustedShot(Pose2d robotPose, ChassisSpeeds fieldRelativeRobotVelocity,
             ChassisAccelerations fieldRelativeRobotAcceleration) {
@@ -129,7 +129,7 @@ public class CalculateShot {
     }
 
     public static double applyFuelDragCoefficient(double flightTime) {
-        // return (1-Math.pow(Math.E, -(fuelDragCoefficient * flightTime))) / fuelDragCoefficient;
-        return flightTime;
+        return (1-Math.pow(Math.E, -(fuelDragCoefficient * flightTime))) / fuelDragCoefficient;
+        // return flightTime;
     }
 }

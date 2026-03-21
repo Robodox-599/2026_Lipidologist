@@ -52,6 +52,7 @@ public class IntakeWrist {
         DogLog.log("Intake/Wrist/WantedState", wantedState);
         DogLog.log("Intake/Wrist/CurrentState", currentState);
         DogLog.log("Intake/Wrist/IsWristJammed", isWristJammed);
+        DogLog.log("Intake/Wrist/AgitationTimer", agitationTimer.get());
     }
 
     public void handleStateTransitions(){
@@ -118,7 +119,7 @@ public class IntakeWrist {
                 setPosition(.33);
                 break;
             case WRIST_RETRACTING:
-                setPosition(0.2);
+                setPosition(0.16);
                 break;
             case WRIST_EXTENDING:
                 setPosition(-0.005);
