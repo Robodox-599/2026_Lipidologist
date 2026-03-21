@@ -311,11 +311,103 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
 
   private void applyStates() {
+    ChassisSpeeds controllerSpeeds = new ChassisSpeeds(
+        //leftY only accounts for the robots translation vertically
+        //leftX only accounts for the robots translation horizontally
+        //rightX only accounts for the robots rotation
+        //all of these represents the X and Y values outputed by the joysticks (left or right)
+
+        //joystickDeadbandApply acounts the wear and tear by the joystick over time. The joystick's value may never truly be at zero
+        // so it returns the value of 0 if it's within a certain tolerance
+
+        //driver.getLeftY() returns a value [-1,1]. However, this restricts it's maximum speed to 1. To get our desired maximum speeds,
+        //you multiply it by the max Speeds
+
+        //note that this doesn't apply the velocites but only gets the values for it
+
+        -joystickDeadbandApply(driver.getLeftY() * TunerConstants.MaxSpeed),
+        -joystickDeadbandApply(driver.getRightX() * TunerConstants.MaxSpeed),
+        -joystickDeadbandApply(driver.getRightX() * TunerConstants.MaxSpeed));
+
+        DogLog.log("Drive/RobotSpeed", controllerSpeeds);
     switch (currentState) {
-      
       case STOPPED:
         setControl(drive.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
         break;
+      case TELEOP_DRIVE:
+        //here is where we apply the robots velocity from the controller speeds we got
+        setControl(
+          drive
+            .withVelocityX(controllerSpeeds.vxMetersPerSecond)
+            .withVelocityY(controllerSpeeds.vyMetersPerSecond)
+            .withRotationalRate(controllerSpeeds.omegaRadiansPerSecond)
+        );
+        break;
+      case ROTATION_LOCK:
+        // this case allows the robot to translate freely, but makes it such that the robot's rotation has a target to lock onto.
+        // some examples of this case being used is when the robot initially locks to the hub only allowing fuel to be shot then,
+        // preventing fuel from being shot from the field. Also because it locks rotation and not movement, it allows you to score
+        // on the move
+        setControl(
+          drive
+            .withVelocityX(controllerSpeeds.vxMetersPerSecond)
+            .withVelocityY(controllerSpeeds.vyMetersPerSecond)
+            .withRotationalRate(targetRotation.getRadians()) //we don't want the rightX to affect the robots rotation but only it's target
+        );
+        // we don't specify the case whether it's auto or teleop because it can be used for both
+        break;
+      case DRIVE_TO_POINT:
+        // this case allows the robot to move to a specific point, anywhere on the field.
+        // for example this case can be used during the end game, where the robot needs to align with the tower for the hook to to latch
+        // this must mean that we must use translation and rotation
+
+        // here we do final minus initial to get our displacement from the target position
+        // we first get the translation (x, y point) for our target position an duse the .minus() to avoid using object type conversion
+        // which makes it more easier to write
+        // for our current translation, we get the translation of our current State's Pose
+        // but why is Pose capitalized
+        Translation2d targetTranslation2d = this.targetPosition.getTranslation().minus(getState().Pose.getTranslation());
+
+        // notice how targetPosition is a Pose2d, so it has attributes of translation and rotation
+        Rotation2d rotation2d = this.targetPosition.getRotation();
+
+        // we know that there are 2 sides on the feild, this must mean that depending on which side the robot is on, however, we only "flip"
+        // when the robot is on the red alliance
+        if (AllianceFlipUtil.shouldFlip()){ //shouldFlip returns true if the robot is on the red alliance
+          targetTranslation2d = targetTranslation2d.rotateBy(kRedAlliancePerspectiveRotation.times(-1));
+        }
+
+        // this tells the robot how faw away it is in a straight line using pythagorean theorm.
+        // but why not use target Translation 2d? It's because the type is Translation2d and not a double. We need the type to be
+        // a double because we'll need it for the PID controller
+        double linearDistance = targetTranslation2d.getNorm(); // the norm does pythagoreon theorm and returns the double
+
+
+        // this isto compensate for friction when the robot is close to our target. This allwos the swerve to not stall once it
+        // gets near
+        double frictionBoost = 0.0;
+        if (linearDistance >= 0.02){
+          frictionBoost = DRIVE_TO_POINT_STATIC_FRICTION_CONSTANT * TunerConstants.MaxSpeed;
+        }
+
+        //Calculates velocity output based on PID and distance including static friction.
+        // It also ensures that it doesn't go over the limit
+        double velocityOutput = Math.min(
+          Math.abs(driveToPointController.calculate(linearDistance, 0)) + frictionBoost, DRIVE_TO_POINT_MAX_VELOCITY_OUTPUT);
+
+        // now let's get the horizontal and veticle components of the linearVelocity so we can apply it to our control as well
+        // as the angle we want to set the robot to
+        Rotation2d driveDirection = targetTranslation2d.getAngle();
+        double xVelocity = velocityOutput * driveDirection.getCos();
+        double yVelocity = velocityOutput * driveDirection.getSin();
+
+        //Apply the velocities and angle now
+        setControl(
+          driveAtAngle
+          .withVelocityX(xVelocity)
+          .withVelocityY(yVelocity)
+          .withTargetDirection(rotation2d)
+        );
       default:
         break;
     }
