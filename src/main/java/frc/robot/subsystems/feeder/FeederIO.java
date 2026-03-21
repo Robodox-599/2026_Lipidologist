@@ -11,4 +11,12 @@ public abstract class FeederIO {
     public void setVelocity(double velocity){};
     public void updateInputs(){};
     public void stop(){};
+
+    public boolean isStatorCurrentTripped(){
+        if (statorCurrent > FeederConstants.tripStatorCurrent){
+            return true;
+        } else{
+            return false;
+        }
+    }
 }

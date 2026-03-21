@@ -5,12 +5,18 @@
 package frc.robot.subsystems.feeder;
 
 import dev.doglog.DogLog;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Feeder {
   private final FeederIO io;
   private FeederWantedState wantedState = FeederWantedState.STOP;
   private FeederCurrentState currentState = FeederCurrentState.STOPPED;
+
+  private final Debouncer feederDebouncer = new Debouncer(1, Debouncer.DebounceType.kRising);
+
 
   public Feeder(FeederIO io){
     this.io = io;
@@ -43,7 +49,12 @@ public class Feeder {
         currentState = FeederCurrentState.STOPPED;
         break;
       case FEED:
-        currentState = FeederCurrentState.FEEDING;
+        if(feederDebouncer.calculate(io.statorCurrent > FeederConstants.tripStatorCurrent)){
+          currentState = FeederCurrentState.REVERSING;
+        } else{
+          currentState = FeederCurrentState.FEEDING;
+        }
+        
         break;
       case REVERSE:
         currentState = FeederCurrentState.REVERSING;
