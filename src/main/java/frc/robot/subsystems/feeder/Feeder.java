@@ -15,8 +15,7 @@ public class Feeder {
   private FeederWantedState wantedState = FeederWantedState.STOP;
   private FeederCurrentState currentState = FeederCurrentState.STOPPED;
 
-  private final Debouncer feederDebouncer = new Debouncer(1, Debouncer.DebounceType.kRising);
-
+  private final Debouncer feederDebouncer = new Debouncer(FeederConstants.tripDuration, Debouncer.DebounceType.kRising);
 
   public Feeder(FeederIO io){
     this.io = io;
@@ -54,7 +53,6 @@ public class Feeder {
         } else{
           currentState = FeederCurrentState.FEEDING;
         }
-        
         break;
       case REVERSE:
         currentState = FeederCurrentState.REVERSING;
