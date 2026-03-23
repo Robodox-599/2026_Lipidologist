@@ -107,4 +107,7 @@ public class Indexer {
     io.indexerPulseFuel(volts);
   }
 
+  public boolean isFuelJammedIndexer() {
+    return io.isFuelJammedIndexer;
+  }
 }

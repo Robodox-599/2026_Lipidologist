@@ -23,4 +23,7 @@ public class FeederConstants {
 
   public static final double supplyCurrentLimitAmps = 40;
   public static final double statorCurrentLimitAmps = 120;
+
+  public static final double stallingStatorCurrentAmps = 20;
+  public static final double fuelDebounce = 0.2;
 }

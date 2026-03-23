@@ -7,6 +7,7 @@ public abstract class FeederIO {
     protected double supplyCurrent = 0.0;
     // protected double appliedVolts = 0.0;
     protected double tempCelsius = 0.0;
+    protected boolean isFuelJammedFeeder = false;
 
     public void updateInputs() {}
 

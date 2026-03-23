@@ -14,6 +14,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import dev.doglog.DogLog;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
@@ -25,6 +27,7 @@ public class FeederIOTalonFX extends FeederIO {
     private final CANBus feederBus;
     private TalonFXConfiguration feederConfig;
     private VelocityVoltage velocityVoltage;
+    Debouncer feederDebouncer = new Debouncer(FeederConstants.fuelDebounce);
 
     private final StatusSignal<AngularVelocity> feederVelocityRPS;
     private final StatusSignal<Temperature> feederTemperature;
@@ -62,6 +65,8 @@ public class FeederIOTalonFX extends FeederIO {
 
         PhoenixUtil.tryUntilOk(10, () -> feederMotor.getConfigurator().apply(feederConfig, 1));
 
+        feederDebouncer.setDebounceType(DebounceType.kRising);
+
         feederVelocityRPS = feederMotor.getVelocity();
         feederTemperature = feederMotor.getDeviceTemp();
         feederAppliedVolts = feederMotor.getMotorVoltage();
@@ -83,6 +88,9 @@ public class FeederIOTalonFX extends FeederIO {
         super.supplyCurrent = feederSupplyCurrent.getValueAsDouble();
         super.statorCurrent = feederStatorCurrent.getValueAsDouble();
         super.tempCelsius = feederTemperature.getValueAsDouble();
+         super.isFuelJammedFeeder = feederDebouncer.calculate(
+                super.statorCurrent > FeederConstants.stallingStatorCurrentAmps
+        );
 
         DogLog.log("Feeder/RPS", super.RPS);
         DogLog.log("Feeder/TargetRPS", super.targetRPS);

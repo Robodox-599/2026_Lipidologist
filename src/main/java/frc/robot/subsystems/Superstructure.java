@@ -782,17 +782,20 @@ public class Superstructure extends SubsystemBase {
 
     private boolean areSystemsReadyForHubShot(double flightTime) {
         return flywheels.atSetpoint() && hood.atSetpoint() &&
+                !feeder.isFuelJammed() && !indexer.isFuelJammedIndexer() &&
                 drivetrain.isAtTargetRotation()
                 && HubShiftUtil.isHubPredictedActive(flightTime);
     }
 
     private boolean areSystemsReadyForHubShot() {
         return flywheels.atSetpoint() && hood.atSetpoint() &&
+                !feeder.isFuelJammed() && !indexer.isFuelJammedIndexer() &&
                 drivetrain.isAtTargetRotation();
     }
 
     private boolean areSystemsReadyForAllianceZoneShot() {
         return flywheels.atSetpoint() && hood.atSetpoint() &&
+                !feeder.isFuelJammed() && !indexer.isFuelJammedIndexer() &&
                 drivetrain.isAtTargetRotation();
     }
 
