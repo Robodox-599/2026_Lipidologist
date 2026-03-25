@@ -83,7 +83,7 @@ public class IndexerIOTalonFX extends IndexerIO {
     super.tempCelsius = indexerTemperature.getValueAsDouble();
     super.isFuelJammedIndexer = indexerDebouncer.calculate(
       super.statorCurrent > IndexerConstants.stallingStatorCurrentAmps &&
-      super.velocity < IndexerConstants.jammedVelocityTolerance
+      Math.abs(super.velocity) < IndexerConstants.jammedVelocityTolerance
     );
 
     DogLog.log("Indexer/Velocity", super.velocity);

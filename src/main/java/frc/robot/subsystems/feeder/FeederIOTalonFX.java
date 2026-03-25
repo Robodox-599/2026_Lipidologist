@@ -90,7 +90,7 @@ public class FeederIOTalonFX extends FeederIO {
         super.tempCelsius = feederTemperature.getValueAsDouble();
         super.isFuelJammed = feederDebouncer.calculate(
                 super.statorCurrent > FeederConstants.stallingStatorCurrentAmps &&
-                super.RPS < FeederConstants.jammedRPSTolerance
+                Math.abs(super.RPS) < FeederConstants.jammedRPSTolerance
         );
 
         DogLog.log("Feeder/RPS", super.RPS);
