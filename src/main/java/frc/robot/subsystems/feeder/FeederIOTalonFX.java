@@ -65,7 +65,7 @@ public class FeederIOTalonFX extends FeederIO {
 
         PhoenixUtil.tryUntilOk(10, () -> feederMotor.getConfigurator().apply(feederConfig, 1));
 
-        feederDebouncer.setDebounceType(DebounceType.kRising);
+        feederDebouncer.setDebounceType(DebounceType.kBoth);
 
         feederVelocityRPS = feederMotor.getVelocity();
         feederTemperature = feederMotor.getDeviceTemp();
@@ -88,8 +88,9 @@ public class FeederIOTalonFX extends FeederIO {
         super.supplyCurrent = feederSupplyCurrent.getValueAsDouble();
         super.statorCurrent = feederStatorCurrent.getValueAsDouble();
         super.tempCelsius = feederTemperature.getValueAsDouble();
-         super.isFuelJammedFeeder = feederDebouncer.calculate(
-                super.statorCurrent > FeederConstants.stallingStatorCurrentAmps
+        super.isFuelJammed = feederDebouncer.calculate(
+                super.statorCurrent > FeederConstants.stallingStatorCurrentAmps &&
+                super.RPS < FeederConstants.jammedRPSTolerance
         );
 
         DogLog.log("Feeder/RPS", super.RPS);

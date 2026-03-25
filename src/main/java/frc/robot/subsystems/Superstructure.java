@@ -76,6 +76,7 @@ public class Superstructure extends SubsystemBase {
 
     public enum CurrentSuperState {
         OUTAKING,
+        UNJAMMING,
         PREPARING_HUB_SHOT,
         PREPARING_HUB_SHOT_AND_AGITATING,
         PREPARING_ALLIANCE_ZONE_SHOT,
@@ -178,6 +179,8 @@ public class Superstructure extends SubsystemBase {
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
                 if (areSystemsReadyForHubShot(this.adjustedShot.flightTime())) {
                     currentSuperState = CurrentSuperState.SHOOTING_HUB;
+                } else if(isFuelJammed()) {
+                    currentSuperState = CurrentSuperState.UNJAMMING;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
                 }
@@ -187,6 +190,8 @@ public class Superstructure extends SubsystemBase {
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
                 if (areSystemsReadyForHubShot(this.adjustedShot.flightTime())) {
                     currentSuperState = CurrentSuperState.SHOOTING_HUB_AND_AGITATING;
+                } else if(isFuelJammed()) {
+                    currentSuperState = CurrentSuperState.UNJAMMING;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT_AND_AGITATING;
                 }
@@ -196,6 +201,8 @@ public class Superstructure extends SubsystemBase {
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
                 if (areSystemsReadyForHubShot()) {
                     currentSuperState = CurrentSuperState.SOTMING_HUB_AUTO;
+                } else if(isFuelJammed()) {
+                    currentSuperState = CurrentSuperState.UNJAMMING;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_SOTM_HUB_AUTO;
                 }
@@ -204,6 +211,8 @@ public class Superstructure extends SubsystemBase {
                 this.adjustedShot = CalculateShot.calculateManualShot();
                 if (areSystemsReadyForHubShot()) {
                     currentSuperState = CurrentSuperState.SHOOTING_HUB;
+                } else if(isFuelJammed()) {
+                    currentSuperState = CurrentSuperState.UNJAMMING;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
                 }
@@ -223,6 +232,8 @@ public class Superstructure extends SubsystemBase {
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
                 if (areSystemsReadyForAllianceZoneShot()) {
                     currentSuperState = CurrentSuperState.SHOOTING_ALLIANCE_ZONE;
+                } else if(isFuelJammed()) {
+                    currentSuperState = CurrentSuperState.UNJAMMING;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_ALLIANCE_ZONE_SHOT;
                 }
@@ -232,6 +243,8 @@ public class Superstructure extends SubsystemBase {
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
                 if (areSystemsReadyForAllianceZoneShot()) {
                     currentSuperState = CurrentSuperState.SHOOTING_ALLIANCE_ZONE_AND_AGITATING;
+                } else if(isFuelJammed()) {
+                    currentSuperState = CurrentSuperState.UNJAMMING;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_ALLIANCE_ZONE_SHOT_AND_AGITATING;
                 }
@@ -390,6 +403,18 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
         hood.setWantedState(Hood.HoodWantedState.STOW);
+        leds.setWantedState(LEDs.LEDsWantedState.IDLE);
+    }
+
+    public void unjamming() {
+        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
+                this.adjustedShot.shootSpeed());
+        hood.setWantedState(Hood.HoodWantedState.SET_POSITION,
+                this.adjustedShot.hoodAngle());
         leds.setWantedState(LEDs.LEDsWantedState.IDLE);
     }
 
@@ -782,21 +807,22 @@ public class Superstructure extends SubsystemBase {
 
     private boolean areSystemsReadyForHubShot(double flightTime) {
         return flywheels.atSetpoint() && hood.atSetpoint() &&
-                !feeder.isFuelJammed() && !indexer.isFuelJammedIndexer() &&
                 drivetrain.isAtTargetRotation()
                 && HubShiftUtil.isHubPredictedActive(flightTime);
     }
 
     private boolean areSystemsReadyForHubShot() {
         return flywheels.atSetpoint() && hood.atSetpoint() &&
-                !feeder.isFuelJammed() && !indexer.isFuelJammedIndexer() &&
                 drivetrain.isAtTargetRotation();
     }
 
     private boolean areSystemsReadyForAllianceZoneShot() {
         return flywheels.atSetpoint() && hood.atSetpoint() &&
-                !feeder.isFuelJammed() && !indexer.isFuelJammedIndexer() &&
                 drivetrain.isAtTargetRotation();
+    }
+
+    private boolean isFuelJammed() {
+        return feeder.isFuelJammedFeeder() && indexer.isFuelJammedIndexer();
     }
 
     private boolean isHoodUnsafe() {

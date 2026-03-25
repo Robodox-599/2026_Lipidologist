@@ -56,7 +56,7 @@ public class IndexerIOTalonFX extends IndexerIO {
 
     PhoenixUtil.tryUntilOk(10, () -> indexerMotor.getConfigurator().apply(indexerConfig, 1));
 
-    indexerDebouncer.setDebounceType(DebounceType.kFalling);
+    indexerDebouncer.setDebounceType(DebounceType.kBoth);
 
     indexerVelocityRad = indexerMotor.getVelocity();
     indexerTemperature = indexerMotor.getDeviceTemp();
@@ -82,7 +82,8 @@ public class IndexerIOTalonFX extends IndexerIO {
     super.appliedVolts = indexerAppliedVolts.getValueAsDouble();
     super.tempCelsius = indexerTemperature.getValueAsDouble();
     super.isFuelJammedIndexer = indexerDebouncer.calculate(
-      super.statorCurrent > IndexerConstants.stallingStatorCurrentAmps
+      super.statorCurrent > IndexerConstants.stallingStatorCurrentAmps &&
+      super.velocity < IndexerConstants.jammedVelocityTolerance
     );
 
     DogLog.log("Indexer/Velocity", super.velocity);

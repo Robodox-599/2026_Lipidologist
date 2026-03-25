@@ -96,8 +96,8 @@ public class Feeder {
     io.stopFeeder();
   }
 
-  public boolean isFuelJammed() {
-    return io.isFuelJammedFeeder;
+  public boolean isFuelJammedFeeder() {
+    return io.isFuelJammed;
   }
 
   public void setWantedState(Feeder.FeederWantedState wantedState) {
