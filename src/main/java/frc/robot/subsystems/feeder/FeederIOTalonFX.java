@@ -27,7 +27,7 @@ public class FeederIOTalonFX extends FeederIO {
     private final CANBus feederBus;
     private TalonFXConfiguration feederConfig;
     private VelocityVoltage velocityVoltage;
-    private Debouncer feederDebouncer;
+    Debouncer feederDebouncer = new Debouncer(FeederConstants.fuelDebounce);
 
     private final StatusSignal<AngularVelocity> feederVelocityRPS;
     private final StatusSignal<Temperature> feederTemperature;
@@ -65,7 +65,7 @@ public class FeederIOTalonFX extends FeederIO {
 
         PhoenixUtil.tryUntilOk(10, () -> feederMotor.getConfigurator().apply(feederConfig, 1));
 
-        feederDebouncer = new Debouncer(FeederConstants.fuelDebounce, DebounceType.kBoth);
+        feederDebouncer.setDebounceType(DebounceType.kBoth);
 
         feederVelocityRPS = feederMotor.getVelocity();
         feederTemperature = feederMotor.getDeviceTemp();

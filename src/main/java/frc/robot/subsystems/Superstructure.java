@@ -177,10 +177,10 @@ public class Superstructure extends SubsystemBase {
             case SHOOT_HUB:
                 this.adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
-                if (isFuelJammed()) {
-                    currentSuperState = CurrentSuperState.UNJAMMING;
-                } else if (areSystemsReadyForHubShot()) {
+                if (areSystemsReadyForHubShot(this.adjustedShot.flightTime())) {
                     currentSuperState = CurrentSuperState.SHOOTING_HUB;
+                } else if(isFuelJammed()) {
+                    currentSuperState = CurrentSuperState.UNJAMMING;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
                 }
@@ -188,10 +188,10 @@ public class Superstructure extends SubsystemBase {
             case SHOOT_HUB_AND_AGITATE:
                 this.adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
-                if (isFuelJammed()) {
-                    currentSuperState = CurrentSuperState.UNJAMMING;
-                } else if (areSystemsReadyForHubShot()) {
+                if (areSystemsReadyForHubShot(this.adjustedShot.flightTime())) {
                     currentSuperState = CurrentSuperState.SHOOTING_HUB_AND_AGITATING;
+                } else if(isFuelJammed()) {
+                    currentSuperState = CurrentSuperState.UNJAMMING;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT_AND_AGITATING;
                 }
@@ -199,20 +199,20 @@ public class Superstructure extends SubsystemBase {
             case SOTM_HUB_AUTO:
                 this.adjustedShot = CalculateShot.calculateHubAdjustedShot(drivetrain.getPose(),
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
-                if (isFuelJammed()) {
-                    currentSuperState = CurrentSuperState.UNJAMMING;
-                } else if (areSystemsReadyForHubShot()) {
+                if (areSystemsReadyForHubShot()) {
                     currentSuperState = CurrentSuperState.SOTMING_HUB_AUTO;
+                } else if(isFuelJammed()) {
+                    currentSuperState = CurrentSuperState.UNJAMMING;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_SOTM_HUB_AUTO;
                 }
                 break;
             case SHOOT_HUB_MANUAL:
                 this.adjustedShot = CalculateShot.calculateManualShot();
-                if (isFuelJammed()) {
-                    currentSuperState = CurrentSuperState.UNJAMMING;
-                } else if (areSystemsReadyForHubShot()) {
+                if (areSystemsReadyForHubShot()) {
                     currentSuperState = CurrentSuperState.SHOOTING_HUB;
+                } else if(isFuelJammed()) {
+                    currentSuperState = CurrentSuperState.UNJAMMING;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
                 }
@@ -230,10 +230,10 @@ public class Superstructure extends SubsystemBase {
             case SHOOT_ALLIANCE_ZONE:
                 this.adjustedShot = CalculateShot.calculateAllianceZoneAdjustedShot(drivetrain.getPose(),
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
-                if (isFuelJammed()) {
-                    currentSuperState = CurrentSuperState.UNJAMMING;
-                } else if (areSystemsReadyForAllianceZoneShot()) {
+                if (areSystemsReadyForAllianceZoneShot()) {
                     currentSuperState = CurrentSuperState.SHOOTING_ALLIANCE_ZONE;
+                } else if(isFuelJammed()) {
+                    currentSuperState = CurrentSuperState.UNJAMMING;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_ALLIANCE_ZONE_SHOT;
                 }
@@ -241,10 +241,10 @@ public class Superstructure extends SubsystemBase {
             case SHOOT_ALLIANCE_ZONE_AND_AGITATE:
                 this.adjustedShot = CalculateShot.calculateAllianceZoneAdjustedShot(drivetrain.getPose(),
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
-                if (isFuelJammed()) {
-                    currentSuperState = CurrentSuperState.UNJAMMING;
-                } else if (areSystemsReadyForAllianceZoneShot()) {
+                if (areSystemsReadyForAllianceZoneShot()) {
                     currentSuperState = CurrentSuperState.SHOOTING_ALLIANCE_ZONE_AND_AGITATING;
+                } else if(isFuelJammed()) {
+                    currentSuperState = CurrentSuperState.UNJAMMING;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_ALLIANCE_ZONE_SHOT_AND_AGITATING;
                 }
@@ -325,9 +325,6 @@ public class Superstructure extends SubsystemBase {
         switch (currentSuperState) {
             case OUTAKING:
                 outaking();
-                break;
-            case UNJAMMING:
-                unjamming();
                 break;
             case PREPARING_HUB_SHOT:
                 preparingHubShot();
@@ -410,10 +407,8 @@ public class Superstructure extends SubsystemBase {
     }
 
     public void unjamming() {
-        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK,
-                this.adjustedShot.targetRotation());
-        feeder.setWantedState(Feeder.FeederWantedState.OUTAKE);
-        indexer.setWantedState(Indexer.IndexerWantedState.OUTAKE);
+        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
@@ -827,7 +822,7 @@ public class Superstructure extends SubsystemBase {
     }
 
     private boolean isFuelJammed() {
-        return feeder.isFuelJammedFeeder();
+        return feeder.isFuelJammedFeeder() && indexer.isFuelJammedIndexer();
     }
 
     private boolean isHoodUnsafe() {
