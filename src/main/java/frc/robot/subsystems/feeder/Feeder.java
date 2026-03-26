@@ -15,7 +15,9 @@ public class Feeder {
   private FeederWantedState wantedState = FeederWantedState.STOP;
   private FeederCurrentState currentState = FeederCurrentState.STOPPED;
 
-  private final Debouncer feederDebouncer = new Debouncer(FeederConstants.tripDuration, Debouncer.DebounceType.kRising);
+  private final Debouncer feederStatorDebouncer = new Debouncer(FeederConstants.tripDuration, Debouncer.DebounceType.kBoth);
+  private boolean isFeederJammed;
+
 
   public Feeder(FeederIO io){
     this.io = io;
@@ -38,6 +40,8 @@ public class Feeder {
     handleStateTransitions();
     applyStates();
     
+    this.isFeederJammed = 
+    
     DogLog.log("Feeder/WantedState", wantedState);
     DogLog.log("Feeder/CurrentState", currentState);
   }
@@ -48,7 +52,7 @@ public class Feeder {
         currentState = FeederCurrentState.STOPPED;
         break;
       case FEED:
-        if(feederDebouncer.calculate(io.statorCurrent > FeederConstants.tripStatorCurrent)){
+        if()){
           currentState = FeederCurrentState.REVERSING;
         } else{
           currentState = FeederCurrentState.FEEDING;
