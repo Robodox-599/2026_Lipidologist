@@ -7,6 +7,7 @@ import choreo.trajectory.Trajectory;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -333,13 +334,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
       DogLog.log("Drive/AngularSpeed", driver.getRightX() * TunerConstants.MaxSpeed);
         break;
       case DRIVE_TO_POINT:
-        if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()){
-          DriverStation.getAlliance().ifPresent(allianceColor-> {
-            setOperatorPerspectiveForward(allianceColor == Alliance.Red 
-              ? kRedAlliancePerspectiveRotation: kBlueAlliancePerspectiveRotation);
-            m_hasAppliedOperatorPerspective = true;
-          });
-        }
+      setControl(.with)
+
     }
   }
 
