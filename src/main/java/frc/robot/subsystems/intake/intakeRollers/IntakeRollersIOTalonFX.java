@@ -78,7 +78,8 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
                                 .withStatorCurrentLimitEnable(true))
                 .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive)
                         .withNeutralMode(NeutralModeValue.Brake))
-                .withOpenLoopRamps(new OpenLoopRampsConfigs().withVoltageOpenLoopRampPeriod(1.0));
+                // .withOpenLoopRamps(new OpenLoopRampsConfigs().withVoltageOpenLoopRampPeriod(1.0))
+;
         PhoenixUtil.tryUntilOk(10, () -> intakeRollersMotorOne.getConfigurator().apply(intakeRollersMotorConfigOne, 1));
         PhoenixUtil.tryUntilOk(10, () -> intakeRollersMotorTwo.getConfigurator().apply(intakeRollersMotorConfigTwo, 1));
 

@@ -179,7 +179,7 @@ public class Superstructure extends SubsystemBase {
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
                 if (isFuelJammed()) {
                     currentSuperState = CurrentSuperState.UNJAMMING;
-                } else if (areSystemsReadyForHubShot()) {
+                } else if (areSystemsReadyForHubShot(this.adjustedShot.flightTime())) {
                     currentSuperState = CurrentSuperState.SHOOTING_HUB;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
@@ -190,7 +190,7 @@ public class Superstructure extends SubsystemBase {
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
                 if (isFuelJammed()) {
                     currentSuperState = CurrentSuperState.UNJAMMING;
-                } else if (areSystemsReadyForHubShot()) {
+                } else if (areSystemsReadyForHubShot(this.adjustedShot.flightTime())) {
                     currentSuperState = CurrentSuperState.SHOOTING_HUB_AND_AGITATING;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT_AND_AGITATING;
@@ -201,7 +201,7 @@ public class Superstructure extends SubsystemBase {
                         drivetrain.getFieldRelativeChassisSpeeds(), drivetrain.getFieldRelativeAccelerations());
                 if (isFuelJammed()) {
                     currentSuperState = CurrentSuperState.UNJAMMING;
-                } else if (areSystemsReadyForHubShot()) {
+                } else if (areSystemsReadyForHubShot(this.adjustedShot.flightTime())) {
                     currentSuperState = CurrentSuperState.SOTMING_HUB_AUTO;
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_SOTM_HUB_AUTO;

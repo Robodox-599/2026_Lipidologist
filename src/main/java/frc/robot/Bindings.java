@@ -38,25 +38,23 @@ public class Bindings {
     driver.leftTrigger().whileTrue(new RepeatCommand(setShootingStateCommand())).onFalse(Commands.either(
         Commands.none(), superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE), driver.rightTrigger()));
 
+    // SHOOT MANUALLY (IN FRONT OF HUB)
     driver.a().and(driver.leftTrigger().negate()).and(driver.rightTrigger().negate()).and(driver.rightBumper().negate())
         .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB_MANUAL))
         .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
+    // OUTAKE FUEL
     driver.rightBumper().and(driver.leftTrigger().negate()).and(driver.rightTrigger().negate())
         .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.OUTAKE))
         .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
-
-    // // PREPARE TO SHOOT TO EITHER HUB OR ALLIANCE ZONE
-    // driver.povRight().and(driver.rightTrigger().negate()).whileTrue(new
-    // RepeatCommand(setPrepareShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    
+    new Trigger(() -> HubShiftUtil.isHubActiveSoon(3)).onTrue(rumbleDriverSwapping(driver, 0.5, 5));
 
     // // AUTOMATICALLY CLIMB
     // driver.a().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLIMB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
     // driver.rightTrigger().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.TESTING))
     // .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
-
-    new Trigger(() -> HubShiftUtil.isHubActiveSoon(3)).onTrue(rumbleDriverSwapping(driver, 0.5, 3));
   }
 
   public Command setShootingStateCommand() {

@@ -57,8 +57,10 @@ public class IntakeWrist {
                 currentState = IntakeWristCurrentState.STOPPED;
                 break;
             case INTAKE_FUEL:
-                if ((io.isWristJammed && DriverStation.isAutonomous()) || io.isWristJammed) {
+                if ((io.isWristJammed && DriverStation.isAutonomous())) { // if in auto and wrist is jammed, unjam hopper
                     currentState = IntakeWristCurrentState.UNJAM;
+                } else if (io.isWristJammed && DriverStation.isTeleop()) { // if in teleop and wrist is jammed, unjam stuck fuel
+                    currentState = IntakeWristCurrentState.WRIST_RETRACTING;
                 } else {
                     currentState = IntakeWristCurrentState.INTAKING_FUEL;
                 }
@@ -96,10 +98,10 @@ public class IntakeWrist {
             //     } else{
             //         currentState = IntakeWristCurrentState.WRIST_EXTENDING;
             //     }
-            //     break;
-            // default:
-            //     currentState = IntakeWristCurrentState.STOPPED;
-            //     break;
+                break;
+            default:
+                currentState = IntakeWristCurrentState.STOPPED;
+                break;
         }
     }
 
