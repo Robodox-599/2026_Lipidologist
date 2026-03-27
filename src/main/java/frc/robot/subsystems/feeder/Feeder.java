@@ -103,5 +103,4 @@ public class Feeder {
   public void setWantedState(Feeder.FeederWantedState wantedState) {
     this.wantedState = wantedState;
   }
-
 }

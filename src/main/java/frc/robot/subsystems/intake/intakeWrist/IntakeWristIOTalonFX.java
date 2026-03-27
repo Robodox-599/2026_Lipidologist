@@ -91,13 +91,13 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
                                 .withMotionMagicAcceleration(IntakeWristConstants.maxAcceleration))
                 .withMotorOutput(
                     new MotorOutputConfigs()
-                        .withInverted(InvertedValue.Clockwise_Positive)
+                        .withInverted(InvertedValue.CounterClockwise_Positive)
                         .withNeutralMode(NeutralModeValue.Brake));
         canCoderConfig = new CANcoderConfiguration()
                 .withMagnetSensor(
                         new MagnetSensorConfigs()
                                 .withMagnetOffset(IntakeWristConstants.magnetOffset)
-                                .withSensorDirection(SensorDirectionValue.Clockwise_Positive)
+                                .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive)
                                 .withAbsoluteSensorDiscontinuityPoint(IntakeWristConstants.absoluteDiscontinuityPoint)
 
                 );

@@ -98,6 +98,7 @@ public class FeederIOTalonFX extends FeederIO {
         DogLog.log("Feeder/SupplyCurrent", super.supplyCurrent);
         DogLog.log("Feeder/StatorCurrent", super.statorCurrent);
         DogLog.log("Feeder/Temperature", super.tempCelsius);
+        DogLog.log("Feeder/isFuelJammed", isFuelJammed);
     }
 
     @Override
