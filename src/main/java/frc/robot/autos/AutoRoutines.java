@@ -44,7 +44,7 @@ public class AutoRoutines {
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
                                                                                 WantedSuperState.SHOOT_HUB_AND_AGITATE),
-                                                new WaitCommand(3.5),
+                                                new WaitCommand(3.0),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 LTRENCHtoHUBSWEEP.cmd()));
@@ -82,7 +82,7 @@ public class AutoRoutines {
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
                                                                                 WantedSuperState.SHOOT_HUB_AND_AGITATE),
-                                                new WaitCommand(3.5),
+                                                new WaitCommand(3.0),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 RTRENCHtoHUBSWEEP.cmd()));
@@ -155,7 +155,7 @@ public class AutoRoutines {
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
                                                                                 WantedSuperState.SHOOT_HUB_AND_AGITATE),
-                                                new WaitCommand(3.5),
+                                                new WaitCommand(3.0),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 RTRENCHtoOUTPOST.cmd()));

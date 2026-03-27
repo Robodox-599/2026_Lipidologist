@@ -113,7 +113,7 @@
    },
    "LMID_END":{
     "x":{
-     "exp":"LMID_START.x",
+     "exp":"(fieldLength / 2)",
      "val":8.2705
     },
     "y":{
@@ -121,22 +121,22 @@
      "val":4.557232000000001
     },
     "heading":{
-     "exp":"270 deg",
-     "val":4.71238898038469
+     "exp":"LMID_START.heading",
+     "val":-1.832595714594046
     }
    },
    "LMID_START":{
     "x":{
-     "exp":"(fieldLength / 2)",
-     "val":8.2705
+     "exp":"8.65 m",
+     "val":8.65
     },
     "y":{
      "exp":"(fieldWidth / 2) + (startingFuelWidth / 2) + (fuelRadius / 2)",
      "val":6.6882285
     },
     "heading":{
-     "exp":"270 deg",
-     "val":4.71238898038469
+     "exp":"-(7 / 12) PI rad",
+     "val":-1.832595714594046
     }
    },
    "LTOWER":{
@@ -261,22 +261,22 @@
      "val":3.511768
     },
     "heading":{
-     "exp":"90 deg",
-     "val":1.5707963267948966
+     "exp":"RMID_START.heading",
+     "val":1.832595714594046
     }
    },
    "RMID_START":{
     "x":{
      "exp":"LMID_START.x",
-     "val":8.2705
+     "val":8.65
     },
     "y":{
      "exp":"fieldWidth - LMID_START.y",
      "val":1.3807715000000007
     },
     "heading":{
-     "exp":"90 deg",
-     "val":1.5707963267948966
+     "exp":"-LMID_START.heading",
+     "val":1.832595714594046
     }
    },
    "RTOWER":{
