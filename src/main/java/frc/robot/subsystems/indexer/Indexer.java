@@ -80,7 +80,7 @@ public class Indexer {
         indexerPulseFuel(1);
         break;
       case REVERSING:
-        setIndexerVoltage(-0.5);
+        setIndexerVoltage(-1);
         break;
       case OUTAKING:
         setIndexerVoltage(-12);

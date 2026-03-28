@@ -53,7 +53,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
     public final StatusSignal<Current> intakeWristStatorCurrent;
     public final StatusSignal<Current> intakeWristSupplyCurrent;
     public final StatusSignal<Temperature> intakeWristTemperature;
-    private final Debouncer wristStallDebouncer = new Debouncer(IntakeWristConstants.debounceTime, DebounceType.kRising);
+    private final Debouncer wristStallDebouncer = new Debouncer(IntakeWristConstants.debounceTime, DebounceType.kBoth);
 
 
     public IntakeWristIOTalonFX() {
@@ -137,6 +137,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
 
         DogLog.log("Intake/Wrist/Position", super.currentPosition);
         DogLog.log("Intake/Wrist/TargetPosition", super.targetPosition);
+        DogLog.log("Intake/Wrist/Velocity", super.velocity);
         DogLog.log("Intake/Wrist/AtSetpoint", super.atSetpoint);
         DogLog.log("Intake/Wrist/Voltage", super.voltage);
         DogLog.log("Intake/Wrist/StatorCurrent", super.statorCurrent);

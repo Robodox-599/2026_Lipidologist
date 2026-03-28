@@ -26,7 +26,7 @@ public class IntakeWristConstants {
 
     public static final double maxVelocity = (12 - kS - kG) / kV;
     public static final double maxAcceleration = maxVelocity;
-    public static final double absoluteDiscontinuityPoint = 0.35;
+    public static final double absoluteDiscontinuityPoint = 0.7;
     public static final double magnetOffset = -0.34326171875;
     public static final double supplyCurrentLimit = 25.0;
     public static final double statorCurrentLimit = 80.0;
@@ -46,10 +46,10 @@ public class IntakeWristConstants {
 
     public static final double wristLengthMeters = 0.5;
     public static final double wristMassKg = 5.0;
-    public static final double agitationTime = 0.4;
+    public static final double agitationTime = 0.5;
 
     public static final double statorCurrentTrip = 70; //must be changed and tested
     public static final double velocityTrip = 1; //must be changed and tested
-    public static final double debounceTime = 1; // must be changed and tested
+    public static final double debounceTime = 0.3; // must be changed and tested
 
 }

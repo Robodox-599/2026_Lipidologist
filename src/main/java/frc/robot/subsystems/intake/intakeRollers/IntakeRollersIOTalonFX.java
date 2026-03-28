@@ -63,9 +63,10 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
                                 .withSupplyCurrentLimitEnable(true)
                                 .withStatorCurrentLimit(IntakeRollersConstants.statorCurrentLimit)
                                 .withStatorCurrentLimitEnable(true))
-                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive)
+                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.CounterClockwise_Positive)
                         .withNeutralMode(NeutralModeValue.Brake))
-                .withOpenLoopRamps(new OpenLoopRampsConfigs().withVoltageOpenLoopRampPeriod(1.0));
+                // .withOpenLoopRamps(new OpenLoopRampsConfigs().withVoltageOpenLoopRampPeriod(1.0))
+                ;
         v_request_one = new VoltageOut(0);
         v_request_two = new VoltageOut(0);
 
@@ -76,10 +77,10 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
                                 .withSupplyCurrentLimitEnable(true)
                                 .withStatorCurrentLimit(IntakeRollersConstants.statorCurrentLimit)
                                 .withStatorCurrentLimitEnable(true))
-                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive)
+                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.CounterClockwise_Positive)
                         .withNeutralMode(NeutralModeValue.Brake))
                 // .withOpenLoopRamps(new OpenLoopRampsConfigs().withVoltageOpenLoopRampPeriod(1.0))
-;
+                ;
         PhoenixUtil.tryUntilOk(10, () -> intakeRollersMotorOne.getConfigurator().apply(intakeRollersMotorConfigOne, 1));
         PhoenixUtil.tryUntilOk(10, () -> intakeRollersMotorTwo.getConfigurator().apply(intakeRollersMotorConfigTwo, 1));
 

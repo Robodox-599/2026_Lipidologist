@@ -101,11 +101,11 @@ public class Vision {
 
         // ChassisSpeeds speeds = robotSpeedsSupplier.get();
         // linearStdDev *= VisionConstants.LINEAR_VELOCITY_STD_DEV_COEFFICIENT.lerp(
-        //     Math.sqrt(
-        //         Math.pow(speeds.vxMetersPerSecond, 2)
-        //             + Math.pow(speeds.vyMetersPerSecond, 2)));
+        // Math.sqrt(
+        // Math.pow(speeds.vxMetersPerSecond, 2)
+        // + Math.pow(speeds.vyMetersPerSecond, 2)));
         // angularStdDev *= VisionConstants.ANGULAR_VELOCITY_STD_DEV_COEFFICIENT.lerp(
-        //     speeds.omegaRadiansPerSecond);
+        // speeds.omegaRadiansPerSecond);
 
         // linearStdDev *= io[cameraIndex].constants.stdDevFactor();
 
@@ -159,11 +159,10 @@ public class Vision {
       return true;
     }
 
-    // ChassisSpeeds speeds = this.robotSpeedsSupplier.get();
-    // if (Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond) > 2.5 ||
-    // speeds.omegaRadiansPerSecond > Units.rotationsToRadians(1)) {
-    // return true;
-    // }
+    ChassisSpeeds speeds = this.robotSpeedsSupplier.get();
+    if (speeds.omegaRadiansPerSecond > Units.rotationsToRadians(0.5)) {
+      return true;
+    }
 
     // Result must be within field
     return observation.pose().getX() < 0.0
