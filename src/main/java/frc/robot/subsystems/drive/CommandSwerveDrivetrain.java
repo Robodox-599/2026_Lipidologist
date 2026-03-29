@@ -65,7 +65,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                                                                        // controller
   private final PIDController choreoXController = new PIDController(5, 0, 0);
   private final PIDController choreoYController = new PIDController(5, 0, 0);
-  private final PIDController choreoThetaPID = new PIDController(3.5, 0, 0);
+  private final PIDController choreoThetaPID = new PIDController(4, 0, 0);
   private final PIDController choreoRotationLockPID = new PIDController(2.5, 0, 0);
 
   private ChassisSpeeds prevFieldRelVelocities = new ChassisSpeeds();
