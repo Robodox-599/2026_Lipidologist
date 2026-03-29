@@ -111,6 +111,20 @@
      "val":3.141592653589793
     }
    },
+   "HUB_CENTER":{
+    "x":{
+     "exp":"4.0218614 m + (47 / 2 in)",
+     "val":4.6187613999999995
+    },
+    "y":{
+     "exp":"fieldWidth / 2",
+     "val":4.0345
+    },
+    "heading":{
+     "exp":"0 rad",
+     "val":0.0
+    }
+   },
    "LMID_END":{
     "x":{
      "exp":"(fieldLength / 2)",
