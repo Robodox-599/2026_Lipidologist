@@ -27,7 +27,7 @@ public class IntakeWristConstants {
     public static final double maxVelocity = (12 - kS - kG) / kV;
     public static final double maxAcceleration = maxVelocity;
     public static final double absoluteDiscontinuityPoint = 0.7;
-    public static final double magnetOffset = -0.34326171875;
+    public static final double magnetOffset = 0.158935546875;
     public static final double supplyCurrentLimit = 25.0;
     public static final double statorCurrentLimit = 80.0;
     public static final double minAngleRotations = 0.0;
