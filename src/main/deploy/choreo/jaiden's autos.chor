@@ -159,8 +159,8 @@
      "val":8.2705
     },
     "y":{
-     "exp":"(fieldWidth / 2) + bumperRadius + fuelRadius",
-     "val":4.557232000000001
+     "exp":"(fieldWidth / 2) + bumperRadius + fuelRadius + 10 in",
+     "val":4.811232
     },
     "heading":{
      "exp":"LMID_START.heading",
@@ -328,7 +328,7 @@
     },
     "y":{
      "exp":"fieldWidth - LMID_END.y",
-     "val":3.511768
+     "val":3.2577680000000004
     },
     "heading":{
      "exp":"RMID_START.heading",

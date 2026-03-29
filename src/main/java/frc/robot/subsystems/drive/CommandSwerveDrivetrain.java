@@ -66,7 +66,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   private final PIDController choreoXController = new PIDController(5, 0, 0);
   private final PIDController choreoYController = new PIDController(5, 0, 0);
   private final PIDController choreoThetaPID = new PIDController(5, 0, 0);
-  private final PIDController choreoRotationLockPID = new PIDController(5, 0, 0);
+  private final PIDController choreoRotationLockPID = new PIDController(2.5, 0, 0);
 
   private ChassisSpeeds prevFieldRelVelocities = new ChassisSpeeds();
 
@@ -423,18 +423,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
               sample.x);
           targetSpeeds.vyMetersPerSecond += choreoYController.calculate(pose.getY(),
               sample.y);
-          targetSpeeds.omegaRadiansPerSecond += choreoRotationLockPID.calculate(pose.getRotation().getRadians(),
-              AllianceFlipUtil.shouldFlip()
-                  ? this.targetRotation.rotateBy(kRedAlliancePerspectiveRotation).getRadians()
-                  : this.targetRotation.getRadians()); // not sure if this works as intended
+          // targetSpeeds.omegaRadiansPerSecond +=
+          // choreoRotationLockPID.calculate(pose.getRotation().getRadians(),
+          // AllianceFlipUtil.shouldFlip()
+          // ? this.targetRotation.rotateBy(kRedAlliancePerspectiveRotation).getRadians()
+          // : this.targetRotation.getRadians()); // not sure if this works as intended
 
           DogLog.log("Drive/Choreo/RobotSetpointSpeedsAfterPID", targetSpeeds);
 
-          setControl(
-              m_pathApplyFieldSpeeds
-                  .withSpeeds(targetSpeeds)
-                  .withWheelForceFeedforwardsX(sample.moduleForcesX())
-                  .withWheelForceFeedforwardsY(sample.moduleForcesY()));
+          setControl(driveAtAngle.withVelocityX(targetSpeeds.vxMetersPerSecond)
+              .withVelocityY(targetSpeeds.vyMetersPerSecond).withTargetDirection(targetRotation));
+
+          // setControl(
+          //     m_pathApplyFieldSpeeds
+          //         .withSpeeds(targetSpeeds)
+          //         .withWheelForceFeedforwardsX(sample.moduleForcesX())
+          //         .withWheelForceFeedforwardsY(sample.moduleForcesY()));
         }
         break;
       case STOPPED:

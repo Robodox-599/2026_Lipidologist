@@ -64,18 +64,15 @@ public class AutoRoutines {
         public AutoRoutine leftDoubleDoubleAnimalStyle() {
                 AutoRoutine routine = autoFactory.newRoutine("leftDoubleDoubleAnimalStyle");
 
-                AutoTrajectory LTRENCHtoLMID = routine.trajectory("LTRENCHtoLMID");
-                AutoTrajectory LMIDtoLBUMP = routine.trajectory("LMIDtoLBUMP");
+                AutoTrajectory LTRENCHtoLBUMP = routine.trajectory("LTRENCHtoLBUMP");
                 AutoTrajectory LBUMPtoLTRENCH = routine.trajectory("LBUMPtoLTRENCH");
                 AutoTrajectory LTRENCHtoHUBSWEEP = routine.trajectory("LTRENCHtoHUBSWEEP");
 
-                routine.active().onTrue(Commands.sequence(LTRENCHtoLMID.resetOdometry(),
+                routine.active().onTrue(Commands.sequence(LTRENCHtoLBUMP.resetOdometry(),
                                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                LTRENCHtoLMID.cmd()));
+                                LTRENCHtoLBUMP.cmd()));
 
-                LTRENCHtoLMID.done().onTrue(LMIDtoLBUMP.cmd());
-
-                LMIDtoLBUMP.done()
+                LTRENCHtoLBUMP.done()
                                 .onTrue(Commands.sequence(LBUMPtoLTRENCH.cmd(),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
@@ -138,18 +135,15 @@ public class AutoRoutines {
         public AutoRoutine rightDoubleDoubleAnimalStyle() {
                 AutoRoutine routine = autoFactory.newRoutine("rightDoubleDoubleAnimalStyle");
 
-                AutoTrajectory RTRENCHtoRMID = routine.trajectory("RTRENCHtoRMID");
-                AutoTrajectory RMIDtoRBUMP = routine.trajectory("RMIDtoRBUMP");
+                AutoTrajectory RTRENCHtoRBUMP = routine.trajectory("RTRENCHtoRBUMP");
                 AutoTrajectory RBUMPtoRTRENCH = routine.trajectory("RBUMPtoRTRENCH");
                 AutoTrajectory RTRENCHtoHUBSWEEP = routine.trajectory("RTRENCHtoHUBSWEEP");
 
-                routine.active().onTrue(Commands.sequence(RTRENCHtoRMID.resetOdometry(),
+                routine.active().onTrue(Commands.sequence(RTRENCHtoRBUMP.resetOdometry(),
                                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                RTRENCHtoRMID.cmd()));
+                                RTRENCHtoRBUMP.cmd()));
 
-                RTRENCHtoRMID.done().onTrue(RMIDtoRBUMP.cmd());
-
-                RMIDtoRBUMP.done()
+                RTRENCHtoRBUMP.done()
                                 .onTrue(Commands.sequence(RBUMPtoRTRENCH.cmd(),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
