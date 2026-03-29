@@ -15,7 +15,7 @@ public class VisionConstants {
     public static final double maxZError = 0.75; // 0.75 
     public static final double maxAmbiguity = 0.2; // 0.3
 
-    public static double linearStdDevBaseline = 0.05; // Meters (0.4)
+    public static double linearStdDevBaseline = 0.03; // Meters (0.4)
     public static double angularStdDevBaseline = 0.1; // Radians (0.4)
     public static final double singleTagMaxDistanceMeters = 5; 
 

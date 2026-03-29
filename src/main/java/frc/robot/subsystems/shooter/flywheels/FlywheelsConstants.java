@@ -34,7 +34,7 @@ public class FlywheelsConstants {
         public static final double statorCurrentLimit = 80;
 
         // velocity tolerance
-        public static final double RPSTolerance = 3;
+        public static final double RPSTolerance = 5;
 
         // setpoints
         public static final double idleRPS = 45;

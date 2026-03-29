@@ -48,7 +48,7 @@ public class Bindings {
         .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.OUTAKE))
         .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
     
-    new Trigger(() -> HubShiftUtil.isHubActiveSoon(3)).onTrue(rumbleDriverSwapping(driver, 0.5, 5));
+    new Trigger(() -> HubShiftUtil.isHubActiveSoon(5)).onTrue(rumbleDriverSwapping(driver, 0.5, 5));
 
     // // AUTOMATICALLY CLIMB
     // driver.a().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLIMB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));

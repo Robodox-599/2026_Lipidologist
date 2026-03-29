@@ -60,7 +60,7 @@ public class IntakeRollers {
                 stop();
                 break;
             case INTAKING_FUEL:
-                setVoltage(7);
+                setVoltage(12);
                 break;
             case AGITATING_FUEL:
                 setVoltage(2);

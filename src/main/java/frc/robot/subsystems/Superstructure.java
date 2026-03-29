@@ -426,8 +426,8 @@ public class Superstructure extends SubsystemBase {
     public void preparingHubShot() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK,
                 this.adjustedShot.targetRotation());
-        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
-        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+        indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
@@ -449,8 +449,8 @@ public class Superstructure extends SubsystemBase {
     public void preparingHubShotAndAgitating() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK,
                 this.adjustedShot.targetRotation());
-        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
-        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+        indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.AGITATE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
@@ -472,8 +472,8 @@ public class Superstructure extends SubsystemBase {
     public void preparingHubSOTMAuto() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
                 this.adjustedShot.targetRotation());
-        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
-        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+        indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
@@ -551,8 +551,8 @@ public class Superstructure extends SubsystemBase {
 
     public void preparingAllianceZoneShot() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
-        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
-        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+        indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
@@ -573,8 +573,8 @@ public class Superstructure extends SubsystemBase {
 
     public void preparingAllianceZoneShotAndAgitating() {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
-        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
-        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+        feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+        indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.AGITATE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
@@ -826,7 +826,7 @@ public class Superstructure extends SubsystemBase {
                 drivetrain.isAtTargetRotation();
     }
 
-    private boolean isFuelJammed() {
+    private boolean isFuelJammed() { 
         return feeder.isFuelJammedFeeder();
     }
 

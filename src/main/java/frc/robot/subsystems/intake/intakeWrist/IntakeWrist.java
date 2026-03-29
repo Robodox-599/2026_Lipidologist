@@ -57,11 +57,7 @@ public class IntakeWrist {
                 currentState = IntakeWristCurrentState.STOPPED;
                 break;
             case INTAKE_FUEL:
-                if ((io.isWristJammed && DriverStation.isAutonomous())) { // if in auto and wrist is jammed, unjam hopper
-                    currentState = IntakeWristCurrentState.UNJAM;
-                } else {
-                    currentState = IntakeWristCurrentState.INTAKING_FUEL;
-                }
+                currentState = IntakeWristCurrentState.INTAKING_FUEL;
                 break;
             case STOW:
                 currentState = IntakeWristCurrentState.STOWING;

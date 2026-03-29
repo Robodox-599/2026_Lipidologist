@@ -42,8 +42,8 @@
    "hubSweepMidExtension":{
     "dimension":"Length",
     "var":{
-     "exp":"0.9 m",
-     "val":0.9
+     "exp":"1.1 m",
+     "val":1.1
     }
    },
    "intakeExtension":{
