@@ -146,13 +146,13 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
 
     @Override
     public void stop() {
-        // intakeRollersMotorOne.setVoltage(0);
+        intakeRollersMotorOne.setVoltage(0);
         intakeRollersMotorTwo.setVoltage(0);
     }
 
     @Override
     public void setVoltage(double voltage) {
-        // intakeRollersMotorOne.setControl(v_request_one.withOutput(voltage).withEnableFOC(true));
+        intakeRollersMotorOne.setControl(v_request_one.withOutput(voltage).withEnableFOC(true));
         intakeRollersMotorTwo.setControl(v_request_two.withOutput(voltage).withEnableFOC(true));
     }
 }

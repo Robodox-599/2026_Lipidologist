@@ -31,11 +31,11 @@ public class Bindings {
 
     // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
     driver.rightTrigger().and(driver.leftTrigger().negate())
-        .whileTrue(new RepeatCommand(setAgitatingShootingStateCommand()))
+        .whileTrue(new RepeatCommand(setShootingStateCommand()))
         .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
     // AUTOMATICALLY SHOOT WHILE AGITATING WHEN READY TO EITHER HUB OR ALLIANCE ZONE
-    driver.leftTrigger().whileTrue(new RepeatCommand(setShootingStateCommand())).onFalse(Commands.either(
+    driver.leftTrigger().whileTrue(new RepeatCommand(setAgitatingShootingStateCommand())).onFalse(Commands.either(
         Commands.none(), superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE), driver.rightTrigger()));
 
     // SHOOT MANUALLY (IN FRONT OF HUB)
