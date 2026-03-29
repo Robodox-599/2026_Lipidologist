@@ -40,6 +40,7 @@ public class IntakeWristIOSim extends IntakeWristIO {
         super.statorCurrent = intakeWristMotorSim.getCurrentDrawAmps();
         super.currentPosition = intakeWristMotorSim.getAngularPositionRad();
         super.atSetpoint = Math.abs(super.currentPosition - super.targetPosition) < 0.02;
+        super.isWristJammed = false;
 
         DogLog.log("Intake/Wrist/StatorCurrent", super.statorCurrent);
         DogLog.log("Intake/Wrist/Position", super.currentPosition);

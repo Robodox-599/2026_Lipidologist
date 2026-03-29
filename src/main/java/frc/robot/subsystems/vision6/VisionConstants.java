@@ -18,6 +18,8 @@ public class VisionConstants {
     public static double linearStdDevBaseline = 0.03; // Meters (0.4)
     public static double angularStdDevBaseline = 0.1; // Radians (0.4)
     public static final double singleTagMaxDistanceMeters = 5; 
+  public static final double maxAngleError =
+      0.08726646259971647; // 5 degrees in radians, used for filtering out bad observations
 
     // public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
     // public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);

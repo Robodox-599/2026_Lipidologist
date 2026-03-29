@@ -15,14 +15,14 @@ public class IntakeRollers {
     public enum IntakeRollersWantedState{
         STOP,
         INTAKE_FUEL,
-        AGITATE_FUEL,
+        // AGITATE_FUEL,
         OUTAKE
     }
 
     public enum IntakeRollersCurrentState{
         STOPPED,
         INTAKING_FUEL,
-        AGITATING_FUEL,
+        // AGITATING_FUEL,
         OUTAKING
     }
 
@@ -42,9 +42,9 @@ public class IntakeRollers {
             case INTAKE_FUEL:
                 currentState = IntakeRollersCurrentState.INTAKING_FUEL;
                 break;
-            case AGITATE_FUEL:
-                currentState = IntakeRollersCurrentState.AGITATING_FUEL;
-                break;
+            // case AGITATE_FUEL:
+            //     currentState = IntakeRollersCurrentState.AGITATING_FUEL;
+            //     break;
             case OUTAKE:
                 currentState = IntakeRollersCurrentState.OUTAKING;
                 break;
@@ -62,9 +62,9 @@ public class IntakeRollers {
             case INTAKING_FUEL:
                 setVoltage(12);
                 break;
-            case AGITATING_FUEL:
-                setVoltage(2);
-                break;
+            // case AGITATING_FUEL:
+            //     setVoltage(2);
+            //     break;
             case OUTAKING:
                 setVoltage(-7);
                 break;

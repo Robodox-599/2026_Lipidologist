@@ -206,10 +206,12 @@ public class Robot extends TimedRobot {
     /** AUTO ROUTINES */
     // COMPETITION
     autoChooser.addRoutine("Left Double Double", autoRoutines::leftDoubleDouble);
+    autoChooser.addRoutine("Left Double Double Animal Style", autoRoutines::leftDoubleDoubleAnimalStyle);
     autoChooser.addRoutine("Right Double Double", autoRoutines::rightDoubleDouble);
-    autoChooser.addRoutine("Left Cheeseburger", autoRoutines::leftCheeseburger);
-    autoChooser.addRoutine("Right Cheeseburger", autoRoutines::rightCheeseburger);
-    autoChooser.addRoutine("Left Hamburger with Onions", autoRoutines::leftHamburgerWithOnions);
+    autoChooser.addRoutine("Right Double Double Animal Style", autoRoutines::rightDoubleDoubleAnimalStyle);
+    // autoChooser.addRoutine("Left Cheeseburger", autoRoutines::leftCheeseburger);
+    // autoChooser.addRoutine("Right Cheeseburger", autoRoutines::rightCheeseburger);
+    // autoChooser.addRoutine("Left Hamburger with Onions", autoRoutines::leftHamburgerWithOnions);
     SmartDashboard.putData("AutoChooser", autoChooser);
 
     RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));

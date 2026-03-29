@@ -467,7 +467,7 @@ public class Superstructure extends SubsystemBase {
                 this.adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
         indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
-        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.AGITATE_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
                 this.adjustedShot.shootSpeed());
@@ -532,7 +532,7 @@ public class Superstructure extends SubsystemBase {
                 this.adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.AGITATE_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
                 this.adjustedShot.shootSpeed());
@@ -591,7 +591,7 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
         indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
-        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.AGITATE_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
                 adjustedShot.shootSpeed());
@@ -631,7 +631,7 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.AGITATE_FUEL);
+        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
                 adjustedShot.shootSpeed());

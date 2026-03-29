@@ -125,6 +125,34 @@
      "val":0.0
     }
    },
+   "LBUMP":{
+    "x":{
+     "exp":"LTRENCH_SHOOTING.x",
+     "val":2.399925
+    },
+    "y":{
+     "exp":"255 in - (73 / 2 in) - 6 in",
+     "val":5.397499999999999
+    },
+    "heading":{
+     "exp":"(PI / 3) rad",
+     "val":1.0471975511965976
+    }
+   },
+   "LBUMP_ALIGN":{
+    "x":{
+     "exp":"HUB_CENTER.x + (73 / 2 in) + 15 in",
+     "val":5.9268614
+    },
+    "y":{
+     "exp":"255 in - (73 / 2 in) - 6 in",
+     "val":5.397499999999999
+    },
+    "heading":{
+     "exp":"LBUMP.heading",
+     "val":1.0471975511965976
+    }
+   },
    "LMID_END":{
     "x":{
      "exp":"(fieldLength / 2)",
@@ -263,6 +291,34 @@
     "heading":{
      "exp":"180 deg",
      "val":3.141592653589793
+    }
+   },
+   "RBUMP":{
+    "x":{
+     "exp":"LBUMP.x",
+     "val":2.399925
+    },
+    "y":{
+     "exp":"fieldWidth - LBUMP.y",
+     "val":2.6715000000000018
+    },
+    "heading":{
+     "exp":"-LBUMP.heading",
+     "val":-1.0471975511965976
+    }
+   },
+   "RBUMP_ALIGN":{
+    "x":{
+     "exp":"LBUMP_ALIGN.x",
+     "val":5.9268614
+    },
+    "y":{
+     "exp":"fieldWidth - LBUMP_ALIGN.y",
+     "val":2.6715000000000018
+    },
+    "heading":{
+     "exp":"-LBUMP_ALIGN.heading",
+     "val":-1.0471975511965976
     }
    },
    "RMID_END":{

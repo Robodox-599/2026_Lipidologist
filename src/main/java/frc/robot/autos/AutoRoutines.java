@@ -61,6 +61,42 @@ public class AutoRoutines {
                 return routine;
         }
 
+        public AutoRoutine leftDoubleDoubleAnimalStyle() {
+                AutoRoutine routine = autoFactory.newRoutine("leftDoubleDoubleAnimalStyle");
+
+                AutoTrajectory LTRENCHtoLMID = routine.trajectory("LTRENCHtoLMID");
+                AutoTrajectory LMIDtoLBUMP = routine.trajectory("LMIDtoLBUMP");
+                AutoTrajectory LBUMPtoLTRENCH = routine.trajectory("LBUMPtoLTRENCH");
+                AutoTrajectory LTRENCHtoHUBSWEEP = routine.trajectory("LTRENCHtoHUBSWEEP");
+
+                routine.active().onTrue(Commands.sequence(LTRENCHtoLMID.resetOdometry(),
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                LTRENCHtoLMID.cmd()));
+
+                LTRENCHtoLMID.done().onTrue(LMIDtoLBUMP.cmd());
+
+                LMIDtoLBUMP.done()
+                                .onTrue(Commands.sequence(LBUMPtoLTRENCH.cmd(),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(
+                                                                                WantedSuperState.SOTM_HUB_AUTO)));
+
+                LBUMPtoLTRENCH.done().onTrue(Commands.sequence(
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                LTRENCHtoHUBSWEEP.cmd()));
+
+                LTRENCHtoHUBSWEEP.done()
+                                .onTrue(Commands.sequence(
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+                                                new WaitCommand(1),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE)));
+
+                return routine;
+        }
+
         public AutoRoutine rightDoubleDouble() {
                 AutoRoutine routine = autoFactory.newRoutine("rightDoubleDouble");
 
@@ -86,6 +122,42 @@ public class AutoRoutines {
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 RTRENCHtoHUBSWEEP.cmd()));
+
+                RTRENCHtoHUBSWEEP.done()
+                                .onTrue(Commands.sequence(
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+                                                new WaitCommand(1),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE)));
+
+                return routine;
+        }
+        
+        public AutoRoutine rightDoubleDoubleAnimalStyle() {
+                AutoRoutine routine = autoFactory.newRoutine("rightDoubleDoubleAnimalStyle");
+
+                AutoTrajectory RTRENCHtoRMID = routine.trajectory("RTRENCHtoRMID");
+                AutoTrajectory RMIDtoRBUMP = routine.trajectory("RMIDtoRBUMP");
+                AutoTrajectory RBUMPtoRTRENCH = routine.trajectory("RBUMPtoRTRENCH");
+                AutoTrajectory RTRENCHtoHUBSWEEP = routine.trajectory("RTRENCHtoHUBSWEEP");
+
+                routine.active().onTrue(Commands.sequence(RTRENCHtoRMID.resetOdometry(),
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                RTRENCHtoRMID.cmd()));
+
+                RTRENCHtoRMID.done().onTrue(RMIDtoRBUMP.cmd());
+
+                RMIDtoRBUMP.done()
+                                .onTrue(Commands.sequence(RBUMPtoRTRENCH.cmd(),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(
+                                                                                WantedSuperState.SOTM_HUB_AUTO)));
+
+                RBUMPtoRTRENCH.done().onTrue(Commands.sequence(
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                RTRENCHtoHUBSWEEP.cmd()));
 
                 RTRENCHtoHUBSWEEP.done()
                                 .onTrue(Commands.sequence(
@@ -187,12 +259,12 @@ public class AutoRoutines {
                 LBUMPtoDEPOT.done()
                                 .onTrue(
                                                 // superstructureCommands
-                                                //                 .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+                                                // .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
                                                 // new WaitCommand(1),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
                                                                                 WantedSuperState.SHOOT_HUB_AND_AGITATE));
-                
+
                 return routine;
         }
 }

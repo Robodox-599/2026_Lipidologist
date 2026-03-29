@@ -158,9 +158,14 @@ public class Vision {
     if (Math.abs(observation.pose().getZ()) > VisionConstants.maxZError) {
       return true;
     }
+    
+    if (Math.abs(observation.pose().getRotation().getY()) > VisionConstants.maxAngleError
+        || Math.abs(observation.pose().getRotation().getX()) > VisionConstants.maxAngleError) {
+      return true;
+    }
 
     ChassisSpeeds speeds = this.robotSpeedsSupplier.get();
-    if (speeds.omegaRadiansPerSecond > Units.rotationsToRadians(0.5)) {
+    if (Math.abs(speeds.omegaRadiansPerSecond) > Units.rotationsToRadians(0.5)) {
       return true;
     }
 
