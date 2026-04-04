@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
 
 import com.ctre.phoenix6.controls.StaticBrake;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 
 import edu.wpi.first.math.util.Units;
@@ -32,7 +33,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     private final CANBus flywheelCANBus;
     private final TalonFX flywheelMotor;
     TalonFXConfiguration flywheelConfiguration;
-    private final VelocityVoltage velocityVoltage;
+    // private final VelocityVoltage velocityVoltage;
+    private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
 
     // status signals
     private final StatusSignal<AngularVelocity> flywheelVelocityRPS;
@@ -72,7 +74,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
                 .withMotorOutput(new MotorOutputConfigs().withInverted(this.flywheelConstants.invert())
                         .withNeutralMode(NeutralModeValue.Coast));
 
-        velocityVoltage = new VelocityVoltage(super.targetRPS);
+        // velocityVoltage = new VelocityVoltage(super.targetRPS);
+        velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
 
         // Applying configuration
         PhoenixUtil.tryUntilOk(10, () -> flywheelMotor.getConfigurator().apply(flywheelConfiguration, 1));
@@ -114,7 +117,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     @Override
     public void setRPS(double RPS) {
         super.targetRPS = RPS;
-        flywheelMotor.setControl(velocityVoltage.withVelocity(RPS).withEnableFOC(true));
+        // flywheelMotor.setControl(velocityVoltage.withVelocity(RPS).withEnableFOC(true));
+        flywheelMotor.setControl(velocityTorqueCurrentFOC.withVelocity(RPS));
     }
 
     @Override
