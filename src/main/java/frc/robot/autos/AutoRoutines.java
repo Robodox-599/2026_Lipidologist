@@ -68,8 +68,9 @@ public class AutoRoutines {
                 AutoTrajectory LTRENCHtoHUBSWEEP = routine.trajectory("LTRENCHtoHUBSWEEP");
 
                 routine.active().onTrue(Commands.sequence(LTRENCHtoLBUMP.resetOdometry(),
+                                Commands.parallel(
                                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                LTRENCHtoLBUMP.cmd()));
+                                LTRENCHtoLBUMP.cmd())));
 
                 LTRENCHtoLBUMP.done()
                                 .onTrue(Commands.sequence(
@@ -139,8 +140,9 @@ public class AutoRoutines {
                 AutoTrajectory RTRENCHtoHUBSWEEP = routine.trajectory("RTRENCHtoHUBSWEEP");
 
                 routine.active().onTrue(Commands.sequence(RTRENCHtoRBUMP.resetOdometry(),
+                                Commands.parallel(
                                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                RTRENCHtoRBUMP.cmd()));
+                                RTRENCHtoRBUMP.cmd())));
 
                 RTRENCHtoRBUMP.done()
                                 .onTrue(Commands.sequence(
