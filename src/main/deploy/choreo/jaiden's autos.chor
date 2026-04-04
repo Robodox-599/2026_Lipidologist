@@ -11,6 +11,13 @@
      "val":0.447675
     }
    },
+   "centerLTrench":{
+    "dimension":"Length",
+    "var":{
+     "exp":"fieldWidth - (trenchOpeningWidth / 2)",
+     "val":7.429682000000001
+    }
+   },
    "centerLine":{
     "dimension":"Length",
     "var":{
@@ -65,13 +72,6 @@
     "var":{
      "exp":"4 m",
      "val":4.0
-    }
-   },
-   "towerX":{
-    "dimension":"Length",
-    "var":{
-     "exp":"43.51 in - (3.5 in / 2)",
-     "val":1.060704
     }
    },
    "trenchOpeningWidth":{
@@ -131,26 +131,26 @@
      "val":2.399925
     },
     "y":{
-     "exp":"255 in - (73 / 2 in) - 6 in",
-     "val":5.397499999999999
+     "exp":"255 in - (73 / 2 in)",
+     "val":5.549899999999999
     },
     "heading":{
-     "exp":"(PI / 3) rad",
-     "val":1.0471975511965976
+     "exp":"0 rad",
+     "val":0.0
     }
    },
-   "LBUMP_ALIGN":{
+   "LBUMP_FAR":{
     "x":{
-     "exp":"HUB_CENTER.x + (73 / 2 in) + 15 in",
-     "val":5.9268614
+     "exp":"HUB_CENTER.x + (73 / 2 in) + 35 in",
+     "val":6.4348614
     },
     "y":{
-     "exp":"255 in - (73 / 2 in) - 6 in",
-     "val":5.397499999999999
+     "exp":"LBUMP.y",
+     "val":5.549899999999999
     },
     "heading":{
      "exp":"LBUMP.heading",
-     "val":1.0471975511965976
+     "val":0.0
     }
    },
    "LMID_END":{
@@ -159,8 +159,8 @@
      "val":8.2705
     },
     "y":{
-     "exp":"(fieldWidth / 2) + bumperRadius + fuelRadius + 10 in",
-     "val":4.811232
+     "exp":"(fieldWidth / 2) + bumperRadius + fuelRadius + 20 in",
+     "val":5.065232000000001
     },
     "heading":{
      "exp":"LMID_START.heading",
@@ -181,32 +181,32 @@
      "val":-1.832595714594046
     }
    },
-   "LTOWER":{
+   "LTRENCH_CLOSE":{
     "x":{
-     "exp":"towerX",
-     "val":1.060704
+     "exp":"startingLine - bumperRadius - 6 in",
+     "val":3.399925
     },
     "y":{
-     "exp":"3.7457125999999996 m + 1.25 m",
-     "val":4.995712599999999
+     "exp":"fieldWidth - bumperRadius - intakeExtension - 3 in",
+     "val":7.341925000000001
     },
     "heading":{
-     "exp":"0 rad",
-     "val":0.0
+     "exp":"90 deg",
+     "val":1.5707963267948966
     }
    },
-   "LTRENCH_ALIGN":{
+   "LTRENCH_FAR":{
     "x":{
      "exp":"5.9 m",
      "val":5.9
     },
     "y":{
-     "exp":"LTRENCH_THRU.y",
-     "val":7.429682000000001
+     "exp":"LTRENCH_CLOSE.y",
+     "val":7.341925000000001
     },
     "heading":{
-     "exp":"180 deg",
-     "val":3.141592653589793
+     "exp":"LTRENCH_CLOSE.heading",
+     "val":1.5707963267948966
     }
    },
    "LTRENCH_HUB_END":{
@@ -229,8 +229,8 @@
      "val":5.9
     },
     "y":{
-     "exp":"3.45 m",
-     "val":3.45
+     "exp":"4.7 m",
+     "val":4.7
     },
     "heading":{
      "exp":"90 deg",
@@ -239,7 +239,7 @@
    },
    "LTRENCH_SHOOTING":{
     "x":{
-     "exp":"LTRENCH_THRU.x - 1 m",
+     "exp":"LTRENCH_CLOSE.x - 1 m",
      "val":2.399925
     },
     "y":{
@@ -253,8 +253,8 @@
    },
    "LTRENCH_START":{
     "x":{
-     "exp":"startingLine",
-     "val":4.0
+     "exp":"startingLine + bumperRadius",
+     "val":4.447675
     },
     "y":{
      "exp":"fieldWidth - bumperRadius",
@@ -265,34 +265,6 @@
      "val":4.71238898038469
     }
    },
-   "LTRENCH_THRU":{
-    "x":{
-     "exp":"startingLine - bumperRadius - 6 in",
-     "val":3.399925
-    },
-    "y":{
-     "exp":"fieldWidth - (trenchOpeningWidth / 2)",
-     "val":7.429682000000001
-    },
-    "heading":{
-     "exp":"180 deg",
-     "val":3.141592653589793
-    }
-   },
-   "OUTPOST":{
-    "x":{
-     "exp":"bumperRadius + intakeExtension",
-     "val":0.650875
-    },
-    "y":{
-     "exp":"0.6659626 m",
-     "val":0.6659626
-    },
-    "heading":{
-     "exp":"180 deg",
-     "val":3.141592653589793
-    }
-   },
    "RBUMP":{
     "x":{
      "exp":"LBUMP.x",
@@ -300,25 +272,25 @@
     },
     "y":{
      "exp":"fieldWidth - LBUMP.y",
-     "val":2.6715000000000018
+     "val":2.5191000000000017
     },
     "heading":{
      "exp":"-LBUMP.heading",
-     "val":-1.0471975511965976
+     "val":0.0
     }
    },
-   "RBUMP_ALIGN":{
+   "RBUMP_FAR":{
     "x":{
-     "exp":"LBUMP_ALIGN.x",
-     "val":5.9268614
+     "exp":"LBUMP_FAR.x",
+     "val":6.4348614
     },
     "y":{
-     "exp":"fieldWidth - LBUMP_ALIGN.y",
-     "val":2.6715000000000018
+     "exp":"fieldWidth - LBUMP_FAR.y",
+     "val":2.5191000000000017
     },
     "heading":{
-     "exp":"-LBUMP_ALIGN.heading",
-     "val":-1.0471975511965976
+     "exp":"-LBUMP_FAR.heading",
+     "val":0.0
     }
    },
    "RMID_END":{
@@ -328,7 +300,7 @@
     },
     "y":{
      "exp":"fieldWidth - LMID_END.y",
-     "val":3.2577680000000004
+     "val":3.003768
     },
     "heading":{
      "exp":"RMID_START.heading",
@@ -349,32 +321,32 @@
      "val":1.832595714594046
     }
    },
-   "RTOWER":{
+   "RTRENCH_CLOSE":{
     "x":{
-     "exp":"towerX",
-     "val":1.060704
+     "exp":"LTRENCH_CLOSE.x",
+     "val":3.399925
     },
     "y":{
-     "exp":"3.7457125999999996 m - 1.25 m",
-     "val":2.4957125999999996
+     "exp":"fieldWidth - LTRENCH_CLOSE.y",
+     "val":0.7270750000000001
     },
     "heading":{
-     "exp":"180 deg",
-     "val":3.141592653589793
+     "exp":"-LTRENCH_CLOSE.heading",
+     "val":-1.5707963267948966
     }
    },
-   "RTRENCH_ALIGN":{
+   "RTRENCH_FAR":{
     "x":{
-     "exp":"LTRENCH_ALIGN.x",
+     "exp":"LTRENCH_FAR.x",
      "val":5.9
     },
     "y":{
-     "exp":"fieldWidth - LTRENCH_THRU.y",
-     "val":0.6393180000000003
+     "exp":"fieldWidth - LTRENCH_CLOSE.y",
+     "val":0.7270750000000001
     },
     "heading":{
-     "exp":"180 deg",
-     "val":3.141592653589793
+     "exp":"-LTRENCH_CLOSE.heading",
+     "val":-1.5707963267948966
     }
    },
    "RTRENCH_HUB_END":{
@@ -398,7 +370,7 @@
     },
     "y":{
      "exp":"fieldWidth - LTRENCH_HUB_START.y",
-     "val":4.619000000000001
+     "val":3.3690000000000007
     },
     "heading":{
      "exp":"270 deg",
@@ -421,8 +393,8 @@
    },
    "RTRENCH_START":{
     "x":{
-     "exp":"startingLine",
-     "val":4.0
+     "exp":"LTRENCH_START.x",
+     "val":4.447675
     },
     "y":{
      "exp":"bumperRadius",
@@ -431,20 +403,6 @@
     "heading":{
      "exp":"90 deg",
      "val":1.5707963267948966
-    }
-   },
-   "RTRENCH_THRU":{
-    "x":{
-     "exp":"LTRENCH_THRU.x",
-     "val":3.399925
-    },
-    "y":{
-     "exp":"fieldWidth - LTRENCH_THRU.y",
-     "val":0.6393180000000003
-    },
-    "heading":{
-     "exp":"180 deg",
-     "val":3.141592653589793
     }
    }
   }
@@ -491,12 +449,12 @@
    "val":502.65482457436696
   },
   "tmax":{
-   "exp":"0.8 N * m",
-   "val":0.8
+   "exp":"1.2 N * m",
+   "val":1.2
   },
   "cof":{
-   "exp":"1",
-   "val":1.0
+   "exp":"2",
+   "val":2.0
   },
   "bumper":{
    "front":{

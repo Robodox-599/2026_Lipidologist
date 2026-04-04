@@ -26,17 +26,16 @@ public class AutoRoutines {
         public AutoRoutine leftDoubleDouble() {
                 AutoRoutine routine = autoFactory.newRoutine("leftDoubleDouble");
 
-                AutoTrajectory LTRENCHtoLMID = routine.trajectory("LTRENCHtoLMID");
-                AutoTrajectory LMIDtoLTRENCH = routine.trajectory("LMIDtoLTRENCH");
+                AutoTrajectory LTRENCHtoMIDSWEEP = routine.trajectory("LTRENCHtoMIDSWEEP");
                 AutoTrajectory LTRENCHtoHUBSWEEP = routine.trajectory("LTRENCHtoHUBSWEEP");
 
-                routine.active().onTrue(Commands.sequence(LTRENCHtoLMID.resetOdometry(),
-                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                LTRENCHtoLMID.cmd()));
+                routine.active().onTrue(Commands.sequence(LTRENCHtoMIDSWEEP.resetOdometry(),
+                                Commands.parallel(
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                                LTRENCHtoMIDSWEEP.cmd())));
 
-                LTRENCHtoLMID.done().onTrue(LMIDtoLTRENCH.cmd());
-
-                LMIDtoLTRENCH.done()
+                LTRENCHtoMIDSWEEP.done()
                                 .onTrue(Commands.sequence(
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
@@ -44,7 +43,7 @@ public class AutoRoutines {
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
                                                                                 WantedSuperState.SHOOT_HUB_AND_AGITATE),
-                                                new WaitCommand(2.5),
+                                                new WaitCommand(3.5),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 LTRENCHtoHUBSWEEP.cmd()));
@@ -98,17 +97,16 @@ public class AutoRoutines {
         public AutoRoutine rightDoubleDouble() {
                 AutoRoutine routine = autoFactory.newRoutine("rightDoubleDouble");
 
-                AutoTrajectory RTRENCHtoRMID = routine.trajectory("RTRENCHtoRMID");
-                AutoTrajectory RMIDtoRTRENCH = routine.trajectory("RMIDtoRTRENCH");
+                AutoTrajectory RTRENCHtoMIDSWEEP = routine.trajectory("RTRENCHtoMIDSWEEP");
                 AutoTrajectory RTRENCHtoHUBSWEEP = routine.trajectory("RTRENCHtoHUBSWEEP");
 
-                routine.active().onTrue(Commands.sequence(RTRENCHtoRMID.resetOdometry(),
-                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                RTRENCHtoRMID.cmd()));
+                routine.active().onTrue(Commands.sequence(RTRENCHtoMIDSWEEP.resetOdometry(),
+                                Commands.parallel(
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                                RTRENCHtoMIDSWEEP.cmd())));
 
-                RTRENCHtoRMID.done().onTrue(RMIDtoRTRENCH.cmd());
-
-                RMIDtoRTRENCH.done()
+                RTRENCHtoMIDSWEEP.done()
                                 .onTrue(Commands.sequence(
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
@@ -116,7 +114,7 @@ public class AutoRoutines {
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
                                                                                 WantedSuperState.SHOOT_HUB_AND_AGITATE),
-                                                new WaitCommand(2.5),
+                                                new WaitCommand(3.5),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 RTRENCHtoHUBSWEEP.cmd()));
@@ -167,81 +165,81 @@ public class AutoRoutines {
                 return routine;
         }
 
-        public AutoRoutine leftCheeseburger() {
-                AutoRoutine routine = autoFactory.newRoutine("leftCheeseburger");
+        // public AutoRoutine leftCheeseburger() {
+        //         AutoRoutine routine = autoFactory.newRoutine("leftCheeseburger");
 
-                AutoTrajectory LTRENCHtoLMID = routine.trajectory("LTRENCHtoLMID");
-                AutoTrajectory LMIDtoLTRENCH = routine.trajectory("LMIDtoLTRENCH");
-                AutoTrajectory LTRENCHtoDEPOT = routine.trajectory("LTRENCHtoDEPOT");
-                AutoTrajectory DEPOT_INTAKE = routine.trajectory("DEPOT_INTAKE");
+        //         AutoTrajectory LTRENCHtoLMID = routine.trajectory("LTRENCHtoLMID");
+        //         AutoTrajectory LMIDtoLTRENCH = routine.trajectory("LMIDtoLTRENCH");
+        //         AutoTrajectory LTRENCHtoDEPOT = routine.trajectory("LTRENCHtoDEPOT");
+        //         AutoTrajectory DEPOT_INTAKE = routine.trajectory("DEPOT_INTAKE");
 
-                routine.active().onTrue(Commands.sequence(LTRENCHtoLMID.resetOdometry(),
-                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                LTRENCHtoLMID.cmd()));
+        //         routine.active().onTrue(Commands.sequence(LTRENCHtoLMID.resetOdometry(),
+        //                         superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+        //                         LTRENCHtoLMID.cmd()));
 
-                LTRENCHtoLMID.done().onTrue(LMIDtoLTRENCH.cmd());
+        //         LTRENCHtoLMID.done().onTrue(LMIDtoLTRENCH.cmd());
 
-                LMIDtoLTRENCH.done().onTrue(LTRENCHtoDEPOT.cmd()
-                                .alongWith(superstructureCommands
-                                                .setWantedSuperStateCommand(WantedSuperState.SOTM_HUB_AUTO)));
+        //         LMIDtoLTRENCH.done().onTrue(LTRENCHtoDEPOT.cmd()
+        //                         .alongWith(superstructureCommands
+        //                                         .setWantedSuperStateCommand(WantedSuperState.SOTM_HUB_AUTO)));
 
-                LTRENCHtoDEPOT.done().onTrue(
-                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO)
-                                                .andThen(DEPOT_INTAKE.cmd()));
+        //         LTRENCHtoDEPOT.done().onTrue(
+        //                         superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO)
+        //                                         .andThen(DEPOT_INTAKE.cmd()));
 
-                DEPOT_INTAKE.done()
-                                .onTrue(Commands.sequence(
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                                                new WaitCommand(1),
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(
-                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE)));
+        //         DEPOT_INTAKE.done()
+        //                         .onTrue(Commands.sequence(
+        //                                         superstructureCommands
+        //                                                         .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+        //                                         new WaitCommand(1),
+        //                                         superstructureCommands
+        //                                                         .setWantedSuperStateCommand(
+        //                                                                         WantedSuperState.SHOOT_HUB_AND_AGITATE)));
 
-                return routine;
-        }
+        //         return routine;
+        // }
 
-        public AutoRoutine rightCheeseburger() {
-                AutoRoutine routine = autoFactory.newRoutine("rightCheeseburger");
+        // public AutoRoutine rightCheeseburger() {
+        //         AutoRoutine routine = autoFactory.newRoutine("rightCheeseburger");
 
-                AutoTrajectory RTRENCHtoRMID = routine.trajectory("RTRENCHtoRMID");
-                AutoTrajectory RMIDtoRTRENCH = routine.trajectory("RMIDtoRTRENCH");
-                AutoTrajectory RTRENCHtoOUTPOST = routine.trajectory("RTRENCHtoOUTPOST");
-                AutoTrajectory OUTPOSTtoRTRENCH = routine.trajectory("OUTPOSTtoRTRENCH");
+        //         AutoTrajectory RTRENCHtoRMID = routine.trajectory("RTRENCHtoRMID");
+        //         AutoTrajectory RMIDtoRTRENCH = routine.trajectory("RMIDtoRTRENCH");
+        //         AutoTrajectory RTRENCHtoOUTPOST = routine.trajectory("RTRENCHtoOUTPOST");
+        //         AutoTrajectory OUTPOSTtoRTRENCH = routine.trajectory("OUTPOSTtoRTRENCH");
 
-                routine.active().onTrue(Commands.sequence(RTRENCHtoRMID.resetOdometry(),
-                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                RTRENCHtoRMID.cmd()));
+        //         routine.active().onTrue(Commands.sequence(RTRENCHtoRMID.resetOdometry(),
+        //                         superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+        //                         RTRENCHtoRMID.cmd()));
 
-                RTRENCHtoRMID.done().onTrue(RMIDtoRTRENCH.cmd());
+        //         RTRENCHtoRMID.done().onTrue(RMIDtoRTRENCH.cmd());
 
-                RMIDtoRTRENCH.done()
-                                .onTrue(Commands.sequence(
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                                                new WaitCommand(1),
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(
-                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE),
-                                                new WaitCommand(2.5),
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                                RTRENCHtoOUTPOST.cmd()));
+        //         RMIDtoRTRENCH.done()
+        //                         .onTrue(Commands.sequence(
+        //                                         superstructureCommands
+        //                                                         .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+        //                                         new WaitCommand(1),
+        //                                         superstructureCommands
+        //                                                         .setWantedSuperStateCommand(
+        //                                                                         WantedSuperState.SHOOT_HUB_AND_AGITATE),
+        //                                         new WaitCommand(2.5),
+        //                                         superstructureCommands
+        //                                                         .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+        //                                         RTRENCHtoOUTPOST.cmd()));
 
-                RTRENCHtoOUTPOST.done()
-                                .onTrue(OUTPOSTtoRTRENCH.cmd());
+        //         RTRENCHtoOUTPOST.done()
+        //                         .onTrue(OUTPOSTtoRTRENCH.cmd());
 
-                OUTPOSTtoRTRENCH.done()
-                                .onTrue(Commands.sequence(
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                                                new WaitCommand(1),
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(
-                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE)));
+        //         OUTPOSTtoRTRENCH.done()
+        //                         .onTrue(Commands.sequence(
+        //                                         superstructureCommands
+        //                                                         .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+        //                                         new WaitCommand(1),
+        //                                         superstructureCommands
+        //                                                         .setWantedSuperStateCommand(
+        //                                                                         WantedSuperState.SHOOT_HUB_AND_AGITATE)));
 
-                return routine;
-        }
+        //         return routine;
+        // }
 
         public AutoRoutine leftHamburgerWithOnions() {
                 AutoRoutine routine = autoFactory.newRoutine("LeftHamburgerWithOnions");
