@@ -19,6 +19,8 @@ import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -33,8 +35,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     private final CANBus flywheelCANBus;
     private final TalonFX flywheelMotor;
     TalonFXConfiguration flywheelConfiguration;
-    // private final VelocityVoltage velocityVoltage;
-    private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
+    private final VelocityVoltage velocityVoltage;
+    // private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
 
     // status signals
     private final StatusSignal<AngularVelocity> flywheelVelocityRPS;
@@ -45,6 +47,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     private final StatusSignal<Current> flywheelSupplyCurrent;
 
     private final FlywheelConstants flywheelConstants;
+
+    private Debouncer rpmDebouncer = new Debouncer(0.15, DebounceType.kFalling);
 
     public FlywheelsIOTalonFX(FlywheelConstants flywheelConstants) {
         this.flywheelConstants = flywheelConstants;
@@ -74,8 +78,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
                 .withMotorOutput(new MotorOutputConfigs().withInverted(this.flywheelConstants.invert())
                         .withNeutralMode(NeutralModeValue.Coast));
 
-        // velocityVoltage = new VelocityVoltage(super.targetRPS);
-        velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
+        velocityVoltage = new VelocityVoltage(super.targetRPS);
+        // velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
 
         // Applying configuration
         PhoenixUtil.tryUntilOk(10, () -> flywheelMotor.getConfigurator().apply(flywheelConfiguration, 1));
@@ -104,11 +108,11 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
         super.statorCurrent = flywheelStatorCurrent.getValueAsDouble();
         super.supplyCurrent = flywheelSupplyCurrent.getValueAsDouble();
         super.temperature = flywheelTemperature.getValueAsDouble();
-        super.isFlywheelAtSetpoint = Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSTolerance;
+        super.isFlywheelAtSetpoint = rpmDebouncer.calculate(Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSTolerance);
 
         DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/RPS", super.RPS);
-        DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/TargetRPS", super.targetRPS);
         DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/isFlywheelAtSpeed", super.isFlywheelAtSetpoint);
+        DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/isFlywheelAtSpeedRaw", Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSTolerance);
         DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/statorCurrent", super.statorCurrent);
         DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/supplyCurrent", super.supplyCurrent);
         DogLog.log("Flywheels/" + this.flywheelConstants.name() + "/temperature", super.temperature);
@@ -116,9 +120,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
 
     @Override
     public void setRPS(double RPS) {
-        super.targetRPS = RPS;
-        // flywheelMotor.setControl(velocityVoltage.withVelocity(RPS).withEnableFOC(true));
-        flywheelMotor.setControl(velocityTorqueCurrentFOC.withVelocity(RPS));
+        flywheelMotor.setControl(velocityVoltage.withVelocity(RPS).withEnableFOC(true));
+        // flywheelMotor.setControl(velocityTorqueCurrentFOC.withVelocity(RPS));
     }
 
     @Override

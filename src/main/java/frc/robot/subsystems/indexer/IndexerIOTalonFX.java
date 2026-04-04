@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -28,14 +29,13 @@ public class IndexerIOTalonFX extends IndexerIO {
   private final CANBus indexerCANBus;
   private TalonFXConfiguration indexerConfig;
 
-  private final Timer pulseTimer = new Timer();
-  private boolean pulseOn = false;
-
   private final StatusSignal<AngularVelocity> indexerVelocityRad;
   private final StatusSignal<Temperature> indexerTemperature;
   private final StatusSignal<Voltage> indexerAppliedVolts;
   private final StatusSignal<Current> indexerStatorCurrent;
   private final StatusSignal<Current> indexerSupplyCurrent;
+
+    private final VoltageOut voltageOut;
 
   public IndexerIOTalonFX() {
     indexerCANBus = new CANBus(IndexerConstants.indexerCANBus);
@@ -55,6 +55,8 @@ public class IndexerIOTalonFX extends IndexerIO {
         ;
 
     PhoenixUtil.tryUntilOk(10, () -> indexerMotor.getConfigurator().apply(indexerConfig, 1));
+
+    voltageOut = new VoltageOut(0);
 
     indexerVelocityRad = indexerMotor.getVelocity();
     indexerTemperature = indexerMotor.getDeviceTemp();
@@ -89,28 +91,11 @@ public class IndexerIOTalonFX extends IndexerIO {
 
   @Override
   public void stopIndexer() {
-    indexerMotor.setVoltage(0);
+    indexerMotor.setControl(voltageOut.withOutput(0));
   }
 
   @Override
-  public void setIndexerVoltage(double volts) {
-    indexerMotor.setVoltage(volts);
-  }
-
-  @Override
-  public void indexerPulseFuel(double volts) {
-    if (!pulseTimer.isRunning()) {
-      pulseTimer.start();
-    }
-
-    if (pulseTimer.get() > IndexerConstants.pulseTimeInterval) {
-      if (!pulseOn) {
-        indexerMotor.setVoltage(volts);
-      } else {
-        indexerMotor.setVoltage(0);
-      }
-      pulseOn = !pulseOn;
-      pulseTimer.reset();
-    }
+  public void setIndexerVoltage(double voltage) {
+    indexerMotor.setControl(voltageOut.withOutput(voltage).withEnableFOC(true));
   }
 }

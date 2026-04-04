@@ -12,7 +12,7 @@ import frc.robot.subsystems.drive.constants.TunerConstants;
 import frc.robot.util.LerpTable;
 
 public class VisionConstants {
-    public static final double maxZError = 0.75; // 0.75 
+    public static final double maxZError = 0.2; // 0.75 
     public static final double maxAmbiguity = 0.2; // 0.3
 
     public static double linearStdDevBaseline = 0.03; // Meters (0.4)
