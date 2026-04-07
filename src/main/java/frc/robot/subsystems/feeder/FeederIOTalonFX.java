@@ -82,7 +82,7 @@ public class FeederIOTalonFX extends FeederIO {
         super.supplyCurrent = feederSupplyCurrent.getValueAsDouble();
         super.voltage = feederVoltage.getValueAsDouble();
         super.temperature = feederTemperature.getValueAsDouble();
-        super.isFeederJammed = feederDebouncer.calculate((super.statorCurrent > FeederConstants.statorCurrentTrip) && (super.velocity < FeederConstants.velocityJamLimit));
+        super.isFeederJammed = feederDebouncer.calculate((super.statorCurrent > FeederConstants.statorCurrentTrip) && (Math.abs(super.velocity) < FeederConstants.velocityJamLimit));
 
         DogLog.log("Feeder/Velocity", super.velocity);
         DogLog.log("Feeder/StatorCurrent", super.statorCurrent);
