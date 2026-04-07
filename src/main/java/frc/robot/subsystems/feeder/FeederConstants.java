@@ -16,4 +16,7 @@ public class FeederConstants {
 
   public static final double supplyCurrent = 0.0;
   public static final double statorCurrent = 0.0;
+
+  public static final double tripDuration = 0.5;
+  public static final double statorCurrentTrip = 70;
 }
