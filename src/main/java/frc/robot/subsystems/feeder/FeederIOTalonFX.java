@@ -57,7 +57,7 @@ public class FeederIOTalonFX extends FeederIO {
                                 .withKS(FeederConstants.kS)
                 );
         m_request = new VelocityVoltage(0);
-        feederDebouncer = new Debouncer(FeederConstants.tripDuration, Debouncer.DebounceType.kRising);
+        feederDebouncer = new Debouncer(FeederConstants.tripDuration, Debouncer.DebounceType.kBoth);
         
         PhoenixUtil.tryUntilOk(10, () -> feederMotor.getConfigurator().apply(feederConfig, 1));
 
@@ -82,7 +82,7 @@ public class FeederIOTalonFX extends FeederIO {
         super.supplyCurrent = feederSupplyCurrent.getValueAsDouble();
         super.voltage = feederVoltage.getValueAsDouble();
         super.temperature = feederTemperature.getValueAsDouble();
-        super.isFeederJammed = feederDebouncer.calculate(super.statorCurrent > FeederConstants.statorCurrentTrip);
+        super.isFeederJammed = feederDebouncer.calculate((super.statorCurrent > FeederConstants.statorCurrentTrip) && (super.velocity < FeederConstants.velocityJamLimit));
 
         DogLog.log("Feeder/Velocity", super.velocity);
         DogLog.log("Feeder/StatorCurrent", super.statorCurrent);

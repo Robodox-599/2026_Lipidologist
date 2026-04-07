@@ -19,4 +19,5 @@ public class FeederConstants {
 
   public static final double tripDuration = 0.5;
   public static final double statorCurrentTrip = 70;
+  public static final double velocityJamLimit = 10;
 }
