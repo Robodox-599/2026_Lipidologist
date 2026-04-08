@@ -99,12 +99,12 @@ public class Flywheels {
         return this.atTargetRPS;
     }
 
-    private boolean allFlywheelsAtSetpoint() {
+    private void allFlywheelsAtSetpoint() {
         boolean allFlywheelsAtSetpoint = true;
         for (int i = 0; i < this.io.length; i++) {
             allFlywheelsAtSetpoint = allFlywheelsAtSetpoint && this.io[i].isFlywheelAtSetpoint;
         }
-        return allFlywheelsAtSetpoint;
+        this.atTargetRPS = allFlywheelsAtSetpoint;
     }
 
     public void setWantedState(Flywheels.FlywheelWantedState wantedState) {
