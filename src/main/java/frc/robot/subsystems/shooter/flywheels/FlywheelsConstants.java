@@ -52,7 +52,7 @@ public class FlywheelsConstants {
                         0.119, InvertedValue.CounterClockwise_Positive);
         public static final FlywheelConstants RightFlywheel = new FlywheelConstants("RightFlywheel", 22, "rio", 0.45, 0, 0,
                         0.29,
-                        0.12, InvertedValue.CounterClockwise_Positive);
+                        0.12, InvertedValue.CounterClockwise_Positive); // amps/rps
 
         public static final FlywheelConstants LeftFlywheelSim = new FlywheelConstants("LeftFlywheel", 20, "rio", 1.25,
                         0, 0, 0, 0,

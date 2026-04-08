@@ -163,12 +163,12 @@ public class FieldConstants {
                                 fieldWidthMeters - openingWidth, openingHeight);
 
                 public static final Rectangle2d trenchZone = new Rectangle2d(
-                                new Translation2d(openingTopLeft.getX() - 2, openingTopLeft.getY()),
-                                new Translation2d(openingTopRight.getX() + 2, openingTopRight.getY()));
+                                new Translation2d(openingTopLeft.getX() - (depth / 2), openingTopLeft.getY()),
+                                new Translation2d(openingTopRight.getX() + (depth / 2), openingTopRight.getY()));
 
                 public static final Rectangle2d oppTrenchZone = new Rectangle2d(
-                                new Translation2d(oppOpeningTopLeft.getX() - 2, oppOpeningTopLeft.getY()),
-                                new Translation2d(oppOpeningTopRight.getX() + 2, oppOpeningTopRight.getY()));
+                                new Translation2d(oppOpeningTopLeft.getX() - (depth / 2), oppOpeningTopLeft.getY()),
+                                new Translation2d(oppOpeningTopRight.getX() + (depth / 2), oppOpeningTopRight.getY()));
         }
 
         public static class RightTrench {
@@ -194,12 +194,12 @@ public class FieldConstants {
                                 openingHeight);
 
                 public static final Rectangle2d trenchZone = new Rectangle2d(
-                                new Translation2d(openingTopLeft.getX() - 2, openingTopLeft.getY()),
-                                new Translation2d(openingTopRight.getX() + 2, openingTopRight.getY()));
+                                new Translation2d(openingTopLeft.getX() - (depth / 2), openingTopLeft.getY()),
+                                new Translation2d(openingTopRight.getX() + (depth / 2), openingTopRight.getY()));
 
                 public static final Rectangle2d oppTrenchZone = new Rectangle2d(
-                                new Translation2d(oppOpeningTopLeft.getX() - 2, oppOpeningTopLeft.getY()),
-                                new Translation2d(oppOpeningTopRight.getX() + 2, oppOpeningTopRight.getY()));
+                                new Translation2d(oppOpeningTopLeft.getX() - (depth / 2), oppOpeningTopLeft.getY()),
+                                new Translation2d(oppOpeningTopRight.getX() + (depth / 2), oppOpeningTopRight.getY()));
         }
 
         /** Tower related constants */

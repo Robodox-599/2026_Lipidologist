@@ -10,7 +10,6 @@ public class Flywheels {
     private FlywheelCurrentState currentState = FlywheelCurrentState.STOPPING;
 
     private double targetRPS = 0;
-    private Debouncer rpmDebouncer = new Debouncer(0.1, DebounceType.kFalling);
     private boolean atTargetRPS = false;
 
     public Flywheels(FlywheelsIO... io) {
@@ -36,10 +35,11 @@ public class Flywheels {
         handleStateTransitions();
         applyStates();
 
-        this.atTargetRPS = rpmDebouncer.calculate(allFlywheelsAtSetpoint());
+        allFlywheelsAtSetpoint();
 
         DogLog.log("Flywheels/WantedState", wantedState);
         DogLog.log("Flywheels/CurrentState", currentState);
+        DogLog.log("Flywheels/TargetRPS", targetRPS);
         DogLog.log("Flywheels/areAllFlywheelsAtTargetRPS", this.atTargetRPS);
     }
 
@@ -99,12 +99,12 @@ public class Flywheels {
         return this.atTargetRPS;
     }
 
-    private boolean allFlywheelsAtSetpoint() {
+    private void allFlywheelsAtSetpoint() {
         boolean allFlywheelsAtSetpoint = true;
         for (int i = 0; i < this.io.length; i++) {
             allFlywheelsAtSetpoint = allFlywheelsAtSetpoint && this.io[i].isFlywheelAtSetpoint;
         }
-        return allFlywheelsAtSetpoint;
+        this.atTargetRPS = allFlywheelsAtSetpoint;
     }
 
     public void setWantedState(Flywheels.FlywheelWantedState wantedState) {
