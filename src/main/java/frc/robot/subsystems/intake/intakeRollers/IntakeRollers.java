@@ -15,6 +15,7 @@ public class IntakeRollers {
     public enum IntakeRollersWantedState{
         STOP,
         INTAKE_FUEL,
+        CLEAN,
         // AGITATE_FUEL,
         OUTAKE
     }
@@ -22,6 +23,7 @@ public class IntakeRollers {
     public enum IntakeRollersCurrentState{
         STOPPED,
         INTAKING_FUEL,
+        CLEANING,
         // AGITATING_FUEL,
         OUTAKING
     }
@@ -29,7 +31,7 @@ public class IntakeRollers {
     public void updateInputs(){
         Tracer.traceFunc("IntakeRollers UpdateInputs", io::updateInputs);
         handleStateTransitions();
-        applyStates();
+        // applyStates();
         DogLog.log("Intake/Rollers/WantedState", this.wantedState);
         DogLog.log("Intake/Rollers/CurrentState", this.currentState);
     }
@@ -47,6 +49,9 @@ public class IntakeRollers {
             //     break;
             case OUTAKE:
                 currentState = IntakeRollersCurrentState.OUTAKING;
+                break;
+            case CLEAN:
+                currentState = IntakeRollersCurrentState.CLEANING;
                 break;
             default:
                 currentState = IntakeRollersCurrentState.STOPPED;
@@ -68,6 +73,8 @@ public class IntakeRollers {
             case OUTAKING:
                 setVoltage(-7);
                 break;
+            case CLEANING:
+                setVoltage(0.5);
             default:
                 stop();
                 break;

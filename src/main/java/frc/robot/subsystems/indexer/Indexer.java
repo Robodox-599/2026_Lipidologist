@@ -18,6 +18,7 @@ public class Indexer {
     PULSE_FUEL,
     REVERSE,
     OUTAKE,
+    CLEAN,
     STOPPED,
   }
 
@@ -26,6 +27,7 @@ public class Indexer {
     PULSING_FUEL,
     REVERSING,
     OUTAKING,
+    CLEANING,
     STOPPING,
   }
 
@@ -38,7 +40,7 @@ public class Indexer {
         Tracer.traceFunc("IndexerUpdateInputs", io::updateInputs);
     
     handleStateTransitions();
-    applyStates();
+    // apapplyStates();
 
     DogLog.log("Indexer/wantedState", wantedState);
     DogLog.log("Indexer/currentState", currentState);
@@ -62,6 +64,8 @@ public class Indexer {
         case OUTAKE:
             currentState = IndexerCurrentState.OUTAKING;
             break;
+        case CLEAN:
+            currentState = IndexerCurrentState.CLEANING;
         default:
             currentState = IndexerCurrentState.STOPPING;
             break;
@@ -85,6 +89,8 @@ public class Indexer {
       case OUTAKING:
         setIndexerVoltage(-12);
         break;
+      case CLEANING:
+        setIndexerVoltage(0.5);
       default:
         stopIndexer();
         break;

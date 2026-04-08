@@ -69,6 +69,7 @@ public class Superstructure extends SubsystemBase {
         // DESCEND_CLIMB,
         IDLE,
         IDLE_AUTO,
+        CLEAN,
         STOP,
         // TESTING,
         // STOW
@@ -89,6 +90,7 @@ public class Superstructure extends SubsystemBase {
         SOTMING_HUB_AUTO,
         IDLING,
         IDLING_AUTO,
+        CLEANING,
         // ALIGN_OUTER_LEFT_TOWER,
         // ALIGN_INNER_LEFT_TOWER,
         // ALIGN_OUTER_RIGHT_TOWER,
@@ -266,6 +268,9 @@ public class Superstructure extends SubsystemBase {
             case IDLE_AUTO:
                 currentSuperState = CurrentSuperState.IDLING_AUTO;
                 break;
+            case CLEAN: 
+                currentSuperState = CurrentSuperState.CLEANING;
+                break;
             // case CLIMB:
             // if (AllianceFlipUtil.shouldFlip()) { // if red alliance
             // if (drivetrain.getPose().getY() >=
@@ -400,6 +405,9 @@ public class Superstructure extends SubsystemBase {
                 break;
             case IDLING_AUTO:
                 idlingAuto();
+                break;
+            case CLEANING:
+                cleaning();
                 break;
             case STOPPED:
                 stop();
@@ -697,6 +705,17 @@ public class Superstructure extends SubsystemBase {
         // } else {
         // climb.setWantedState(ClimbWantedState.STOW);
         // }
+    }
+
+    public void cleaning() {
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.STOPPED);
+        feeder.setWantedState(Feeder.FeederWantedState.CLEAN);
+        indexer.setWantedState(Indexer.IndexerWantedState.CLEAN);
+        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.CLEAN);
+        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.CLEAN);
+        hood.setWantedState(Hood.HoodWantedState.STOW);
+        leds.setWantedState(LEDs.LEDsWantedState.IDLE);
     }
 
     // public void alignOuterLeftTower() {

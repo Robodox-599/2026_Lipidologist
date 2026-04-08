@@ -19,12 +19,14 @@ public class Flywheels {
     public enum FlywheelWantedState {
         SET_RPS,
         IDLE,
+        CLEAN,
         STOPPED
     }
 
     public enum FlywheelCurrentState {
         SETTING_RPS,
         IDLING,
+        CLEANING,
         STOPPING
     }
 
@@ -33,7 +35,7 @@ public class Flywheels {
             this.io[i].updateInputs();
         }
         handleStateTransitions();
-        applyStates();
+        // applyStates();
 
         allFlywheelsAtSetpoint();
 
@@ -51,6 +53,9 @@ public class Flywheels {
             case IDLE:
                 currentState = FlywheelCurrentState.IDLING;
                 break;
+            case CLEAN:
+                currentState = FlywheelCurrentState.CLEANING;
+                break;
             case STOPPED:
                 currentState = FlywheelCurrentState.STOPPING;
                 break;
@@ -67,6 +72,9 @@ public class Flywheels {
                 break;
             case IDLING:
                 setRPS(FlywheelsConstants.idleRPS);
+                break;
+            case CLEANING:
+                setVoltage(0.5);;
                 break;
             case STOPPING:
                 stop();

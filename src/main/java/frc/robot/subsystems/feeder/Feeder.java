@@ -20,6 +20,7 @@ public class Feeder {
     FEED_FUEL,
     REVERSE,
     OUTAKE,
+    CLEAN
   }
 
   public enum FeederCurrentState {
@@ -27,6 +28,7 @@ public class Feeder {
     FEEDING_FUEL,
     REVERSE,
     OUTAKING,
+    CLEANING
   }
 
   public Feeder(FeederIO io) {
@@ -37,7 +39,7 @@ public class Feeder {
     Tracer.traceFunc("FeederUpdateInputs", io::updateInputs);
 
     handleFeederStateTransitions();
-    applyStates();
+    // applyStates();
 
     DogLog.log("Feeder/wantedState", wantedState);
     DogLog.log("Feeder/currentState", currentState);
@@ -58,6 +60,9 @@ public class Feeder {
       case OUTAKE:
         currentState = FeederCurrentState.OUTAKING;
         break;
+      case CLEAN:
+        currentState = FeederCurrentState.CLEANING;
+        break;
       default:
         currentState = FeederCurrentState.STOPPED;
         break;
@@ -77,6 +82,9 @@ public class Feeder {
         break;
       case OUTAKING:
         setVoltage(-12);
+        break;
+      case CLEANING:
+        setVoltage(0.5);
         break;
       default:
         stopFeeder();
