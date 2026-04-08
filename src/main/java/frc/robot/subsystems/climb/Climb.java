@@ -30,7 +30,7 @@ public class Climb {
   public void updateInputs() {
     io.updateInputs();
     handleStateTransitions();
-    applyStates();
+    // applyStates();
 
     DogLog.log("Climb/WantedState", wantedState);
     DogLog.log("Climb/CurrentState", currentState);
