@@ -1,5 +1,5 @@
 {
- "name":"LBUMPtoDEPOT",
+ "name":"bump_to_depot",
  "version":3,
  "snapshot":{
   "waypoints":[

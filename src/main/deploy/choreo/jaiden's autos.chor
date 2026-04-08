@@ -49,8 +49,8 @@
    "hubSweepMidExtension":{
     "dimension":"Length",
     "var":{
-     "exp":"1.1 m",
-     "val":1.1
+     "exp":"1.4 m",
+     "val":1.4
     }
    },
    "intakeExtension":{
@@ -60,7 +60,7 @@
      "val":0.20319999999999996
     }
    },
-   "maxIntakeVelocity":{
+   "maxFirstSweepVelocity":{
     "dimension":"LinVel",
     "var":{
      "exp":"1.5 m / s",
@@ -72,6 +72,13 @@
     "var":{
      "exp":"0.35 m / s",
      "val":0.35
+    }
+   },
+   "maxSecondSweepVelocity":{
+    "dimension":"LinVel",
+    "var":{
+     "exp":"2.5 m / s",
+     "val":2.5
     }
    },
    "startingFuelWidth":{
@@ -127,12 +134,12 @@
    },
    "CLOSE_MID_END":{
     "x":{
-     "exp":"centerLine - hubSweepMidExtension",
-     "val":7.1705000000000005
+     "exp":"CLOSE_MID_START.x",
+     "val":6.8705
     },
     "y":{
-     "exp":"(fieldWidth / 2) + bumperRadius + fuelRadius + 20 in",
-     "val":5.065232000000001
+     "exp":"(fieldWidth / 2) + bumperRadius + fuelRadius + 40 in",
+     "val":5.573232000000001
     },
     "heading":{
      "exp":"-(5 / 6) PI rad",
@@ -142,7 +149,7 @@
    "CLOSE_MID_START":{
     "x":{
      "exp":"centerLine - hubSweepMidExtension",
-     "val":7.1705000000000005
+     "val":6.8705
     },
     "y":{
      "exp":"(fieldWidth / 2) + (startingFuelWidth / 2) + (fuelRadius / 2)",
@@ -211,8 +218,8 @@
    },
    "FAR_MID_TURN":{
     "x":{
-     "exp":"8 m",
-     "val":8.0
+     "exp":"7.9 m",
+     "val":7.9
     },
     "y":{
      "exp":"4.8 m",
@@ -240,7 +247,7 @@
    "HUB_END":{
     "x":{
      "exp":"HUB_START.x",
-     "val":5.9
+     "val":5.75
     },
     "y":{
      "exp":"6.4 m",
@@ -253,19 +260,33 @@
    },
    "HUB_START":{
     "x":{
-     "exp":"5.9 m",
-     "val":5.9
+     "exp":"5.75 m",
+     "val":5.75
     },
     "y":{
-     "exp":"4.7 m",
-     "val":4.7
+     "exp":"4.9 m",
+     "val":4.9
     },
     "heading":{
      "exp":"90 deg",
      "val":1.5707963267948966
     }
    },
-   "TRENCH_CLOSE":{
+   "TRENCH_CLOSE_THRU":{
+    "x":{
+     "exp":"TRENCH_CLOSE_WALL.x",
+     "val":3.399925
+    },
+    "y":{
+     "exp":"fieldWidth - (trenchOpeningWidth / 2)",
+     "val":7.429682000000001
+    },
+    "heading":{
+     "exp":"0 rad",
+     "val":0.0
+    }
+   },
+   "TRENCH_CLOSE_WALL":{
     "x":{
      "exp":"startingLine - bumperRadius - 6 in",
      "val":3.399925
@@ -279,23 +300,37 @@
      "val":1.5707963267948966
     }
    },
-   "TRENCH_FAR":{
+   "TRENCH_FAR_THRU":{
+    "x":{
+     "exp":"TRENCH_FAR_WALL.x",
+     "val":5.9
+    },
+    "y":{
+     "exp":"TRENCH_CLOSE_THRU.y",
+     "val":7.429682000000001
+    },
+    "heading":{
+     "exp":"TRENCH_CLOSE_THRU.heading",
+     "val":0.0
+    }
+   },
+   "TRENCH_FAR_WALL":{
     "x":{
      "exp":"5.9 m",
      "val":5.9
     },
     "y":{
-     "exp":"TRENCH_CLOSE.y",
+     "exp":"TRENCH_CLOSE_WALL.y",
      "val":7.341925000000001
     },
     "heading":{
-     "exp":"TRENCH_CLOSE.heading",
+     "exp":"TRENCH_CLOSE_WALL.heading",
      "val":1.5707963267948966
     }
    },
    "TRENCH_SHOOTING":{
     "x":{
-     "exp":"TRENCH_CLOSE.x - 1 m",
+     "exp":"TRENCH_CLOSE_WALL.x - 1 m",
      "val":2.399925
     },
     "y":{

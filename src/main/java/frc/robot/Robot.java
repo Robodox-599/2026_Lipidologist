@@ -205,10 +205,14 @@ public class Robot extends TimedRobot {
 
     /** AUTO ROUTINES */
     // COMPETITION
-    autoChooser.addRoutine("Left Double Double", autoRoutines::leftDoubleDouble);
-    autoChooser.addRoutine("Left Double Double Animal Style", autoRoutines::leftDoubleDoubleAnimalStyle);
-    autoChooser.addRoutine("Right Double Double", autoRoutines::rightDoubleDouble);
-    autoChooser.addRoutine("Right Double Double Animal Style", autoRoutines::rightDoubleDoubleAnimalStyle);
+    autoChooser.addRoutine("Left Double Steak Bowl", autoRoutines::leftDoubleSteakBowl);
+    autoChooser.addRoutine("Left Double Steak Burrito", autoRoutines::leftDoubleSteakBurrito);
+    autoChooser.addRoutine("Left Chicken and Steak Bowl", autoRoutines::leftChickenAndSteakBowl);
+    autoChooser.addRoutine("Left Chicken and Steak Burrito", autoRoutines::leftChickenAndSteakBurrito);
+    autoChooser.addRoutine("Right Double Steak Bowl", autoRoutines::rightDoubleSteakBowl);
+    autoChooser.addRoutine("Right Double Steak Burrito", autoRoutines::rightDoubleSteakBurrito);
+    autoChooser.addRoutine("Right Chicken and Steak Bowl", autoRoutines::rightChickenAndSteakBowl);
+    autoChooser.addRoutine("Right Chicken and Steak Burrito", autoRoutines::rightChickenAndSteakBurrito);
     // autoChooser.addRoutine("Left Cheeseburger", autoRoutines::leftCheeseburger);
     // autoChooser.addRoutine("Right Cheeseburger", autoRoutines::rightCheeseburger);
     // autoChooser.addRoutine("Left Hamburger with Onions", autoRoutines::leftHamburgerWithOnions);
