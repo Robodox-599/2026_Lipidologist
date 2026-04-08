@@ -220,7 +220,7 @@ public class Superstructure extends SubsystemBase {
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
                 }
-                break;
+                break; 
             // case PREPARE_ALLIANCE_ZONE_SHOT:
             // this.adjustedShot =
             // CalculateShot.calculateAllianceZoneAdjustedShot(drivetrain.getPose(),
