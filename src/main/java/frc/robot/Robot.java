@@ -131,12 +131,9 @@ public class Robot extends TimedRobot {
         hood = new Hood(new HoodIOTalonFX());
         vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
             new VisionIOReal(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-            // new VisionIOReal(VisionConstants.sideLeftCameraConstants, () ->
-            // drivetrain.getPose()),
-            new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
-        // new VisionIOReal(VisionConstants.sideRightCameraConstants, () ->
-        // drivetrain.getPose())
-        );
+            new VisionIOReal(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
+            new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
+            new VisionIOReal(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose()));
         leds = new LEDs(new LEDsIOReal());
         break;
       case SIM:
@@ -218,7 +215,7 @@ public class Robot extends TimedRobot {
     RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
 
-    // SmartDashboard.putNumber("Flywheel Velocity", 0.0);
+    // SmartDashboard.putNumber("Flywheel Velocity", 45.0);
     // SmartDashboard.putNumber("Hood Rotations", 0.0);
 
     // DogLog.log("LeftTrenchZone", FieldConstants.LeftTrench.trenchZone);
@@ -230,13 +227,13 @@ public class Robot extends TimedRobot {
 
     // intakeRollers.setWantedState(IntakeRollersWantedState.INTAKE_FUEL);
     // driver.rightTrigger().onTrue(Commands.runOnce(() -> {
-    // feeder.setWantedState(FeederWantedState.FEED_FUEL);
-    // indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
-    // intakeWrist.setWantedState(IntakeWristWantedState.AGITATE_FUEL);
+    //   feeder.setWantedState(FeederWantedState.FEED_FUEL);
+    //   indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
+    //   intakeWrist.setWantedState(IntakeWristWantedState.AGITATE_FUEL);
     // })).onFalse(Commands.runOnce(() -> {
-    // feeder.setWantedState(FeederWantedState.STOPPED);
-    // indexer.setWantedState(IndexerWantedState.STOPPED);
-    // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
+    //   feeder.setWantedState(FeederWantedState.REVERSE);
+    //   indexer.setWantedState(IndexerWantedState.REVERSE);
+    //   intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
     // }));
   }
 
@@ -262,7 +259,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
     Tracer.traceFunc("CommandScheduler", scheduler::run);
     // flywheels.setWantedState(FlywheelWantedState.SET_RPS,
-    // SmartDashboard.getNumber("Flywheel Velocity", 0.0));
+    // SmartDashboard.getNumber("Flywheel Velocity", 45.0));
     // hood.setWantedState(HoodWantedState.SET_POSITION,
     // SmartDashboard.getNumber("Hood Rotations", 0.0));
     // feeder.setWantedState(FeederWantedState.FEED_FUEL);
@@ -270,19 +267,17 @@ public class Robot extends TimedRobot {
     // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
 
     // Translation2d robotTranslation = drivetrain.getPose().getTranslation();
-    // Translation2d allianceZoneTarget = new Translation2d(
-    // AllianceFlipUtil.applyX(FieldConstants.LinesVertical.starting - 1),
-    // robotTranslation.getY());
+    // Translation2d hubTranslation = AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
 
-    // double distance = robotTranslation.getDistance(allianceZoneTarget);
+    // double distance = robotTranslation.getDistance(hubTranslation);
 
     // Rotation2d targetRotation = Rotation2d
-    // .fromRadians(Math.atan2(robotTranslation.getY() - allianceZoneTarget.getY(),
-    // robotTranslation.getX() - allianceZoneTarget.getX()));
+    // .fromRadians(Math.atan2(robotTranslation.getY() - hubTranslation.getY(),
+    // robotTranslation.getX() - hubTranslation.getX()));
 
     // drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK,
     // targetRotation);
-    // DogLog.log("DistanceToAllianceZoneTarget", distance);
+    // DogLog.log("DistanceToHub", distance);
   }
 
   @Override

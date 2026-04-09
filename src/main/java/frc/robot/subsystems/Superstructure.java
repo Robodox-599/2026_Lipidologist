@@ -71,7 +71,7 @@ public class Superstructure extends SubsystemBase {
         IDLE_AUTO,
         CLEAN,
         STOP,
-        // TESTING,
+        TESTING,
         // STOW
     }
 
@@ -98,7 +98,7 @@ public class Superstructure extends SubsystemBase {
         // CLIMB,
         // DESCEND_CLIMB,
         STOPPED,
-        // TESTING,
+        TESTING,
         // STOWING
     }
 
@@ -224,7 +224,7 @@ public class Superstructure extends SubsystemBase {
                 } else {
                     currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
                 }
-                break; 
+                break;
             // case PREPARE_ALLIANCE_ZONE_SHOT:
             // this.adjustedShot =
             // CalculateShot.calculateAllianceZoneAdjustedShot(drivetrain.getPose(),
@@ -268,7 +268,7 @@ public class Superstructure extends SubsystemBase {
             case IDLE_AUTO:
                 currentSuperState = CurrentSuperState.IDLING_AUTO;
                 break;
-            case CLEAN: 
+            case CLEAN:
                 currentSuperState = CurrentSuperState.CLEANING;
                 break;
             // case CLIMB:
@@ -332,9 +332,9 @@ public class Superstructure extends SubsystemBase {
             case STOP:
                 currentSuperState = CurrentSuperState.STOPPED;
                 break;
-            // case TESTING:
-            // currentSuperState = CurrentSuperState.TESTING;
-            // break;
+            case TESTING:
+                currentSuperState = CurrentSuperState.TESTING;
+                break;
             // case STOW:
             // currentSuperState = CurrentSuperState.STOWING;
             // break;
@@ -412,9 +412,9 @@ public class Superstructure extends SubsystemBase {
             case STOPPED:
                 stop();
                 break;
-            // case TESTING:
-            // testing();
-            // break;
+            case TESTING:
+                testing();
+                break;
             // case STOWING:
             // stowing();
             // break;
@@ -504,7 +504,7 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
                 this.adjustedShot.shootSpeed());
-       if (isHoodUnsafe()) {
+        if (isHoodUnsafe()) {
             hood.setWantedState(Hood.HoodWantedState.STOW);
         } else {
             hood.setWantedState(Hood.HoodWantedState.SET_POSITION,
@@ -844,7 +844,7 @@ public class Superstructure extends SubsystemBase {
         // climb.setWantedState(ClimbWantedState.STOP);
     }
 
-    // public void testing() {
+    public void testing() {
     // drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
     // if (areSystemsReadyForHubShot()) {
     // feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
@@ -858,7 +858,7 @@ public class Superstructure extends SubsystemBase {
     // intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
     // flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 70);
     // hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.01);
-    // }
+    }
 
     // public void stowing() {
     // drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);

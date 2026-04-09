@@ -74,7 +74,7 @@ public class VisionConstants {
     public static final double sideLeftCameraPoseZ = Units.inchesToMeters(16.913); // 18.451 (Z value in CAD)
 
     // CAMERA 2 POSE (ROLL)
-    public static final double sideLeftCameraPoseRoll = Units.degreesToRadians(100.1894-90); // 5.9670
+    public static final double sideLeftCameraPoseRoll = Units.degreesToRadians(90-100.1894); // 5.9670
 
     // CAMERA 2 POSE (PITCH)
     public static final double sideLeftCameraPosePitch = Units.degreesToRadians(90-110.5000); // 109.3582-180 (up/down rotation)
@@ -116,7 +116,7 @@ public class VisionConstants {
     public static final double sideRightCameraPoseZ = Units.inchesToMeters(16.913); // 18.369 (Z value in CAD)
 
     // CAMERA 4 POSE (ROLL)
-    public static final double sideRightCameraPoseRoll = Units.degreesToRadians(90-100.1894); // -4.4670
+    public static final double sideRightCameraPoseRoll = Units.degreesToRadians(100.1894-90); // -4.4670
 
     // CAMERA 4 POSE (PITCH)
     public static final double sideRightCameraPosePitch = Units.degreesToRadians(90-110.5000); // 90 - 68.5050 (up/down rotation)
@@ -176,7 +176,7 @@ public class VisionConstants {
                     new Translation3d(
                             sideLeftCameraPoseX, sideLeftCameraPoseY, sideLeftCameraPoseZ),
                     new Rotation3d(
-                            sideLeftCameraPoseRoll, sideLeftCameraPosePitch, sideLeftCameraPoseYaw)), 1.35);
+                            sideLeftCameraPoseRoll, sideLeftCameraPosePitch, sideLeftCameraPoseYaw)), 1);
 
     public static final CameraConstants frontRightCameraConstants = new CameraConstants(
             frontRightCameraName,
@@ -192,7 +192,7 @@ public class VisionConstants {
                     new Translation3d(
                             sideRightCameraPoseX, sideRightCameraPoseY, sideRightCameraPoseZ),
                     new Rotation3d(
-                            sideRightCameraPoseRoll, sideRightCameraPosePitch, sideRightCameraPoseYaw)), 1.35);
+                            sideRightCameraPoseRoll, sideRightCameraPosePitch, sideRightCameraPoseYaw)), 1);
 
     // public static final CameraConstants backCameraConstants =
     // new CameraConstants(

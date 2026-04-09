@@ -35,7 +35,7 @@ public class Flywheels {
             this.io[i].updateInputs();
         }
         handleStateTransitions();
-        // applyStates();
+        applyStates();
 
         allFlywheelsAtSetpoint();
 
@@ -74,7 +74,7 @@ public class Flywheels {
                 setRPS(FlywheelsConstants.idleRPS);
                 break;
             case CLEANING:
-                setVoltage(0.5);;
+                setVoltage(0.5);
                 break;
             case STOPPING:
                 stop();

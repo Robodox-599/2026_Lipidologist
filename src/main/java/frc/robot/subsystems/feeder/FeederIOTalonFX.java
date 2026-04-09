@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -23,98 +24,103 @@ import edu.wpi.first.units.measure.Voltage;
 import frc.robot.util.PhoenixUtil;
 
 public class FeederIOTalonFX extends FeederIO {
-    private final TalonFX feederMotor;
-    private final CANBus feederBus;
-    private TalonFXConfiguration feederConfig;
-    private VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
-    private Debouncer feederDebouncer;
+        private final TalonFX feederMotor;
+        private final CANBus feederBus;
+        private TalonFXConfiguration feederConfig;
+        // private VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
+        private VelocityVoltage velocityVoltage;
+        private Debouncer feederDebouncer;
 
-    private final StatusSignal<AngularVelocity> feederVelocityRPS;
-    private final StatusSignal<Temperature> feederTemperature;
-    private final StatusSignal<Voltage> feederAppliedVolts;
-    private final StatusSignal<Current> feederStatorCurrent;
-    private final StatusSignal<Current> feederSupplyCurrent;
+        private final StatusSignal<AngularVelocity> feederVelocityRPS;
+        private final StatusSignal<Temperature> feederTemperature;
+        private final StatusSignal<Voltage> feederAppliedVolts;
+        private final StatusSignal<Current> feederStatorCurrent;
+        private final StatusSignal<Current> feederSupplyCurrent;
 
-    public FeederIOTalonFX() {
-        feederBus = new CANBus(FeederConstants.feederCANBus);
-        feederMotor = new TalonFX(FeederConstants.feederMotorID, feederBus);
+        public FeederIOTalonFX() {
+                feederBus = new CANBus(FeederConstants.feederCANBus);
+                feederMotor = new TalonFX(FeederConstants.feederMotorID, feederBus);
 
-        feederConfig = new TalonFXConfiguration()
-                .withMotionMagic(
-                        new MotionMagicConfigs()
-                                .withMotionMagicCruiseVelocity(FeederConstants.maxVelocityRotsPerSec)
-                                .withMotionMagicAcceleration(FeederConstants.maxAccelerationRotationsPerSecSQ))
-                .withSlot0(
-                        new Slot0Configs()
-                                .withKP(FeederConstants.kP)
-                                .withKI(FeederConstants.kI)
-                                .withKD(FeederConstants.kD)
-                                .withKV(FeederConstants.kV)
-                                .withKS(FeederConstants.kS))
-                .withCurrentLimits(
-                        new CurrentLimitsConfigs()
-                                .withStatorCurrentLimit(FeederConstants.statorCurrentLimitAmps)
-                                .withStatorCurrentLimitEnable(true)
-                                .withSupplyCurrentLimit(FeederConstants.supplyCurrentLimitAmps)
-                                .withSupplyCurrentLimitEnable(true))
-                .withMotorOutput(
-                        new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake)
-                                .withInverted(InvertedValue.CounterClockwise_Positive));
+                feederConfig = new TalonFXConfiguration()
+                                .withMotionMagic(
+                                                new MotionMagicConfigs()
+                                                                .withMotionMagicCruiseVelocity(
+                                                                                FeederConstants.maxVelocityRotsPerSec)
+                                                                .withMotionMagicAcceleration(
+                                                                                FeederConstants.maxAccelerationRotationsPerSecSQ))
+                                .withSlot0(
+                                                new Slot0Configs()
+                                                                .withKP(FeederConstants.kP)
+                                                                .withKI(FeederConstants.kI)
+                                                                .withKD(FeederConstants.kD)
+                                                                .withKV(FeederConstants.kV)
+                                                                .withKS(FeederConstants.kS))
+                                .withCurrentLimits(
+                                                new CurrentLimitsConfigs()
+                                                                .withStatorCurrentLimit(
+                                                                                FeederConstants.statorCurrentLimitAmps)
+                                                                .withStatorCurrentLimitEnable(true)
+                                                                .withSupplyCurrentLimit(
+                                                                                FeederConstants.supplyCurrentLimitAmps)
+                                                                .withSupplyCurrentLimitEnable(true))
+                                .withMotorOutput(
+                                                new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake)
+                                                                .withInverted(InvertedValue.CounterClockwise_Positive));
 
-        velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
+                // velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
+                velocityVoltage = new VelocityVoltage(0);
 
-        PhoenixUtil.tryUntilOk(10, () -> feederMotor.getConfigurator().apply(feederConfig, 1));
+                PhoenixUtil.tryUntilOk(10, () -> feederMotor.getConfigurator().apply(feederConfig, 1));
 
-        feederDebouncer = new Debouncer(FeederConstants.fuelDebounce, DebounceType.kBoth);
+                feederDebouncer = new Debouncer(FeederConstants.fuelDebounce, DebounceType.kBoth);
 
-        feederVelocityRPS = feederMotor.getVelocity();
-        feederTemperature = feederMotor.getDeviceTemp();
-        feederAppliedVolts = feederMotor.getMotorVoltage();
-        feederStatorCurrent = feederMotor.getStatorCurrent();
-        feederSupplyCurrent = feederMotor.getSupplyCurrent();
+                feederVelocityRPS = feederMotor.getVelocity();
+                feederTemperature = feederMotor.getDeviceTemp();
+                feederAppliedVolts = feederMotor.getMotorVoltage();
+                feederStatorCurrent = feederMotor.getStatorCurrent();
+                feederSupplyCurrent = feederMotor.getSupplyCurrent();
 
-        BaseStatusSignal.setUpdateFrequencyForAll(50, feederVelocityRPS,
-                feederTemperature, feederAppliedVolts, feederStatorCurrent, feederSupplyCurrent);
+                BaseStatusSignal.setUpdateFrequencyForAll(50, feederVelocityRPS,
+                                feederTemperature, feederAppliedVolts, feederStatorCurrent, feederSupplyCurrent);
 
-        feederMotor.optimizeBusUtilization();
-    }
+                feederMotor.optimizeBusUtilization();
+        }
 
-    @Override
-    public void updateInputs() {
-        BaseStatusSignal.refreshAll(feederVelocityRPS, feederTemperature,
-                feederAppliedVolts, feederStatorCurrent, feederSupplyCurrent);
+        @Override
+        public void updateInputs() {
+                BaseStatusSignal.refreshAll(feederVelocityRPS, feederTemperature,
+                                feederAppliedVolts, feederStatorCurrent, feederSupplyCurrent);
 
-        super.RPS = feederVelocityRPS.getValueAsDouble();
-        super.supplyCurrent = feederSupplyCurrent.getValueAsDouble();
-        super.statorCurrent = feederStatorCurrent.getValueAsDouble();
-        super.tempCelsius = feederTemperature.getValueAsDouble();
-        super.isFuelJammed = feederDebouncer.calculate(
-                super.statorCurrent > FeederConstants.stallingStatorCurrentAmps &&
-                Math.abs(super.RPS) < FeederConstants.jammedRPSTolerance
-        );
+                super.RPS = feederVelocityRPS.getValueAsDouble();
+                super.supplyCurrent = feederSupplyCurrent.getValueAsDouble();
+                super.statorCurrent = feederStatorCurrent.getValueAsDouble();
+                super.tempCelsius = feederTemperature.getValueAsDouble();
+                super.isFuelJammed = feederDebouncer.calculate(
+                                super.statorCurrent > FeederConstants.stallingStatorCurrentAmps &&
+                                                Math.abs(super.RPS) < FeederConstants.jammedRPSTolerance);
 
-        DogLog.log("Feeder/RPS", super.RPS);
-        DogLog.log("Feeder/TargetRPS", super.targetRPS);
-        DogLog.log("Feeder/SupplyCurrent", super.supplyCurrent);
-        DogLog.log("Feeder/StatorCurrent", super.statorCurrent);
-        DogLog.log("Feeder/Temperature", super.tempCelsius);
-        DogLog.log("Feeder/isFuelJammed", isFuelJammed);
-    }
+                DogLog.log("Feeder/RPS", super.RPS);
+                DogLog.log("Feeder/TargetRPS", super.targetRPS);
+                DogLog.log("Feeder/SupplyCurrent", super.supplyCurrent);
+                DogLog.log("Feeder/StatorCurrent", super.statorCurrent);
+                DogLog.log("Feeder/Temperature", super.tempCelsius);
+                DogLog.log("Feeder/isFuelJammed", isFuelJammed);
+        }
 
-    @Override
-    public void stopFeeder() {
-        feederMotor.setVoltage(0);
-    }
+        @Override
+        public void stopFeeder() {
+                feederMotor.setVoltage(0);
+        }
 
-    @Override
-    public void setFeederVelocity(double RPS) {
-        super.targetRPS = RPS;
-        // feederMotor.setControl(velocityVoltage.withVelocity(RPS).withEnableFOC(true));
-        feederMotor.setControl(velocityTorqueCurrentFOC.withVelocity(super.RPS));
-    }
+        @Override
+        public void setFeederVelocity(double RPS) {
+                super.targetRPS = RPS;
+                feederMotor.setControl(velocityVoltage.withVelocity(super.targetRPS).withEnableFOC(true));
+                // feederMotor.setControl(velocityTorqueCurrentFOC.withVelocity(super.targetRPS));
+        }
 
-    @Override
-    public void setVoltage(double voltage) {
-        feederMotor.setVoltage(voltage);
-    }
+        @Override
+        public void setVoltage(double voltage) {
+                feederMotor.setVoltage(voltage);
+        }
 }
