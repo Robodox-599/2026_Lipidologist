@@ -26,6 +26,7 @@ public class IntakeWrist {
     public enum IntakeWristWantedState {
         STOP,
         INTAKE_FUEL,
+        LIFT,
         STOW, // pack
         AGITATE_FUEL,
     }
@@ -34,6 +35,7 @@ public class IntakeWrist {
         STOPPED,
         INTAKING_FUEL,
         STOWING, // packing
+        LIFTING,
         WRIST_RETRACTING,
         WRIST_EXTENDING,
         UNJAM
@@ -63,6 +65,9 @@ public class IntakeWrist {
                 } else {
                     currentState = IntakeWristCurrentState.INTAKING_FUEL;
                 }
+                break;
+            case LIFT:
+                currentState = IntakeWristCurrentState.LIFTING;
                 break;
             case STOW:
                 currentState = IntakeWristCurrentState.STOWING;
@@ -111,6 +116,9 @@ public class IntakeWrist {
                 break;
             case INTAKING_FUEL:
                 setPosition(0.005);
+                break;
+            case LIFTING:
+                setPosition(0.1);
                 break;
             case STOWING:
                 setPosition(.35);

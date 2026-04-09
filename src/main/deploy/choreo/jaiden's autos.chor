@@ -49,8 +49,8 @@
    "hubSweepMidExtension":{
     "dimension":"Length",
     "var":{
-     "exp":"1.4 m",
-     "val":1.4
+     "exp":"1.1 m",
+     "val":1.1
     }
    },
    "intakeExtension":{
@@ -60,11 +60,18 @@
      "val":0.20319999999999996
     }
    },
-   "maxFirstSweepVelocity":{
+   "intakePrelift":{
+    "dimension":"Time",
+    "var":{
+     "exp":"-0.25 s",
+     "val":-0.25
+    }
+   },
+   "maxFastSweepVelocity":{
     "dimension":"LinVel",
     "var":{
-     "exp":"1.5 m / s",
-     "val":1.5
+     "exp":"2.5 m / s",
+     "val":2.5
     }
    },
    "maxSOTMVelocity":{
@@ -74,11 +81,18 @@
      "val":0.35
     }
    },
-   "maxSecondSweepVelocity":{
+   "maxSlowSweepVelocity":{
     "dimension":"LinVel",
     "var":{
-     "exp":"2.5 m / s",
-     "val":2.5
+     "exp":"1.5 m / s",
+     "val":1.5
+    }
+   },
+   "maxTurnVelocity":{
+    "dimension":"LinVel",
+    "var":{
+     "exp":"2 m / s",
+     "val":2.0
     }
    },
    "startingFuelWidth":{
@@ -120,8 +134,8 @@
    },
    "BUMP_FAR":{
     "x":{
-     "exp":"HUB_CENTER.x + (73 / 2 in) + 35 in",
-     "val":6.4348614
+     "exp":"HUB_CENTER.x + (73 / 2 in) + 20 in",
+     "val":6.0538614
     },
     "y":{
      "exp":"BUMP.y",
@@ -135,11 +149,11 @@
    "CLOSE_MID_END":{
     "x":{
      "exp":"CLOSE_MID_START.x",
-     "val":6.8705
+     "val":7.1705000000000005
     },
     "y":{
-     "exp":"(fieldWidth / 2) + bumperRadius + fuelRadius + 40 in",
-     "val":5.573232000000001
+     "exp":"(fieldWidth / 2) + bumperRadius + fuelRadius + 25 in",
+     "val":5.192232000000001
     },
     "heading":{
      "exp":"-(5 / 6) PI rad",
@@ -149,7 +163,7 @@
    "CLOSE_MID_START":{
     "x":{
      "exp":"centerLine - hubSweepMidExtension",
-     "val":6.8705
+     "val":7.1705000000000005
     },
     "y":{
      "exp":"(fieldWidth / 2) + (startingFuelWidth / 2) + (fuelRadius / 2)",
@@ -188,21 +202,21 @@
      "val":3.141592653589793
     }
    },
-   "FAR_MID_END":{
+   "FS_1":{
     "x":{
-     "exp":"8.375 m",
-     "val":8.375
+     "exp":"6.461648464202881 m",
+     "val":6.461648464202881
     },
     "y":{
-     "exp":"5.4 m",
-     "val":5.4
+     "exp":"7.409997940063477 m",
+     "val":7.409997940063477
     },
     "heading":{
-     "exp":"FAR_MID_START.heading",
+     "exp":"FS_2.heading",
      "val":-1.832595714594046
     }
    },
-   "FAR_MID_START":{
+   "FS_2":{
     "x":{
      "exp":"8.65 m",
      "val":8.65
@@ -216,7 +230,21 @@
      "val":-1.832595714594046
     }
    },
-   "FAR_MID_TURN":{
+   "FS_3":{
+    "x":{
+     "exp":"8.375 m",
+     "val":8.375
+    },
+    "y":{
+     "exp":"5.4 m",
+     "val":5.4
+    },
+    "heading":{
+     "exp":"FS_2.heading",
+     "val":-1.832595714594046
+    }
+   },
+   "FS_4":{
     "x":{
      "exp":"7.9 m",
      "val":7.9
@@ -244,32 +272,144 @@
      "val":0.0
     }
    },
-   "HUB_END":{
+   "SS_HUB_1":{
     "x":{
-     "exp":"HUB_START.x",
-     "val":5.75
+     "exp":"7.15 m",
+     "val":7.15
     },
     "y":{
-     "exp":"6.4 m",
-     "val":6.4
+     "exp":"6.5 m",
+     "val":6.5
+    },
+    "heading":{
+     "exp":"-90 deg",
+     "val":-1.5707963267948966
+    }
+   },
+   "SS_HUB_2":{
+    "x":{
+     "exp":"7.15 m",
+     "val":7.15
+    },
+    "y":{
+     "exp":"SS_HUB_5.y",
+     "val":4.6
+    },
+    "heading":{
+     "exp":"-2.0100621613907954 rad",
+     "val":-2.0100621613907954
+    }
+   },
+   "SS_HUB_3":{
+    "x":{
+     "exp":"6.7 m",
+     "val":6.7
+    },
+    "y":{
+     "exp":"4.25 m",
+     "val":4.25
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
+    }
+   },
+   "SS_HUB_4":{
+    "x":{
+     "exp":"6.2 m",
+     "val":6.2
+    },
+    "y":{
+     "exp":"4.25 m",
+     "val":4.25
+    },
+    "heading":{
+     "exp":"2.0831471187520485 rad",
+     "val":2.0831471187520485
+    }
+   },
+   "SS_HUB_5":{
+    "x":{
+     "exp":"5.85 m",
+     "val":5.85
+    },
+    "y":{
+     "exp":"4.6 m",
+     "val":4.6
     },
     "heading":{
      "exp":"90 deg",
      "val":1.5707963267948966
     }
    },
-   "HUB_START":{
+   "SS_HUB_6":{
     "x":{
-     "exp":"5.75 m",
-     "val":5.75
+     "exp":"SS_HUB_5.x",
+     "val":5.85
     },
     "y":{
-     "exp":"4.9 m",
-     "val":4.9
+     "exp":"TRENCH_FAR_WALL.y",
+     "val":7.341925000000001
     },
     "heading":{
-     "exp":"90 deg",
+     "exp":"SS_HUB_5.heading",
      "val":1.5707963267948966
+    }
+   },
+   "SS_MID_1":{
+    "x":{
+     "exp":"7.471434593200684 m",
+     "val":7.471434593200684
+    },
+    "y":{
+     "exp":"7.076998233795166 m",
+     "val":7.076998233795166
+    },
+    "heading":{
+     "exp":"-1.0893988194375648 rad",
+     "val":-1.0893988194375648
+    }
+   },
+   "SS_MID_2":{
+    "x":{
+     "exp":"7.869862079620361 m",
+     "val":7.869862079620361
+    },
+    "y":{
+     "exp":"4.954121112823486 m",
+     "val":4.954121112823486
+    },
+    "heading":{
+     "exp":"-1.6814530755388584 rad",
+     "val":-1.6814530755388584
+    }
+   },
+   "SS_MID_3":{
+    "x":{
+     "exp":"7.7403106689453125 m",
+     "val":7.740310668945312
+    },
+    "y":{
+     "exp":"3.9798004627227783 m",
+     "val":3.9798004627227783
+    },
+    "heading":{
+     "exp":"-2.841186779575896 rad",
+     "val":-2.841186779575896
+    }
+   },
+   "SS_MID_4":{
+    "x":{
+     "exp":"6.91164493560791 m",
+     "val":6.91164493560791
+    },
+    "y":{
+     "exp":"3.9297947883605957 m",
+     "val":3.929794788360596
+    },
+    "heading":{
+     "exp":"2.495686104943763 rad",
+     "val":2.495686104943763
     }
    },
    "TRENCH_CLOSE_THRU":{

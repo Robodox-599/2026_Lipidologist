@@ -145,11 +145,12 @@ public class Robot extends TimedRobot {
         intakeWrist = new IntakeWrist(new IntakeWristIOSim());
         flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
         hood = new Hood(new HoodIOSim());
-        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
-            new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-            new VisionIOSim(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
-            new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
-            new VisionIOSim(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose()));
+        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds()
+            // new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
+            // new VisionIOSim(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
+            // new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
+            // new VisionIOSim(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose())
+            );
         leds = new LEDs(new LEDsIO());
         break;
       default: // defaults to sim
@@ -197,14 +198,14 @@ public class Robot extends TimedRobot {
 
     /** AUTO ROUTINES */
     // COMPETITION
-    autoChooser.addRoutine("Left Double Steak Bowl", autoRoutines::leftDoubleSteakBowl);
-    autoChooser.addRoutine("Left Double Steak Burrito", autoRoutines::leftDoubleSteakBurrito);
-    autoChooser.addRoutine("Left Chicken and Steak Bowl", autoRoutines::leftChickenAndSteakBowl);
-    autoChooser.addRoutine("Left Chicken and Steak Burrito", autoRoutines::leftChickenAndSteakBurrito);
-    autoChooser.addRoutine("Right Double Steak Bowl", autoRoutines::rightDoubleSteakBowl);
-    autoChooser.addRoutine("Right Double Steak Burrito", autoRoutines::rightDoubleSteakBurrito);
-    autoChooser.addRoutine("Right Chicken and Steak Bowl", autoRoutines::rightChickenAndSteakBowl);
-    autoChooser.addRoutine("Right Chicken and Steak Burrito", autoRoutines::rightChickenAndSteakBurrito);
+    autoChooser.addRoutine("Left Hub Double Double", () -> autoRoutines.hubDoubleDouble(true));
+    autoChooser.addRoutine("Left Mid Double Double", () -> autoRoutines.midDoubleDouble(true));
+    autoChooser.addRoutine("Left Hub Animal Style", () -> autoRoutines.hubAnimalStyle(true));
+    autoChooser.addRoutine("Left Mid Animal Style", () -> autoRoutines.midAnimalStyle(true));
+    autoChooser.addRoutine("Right Hub Double Double", () -> autoRoutines.hubDoubleDouble(false));
+    autoChooser.addRoutine("Right Mid Double Double", () -> autoRoutines.midDoubleDouble(false));
+    autoChooser.addRoutine("Right Hub Animal Style", () -> autoRoutines.hubAnimalStyle(false));
+    autoChooser.addRoutine("Right Mid Animal Style", () -> autoRoutines.midAnimalStyle(false));
     // autoChooser.addRoutine("Left Cheeseburger", autoRoutines::leftCheeseburger);
     // autoChooser.addRoutine("Right Cheeseburger",
     // autoRoutines::rightCheeseburger);
