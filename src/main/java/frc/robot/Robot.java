@@ -113,7 +113,6 @@ public class Robot extends TimedRobot {
         new DogLogOptions()
             .withCaptureDs(true)
             .withCaptureNt(true)
-            .withNtPublish(true)
             .withCaptureConsole(true)
             .withUseLogThread(false));
 
@@ -146,7 +145,7 @@ public class Robot extends TimedRobot {
         flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
         hood = new Hood(new HoodIOSim());
         vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds()
-            // new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
+            // new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose())
             // new VisionIOSim(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
             // new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
             // new VisionIOSim(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose())
@@ -199,12 +198,16 @@ public class Robot extends TimedRobot {
     /** AUTO ROUTINES */
     // COMPETITION
     autoChooser.addRoutine("Left Hub Double Double", () -> autoRoutines.hubDoubleDouble(true));
+    autoChooser.addRoutine("Left Safe Double Double", () -> autoRoutines.safeDoubleDouble(true));
     autoChooser.addRoutine("Left Mid Double Double", () -> autoRoutines.midDoubleDouble(true));
     autoChooser.addRoutine("Left Hub Animal Style", () -> autoRoutines.hubAnimalStyle(true));
+    autoChooser.addRoutine("Left Safe Animal Style", () -> autoRoutines.safeAnimalStyle(true));
     autoChooser.addRoutine("Left Mid Animal Style", () -> autoRoutines.midAnimalStyle(true));
     autoChooser.addRoutine("Right Hub Double Double", () -> autoRoutines.hubDoubleDouble(false));
+    autoChooser.addRoutine("Right Safe Double Double", () -> autoRoutines.safeDoubleDouble(false));
     autoChooser.addRoutine("Right Mid Double Double", () -> autoRoutines.midDoubleDouble(false));
     autoChooser.addRoutine("Right Hub Animal Style", () -> autoRoutines.hubAnimalStyle(false));
+    autoChooser.addRoutine("Right Safe Animal Style", () -> autoRoutines.safeAnimalStyle(false));
     autoChooser.addRoutine("Right Mid Animal Style", () -> autoRoutines.midAnimalStyle(false));
     // autoChooser.addRoutine("Left Cheeseburger", autoRoutines::leftCheeseburger);
     // autoChooser.addRoutine("Right Cheeseburger",

@@ -29,20 +29,20 @@ public class Vision {
   private final Supplier<ChassisSpeeds> robotSpeedsSupplier;
   private final VisionIOReal[] io;
 
-  private final Alert[] disconnectedAlerts;
-  private final Alert cameraDisconnectedAlert = new Alert("One or more cameras are disconnected.", AlertType.kWarning);
+  // private final Alert[] disconnectedAlerts;
+  // private final Alert cameraDisconnectedAlert = new Alert("One or more cameras are disconnected.", AlertType.kWarning);
 
   public Vision(VisionConsumer consumer, Supplier<ChassisSpeeds> robotSpeedsSupplier, VisionIOReal... io) {
     this.consumer = consumer;
     this.robotSpeedsSupplier = robotSpeedsSupplier;
     this.io = io;
 
-    // Initialize disconnected alerts
-    this.disconnectedAlerts = new Alert[io.length];
-    for (int i = 0; i < io.length; i++) {
-      disconnectedAlerts[i] = new Alert(
-          "Vision camera " + Integer.toString(i) + " is disconnected.", AlertType.kWarning);
-    }
+    // // Initialize disconnected alerts
+    // this.disconnectedAlerts = new Alert[io.length];
+    // for (int i = 0; i < io.length; i++) {
+    //   disconnectedAlerts[i] = new Alert(
+    //       "Vision camera " + Integer.toString(i) + " is disconnected.", AlertType.kWarning);
+    // }
   }
 
   // Functional interface for vision consumer
@@ -67,7 +67,7 @@ public class Vision {
     // Loop over cameras
     for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
 
-      cameraDisconnectedAlert.set(!io[cameraIndex].connected);
+      // cameraDisconnectedAlert.set(!io[cameraIndex].connected);
 
       // Initialize logging values
       List<Pose3d> robotPoses = new LinkedList<>();
@@ -113,9 +113,9 @@ public class Vision {
             VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
       }
 
-      // Log camera data
-      DogLog.log("Vision/" + io[cameraIndex].constants.name() + "/RobotPoses",
-          robotPoses.toArray(new Pose3d[robotPoses.size()]));
+      // // Log camera data
+      // DogLog.log("Vision/" + io[cameraIndex].constants.name() + "/RobotPoses",
+      //     robotPoses.toArray(new Pose3d[robotPoses.size()]));
       DogLog.log("Vision/" + io[cameraIndex].constants.name() + "/RobotPosesAccepted",
           robotPosesAccepted.toArray(new Pose3d[robotPosesAccepted.size()]));
       DogLog.log("Vision/" + io[cameraIndex].constants.name() + "/RobotPosesRejected",
@@ -124,15 +124,15 @@ public class Vision {
       allRobotPosesAccepted.addAll(robotPosesAccepted);
       allRobotPosesRejected.addAll(robotPosesRejected);
     }
-    // Log summary data
-    DogLog.log(
-        "Vision/Summary/RobotPoses", allRobotPoses.toArray(new Pose3d[allRobotPoses.size()]));
-    DogLog.log(
-        "Vision/Summary/RobotPosesAccepted",
-        allRobotPosesAccepted.toArray(new Pose3d[allRobotPosesAccepted.size()]));
-    DogLog.log(
-        "Vision/Summary/RobotPosesRejected",
-        allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
+    // // Log summary data
+    // DogLog.log(
+    //     "Vision/Summary/RobotPoses", allRobotPoses.toArray(new Pose3d[allRobotPoses.size()]));
+    // DogLog.log(
+    //     "Vision/Summary/RobotPosesAccepted",
+    //     allRobotPosesAccepted.toArray(new Pose3d[allRobotPosesAccepted.size()]));
+    // DogLog.log(
+    //     "Vision/Summary/RobotPosesRejected",
+    //     allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
   }
 
   private boolean shouldRejectPoseObservation(PoseObservation observation) {
