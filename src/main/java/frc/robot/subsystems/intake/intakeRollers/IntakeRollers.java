@@ -74,7 +74,8 @@ public class IntakeRollers {
                 setVoltage(-7);
                 break;
             case CLEANING:
-                setVoltage(0.5);
+                setVoltage(0.65);
+                break;
             default:
                 stop();
                 break;
