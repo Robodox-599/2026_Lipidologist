@@ -143,15 +143,16 @@ public class Vision {
 
     // Single tag results can provide more errors than multi-tag
     if (observation.tagCount() == 1) {
-      // Single tag results have ambiguity which cause the estimator to pick the wrong
-      // location
-      if (observation.ambiguity() > VisionConstants.maxAmbiguity) {
-        return true;
-      }
-      // Single tag results get worse at a distance
-      if (observation.averageTagDistance() > VisionConstants.singleTagMaxDistanceMeters) {
-        return true;
-      }
+      // // Single tag results have ambiguity which cause the estimator to pick the wrong
+      // // location
+      // if (observation.ambiguity() > VisionConstants.maxAmbiguity) {
+      //   return true;
+      // }
+      // // Single tag results get worse at a distance
+      // if (observation.averageTagDistance() > VisionConstants.singleTagMaxDistanceMeters) {
+      //   return true;
+      // }
+      return true;
     }
 
     // Result must not be above or below the floor
