@@ -6,7 +6,7 @@ import frc.robot.subsystems.vision6.VisionConstants.CameraConstants;
 
 public abstract class VisionIO {
     public boolean connected = false;
-    public CameraConstants constants = new CameraConstants("", new Transform3d(), 1);
+    public CameraConstants constants = new CameraConstants("", new Transform3d(), 1, false);
     public PoseObservation[] poseObservations = new PoseObservation[0];
 
     public static record PoseObservation(

@@ -12,14 +12,14 @@ import frc.robot.subsystems.drive.constants.TunerConstants;
 import frc.robot.util.LerpTable;
 
 public class VisionConstants {
-    public static final double maxZError = 0.2; // 0.75 
+    public static final double maxZError = 0.25; // 0.75 
     public static final double maxAmbiguity = 0.2; // 0.3
 
     public static double linearStdDevBaseline = 0.03; // Meters (0.4)
     public static double angularStdDevBaseline = 0.1; // Radians (0.4)
     public static final double singleTagMaxDistanceMeters = 5; 
   public static final double maxAngleError =
-      0.08726646259971647; // 5 degrees in radians, used for filtering out bad observations
+      Units.degreesToRadians(20); 
 
     // public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
     // public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);
@@ -36,7 +36,7 @@ public class VisionConstants {
           new LerpTable.LerpTableEntry(7.0, 1.54),
           new LerpTable.LerpTableEntry(12.0, 100.0));
 
-    public record CameraConstants(String name, Transform3d robotToCamera, double stdDevFactor) {
+    public record CameraConstants(String name, Transform3d robotToCamera, double stdDevFactor, boolean shouldRejectSingleTag) {
     }
 
     // /* VISION */
@@ -169,14 +169,14 @@ public class VisionConstants {
             new Transform3d(
                     new Translation3d(frontLeftCameraPoseX, frontLeftCameraPoseY, frontLeftCameraPoseZ),
                     new Rotation3d(
-                            frontLeftCameraPoseRoll, frontLeftCameraPosePitch, frontLeftCameraPoseYaw)), 1);
+                            frontLeftCameraPoseRoll, frontLeftCameraPosePitch, frontLeftCameraPoseYaw)), 1, false);
      public static final CameraConstants sideLeftCameraConstants = new CameraConstants(
             sideLeftCameraName,
             new Transform3d(
                     new Translation3d(
                             sideLeftCameraPoseX, sideLeftCameraPoseY, sideLeftCameraPoseZ),
                     new Rotation3d(
-                            sideLeftCameraPoseRoll, sideLeftCameraPosePitch, sideLeftCameraPoseYaw)), 1);
+                            sideLeftCameraPoseRoll, sideLeftCameraPosePitch, sideLeftCameraPoseYaw)), 1, true);
 
     public static final CameraConstants frontRightCameraConstants = new CameraConstants(
             frontRightCameraName,
@@ -184,7 +184,7 @@ public class VisionConstants {
                     new Translation3d(
                             frontRightCameraPoseX, frontRightCameraPoseY, frontRightCameraPoseZ),
                     new Rotation3d(
-                            frontRightCameraPoseRoll, frontRightCameraPosePitch, frontRightCameraPoseYaw)), 1);
+                            frontRightCameraPoseRoll, frontRightCameraPosePitch, frontRightCameraPoseYaw)), 1, false);
 
      public static final CameraConstants sideRightCameraConstants = new CameraConstants(
             sideRightCameraName,
@@ -192,7 +192,7 @@ public class VisionConstants {
                     new Translation3d(
                             sideRightCameraPoseX, sideRightCameraPoseY, sideRightCameraPoseZ),
                     new Rotation3d(
-                            sideRightCameraPoseRoll, sideRightCameraPosePitch, sideRightCameraPoseYaw)), 1);
+                            sideRightCameraPoseRoll, sideRightCameraPosePitch, sideRightCameraPoseYaw)), 1, true);
 
     // public static final CameraConstants backCameraConstants =
     // new CameraConstants(

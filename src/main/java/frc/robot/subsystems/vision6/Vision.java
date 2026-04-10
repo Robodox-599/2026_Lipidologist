@@ -79,7 +79,7 @@ public class Vision {
         DogLog.log("Vision/" + io[cameraIndex].constants.name() + "/Observation", observation);
 
         // Check whether to reject pose
-        boolean rejectPose = shouldRejectPoseObservation(observation);
+        boolean rejectPose = shouldRejectPoseObservation(observation, io[cameraIndex].constants.shouldRejectSingleTag());
 
         // Log poses
         robotPoses.add(observation.pose());
@@ -137,7 +137,7 @@ public class Vision {
     this.hasTargets = allRobotPosesAccepted.size() > 0;
   }
 
-  private boolean shouldRejectPoseObservation(PoseObservation observation) {
+  private boolean shouldRejectPoseObservation(PoseObservation observation, boolean shouldRejectSingleTag) {
     // Should have at least one tag
     if (observation.tagCount() <= 0) {
       return true;
@@ -145,6 +145,11 @@ public class Vision {
 
     // Single tag results can provide more errors than multi-tag
     if (observation.tagCount() == 1) {
+      // Certain cameras (side cameras) should reject single tag
+      if (shouldRejectSingleTag) {
+        return true;
+      }
+
       // Single tag results have ambiguity which cause the estimator to pick the wrong
       // location
       if (observation.ambiguity() > VisionConstants.maxAmbiguity) {
@@ -166,10 +171,10 @@ public class Vision {
       return true;
     }
 
-    // ChassisSpeeds speeds = this.robotSpeedsSupplier.get();
-    // if (Math.abs(speeds.omegaRadiansPerSecond) > Units.rotationsToRadians(0.5)) {
-    //   return true;
-    // }
+    ChassisSpeeds speeds = this.robotSpeedsSupplier.get();
+    if (Math.abs(speeds.omegaRadiansPerSecond) > Units.rotationsToRadians(0.5)) {
+      return true;
+    }
 
     // Result must be within field
     return observation.pose().getX() < 0.0
