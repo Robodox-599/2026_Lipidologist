@@ -28,6 +28,7 @@ public class Vision {
   private final VisionConsumer consumer;
   private final Supplier<ChassisSpeeds> robotSpeedsSupplier;
   private final VisionIOReal[] io;
+  private boolean hasTargets = false;
 
   // private final Alert[] disconnectedAlerts;
   // private final Alert cameraDisconnectedAlert = new Alert("One or more cameras are disconnected.", AlertType.kWarning);
@@ -60,9 +61,9 @@ public class Vision {
     }
 
     // Initialize logging values
-    List<Pose3d> allRobotPoses = new LinkedList<>();
+    // List<Pose3d> allRobotPoses = new LinkedList<>();
     List<Pose3d> allRobotPosesAccepted = new LinkedList<>();
-    List<Pose3d> allRobotPosesRejected = new LinkedList<>();
+    // List<Pose3d> allRobotPosesRejected = new LinkedList<>();
 
     // Loop over cameras
     for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
@@ -120,19 +121,20 @@ public class Vision {
           robotPosesAccepted.toArray(new Pose3d[robotPosesAccepted.size()]));
       DogLog.log("Vision/" + io[cameraIndex].constants.name() + "/RobotPosesRejected",
           robotPosesRejected.toArray(new Pose3d[robotPosesRejected.size()]));
-      allRobotPoses.addAll(robotPoses);
+      // allRobotPoses.addAll(robotPoses);
       allRobotPosesAccepted.addAll(robotPosesAccepted);
-      allRobotPosesRejected.addAll(robotPosesRejected);
+      // allRobotPosesRejected.addAll(robotPosesRejected);
     }
     // // Log summary data
     // DogLog.log(
     //     "Vision/Summary/RobotPoses", allRobotPoses.toArray(new Pose3d[allRobotPoses.size()]));
-    // DogLog.log(
-    //     "Vision/Summary/RobotPosesAccepted",
-    //     allRobotPosesAccepted.toArray(new Pose3d[allRobotPosesAccepted.size()]));
+    DogLog.log(
+        "Vision/Summary/RobotPosesAccepted",
+        allRobotPosesAccepted.toArray(new Pose3d[allRobotPosesAccepted.size()]));
     // DogLog.log(
     //     "Vision/Summary/RobotPosesRejected",
     //     allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
+    this.hasTargets = allRobotPosesAccepted.size() > 0;
   }
 
   private boolean shouldRejectPoseObservation(PoseObservation observation) {
@@ -164,16 +166,20 @@ public class Vision {
       return true;
     }
 
-    ChassisSpeeds speeds = this.robotSpeedsSupplier.get();
-    if (Math.abs(speeds.omegaRadiansPerSecond) > Units.rotationsToRadians(0.5)) {
-      return true;
-    }
+    // ChassisSpeeds speeds = this.robotSpeedsSupplier.get();
+    // if (Math.abs(speeds.omegaRadiansPerSecond) > Units.rotationsToRadians(0.5)) {
+    //   return true;
+    // }
 
     // Result must be within field
     return observation.pose().getX() < 0.0
         || observation.pose().getX() > FieldConstants.fieldLengthMeters
         || observation.pose().getY() < 0.0
         || observation.pose().getY() > FieldConstants.fieldWidthMeters;
+  }
+
+  public boolean hasTargets() {
+    return this.hasTargets;
   }
 
   // public Matrix<N3, N1>

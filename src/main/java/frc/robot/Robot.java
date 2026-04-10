@@ -145,11 +145,15 @@ public class Robot extends TimedRobot {
         flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
         hood = new Hood(new HoodIOSim());
         vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds()
-            // new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose())
-            // new VisionIOSim(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
-            // new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
-            // new VisionIOSim(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose())
-            );
+        // new VisionIOSim(VisionConstants.frontLeftCameraConstants, () ->
+        // drivetrain.getPose())
+        // new VisionIOSim(VisionConstants.sideLeftCameraConstants, () ->
+        // drivetrain.getPose()),
+        // new VisionIOSim(VisionConstants.frontRightCameraConstants, () ->
+        // drivetrain.getPose())
+        // new VisionIOSim(VisionConstants.sideRightCameraConstants, () ->
+        // drivetrain.getPose())
+        );
         leds = new LEDs(new LEDsIO());
         break;
       default: // defaults to sim
@@ -231,14 +235,24 @@ public class Robot extends TimedRobot {
 
     // intakeRollers.setWantedState(IntakeRollersWantedState.INTAKE_FUEL);
     // driver.rightTrigger().onTrue(Commands.runOnce(() -> {
-    //   feeder.setWantedState(FeederWantedState.FEED_FUEL);
-    //   indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
-    //   intakeWrist.setWantedState(IntakeWristWantedState.AGITATE_FUEL);
+    // feeder.setWantedState(FeederWantedState.FEED_FUEL);
+    // indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
+    // intakeWrist.setWantedState(IntakeWristWantedState.AGITATE_FUEL);
     // })).onFalse(Commands.runOnce(() -> {
-    //   feeder.setWantedState(FeederWantedState.REVERSE);
-    //   indexer.setWantedState(IndexerWantedState.REVERSE);
-    //   intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
+    // feeder.setWantedState(FeederWantedState.REVERSE);
+    // indexer.setWantedState(IndexerWantedState.REVERSE);
+    // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
     // }));
+
+    DogLog.log("FieldConstants/LeftBump/bumpZone/NearLeft",
+        new Pose2d(FieldConstants.LeftBump.oppNearLeftCorner, Rotation2d.kZero));
+    DogLog.log("FieldConstants/LeftBump/bumpZone/FarRight",
+        new Pose2d(FieldConstants.LeftBump.oppFarRightCorner, Rotation2d.kZero));
+
+    DogLog.log("FieldConstants/RightBump/bumpZone/NearLeft",
+        new Pose2d(FieldConstants.RightBump.oppNearLeftCorner, Rotation2d.kZero));
+    DogLog.log("FieldConstants/RightBump/bumpZone/FarRight",
+        new Pose2d(FieldConstants.RightBump.oppFarRightCorner, Rotation2d.kZero));
   }
 
   // private void configureAutos(CommandSwerveDrivetrain drivetrain,
@@ -271,7 +285,8 @@ public class Robot extends TimedRobot {
     // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
 
     // Translation2d robotTranslation = drivetrain.getPose().getTranslation();
-    // Translation2d hubTranslation = AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
+    // Translation2d hubTranslation =
+    // AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
 
     // double distance = robotTranslation.getDistance(hubTranslation);
 

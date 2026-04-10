@@ -154,6 +154,7 @@ public class Superstructure extends SubsystemBase {
         DogLog.log("Superstructure/ReadyToShootAllianceZone", areSystemsReadyForAllianceZoneShot());
 
         DogLog.log("Superstructure/isHoodUnsafe", isHoodUnsafe());
+        DogLog.log("Superstructure/isIntakeUnsafe", isIntakeUnsafe());
 
         Tracer.endTrace();
     }
@@ -555,7 +556,11 @@ public class Superstructure extends SubsystemBase {
         feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
         indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+        if (vision.hasTargets() && isIntakeUnsafe()) {
+            intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.LIFT);
+        } else {
+            intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+        }
         flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
         hood.setWantedState(Hood.HoodWantedState.STOW);
         leds.setWantedState(LEDs.LEDsWantedState.IDLE);
@@ -675,10 +680,19 @@ public class Superstructure extends SubsystemBase {
     }
 
     private boolean isHoodUnsafe() {
-        return FieldConstants.LeftTrench.trenchZone.contains(drivetrain.getPose().getTranslation())
-                || FieldConstants.RightTrench.trenchZone.contains(drivetrain.getPose().getTranslation())
-                || FieldConstants.LeftTrench.oppTrenchZone.contains(drivetrain.getPose().getTranslation())
-                || FieldConstants.RightTrench.oppTrenchZone.contains(drivetrain.getPose().getTranslation());
+        Translation2d pose = drivetrain.getPose().getTranslation();
+        return FieldConstants.LeftTrench.trenchZone.contains(pose)
+                || FieldConstants.RightTrench.trenchZone.contains(pose)
+                || FieldConstants.LeftTrench.oppTrenchZone.contains(pose)
+                || FieldConstants.RightTrench.oppTrenchZone.contains(pose);
+    }
+
+    private boolean isIntakeUnsafe() {
+        Translation2d pose = drivetrain.getPose().getTranslation();
+        return FieldConstants.LeftBump.bumpZone.contains(pose)
+                || FieldConstants.RightBump.bumpZone.contains(pose)
+                || FieldConstants.LeftBump.oppBumpZone.contains(pose)
+                || FieldConstants.RightBump.oppBumpZone.contains(pose);
     }
 
     // private boolean isReadyToAdvanceToInnerTower(Pose2d outerTowerPose) {

@@ -13,8 +13,10 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.climb.ClimbConstants;
 import frc.robot.subsystems.drive.constants.TunerConstants;
+import frc.robot.util.AllianceFlipUtil;
 
 public class FieldConstants {
         public static final double fieldLengthMeters = 16.541;
@@ -94,23 +96,26 @@ public class FieldConstants {
                 public static final double depth = Units.inchesToMeters(44.4);
 
                 // Relevant reference points on alliance side
-                public static final Translation2d nearLeftCorner = new Translation2d(
-                                LinesVertical.hubCenter - width / 2,
-                                Units.inchesToMeters(255));
+                public static final Translation2d nearLeftCorner = Hub.nearLeftCorner
+                                .plus(new Translation2d(0.0, width));
                 public static final Translation2d nearRightCorner = Hub.nearLeftCorner;
-                public static final Translation2d farLeftCorner = new Translation2d(LinesVertical.hubCenter + width / 2,
-                                Units.inchesToMeters(255));
+                public static final Translation2d farLeftCorner = Hub.farLeftCorner.plus(new Translation2d(0.0, width));
                 public static final Translation2d farRightCorner = Hub.farLeftCorner;
 
-                // Relevant reference points on opposing side
-                public static final Translation2d oppNearLeftCorner = new Translation2d(
-                                LinesVertical.hubCenter - width / 2,
-                                Units.inchesToMeters(255));
-                public static final Translation2d oppNearRightCorner = Hub.oppNearLeftCorner;
-                public static final Translation2d oppFarLeftCorner = new Translation2d(
-                                LinesVertical.hubCenter + width / 2,
-                                Units.inchesToMeters(255));
-                public static final Translation2d oppFarRightCorner = Hub.oppFarLeftCorner;
+                public static final Translation2d oppNearLeftCorner = AllianceFlipUtil.flip(nearLeftCorner);
+                public static final Translation2d oppFarRightCorner = AllianceFlipUtil.flip(farRightCorner);
+
+                public static final Rectangle2d bumpZone = new Rectangle2d(
+                                new Translation2d(nearLeftCorner.getX() - TunerConstants.bumperRadius + Units.inchesToMeters(4),
+                                                nearLeftCorner.getY()),
+                                new Translation2d(farRightCorner.getX() + TunerConstants.bumperRadius - Units.inchesToMeters(4),
+                                                farRightCorner.getY()));
+
+                public static final Rectangle2d oppBumpZone = new Rectangle2d(
+                                new Translation2d(oppNearLeftCorner.getX() + TunerConstants.bumperRadius - Units.inchesToMeters(4),
+                                                oppNearLeftCorner.getY()),
+                                new Translation2d(oppFarRightCorner.getX() - TunerConstants.bumperRadius + Units.inchesToMeters(4),
+                                                oppFarRightCorner.getY()));
         }
 
         /** Right Bump related constants */
@@ -121,23 +126,27 @@ public class FieldConstants {
                 public static final double depth = Units.inchesToMeters(44.4);
 
                 // Relevant reference points on alliance side
-                public static final Translation2d nearLeftCorner = new Translation2d(
-                                LinesVertical.hubCenter + width / 2,
-                                Units.inchesToMeters(255));
-                public static final Translation2d nearRightCorner = Hub.nearLeftCorner;
-                public static final Translation2d farLeftCorner = new Translation2d(LinesVertical.hubCenter - width / 2,
-                                Units.inchesToMeters(255));
-                public static final Translation2d farRightCorner = Hub.farLeftCorner;
+                public static final Translation2d nearLeftCorner = Hub.nearRightCorner;
+                public static final Translation2d nearRightCorner = Hub.nearRightCorner
+                                .minus(new Translation2d(0.0, width));
+                public static final Translation2d farLeftCorner = Hub.farRightCorner;
+                public static final Translation2d farRightCorner = Hub.farRightCorner
+                                .minus(new Translation2d(0.0, width));
 
-                // Relevant reference points on opposing side
-                public static final Translation2d oppNearLeftCorner = new Translation2d(
-                                LinesVertical.hubCenter + width / 2,
-                                Units.inchesToMeters(255));
-                public static final Translation2d oppNearRightCorner = Hub.oppNearLeftCorner;
-                public static final Translation2d oppFarLeftCorner = new Translation2d(
-                                LinesVertical.hubCenter - width / 2,
-                                Units.inchesToMeters(255));
-                public static final Translation2d oppFarRightCorner = Hub.oppFarLeftCorner;
+                public static final Translation2d oppNearLeftCorner = AllianceFlipUtil.flip(nearLeftCorner);
+                public static final Translation2d oppFarRightCorner = AllianceFlipUtil.flip(farRightCorner);
+
+                public static final Rectangle2d bumpZone = new Rectangle2d(
+                                new Translation2d(nearLeftCorner.getX() - TunerConstants.bumperRadius + Units.inchesToMeters(4),
+                                                nearLeftCorner.getY()),
+                                new Translation2d(farRightCorner.getX() + TunerConstants.bumperRadius - Units.inchesToMeters(4),
+                                                farRightCorner.getY()));
+
+                public static final Rectangle2d oppBumpZone = new Rectangle2d(
+                                new Translation2d(oppNearLeftCorner.getX() + TunerConstants.bumperRadius - Units.inchesToMeters(4),
+                                                oppNearLeftCorner.getY()),
+                                new Translation2d(oppFarRightCorner.getX() - TunerConstants.bumperRadius + Units.inchesToMeters(4),
+                                                oppFarRightCorner.getY()));
         }
 
         /** Left Trench related constants */
@@ -248,8 +257,8 @@ public class FieldConstants {
                                                 - Units.inchesToMeters(0.75));
 
                 public static final Pose2d leftOuterTowerPose = new Pose2d(frontFaceX - Units.inchesToMeters(3.5 / 2),
-                                leftUpright.getY()+ Units.inchesToMeters(0.75) +
-                                               Units.inchesToMeters(6) + Units.inchesToMeters(3), // +3 in tolerance
+                                leftUpright.getY() + Units.inchesToMeters(0.75) +
+                                                Units.inchesToMeters(6) + Units.inchesToMeters(3), // +3 in tolerance
                                 new Rotation2d(Units.degreesToRadians(0))).transformBy(ClimbConstants.climbTransform);
                 public static final Pose2d leftInnerTowerPose = new Pose2d(frontFaceX - Units.inchesToMeters(3.5 / 2),
                                 leftUpright.getY() + Units.inchesToMeters(0.75),

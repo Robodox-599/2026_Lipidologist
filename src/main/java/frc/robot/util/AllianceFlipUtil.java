@@ -46,4 +46,16 @@ public class AllianceFlipUtil {
     return DriverStation.getAlliance().isPresent()
         && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
   }
+
+  public static Translation2d flip(Translation2d translation) {
+    return new Translation2d(flipX(translation.getX()), translation.getY());
+  }
+
+  public static double flipX(double x) {
+    return FieldConstants.fieldLengthMeters - x;
+  }
+
+  public static double flipY(double y) {
+    return FieldConstants.fieldWidthMeters - y;
+  }
 }
