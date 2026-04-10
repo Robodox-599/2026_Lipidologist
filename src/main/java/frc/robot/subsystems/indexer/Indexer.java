@@ -66,7 +66,6 @@ public class Indexer {
             break;
         case CLEAN:
             currentState = IndexerCurrentState.CLEANING;
-            break;
         default:
             currentState = IndexerCurrentState.STOPPING;
             break;
@@ -92,7 +91,6 @@ public class Indexer {
         break;
       case CLEANING:
         setIndexerVoltage(0.5);
-        break;
       default:
         stopIndexer();
         break;

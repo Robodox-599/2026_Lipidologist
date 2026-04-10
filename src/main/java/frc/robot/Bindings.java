@@ -48,10 +48,10 @@ public class Bindings {
         .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.OUTAKE))
         .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    //CLEAN SYSTEMS
-    driver.x()
-        .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLEAN))
-        .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
+    // //CLEAN SYSTEMs
+    // driver.x()
+    //     .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLEAN))
+    //     .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState));
     
     new Trigger(() -> HubShiftUtil.isHubActiveSoon(5)).onTrue(rumbleDriverSwapping(driver, 0.5, 5));
 
