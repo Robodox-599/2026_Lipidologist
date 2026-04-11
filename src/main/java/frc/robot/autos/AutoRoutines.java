@@ -14,8 +14,8 @@ public class AutoRoutines {
         private Superstructure superstructureCommands;
         private CommandSwerveDrivetrain drivetrain;
 
-        private static double shoot_without_agitation_secs = 1.0;
-        private static double shoot_with_agitation_secs = 3.5;
+        private static double shoot_without_agitation_secs = 1.5;
+        private static double shoot_with_agitation_secs = 3.0;
 
         public AutoRoutines(
                         AutoFactory autoFactory,
@@ -29,8 +29,12 @@ public class AutoRoutines {
         public AutoRoutine hubDoubleDouble(boolean isLeft) {
                 AutoRoutine routine = autoFactory.newRoutine("hubDoubleDouble");
 
-                AutoTrajectory trench_only_1 = isLeft ? routine.trajectory("trench_only_1") : routine.trajectory("trench_only_1").mirrorY();
-                AutoTrajectory trench_only_2_hub = isLeft ? routine.trajectory("trench_only_2_hub") : routine.trajectory("trench_only_2_hub").mirrorY();
+                AutoTrajectory trench_only_1 = isLeft ? routine.trajectory("trench_only_1")
+                                : routine.trajectory("trench_only_1").mirrorY();
+                AutoTrajectory trench_only_2_hub = isLeft ? routine.trajectory("trench_only_2_hub")
+                                : routine.trajectory("trench_only_2_hub").mirrorY();
+                AutoTrajectory trench_only_3 = isLeft ? routine.trajectory("trench_only_3")
+                                : routine.trajectory("trench_only_3").mirrorY();
 
                 routine.active().onTrue(Commands.sequence(trench_only_1.resetOdometry(),
                                 Commands.parallel(
@@ -58,7 +62,13 @@ public class AutoRoutines {
                                                 new WaitCommand(shoot_without_agitation_secs),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
-                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE)));
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE),
+                                                new WaitCommand(shoot_with_agitation_secs),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                                trench_only_3.cmd()));
+
+                trench_only_3.done().onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
                 return routine;
         }
@@ -66,8 +76,12 @@ public class AutoRoutines {
         public AutoRoutine midDoubleDouble(boolean isLeft) {
                 AutoRoutine routine = autoFactory.newRoutine("midDoubleDouble");
 
-                AutoTrajectory trench_only_1 = isLeft ? routine.trajectory("trench_only_1") : routine.trajectory("trench_only_1").mirrorY();
-                AutoTrajectory trench_only_2_mid = isLeft ? routine.trajectory("trench_only_2_mid") : routine.trajectory("trench_only_2_mid").mirrorY();
+                AutoTrajectory trench_only_1 = isLeft ? routine.trajectory("trench_only_1")
+                                : routine.trajectory("trench_only_1").mirrorY();
+                AutoTrajectory trench_only_2_mid = isLeft ? routine.trajectory("trench_only_2_mid")
+                                : routine.trajectory("trench_only_2_mid").mirrorY();
+                AutoTrajectory trench_only_3 = isLeft ? routine.trajectory("trench_only_3")
+                                : routine.trajectory("trench_only_3").mirrorY();
 
                 routine.active().onTrue(Commands.sequence(trench_only_1.resetOdometry(),
                                 Commands.parallel(
@@ -95,7 +109,13 @@ public class AutoRoutines {
                                                 new WaitCommand(shoot_without_agitation_secs),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
-                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE)));
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE),
+                                                new WaitCommand(shoot_with_agitation_secs),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                                trench_only_3.cmd()));
+                                                
+                trench_only_3.done().onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
                 return routine;
         }
@@ -103,8 +123,12 @@ public class AutoRoutines {
         public AutoRoutine hubAnimalStyle(boolean isLeft) {
                 AutoRoutine routine = autoFactory.newRoutine("hubAnimalStyle");
 
-                AutoTrajectory trench_and_bump_1 = isLeft ? routine.trajectory("trench_and_bump_1") : routine.trajectory("trench_and_bump_1").mirrorY();
-                AutoTrajectory trench_and_bump_2_hub = isLeft ? routine.trajectory("trench_and_bump_2_hub") : routine.trajectory("trench_and_bump_2_hub").mirrorY();
+                AutoTrajectory trench_and_bump_1 = isLeft ? routine.trajectory("trench_and_bump_1")
+                                : routine.trajectory("trench_and_bump_1").mirrorY();
+                AutoTrajectory trench_and_bump_2_hub = isLeft ? routine.trajectory("trench_and_bump_2_hub")
+                                : routine.trajectory("trench_and_bump_2_hub").mirrorY();
+                AutoTrajectory trench_only_3 = isLeft ? routine.trajectory("trench_only_3")
+                                : routine.trajectory("trench_only_3").mirrorY();
 
                 routine.active().onTrue(Commands.sequence(trench_and_bump_1.resetOdometry(),
                                 Commands.parallel(
@@ -112,7 +136,8 @@ public class AutoRoutines {
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 trench_and_bump_1.cmd())));
 
-                trench_and_bump_1.atTime("lift_intake").onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
+                trench_and_bump_1.atTime("lift_intake").onTrue(
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
 
                 trench_and_bump_1.done()
                                 .onTrue(Commands.sequence(
@@ -134,7 +159,13 @@ public class AutoRoutines {
                                                 new WaitCommand(shoot_without_agitation_secs),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
-                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE)));
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE),
+                                                new WaitCommand(shoot_with_agitation_secs),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                                trench_only_3.cmd()));
+                                                
+                trench_only_3.done().onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
                 return routine;
         }
@@ -142,8 +173,13 @@ public class AutoRoutines {
         public AutoRoutine midAnimalStyle(boolean isLeft) {
                 AutoRoutine routine = autoFactory.newRoutine("midAnimalStyle");
 
-                AutoTrajectory trench_and_bump_1 = isLeft ? routine.trajectory("trench_and_bump_1") : routine.trajectory("trench_and_bump_1").mirrorY();
-                AutoTrajectory trench_and_bump_2_mid = isLeft ? routine.trajectory("trench_and_bump_2_mid") : routine.trajectory("trench_and_bump_2_mid").mirrorY();
+                AutoTrajectory trench_and_bump_1 = isLeft ? routine.trajectory("trench_and_bump_1")
+                                : routine.trajectory("trench_and_bump_1").mirrorY();
+                AutoTrajectory trench_and_bump_2_mid = isLeft ? routine.trajectory("trench_and_bump_2_mid")
+                                : routine.trajectory("trench_and_bump_2_mid").mirrorY();
+                AutoTrajectory trench_and_bump_3 = isLeft ? routine.trajectory("trench_and_bump_3")
+                                : routine.trajectory("trench_and_bump_3").mirrorY();
+                
 
                 routine.active().onTrue(Commands.sequence(trench_and_bump_1.resetOdometry(),
                                 Commands.parallel(
@@ -151,7 +187,8 @@ public class AutoRoutines {
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 trench_and_bump_1.cmd())));
 
-                trench_and_bump_1.atTime("lift_intake").onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
+                trench_and_bump_1.atTime("lift_intake").onTrue(
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
 
                 trench_and_bump_1.done()
                                 .onTrue(Commands.sequence(
@@ -166,7 +203,8 @@ public class AutoRoutines {
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 trench_and_bump_2_mid.cmd()));
 
-                trench_and_bump_2_mid.atTime("lift_intake").onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
+                trench_and_bump_2_mid.atTime("lift_intake").onTrue(
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
 
                 trench_and_bump_2_mid.done()
                                 .onTrue(Commands.sequence(
@@ -175,7 +213,13 @@ public class AutoRoutines {
                                                 new WaitCommand(shoot_without_agitation_secs),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
-                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE)));
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE),
+                                                new WaitCommand(shoot_with_agitation_secs),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                                trench_and_bump_3.cmd()));
+                                                
+                trench_and_bump_3.done().onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
                 return routine;
         }
@@ -183,8 +227,12 @@ public class AutoRoutines {
         public AutoRoutine safeDoubleDouble(boolean isLeft) {
                 AutoRoutine routine = autoFactory.newRoutine("safeDoubleDouble");
 
-                AutoTrajectory trench_only_1 = isLeft ? routine.trajectory("trench_only_1") : routine.trajectory("trench_only_1").mirrorY();
-                AutoTrajectory trench_only_2_safe = isLeft ? routine.trajectory("trench_only_2_safe") : routine.trajectory("trench_only_2_safe").mirrorY();
+                AutoTrajectory trench_only_1 = isLeft ? routine.trajectory("trench_only_1")
+                                : routine.trajectory("trench_only_1").mirrorY();
+                AutoTrajectory trench_only_2_safe = isLeft ? routine.trajectory("trench_only_2_safe")
+                                : routine.trajectory("trench_only_2_safe").mirrorY();
+                AutoTrajectory trench_only_3 = isLeft ? routine.trajectory("trench_only_3")
+                                : routine.trajectory("trench_only_3").mirrorY();
 
                 routine.active().onTrue(Commands.sequence(trench_only_1.resetOdometry(),
                                 Commands.parallel(
@@ -206,13 +254,18 @@ public class AutoRoutines {
                                                 trench_only_2_safe.cmd()));
 
                 trench_only_2_safe.done()
-                                .onTrue(Commands.sequence(
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+                                .onTrue(Commands.sequence(superstructureCommands
+                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
                                                 new WaitCommand(shoot_without_agitation_secs),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
-                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE)));
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE),
+                                                new WaitCommand(shoot_with_agitation_secs),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                                trench_only_3.cmd()));
+
+                trench_only_3.done().onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
                 return routine;
         }
@@ -220,8 +273,12 @@ public class AutoRoutines {
         public AutoRoutine safeAnimalStyle(boolean isLeft) {
                 AutoRoutine routine = autoFactory.newRoutine("safeAnimalStyle");
 
-                AutoTrajectory trench_and_bump_1 = isLeft ? routine.trajectory("trench_and_bump_1") : routine.trajectory("trench_and_bump_1").mirrorY();
-                AutoTrajectory trench_and_bump_2_safe = isLeft ? routine.trajectory("trench_and_bump_2_safe") : routine.trajectory("trench_and_bump_2_safe").mirrorY();
+                AutoTrajectory trench_and_bump_1 = isLeft ? routine.trajectory("trench_and_bump_1")
+                                : routine.trajectory("trench_and_bump_1").mirrorY();
+                AutoTrajectory trench_and_bump_2_safe = isLeft ? routine.trajectory("trench_and_bump_2_safe")
+                                : routine.trajectory("trench_and_bump_2_safe").mirrorY();
+                AutoTrajectory trench_and_bump_3 = isLeft ? routine.trajectory("trench_and_bump_3")
+                                : routine.trajectory("trench_and_bump_3").mirrorY();
 
                 routine.active().onTrue(Commands.sequence(trench_and_bump_1.resetOdometry(),
                                 Commands.parallel(
@@ -229,7 +286,8 @@ public class AutoRoutines {
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 trench_and_bump_1.cmd())));
 
-                trench_and_bump_1.atTime("lift_intake").onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
+                trench_and_bump_1.atTime("lift_intake").onTrue(
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
 
                 trench_and_bump_1.done()
                                 .onTrue(Commands.sequence(
@@ -244,166 +302,178 @@ public class AutoRoutines {
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 trench_and_bump_2_safe.cmd()));
 
-                trench_and_bump_2_safe.atTime("lift_intake").onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
+                trench_and_bump_2_safe.atTime("lift_intake").onTrue(
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
 
                 trench_and_bump_2_safe.done()
-                                .onTrue(Commands.sequence(
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+                                .onTrue(Commands.sequence(superstructureCommands
+                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
                                                 new WaitCommand(shoot_without_agitation_secs),
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(
-                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE)));
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE),
+                                                new WaitCommand(shoot_with_agitation_secs),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                                trench_and_bump_3.cmd()));
+                                                
+                trench_and_bump_3.done().onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
                 return routine;
         }
 
         // public AutoRoutine rightDoubleSteakBurrito() {
-        //         AutoRoutine routine = autoFactory.newRoutine("rightDoubleSteakBurrito");
+        // AutoRoutine routine = autoFactory.newRoutine("rightDoubleSteakBurrito");
 
-        //         AutoTrajectory trench_only_1 = routine.trajectory("trench_only_1").mirrorY();
-        //         AutoTrajectory trench_only_2_hub = routine.trajectory("trench_only_2_hub").mirrorY();
+        // AutoTrajectory trench_only_1 = routine.trajectory("trench_only_1").mirrorY();
+        // AutoTrajectory trench_only_2_hub =
+        // routine.trajectory("trench_only_2_hub").mirrorY();
 
-        //         routine.active().onTrue(Commands.sequence(trench_only_1.resetOdometry(),
-        //                         Commands.parallel(
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-        //                                         trench_only_1.cmd())));
+        // routine.active().onTrue(Commands.sequence(trench_only_1.resetOdometry(),
+        // Commands.parallel(
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+        // trench_only_1.cmd())));
 
-        //         trench_only_1.done()
-        //                         .onTrue(Commands.sequence(
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-        //                                         new WaitCommand(1.0),
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(
-        //                                                                         WantedSuperState.SHOOT_HUB_AND_AGITATE),
-        //                                         new WaitCommand(3.5),
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-        //                                         trench_only_2_hub.cmd()));
+        // trench_only_1.done()
+        // .onTrue(Commands.sequence(
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+        // new WaitCommand(1.0),
+        // superstructureCommands
+        // .setWantedSuperStateCommand(
+        // WantedSuperState.SHOOT_HUB_AND_AGITATE),
+        // new WaitCommand(3.5),
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+        // trench_only_2_hub.cmd()));
 
-        //         trench_only_2_hub.done()
-        //                         .onTrue(Commands.sequence(
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-        //                                         new WaitCommand(1),
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(
-        //                                                                         WantedSuperState.SHOOT_HUB_AND_AGITATE)));
+        // trench_only_2_hub.done()
+        // .onTrue(Commands.sequence(
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+        // new WaitCommand(1),
+        // superstructureCommands
+        // .setWantedSuperStateCommand(
+        // WantedSuperState.SHOOT_HUB_AND_AGITATE)));
 
-        //         return routine;
+        // return routine;
         // }
 
         // public AutoRoutine rightDoubleSteakBowl() {
-        //         AutoRoutine routine = autoFactory.newRoutine("rightDoubleSteakBowl");
+        // AutoRoutine routine = autoFactory.newRoutine("rightDoubleSteakBowl");
 
-        //         AutoTrajectory trench_only_1 = routine.trajectory("trench_only_1").mirrorY();
-        //         AutoTrajectory trench_and_bump_2_mid = routine.trajectory("trench_only_2_mid").mirrorY();
+        // AutoTrajectory trench_only_1 = routine.trajectory("trench_only_1").mirrorY();
+        // AutoTrajectory trench_and_bump_2_mid =
+        // routine.trajectory("trench_only_2_mid").mirrorY();
 
-        //         routine.active().onTrue(Commands.sequence(trench_only_1.resetOdometry(),
-        //                         Commands.parallel(
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-        //                                         trench_only_1.cmd())));
+        // routine.active().onTrue(Commands.sequence(trench_only_1.resetOdometry(),
+        // Commands.parallel(
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+        // trench_only_1.cmd())));
 
-        //         trench_only_1.done()
-        //                         .onTrue(Commands.sequence(
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-        //                                         new WaitCommand(1.0),
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(
-        //                                                                         WantedSuperState.SHOOT_HUB_AND_AGITATE),
-        //                                         new WaitCommand(3.5),
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-        //                                         trench_and_bump_2_mid.cmd()));
+        // trench_only_1.done()
+        // .onTrue(Commands.sequence(
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+        // new WaitCommand(1.0),
+        // superstructureCommands
+        // .setWantedSuperStateCommand(
+        // WantedSuperState.SHOOT_HUB_AND_AGITATE),
+        // new WaitCommand(3.5),
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+        // trench_and_bump_2_mid.cmd()));
 
-        //         trench_and_bump_2_mid.done()
-        //                         .onTrue(Commands.sequence(
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-        //                                         new WaitCommand(1),
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(
-        //                                                                         WantedSuperState.SHOOT_HUB_AND_AGITATE)));
+        // trench_and_bump_2_mid.done()
+        // .onTrue(Commands.sequence(
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+        // new WaitCommand(1),
+        // superstructureCommands
+        // .setWantedSuperStateCommand(
+        // WantedSuperState.SHOOT_HUB_AND_AGITATE)));
 
-        //         return routine;
+        // return routine;
         // }
 
         // public AutoRoutine rightChickenAndSteakBurrito() {
-        //         AutoRoutine routine = autoFactory.newRoutine("rightChickenAndSteakBurrito");
+        // AutoRoutine routine = autoFactory.newRoutine("rightChickenAndSteakBurrito");
 
-        //         AutoTrajectory trench_and_bump_1 = routine.trajectory("trench_and_bump_1").mirrorY();
-        //         AutoTrajectory trench_and_bump_2_hub = routine.trajectory("trench_and_bump_2_hub").mirrorY();
+        // AutoTrajectory trench_and_bump_1 =
+        // routine.trajectory("trench_and_bump_1").mirrorY();
+        // AutoTrajectory trench_and_bump_2_hub =
+        // routine.trajectory("trench_and_bump_2_hub").mirrorY();
 
-        //         routine.active().onTrue(Commands.sequence(trench_and_bump_1.resetOdometry(),
-        //                         Commands.parallel(
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-        //                                         trench_and_bump_1.cmd())));
+        // routine.active().onTrue(Commands.sequence(trench_and_bump_1.resetOdometry(),
+        // Commands.parallel(
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+        // trench_and_bump_1.cmd())));
 
-        //         trench_and_bump_1.done()
-        //                         .onTrue(Commands.sequence(
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-        //                                         new WaitCommand(1.0),
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(
-        //                                                                         WantedSuperState.SHOOT_HUB_AND_AGITATE),
-        //                                         new WaitCommand(3.5),
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-        //                                         trench_and_bump_2_hub.cmd()));
+        // trench_and_bump_1.done()
+        // .onTrue(Commands.sequence(
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+        // new WaitCommand(1.0),
+        // superstructureCommands
+        // .setWantedSuperStateCommand(
+        // WantedSuperState.SHOOT_HUB_AND_AGITATE),
+        // new WaitCommand(3.5),
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+        // trench_and_bump_2_hub.cmd()));
 
-        //         trench_and_bump_2_hub.done()
-        //                         .onTrue(Commands.sequence(
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-        //                                         new WaitCommand(1),
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(
-        //                                                                         WantedSuperState.SHOOT_HUB_AND_AGITATE)));
+        // trench_and_bump_2_hub.done()
+        // .onTrue(Commands.sequence(
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+        // new WaitCommand(1),
+        // superstructureCommands
+        // .setWantedSuperStateCommand(
+        // WantedSuperState.SHOOT_HUB_AND_AGITATE)));
 
-        //         return routine;
+        // return routine;
         // }
 
         // public AutoRoutine rightChickenAndSteakBowl() {
-        //         AutoRoutine routine = autoFactory.newRoutine("rightChickenAndSteakBowl");
+        // AutoRoutine routine = autoFactory.newRoutine("rightChickenAndSteakBowl");
 
-        //         AutoTrajectory trench_and_bump_1 = routine.trajectory("trench_and_bump_1").mirrorY();
-        //         AutoTrajectory trench_and_bump_2_mid = routine.trajectory("trench_and_bump_2_mid").mirrorY();
+        // AutoTrajectory trench_and_bump_1 =
+        // routine.trajectory("trench_and_bump_1").mirrorY();
+        // AutoTrajectory trench_and_bump_2_mid =
+        // routine.trajectory("trench_and_bump_2_mid").mirrorY();
 
-        //         routine.active().onTrue(Commands.sequence(trench_and_bump_1.resetOdometry(),
-        //                         Commands.parallel(
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-        //                                         trench_and_bump_1.cmd())));
+        // routine.active().onTrue(Commands.sequence(trench_and_bump_1.resetOdometry(),
+        // Commands.parallel(
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+        // trench_and_bump_1.cmd())));
 
-        //         trench_and_bump_1.done()
-        //                         .onTrue(Commands.sequence(
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-        //                                         new WaitCommand(1.0),
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(
-        //                                                                         WantedSuperState.SHOOT_HUB_AND_AGITATE),
-        //                                         new WaitCommand(3.5),
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-        //                                         trench_and_bump_2_mid.cmd()));
+        // trench_and_bump_1.done()
+        // .onTrue(Commands.sequence(
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+        // new WaitCommand(1.0),
+        // superstructureCommands
+        // .setWantedSuperStateCommand(
+        // WantedSuperState.SHOOT_HUB_AND_AGITATE),
+        // new WaitCommand(3.5),
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+        // trench_and_bump_2_mid.cmd()));
 
-        //         trench_and_bump_2_mid.done()
-        //                         .onTrue(Commands.sequence(
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-        //                                         new WaitCommand(1),
-        //                                         superstructureCommands
-        //                                                         .setWantedSuperStateCommand(
-        //                                                                         WantedSuperState.SHOOT_HUB_AND_AGITATE)));
+        // trench_and_bump_2_mid.done()
+        // .onTrue(Commands.sequence(
+        // superstructureCommands
+        // .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+        // new WaitCommand(1),
+        // superstructureCommands
+        // .setWantedSuperStateCommand(
+        // WantedSuperState.SHOOT_HUB_AND_AGITATE)));
 
-        //         return routine;
+        // return routine;
         // }
 
         public AutoRoutine leftHamburgerWithOnions() {

@@ -646,12 +646,15 @@ public class Superstructure extends SubsystemBase {
         return flywheels.atSetpoint() && hood.atSetpoint() &&
                 drivetrain.isAtTargetRotation()
                 && HubShiftUtil.isHubPredictedActive(flightTime)
-                && isWithinAllianceZone();
+                && isWithinAllianceZone()
+                ;
     }
 
     private boolean areSystemsReadyForHubShot() {
         return flywheels.atSetpoint() && hood.atSetpoint() &&
-                drivetrain.isAtTargetRotation() && isWithinAllianceZone();
+                drivetrain.isAtTargetRotation() 
+                && isWithinAllianceZone()
+                ;
     }
 
     public boolean isWithinAllianceZone() {

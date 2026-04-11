@@ -11,6 +11,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -29,6 +31,7 @@ public class Vision {
   private final Supplier<ChassisSpeeds> robotSpeedsSupplier;
   private final VisionIOReal[] io;
   private boolean hasTargets = false;
+  private Debouncer targetDebouncer = new Debouncer(1.0, DebounceType.kFalling);
 
   // private final Alert[] disconnectedAlerts;
   // private final Alert cameraDisconnectedAlert = new Alert("One or more cameras are disconnected.", AlertType.kWarning);
@@ -134,7 +137,7 @@ public class Vision {
     // DogLog.log(
     //     "Vision/Summary/RobotPosesRejected",
     //     allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
-    this.hasTargets = allRobotPosesAccepted.size() > 0;
+    this.hasTargets = targetDebouncer.calculate(allRobotPosesAccepted.size() > 0);
   }
 
   private boolean shouldRejectPoseObservation(PoseObservation observation, boolean shouldRejectSingleTag) {

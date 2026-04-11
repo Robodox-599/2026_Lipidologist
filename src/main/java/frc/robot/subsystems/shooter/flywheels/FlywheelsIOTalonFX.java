@@ -48,8 +48,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
 
     private final FlywheelConstants flywheelConstants;
 
-    private Debouncer rpmDebouncer = new Debouncer(0.2, DebounceType.kFalling);
-
+    private Debouncer rpmDebouncer = new Debouncer(0.1, DebounceType.kBoth);
+ 
     public FlywheelsIOTalonFX(FlywheelConstants flywheelConstants) {
         this.flywheelConstants = flywheelConstants;
 

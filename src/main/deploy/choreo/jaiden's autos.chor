@@ -218,12 +218,12 @@
    },
    "FS_2":{
     "x":{
-     "exp":"8.65 m",
-     "val":8.65
+     "exp":"8.55 m",
+     "val":8.55
     },
     "y":{
-     "exp":"(fieldWidth / 2) + (startingFuelWidth / 2) + (fuelRadius / 2)",
-     "val":6.6882285
+     "exp":"(fieldWidth / 2) + (startingFuelWidth / 2) + (fuelRadius / 2) + 10 in",
+     "val":6.942228500000001
     },
     "heading":{
      "exp":"-(7 / 12) PI rad",
@@ -232,8 +232,8 @@
    },
    "FS_3":{
     "x":{
-     "exp":"8.375 m",
-     "val":8.375
+     "exp":"8.235 m",
+     "val":8.235
     },
     "y":{
      "exp":"5.4 m",
