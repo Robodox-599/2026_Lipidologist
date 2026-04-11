@@ -208,12 +208,14 @@ public class Robot extends TimedRobot {
     autoChooser.addRoutine("Left Hub Animal Style", () -> autoRoutines.hubAnimalStyle(true));
     autoChooser.addRoutine("Left Safe Animal Style", () -> autoRoutines.safeAnimalStyle(true));
     autoChooser.addRoutine("Left Mid Animal Style", () -> autoRoutines.midAnimalStyle(true));
+    autoChooser.addRoutine("Left Neapolitan Milkshake", () -> autoRoutines.neapolitanMilkshake(true));
     autoChooser.addRoutine("Right Hub Double Double", () -> autoRoutines.hubDoubleDouble(false));
     autoChooser.addRoutine("Right Safe Double Double", () -> autoRoutines.safeDoubleDouble(false));
     autoChooser.addRoutine("Right Mid Double Double", () -> autoRoutines.midDoubleDouble(false));
     autoChooser.addRoutine("Right Hub Animal Style", () -> autoRoutines.hubAnimalStyle(false));
     autoChooser.addRoutine("Right Safe Animal Style", () -> autoRoutines.safeAnimalStyle(false));
     autoChooser.addRoutine("Right Mid Animal Style", () -> autoRoutines.midAnimalStyle(false));
+    autoChooser.addRoutine("Right Neapolitan Milkshake", () -> autoRoutines.neapolitanMilkshake(false));
     // autoChooser.addRoutine("Left Cheeseburger", autoRoutines::leftCheeseburger);
     // autoChooser.addRoutine("Right Cheeseburger",
     // autoRoutines::rightCheeseburger);

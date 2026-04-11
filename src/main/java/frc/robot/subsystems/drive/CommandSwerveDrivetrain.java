@@ -450,10 +450,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     this.wantedState = wantedState;
   }
   
-  public Command setWantedStateCommand(WantedState wantedState) {
-    return Commands.runOnce(() -> setWantedState(wantedState));
-  }
-
   public void setWantedState(WantedState wantedState, Rotation2d targetRotation) {
     this.wantedState = wantedState;
     this.targetRotation = targetRotation;

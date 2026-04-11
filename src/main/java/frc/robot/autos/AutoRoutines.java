@@ -3,7 +3,9 @@ package frc.robot.autos;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.WantedSuperState;
@@ -37,8 +39,8 @@ public class AutoRoutines {
                 AutoTrajectory trench_only_3 = isLeft ? routine.trajectory("trench_only_3")
                                 : routine.trajectory("trench_only_3").mirrorY();
 
-                routine.active().onTrue(Commands.parallel(trench_only_1.resetOdometry(),
-                                drivetrain.setWantedStateCommand(WantedState.CHOREO_TRAJECTORY),
+                routine.active().onTrue(Commands.parallel(disregardRequirements(trench_only_1.resetOdometry()),
+                                Commands.runOnce(() -> drivetrain.setWantedState(WantedState.CHOREO_TRAJECTORY)),
                                 superstructureCommands
                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                 trench_only_1.cmd()));
@@ -84,8 +86,8 @@ public class AutoRoutines {
                 AutoTrajectory trench_only_3 = isLeft ? routine.trajectory("trench_only_3")
                                 : routine.trajectory("trench_only_3").mirrorY();
 
-                routine.active().onTrue(Commands.parallel(trench_only_1.resetOdometry(),
-                                drivetrain.setWantedStateCommand(WantedState.CHOREO_TRAJECTORY),
+                routine.active().onTrue(Commands.parallel(disregardRequirements(trench_only_1.resetOdometry()),
+                                Commands.runOnce(() -> drivetrain.setWantedState(WantedState.CHOREO_TRAJECTORY)),
                                 superstructureCommands
                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                 trench_only_1.cmd()));
@@ -131,8 +133,8 @@ public class AutoRoutines {
                 AutoTrajectory trench_only_3 = isLeft ? routine.trajectory("trench_only_3")
                                 : routine.trajectory("trench_only_3").mirrorY();
 
-                routine.active().onTrue(Commands.parallel(trench_and_bump_1.resetOdometry(),
-                                drivetrain.setWantedStateCommand(WantedState.CHOREO_TRAJECTORY),
+                routine.active().onTrue(Commands.parallel(disregardRequirements(trench_and_bump_1.resetOdometry()),
+                                Commands.runOnce(() -> drivetrain.setWantedState(WantedState.CHOREO_TRAJECTORY)),
                                 superstructureCommands
                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                 trench_and_bump_1.cmd()));
@@ -181,8 +183,8 @@ public class AutoRoutines {
                 AutoTrajectory trench_and_bump_3 = isLeft ? routine.trajectory("trench_and_bump_3")
                                 : routine.trajectory("trench_and_bump_3").mirrorY();
 
-                routine.active().onTrue(Commands.parallel(trench_and_bump_1.resetOdometry(),
-                                drivetrain.setWantedStateCommand(WantedState.CHOREO_TRAJECTORY),
+                routine.active().onTrue(Commands.parallel(disregardRequirements(trench_and_bump_1.resetOdometry()),
+                                Commands.runOnce(() -> drivetrain.setWantedState(WantedState.CHOREO_TRAJECTORY)),
                                 superstructureCommands
                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                 trench_and_bump_1.cmd()));
@@ -235,8 +237,8 @@ public class AutoRoutines {
                 AutoTrajectory trench_only_3 = isLeft ? routine.trajectory("trench_only_3")
                                 : routine.trajectory("trench_only_3").mirrorY();
 
-                routine.active().onTrue(Commands.parallel(trench_only_1.resetOdometry(),
-                                drivetrain.setWantedStateCommand(WantedState.CHOREO_TRAJECTORY),
+                routine.active().onTrue(Commands.parallel(disregardRequirements(trench_only_1.resetOdometry()),
+                                Commands.runOnce(() -> drivetrain.setWantedState(WantedState.CHOREO_TRAJECTORY)),
                                 superstructureCommands
                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                 trench_only_1.cmd()));
@@ -281,8 +283,8 @@ public class AutoRoutines {
                 AutoTrajectory trench_and_bump_3 = isLeft ? routine.trajectory("trench_and_bump_3")
                                 : routine.trajectory("trench_and_bump_3").mirrorY();
 
-                routine.active().onTrue(Commands.parallel(trench_and_bump_1.resetOdometry(),
-                                drivetrain.setWantedStateCommand(WantedState.CHOREO_TRAJECTORY),
+                routine.active().onTrue(Commands.parallel(disregardRequirements(trench_and_bump_1.resetOdometry()),
+                                Commands.runOnce(() -> drivetrain.setWantedState(WantedState.CHOREO_TRAJECTORY)),
                                 superstructureCommands
                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                 trench_and_bump_1.cmd()));
@@ -320,6 +322,41 @@ public class AutoRoutines {
 
                 trench_and_bump_3.done()
                                 .onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE));
+
+                return routine;
+        }
+
+        public AutoRoutine neapolitanMilkshake(boolean isLeft) {
+                AutoRoutine routine = autoFactory.newRoutine("neapolitanMilkshake");
+
+                AutoTrajectory bump_only_1 = isLeft ? routine.trajectory("bump_only_1")
+                                : routine.trajectory("bump_only_1").mirrorY();
+
+                routine.active().onTrue(Commands.sequence(
+                                Commands.parallel(
+                                                disregardRequirements(bump_only_1.resetOdometry()),
+                                                Commands.runOnce(() -> drivetrain
+                                                                .setWantedState(WantedState.CHOREO_TRAJECTORY)),
+                                                superstructureCommands.setWantedSuperStateCommand(
+                                                                WantedSuperState.LIFT_INTAKE_AUTO)),
+                                new WaitCommand(1.5),
+                                bump_only_1.cmd()));
+
+                bump_only_1.atTime("deploy_intake").onTrue(
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO));
+
+                bump_only_1.atTime("lift_intake").onTrue(
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
+
+                bump_only_1.done()
+                                .onTrue(Commands.sequence(
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+                                                new WaitCommand(shoot_without_agitation_secs),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE),
+                                                new WaitCommand(shoot_with_agitation_secs)));
 
                 return routine;
         }
@@ -478,24 +515,34 @@ public class AutoRoutines {
         // return routine;
         // }
 
-        public AutoRoutine leftHamburgerWithOnions() {
-                AutoRoutine routine = autoFactory.newRoutine("LeftHamburgerWithOnions");
+        // public AutoRoutine leftHamburgerWithOnions() {
+        // AutoRoutine routine = autoFactory.newRoutine("LeftHamburgerWithOnions");
 
-                AutoTrajectory bump_to_depot = routine.trajectory("bump_to_depot");
+        // AutoTrajectory bump_to_depot = routine.trajectory("bump_to_depot");
 
-                routine.active().onTrue(Commands.sequence(bump_to_depot.resetOdometry(),
-                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                bump_to_depot.cmd()));
+        // routine.active().onTrue(Commands.sequence(bump_to_depot.resetOdometry(),
+        // superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+        // bump_to_depot.cmd()));
 
-                bump_to_depot.done()
-                                .onTrue(
-                                                // superstructureCommands
-                                                // .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
-                                                // new WaitCommand(1),
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(
-                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE));
+        // bump_to_depot.done()
+        // .onTrue(
+        // // superstructureCommands
+        // // .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+        // // new WaitCommand(1),
+        // superstructureCommands
+        // .setWantedSuperStateCommand(
+        // WantedSuperState.SHOOT_HUB_AND_AGITATE));
 
-                return routine;
+        // return routine;
+        // }
+
+        public Command disregardRequirements(Command cmd) {
+                return new FunctionalCommand(
+                                cmd::initialize,
+                                cmd::execute,
+                                cmd::end,
+                                cmd::isFinished
+                // no requirements passed = empty by default
+                );
         }
 }
