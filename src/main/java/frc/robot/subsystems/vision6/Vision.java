@@ -31,7 +31,7 @@ public class Vision {
   private final Supplier<ChassisSpeeds> robotSpeedsSupplier;
   private final VisionIOReal[] io;
   private boolean hasTargets = false;
-  private Debouncer targetDebouncer = new Debouncer(1.0, DebounceType.kFalling);
+  private Debouncer targetDebouncer = new Debouncer(2.0, DebounceType.kFalling);
 
   // private final Alert[] disconnectedAlerts;
   // private final Alert cameraDisconnectedAlert = new Alert("One or more cameras are disconnected.", AlertType.kWarning);
