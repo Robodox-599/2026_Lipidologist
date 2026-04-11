@@ -31,12 +31,13 @@ public class Flywheels {
     }
 
     public void updateInputs() {
-        for (int i = 0; i < this.io.length; i++) {
-            this.io[i].updateInputs();
-        }
         handleStateTransitions();
         applyStates();
 
+        for (int i = 0; i < this.io.length; i++) {
+            this.io[i].updateInputs();
+        }
+        
         allFlywheelsAtSetpoint();
 
         DogLog.log("Flywheels/WantedState", wantedState);
