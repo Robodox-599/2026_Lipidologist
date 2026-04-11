@@ -326,29 +326,64 @@ public class AutoRoutines {
                 return routine;
         }
 
-        public AutoRoutine neapolitanMilkshake(boolean isLeft) {
-                AutoRoutine routine = autoFactory.newRoutine("neapolitanMilkshake");
+        public AutoRoutine safeNeapolitanMilkshake(boolean isLeft) {
+                AutoRoutine routine = autoFactory.newRoutine("safeNeapolitanMilkshake");
 
-                AutoTrajectory bump_only_1 = isLeft ? routine.trajectory("bump_only_1")
-                                : routine.trajectory("bump_only_1").mirrorY();
+                AutoTrajectory bump_only_1_safe = isLeft ? routine.trajectory("bump_only_1_safe")
+                                : routine.trajectory("bump_only_1_safe").mirrorY();
 
                 routine.active().onTrue(Commands.sequence(
                                 Commands.parallel(
-                                                disregardRequirements(bump_only_1.resetOdometry()),
+                                                disregardRequirements(bump_only_1_safe.resetOdometry()),
                                                 Commands.runOnce(() -> drivetrain
                                                                 .setWantedState(WantedState.CHOREO_TRAJECTORY)),
                                                 superstructureCommands.setWantedSuperStateCommand(
                                                                 WantedSuperState.LIFT_INTAKE_AUTO)),
                                 new WaitCommand(1.5),
-                                bump_only_1.cmd()));
+                                bump_only_1_safe.cmd()));
 
-                bump_only_1.atTime("deploy_intake").onTrue(
+                bump_only_1_safe.atTime("deploy_intake").onTrue(
                                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO));
 
-                bump_only_1.atTime("lift_intake").onTrue(
+                bump_only_1_safe.atTime("lift_intake").onTrue(
                                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
 
-                bump_only_1.done()
+                bump_only_1_safe.done()
+                                .onTrue(Commands.sequence(
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+                                                new WaitCommand(shoot_without_agitation_secs),
+                                                superstructureCommands
+                                                                .setWantedSuperStateCommand(
+                                                                                WantedSuperState.SHOOT_HUB_AND_AGITATE),
+                                                new WaitCommand(shoot_with_agitation_secs)));
+
+                return routine;
+        }
+        
+        public AutoRoutine greedyNeapolitanMilkshake(boolean isLeft) {
+                AutoRoutine routine = autoFactory.newRoutine("greedyNeapolitanMilkshake");
+
+                AutoTrajectory bump_only_1_greedy = isLeft ? routine.trajectory("bump_only_1_greedy")
+                                : routine.trajectory("bump_only_1_greedy").mirrorY();
+
+                routine.active().onTrue(Commands.sequence(
+                                Commands.parallel(
+                                                disregardRequirements(bump_only_1_greedy.resetOdometry()),
+                                                Commands.runOnce(() -> drivetrain
+                                                                .setWantedState(WantedState.CHOREO_TRAJECTORY)),
+                                                superstructureCommands.setWantedSuperStateCommand(
+                                                                WantedSuperState.LIFT_INTAKE_AUTO)),
+                                new WaitCommand(1.5),
+                                bump_only_1_greedy.cmd()));
+
+                bump_only_1_greedy.atTime("deploy_intake").onTrue(
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO));
+
+                bump_only_1_greedy.atTime("lift_intake").onTrue(
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
+
+                bump_only_1_greedy.done()
                                 .onTrue(Commands.sequence(
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
