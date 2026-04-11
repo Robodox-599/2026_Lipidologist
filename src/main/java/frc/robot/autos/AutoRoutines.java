@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.WantedSuperState;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.CommandSwerveDrivetrain.WantedState;
 
 public class AutoRoutines {
         private AutoFactory autoFactory;
@@ -36,11 +37,11 @@ public class AutoRoutines {
                 AutoTrajectory trench_only_3 = isLeft ? routine.trajectory("trench_only_3")
                                 : routine.trajectory("trench_only_3").mirrorY();
 
-                routine.active().onTrue(Commands.sequence(trench_only_1.resetOdometry(),
-                                Commands.parallel(
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                                trench_only_1.cmd())));
+                routine.active().onTrue(Commands.parallel(trench_only_1.resetOdometry(),
+                                drivetrain.setWantedStateCommand(WantedState.CHOREO_TRAJECTORY),
+                                superstructureCommands
+                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                trench_only_1.cmd()));
 
                 trench_only_1.done()
                                 .onTrue(Commands.sequence(
@@ -83,11 +84,11 @@ public class AutoRoutines {
                 AutoTrajectory trench_only_3 = isLeft ? routine.trajectory("trench_only_3")
                                 : routine.trajectory("trench_only_3").mirrorY();
 
-                routine.active().onTrue(Commands.sequence(trench_only_1.resetOdometry(),
-                                Commands.parallel(
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                                trench_only_1.cmd())));
+                routine.active().onTrue(Commands.parallel(trench_only_1.resetOdometry(),
+                                drivetrain.setWantedStateCommand(WantedState.CHOREO_TRAJECTORY),
+                                superstructureCommands
+                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                trench_only_1.cmd()));
 
                 trench_only_1.done()
                                 .onTrue(Commands.sequence(
@@ -114,7 +115,7 @@ public class AutoRoutines {
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 trench_only_3.cmd()));
-                                                
+
                 trench_only_3.done().onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
                 return routine;
@@ -130,11 +131,11 @@ public class AutoRoutines {
                 AutoTrajectory trench_only_3 = isLeft ? routine.trajectory("trench_only_3")
                                 : routine.trajectory("trench_only_3").mirrorY();
 
-                routine.active().onTrue(Commands.sequence(trench_and_bump_1.resetOdometry(),
-                                Commands.parallel(
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                                trench_and_bump_1.cmd())));
+                routine.active().onTrue(Commands.parallel(trench_and_bump_1.resetOdometry(),
+                                drivetrain.setWantedStateCommand(WantedState.CHOREO_TRAJECTORY),
+                                superstructureCommands
+                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                trench_and_bump_1.cmd()));
 
                 trench_and_bump_1.atTime("lift_intake").onTrue(
                                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
@@ -164,7 +165,7 @@ public class AutoRoutines {
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 trench_only_3.cmd()));
-                                                
+
                 trench_only_3.done().onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
                 return routine;
@@ -179,13 +180,12 @@ public class AutoRoutines {
                                 : routine.trajectory("trench_and_bump_2_mid").mirrorY();
                 AutoTrajectory trench_and_bump_3 = isLeft ? routine.trajectory("trench_and_bump_3")
                                 : routine.trajectory("trench_and_bump_3").mirrorY();
-                
 
-                routine.active().onTrue(Commands.sequence(trench_and_bump_1.resetOdometry(),
-                                Commands.parallel(
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                                trench_and_bump_1.cmd())));
+                routine.active().onTrue(Commands.parallel(trench_and_bump_1.resetOdometry(),
+                                drivetrain.setWantedStateCommand(WantedState.CHOREO_TRAJECTORY),
+                                superstructureCommands
+                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                trench_and_bump_1.cmd()));
 
                 trench_and_bump_1.atTime("lift_intake").onTrue(
                                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
@@ -218,8 +218,9 @@ public class AutoRoutines {
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 trench_and_bump_3.cmd()));
-                                                
-                trench_and_bump_3.done().onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE));
+
+                trench_and_bump_3.done()
+                                .onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
                 return routine;
         }
@@ -234,11 +235,11 @@ public class AutoRoutines {
                 AutoTrajectory trench_only_3 = isLeft ? routine.trajectory("trench_only_3")
                                 : routine.trajectory("trench_only_3").mirrorY();
 
-                routine.active().onTrue(Commands.sequence(trench_only_1.resetOdometry(),
-                                Commands.parallel(
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                                trench_only_1.cmd())));
+                routine.active().onTrue(Commands.parallel(trench_only_1.resetOdometry(),
+                                drivetrain.setWantedStateCommand(WantedState.CHOREO_TRAJECTORY),
+                                superstructureCommands
+                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                trench_only_1.cmd()));
 
                 trench_only_1.done()
                                 .onTrue(Commands.sequence(
@@ -280,11 +281,11 @@ public class AutoRoutines {
                 AutoTrajectory trench_and_bump_3 = isLeft ? routine.trajectory("trench_and_bump_3")
                                 : routine.trajectory("trench_and_bump_3").mirrorY();
 
-                routine.active().onTrue(Commands.sequence(trench_and_bump_1.resetOdometry(),
-                                Commands.parallel(
-                                                superstructureCommands
-                                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                                trench_and_bump_1.cmd())));
+                routine.active().onTrue(Commands.parallel(trench_and_bump_1.resetOdometry(),
+                                drivetrain.setWantedStateCommand(WantedState.CHOREO_TRAJECTORY),
+                                superstructureCommands
+                                                .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                                trench_and_bump_1.cmd()));
 
                 trench_and_bump_1.atTime("lift_intake").onTrue(
                                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.LIFT_INTAKE_AUTO));
@@ -316,8 +317,9 @@ public class AutoRoutines {
                                                 superstructureCommands
                                                                 .setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                                                 trench_and_bump_3.cmd()));
-                                                
-                trench_and_bump_3.done().onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE));
+
+                trench_and_bump_3.done()
+                                .onTrue(superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
                 return routine;
         }
