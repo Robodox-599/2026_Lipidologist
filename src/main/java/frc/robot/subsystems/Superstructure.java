@@ -97,8 +97,8 @@ public class Superstructure extends SubsystemBase {
         // STOWING
     }
 
-    private WantedSuperState wantedSuperState = WantedSuperState.IDLE;
-    private CurrentSuperState currentSuperState = CurrentSuperState.IDLING;
+    private WantedSuperState wantedSuperState = WantedSuperState.STOP;
+    private CurrentSuperState currentSuperState = CurrentSuperState.STOPPED;
     private AdjustedShot adjustedShot = new AdjustedShot(Rotation2d.kZero, 0, 0, 0);
 
     public Superstructure(

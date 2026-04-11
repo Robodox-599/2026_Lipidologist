@@ -46,11 +46,13 @@ public class IntakeWristConstants {
 
     public static final double wristLengthMeters = 0.5;
     public static final double wristMassKg = 5.0;
+    public static final double agitationTime = 0.4;
 
     public static final double statorCurrentTrip = 70; //must be changed and tested
     public static final double velocityTrip = 1; //must be changed and tested
     public static final double debounceTime = 0.3; // must be changed and tested
     
-    public static final double totalAgitationTime = 2.0;
-    public static final double maxAgitationPosition = 0.2;
+    public static final double totalAgitationTime = 3.0;
+    public static final double maxAgitationPosition = 0.25;
+    public static final double deltaAgitation = 0.08;
 }

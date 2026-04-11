@@ -14,9 +14,12 @@ import frc.robot.util.Tracer;
 /** Add your docs here. */
 public class IntakeWrist {
     private final IntakeWristIO io;
+    private IntakeWristWantedState previousWantedState = IntakeWristWantedState.STOP;
     private IntakeWristWantedState wantedState = IntakeWristWantedState.STOP;
     private IntakeWristCurrentState currentState = IntakeWristCurrentState.STOPPED;
     private Timer agitationTimer = new Timer();
+    private Timer liftingAgitationTimer = new Timer();
+    private double currentAgitationPosition = 0;
 
     public IntakeWrist(IntakeWristIO io) {
         this.io = io;
@@ -35,7 +38,8 @@ public class IntakeWrist {
         INTAKING_FUEL,
         STOWING, // packing
         LIFTING,
-        AGITATING_FUEL,
+        WRIST_RETRACTING,
+        WRIST_EXTENDING,
         UNJAM
     }
 
@@ -47,8 +51,10 @@ public class IntakeWrist {
 
         DogLog.log("Intake/Wrist/WantedState", wantedState);
         DogLog.log("Intake/Wrist/CurrentState", currentState);
+        DogLog.log("Intake/Wrist/PreviousWantedState", previousWantedState);
         DogLog.log("Intake/Wrist/IsWristJammed", io.isWristJammed);
         DogLog.log("Intake/Wrist/AgitationTimer", agitationTimer.get());
+        DogLog.log("Intake/Wrist/LiftingAgitationTimer", liftingAgitationTimer.get());
     }
 
     public void handleStateTransitions() {
@@ -71,10 +77,51 @@ public class IntakeWrist {
                 currentState = IntakeWristCurrentState.STOWING;
                 break;
             case AGITATE_FUEL:
-                if (currentState != IntakeWristCurrentState.AGITATING_FUEL) {
+                // if (currentState == IntakeWristCurrentState.WRIST_RETRACTING){
+                // if (atSetpoint() || io.isWristJammed){
+                // currentState = IntakeWristCurrentState.WRIST_EXTENDING;
+                // } else{
+                // currentState = IntakeWristCurrentState.WRIST_RETRACTING;
+                // }
+                // } else if(currentState == IntakeWristCurrentState.WRIST_EXTENDING){
+                // if (atSetpoint() || io.isWristJammed){
+                // currentState = IntakeWristCurrentState.WRIST_RETRACTING;
+                // } else{
+                // currentState = IntakeWristCurrentState.WRIST_EXTENDING;
+                // }
+                // } else {
+                // currentState = IntakeWristCurrentState.WRIST_EXTENDING;
+                // }
+
+                if (this.previousWantedState != IntakeWristWantedState.AGITATE_FUEL) {
+                    liftingAgitationTimer.restart();
                     agitationTimer.restart();
+                    currentAgitationPosition = Math
+                                .max(Math.min(liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
+                                        1.0)
+                                        * IntakeWristConstants.maxAgitationPosition, 0.005 + IntakeWristConstants.deltaAgitation);
                 }
-                currentState = IntakeWristCurrentState.AGITATING_FUEL;
+                if (agitationTimer.get() > IntakeWristConstants.agitationTime) {
+                    if (currentState == IntakeWristCurrentState.WRIST_RETRACTING) {
+                        currentAgitationPosition = Math
+                                .max(Math.min(liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
+                                        1.0)
+                                        * IntakeWristConstants.maxAgitationPosition, 0.005 + IntakeWristConstants.deltaAgitation);
+                        currentState = IntakeWristCurrentState.WRIST_EXTENDING;
+                        agitationTimer.restart();
+                    } else {
+                        currentAgitationPosition = Math
+                                .max(Math.min(liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
+                                        1.0)
+                                        * IntakeWristConstants.maxAgitationPosition, 0.005 + IntakeWristConstants.deltaAgitation);
+                        currentState = IntakeWristCurrentState.WRIST_RETRACTING;
+                        agitationTimer.restart();
+                    }
+                } else if (currentState == IntakeWristCurrentState.WRIST_EXTENDING) {
+                    currentState = IntakeWristCurrentState.WRIST_EXTENDING;
+                } else {
+                    currentState = IntakeWristCurrentState.WRIST_RETRACTING;
+                }
                 break;
             default:
                 currentState = IntakeWristCurrentState.STOPPED;
@@ -91,14 +138,16 @@ public class IntakeWrist {
                 setPosition(0.005);
                 break;
             case LIFTING:
-                setPosition(0.1);
+                setPosition(0.05);
                 break;
             case STOWING:
                 setPosition(.35);
                 break;
-            case AGITATING_FUEL:
-                setPosition(Math.max(Math.min(agitationTimer.get() / IntakeWristConstants.totalAgitationTime, 1.0)
-                        * IntakeWristConstants.maxAgitationPosition, 0.005));
+            case WRIST_RETRACTING:
+                setPosition(currentAgitationPosition);
+                break;
+            case WRIST_EXTENDING:
+                setPosition(Math.max(currentAgitationPosition - IntakeWristConstants.deltaAgitation, 0.005));
                 break;
             case UNJAM:
                 setPosition(0.33);
@@ -115,6 +164,7 @@ public class IntakeWrist {
     }
 
     public void setWantedState(IntakeWrist.IntakeWristWantedState wantedState) {
+        this.previousWantedState = this.wantedState;
         this.wantedState = wantedState;
     }
 
