@@ -67,6 +67,13 @@
      "val":-0.25
     }
    },
+   "maxBumpVelocity":{
+    "dimension":"LinVel",
+    "var":{
+     "exp":"2.5 m / s",
+     "val":2.5
+    }
+   },
    "maxFastSweepVelocity":{
     "dimension":"LinVel",
     "var":{
