@@ -75,7 +75,7 @@ public class Flywheels {
                 setRPS(FlywheelsConstants.idleRPS);
                 break;
             case CLEANING:
-                setVoltage(0.4);
+                setVoltage(0.5);
                 break;
             case STOPPING:
                 stop();

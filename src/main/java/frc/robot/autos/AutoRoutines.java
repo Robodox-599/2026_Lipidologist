@@ -17,8 +17,8 @@ public class AutoRoutines {
         private Superstructure superstructureCommands;
         private CommandSwerveDrivetrain drivetrain;
 
-        private static double shoot_without_agitation_secs = 1.0;
-        private static double shoot_with_agitation_secs = 3.0;
+        private static double shoot_without_agitation_secs = 0.8;
+        private static double shoot_with_agitation_secs = 3.5;
 
         public AutoRoutines(
                         AutoFactory autoFactory,

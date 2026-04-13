@@ -168,11 +168,11 @@ public class Robot extends TimedRobot {
         hood = new Hood(new HoodIOSim());
         vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
             new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-            // new VisionIOSim(VisionConstants.sideLeftCameraConstants, () ->
-            // drivetrain.getPose()),
-            new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
-        // new VisionIOSim(VisionConstants.sideRightCameraConstants, () ->
-        // drivetrain.getPose())
+            new VisionIOSim(VisionConstants.sideLeftCameraConstants, () ->
+            drivetrain.getPose()),
+            new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
+        new VisionIOSim(VisionConstants.sideRightCameraConstants, () ->
+        drivetrain.getPose())
         );
         leds = new LEDs(new LEDsIO());
         break;

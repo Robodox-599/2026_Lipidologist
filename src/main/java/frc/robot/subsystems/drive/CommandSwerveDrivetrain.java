@@ -483,7 +483,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   // }
 
   public boolean isAtTargetRotation() {
-    return driveAtAngle.HeadingController.getPositionError() < Units.degreesToRadians(3);
+    return driveAtAngle.HeadingController.getPositionError() < Units.degreesToRadians(5);
   }
 
   public boolean isAtTargetPose() {
