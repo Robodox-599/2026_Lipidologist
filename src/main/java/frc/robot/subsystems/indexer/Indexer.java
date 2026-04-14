@@ -19,13 +19,14 @@ public class Indexer extends SubsystemBase {
     INDEX,
     REVERSE,
     PULSE,
-
+    CLEAN
   }
 
   public enum IndexerCurrentState{
     STOPPED,
     INDEXING,
     REVERSING,
+    CLEANNING
   }
 
   public Indexer(IndexerIO io){
@@ -70,6 +71,8 @@ public class Indexer extends SubsystemBase {
           }
         }
         break;
+      case CLEAN:
+        currentState = IndexerCurrentState.CLEANNING;
       default:
         currentState = IndexerCurrentState.STOPPED;
         break;
@@ -86,6 +89,9 @@ public class Indexer extends SubsystemBase {
         setVoltage(0);
         break;
       case REVERSING:
+        setVoltage(0);
+        break;
+      case CLEANNING:
         setVoltage(0);
         break;
       default:

@@ -25,12 +25,14 @@ public class Feeder {
     STOP,
     FEED,
     REVERSE,
+    CLEAN
   }
 
   public enum FeederCurrentState{
     STOPPED,
     FEEDING,
-    REVERSING
+    REVERSING,
+    CLEANING
   }
 
   public void updateInputs(){
@@ -56,6 +58,9 @@ public class Feeder {
       case REVERSE:
         currentState = FeederCurrentState.REVERSING;
         break;
+      case CLEAN:
+        currentState = FeederCurrentState.CLEANING;
+        break;
       default:
         currentState = FeederCurrentState.STOPPED;
         break;
@@ -73,6 +78,8 @@ public class Feeder {
       case REVERSING:
         setVelocity(0);
         break;
+      case CLEANING:
+        setVelocity(0); //really slow
       default:
         setVelocity(0);
     }
