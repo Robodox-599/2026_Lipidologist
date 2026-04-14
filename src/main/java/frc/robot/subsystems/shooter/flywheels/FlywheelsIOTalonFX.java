@@ -47,12 +47,23 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     // private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
 
     // status signals
-    private final StatusSignal<AngularVelocity> flywheelVelocityRPS;
-    private final StatusSignal<Temperature> flywheelTemperature;
-    private final StatusSignal<Angle> flywheelPosition;
-    private final StatusSignal<Voltage> flywheelAppliedVolts;
-    private final StatusSignal<Current> flywheelStatorCurrent;
-    private final StatusSignal<Current> flywheelSupplyCurrent;
+    private final StatusSignal<AngularVelocity> flywheelLeaderVelocityRPS; //VelocityRPS
+    private final StatusSignal<AngularVelocity> flywheelFollower1VelocityRPS;
+    private final StatusSignal<AngularVelocity> flywheelFollower2VelocityRPS;
+    private final StatusSignal<AngularVelocity> flywheelFollower3VelocityRPS;
+    private final StatusSignal<Current> flywheelLeaderStatorCurrent; //StatorCurrent
+    private final StatusSignal<Current> flywheelFollower1StatorCurrent;
+    private final StatusSignal<Current> flywheelFollower2StatorCurrent;
+    private final StatusSignal<Current> flywheelFollower3StatorCurrent;
+    private final StatusSignal<Current> flywheelLeaderSupplyCurrent; //SupplyCurrent
+    private final StatusSignal<Current> flywheelFollower1SupplyCurrent;
+    private final StatusSignal<Current> flywheelFollower2SupplyCurrent;
+    private final StatusSignal<Current> flywheelFollower3SupplyCurrent;
+    private final StatusSignal<Voltage> flywheelLeaderAppliedVolts; //AppliedVolts
+    private final StatusSignal<Voltage> flywheelFollower1AppliedVolts;
+    private final StatusSignal<Voltage> flywheelFollower2AppliedVolts;
+    private final StatusSignal<Voltage> flywheelFollower3AppliedVolts;
+    private final BaseStatusSignal[] characterizationSignals;
 
     // private final FlywheelConstants flywheelConstants;
 
@@ -90,7 +101,6 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
                                 .withKS(FlywheelsConstants.flywheelRealkS)
                                 .withKV(FlywheelsConstants.flywheelRealkV));
 
-       
         velocityVoltage = new VelocityVoltage(super.targetRPS);
         // velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
 
@@ -104,17 +114,45 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
         flywheelFollower2Motor.setControl(new Follower(FlywheelsConstants.flywheelLeaderMotorID, MotorAlignmentValue.Aligned));
         flywheelFollower3Motor.setControl(new Follower(FlywheelsConstants.flywheelLeaderMotorID, MotorAlignmentValue.Aligned));
 
-        // status signals
-        flywheelVelocityRPS = flywheelLeaderMotor.getVelocity();
-        flywheelTemperature = flywheelLeaderMotor.getDeviceTemp();
-        flywheelPosition = flywheelLeaderMotor.getPosition();
-        flywheelAppliedVolts = flywheelLeaderMotor.getMotorVoltage();
-        flywheelStatorCurrent = flywheelLeaderMotor.getStatorCurrent();
-        flywheelSupplyCurrent = flywheelLeaderMotor.getSupplyCurrent();
+        // status signals    
+        flywheelLeaderVelocityRPS = flywheelLeaderMotor.getVelocity(); //VelocityRPS
+        flywheelFollower1VelocityRPS = flywheelFollower1Motor.getVelocity();
+        flywheelFollower2VelocityRPS = flywheelFollower2Motor.getVelocity();
+        flywheelFollower3VelocityRPS = flywheelFollower3Motor.getVelocity();
+        flywheelLeaderStatorCurrent = flywheelLeaderMotor.getStatorCurrent(); //StatorCurrent
+        flywheelFollower1StatorCurrent = flywheelFollower1Motor.getStatorCurrent();
+        flywheelFollower2StatorCurrent = flywheelFollower2Motor.getStatorCurrent();
+        flywheelFollower3StatorCurrent = flywheelFollower3Motor.getStatorCurrent();
+        flywheelLeaderSupplyCurrent = flywheelLeaderMotor.getSupplyCurrent(); //SupplyCurrent
+        flywheelFollower1SupplyCurrent = flywheelFollower1Motor.getSupplyCurrent();
+        flywheelFollower2SupplyCurrent = flywheelFollower2Motor.getSupplyCurrent();
+        flywheelFollower3SupplyCurrent = flywheelFollower3Motor.getSupplyCurrent();
+        flywheelLeaderAppliedVolts = flywheelLeaderMotor.getMotorVoltage(); //
+        flywheelFollower1AppliedVolts = flywheelFollower1Motor.getMotorVoltage();
+        flywheelFollower2AppliedVolts = flywheelFollower2Motor.getMotorVoltage();
+        flywheelFollower3AppliedVolts = flywheelFollower3Motor.getMotorVoltage();
+        characterizationSignals = new BaseStatusSignal[]{
+            flywheelLeaderVelocityRPS,
+            flywheelFollower1VelocityRPS,
+            flywheelFollower2VelocityRPS,
+            flywheelFollower3VelocityRPS,
+            flywheelLeaderStatorCurrent,
+            flywheelFollower1StatorCurrent,
+            flywheelFollower2StatorCurrent,
+            flywheelFollower3StatorCurrent,
+            flywheelLeaderSupplyCurrent,
+            flywheelFollower1SupplyCurrent,
+            flywheelFollower2SupplyCurrent,
+            flywheelFollower2SupplyCurrent,
+            flywheelFollower3SupplyCurrent,
+            flywheelLeaderAppliedVolts,
+            flywheelFollower1AppliedVolts,
+            flywheelFollower2AppliedVolts,
+            flywheelFollower3AppliedVolts
+        };
 
         // update frequency
-        BaseStatusSignal.setUpdateFrequencyForAll(50, flywheelVelocityRPS, flywheelTemperature,
-                flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
+        BaseStatusSignal.setUpdateFrequencyForAll(50, characterizationSignals);
 
         flywheelLeaderMotor.optimizeBusUtilization();
         flywheelFollower1Motor.optimizeBusUtilization();
@@ -124,13 +162,11 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
 
     @Override
     public void updateInputs() {
-        BaseStatusSignal.refreshAll(flywheelVelocityRPS, flywheelTemperature,
-                flywheelPosition, flywheelAppliedVolts, flywheelStatorCurrent, flywheelSupplyCurrent);
+        BaseStatusSignal.refreshAll(characterizationSignals);
 
-        super.RPS = flywheelVelocityRPS.getValueAsDouble();
-        super.statorCurrent = flywheelStatorCurrent.getValueAsDouble();
-        super.supplyCurrent = flywheelSupplyCurrent.getValueAsDouble();
-        super.temperature = flywheelTemperature.getValueAsDouble();
+        super.RPS = flywheelLeaderVelocityRPS.getValueAsDouble();
+        super.statorCurrent = flywheelLeaderStatorCurrent.getValueAsDouble();
+        super.supplyCurrent = flywheelLeaderSupplyCurrent.getValueAsDouble();
         super.isFlywheelAtSetpoint = rpmDebouncer.calculate(Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSTolerance);
 
         DogLog.log("Flywheels/RPS", super.RPS);
