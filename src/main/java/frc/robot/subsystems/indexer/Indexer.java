@@ -73,6 +73,7 @@ public class Indexer extends SubsystemBase {
         break;
       case CLEAN:
         currentState = IndexerCurrentState.CLEANNING;
+        break;
       default:
         currentState = IndexerCurrentState.STOPPED;
         break;
@@ -92,7 +93,7 @@ public class Indexer extends SubsystemBase {
         setVoltage(0);
         break;
       case CLEANNING:
-        setVoltage(0);
+        setVoltage(0); //low value
         break;
       default:
         stop();
@@ -107,4 +108,9 @@ public class Indexer extends SubsystemBase {
   private void setVoltage(double voltage){
     io.setVoltage(voltage);
   }
+
+  public void setWantedState(Indexer.IndexerWantedState wantedState){
+    this.wantedState = wantedState;
+  }
+
 }

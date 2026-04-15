@@ -28,6 +28,7 @@ public class Bindings extends SubsystemBase {
     this.superstructure = superstructure;
 
     driver.y().onTrue(superstructure.zeroPoseCommand());
+    driver.b().whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLEAN));
 
     // driver.rightTrigger().whileTrue(new RepeatCommand(setShootingStateCommand())).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 

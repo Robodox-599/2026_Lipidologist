@@ -92,4 +92,8 @@ public class Feeder {
   private void setVelocity(double velocity){
     io.setVelocity(velocity);
   }
+
+  public void setWantedWatate(Feeder.FeederWantedState wantedState){
+    this.wantedState = wantedState;
+  }
 }

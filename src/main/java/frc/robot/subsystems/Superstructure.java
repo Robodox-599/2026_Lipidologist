@@ -27,17 +27,18 @@ import frc.robot.util.HubShiftUtil.ShiftInfo;
 import frc.robot.util.ShotData;
 import frc.robot.util.CalculateShot.AdjustedShot;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
+import frc.robot.subsystems.shooter.flywheels.Flywheels.FlywheelWantedState;
 import frc.robot.util.AllianceFlipUtil;
 
 public class Superstructure extends SubsystemBase {
 
     // final Climb climb;
     final CommandSwerveDrivetrain drivetrain;
-    // final Feeder feeder;
-    // final Indexer indexer;
+    final Feeder feeder;
+    final Indexer indexer;
     final IntakeRollers intakeRollers;
     final IntakeWrist intakeWrist;
-    // final Flywheels flywheels;
+    final Flywheels flywheels;
     // final Hood hood;
     final Vision vision;
     private final ShotData shotCalculator = new ShotData();
@@ -47,6 +48,7 @@ public class Superstructure extends SubsystemBase {
         SHOOT_HUB,
         PREPARE_ALLIANCE_ZONE_SHOT,
         SHOOT_ALLIANCE_ZONE,
+        CLEAN,
         IDLE,
         STOP,
     }
@@ -56,6 +58,7 @@ public class Superstructure extends SubsystemBase {
         SHOOTING_HUB,
         PREPARING_ALLIANCE_ZONE_SHOT,
         SHOOTING_ALLIANCE_ZONE,
+        CLEANING,
         IDLING,
         STOPPED;
     }
@@ -73,21 +76,21 @@ public class Superstructure extends SubsystemBase {
     public Superstructure(
             // Climb climb,
             CommandSwerveDrivetrain drivetrain,
-            // Feeder feeder,
-            // Indexer indexer,
+            Feeder feeder,
+            Indexer indexer,
             IntakeRollers intakeRollers,
             IntakeWrist intakeWrist,
-            // Flywheels flywheels,
+            Flywheels flywheels,
             // Hood hood
             Vision vision
             ) {
         // this.climb = climb;
         this.drivetrain = drivetrain;
-        // this.feeder = feeder;
-        // this.indexer = indexer;
+        this.feeder = feeder;
+        this.indexer = indexer;
         this.intakeRollers = intakeRollers;
         this.intakeWrist = intakeWrist;
-        // this.flywheels = flywheels;
+        this.flywheels = flywheels;
         // this.hood = hood;
         this.vision = vision;
     }
@@ -96,11 +99,11 @@ public class Superstructure extends SubsystemBase {
     public void periodic() {
         // climb.updateInputs();
         drivetrain.updateInputs();
-        // feeder.updateInputs();
-        // indexer.updateInputs();
+        feeder.updateInputs();
+        indexer.updateInputs();
         intakeRollers.updateInputs();
         intakeWrist.updateInputs();
-        // flywheels.updateInputs();
+        flywheels.updateInputs();
         // hood.updateInputs();
         vision.updateInputs();
 
@@ -140,6 +143,8 @@ public class Superstructure extends SubsystemBase {
                 //     currentSuperState = CurrentSuperState.PREPARING_ALLIANCE_ZONE_SHOT;
                 // }
                 break;
+            case CLEAN:
+                currentSuperState = CurrentSuperState.CLEANING;
             case IDLE:
                 currentSuperState = CurrentSuperState.IDLING;
                 break;
@@ -163,6 +168,9 @@ public class Superstructure extends SubsystemBase {
                 break;
             case SHOOTING_ALLIANCE_ZONE:
                 shootingAllianceZone();
+                break;
+            case CLEANING:
+                //
                 break;
             case IDLING:
                 idling();
@@ -232,6 +240,13 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         // flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPM, adjustedShot.shootSpeed());
         // hood.setWantedState(Hood.HoodWantedState.SET_POSITION, adjustedShot.hoodAngle());
+    }
+    
+    public void cleaning(){
+        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.CLEAN);
+        indexer.setWantedState(Indexer.IndexerWantedState.CLEAN);
+        feeder.setWantedWatate(Feeder.FeederWantedState.CLEAN);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.CLEAN);
     }
 
     public void idling() {

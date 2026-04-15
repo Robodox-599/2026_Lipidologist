@@ -16,7 +16,7 @@ public class Flywheels {
     public enum FlywheelWantedState {
         SET_RPS,
         IDLE,
-        CLEANING,
+        CLEAN,
         STOPPED
     }
 
@@ -46,7 +46,7 @@ public class Flywheels {
             case IDLE:
                 currentState = FlywheelCurrentState.IDLING;
                 break;
-            case CLEANING:
+            case CLEAN:
                 currentState = FlywheelCurrentState.CLEANING;
                 break;
             case STOPPED:
