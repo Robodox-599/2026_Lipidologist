@@ -72,6 +72,8 @@ public class Superstructure extends SubsystemBase {
         LIFT_INTAKE_AUTO,
         STOP,
         TESTING,
+        TUNE_SHOT_DATA_IDLE,
+        TUNE_SHOT_DATA_SHOOT,
         // STOW
     }
 
@@ -94,6 +96,8 @@ public class Superstructure extends SubsystemBase {
         LIFTING_INTAKE_AUTO,
         STOPPED,
         TESTING,
+        TUNING_SHOT_DATA_IDLING,
+        TUNING_SHOT_DATA_SHOOTING
         // STOWING
     }
 
@@ -278,6 +282,16 @@ public class Superstructure extends SubsystemBase {
             // break;
             case LIFT_INTAKE_AUTO:
                 currentSuperState = CurrentSuperState.LIFTING_INTAKE_AUTO;
+                break;
+            case TUNE_SHOT_DATA_SHOOT:
+                if (areSystemsReadyForHubShot()){
+                    currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_SHOOTING;
+                } else{
+                    currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_IDLING;
+                }
+                break;
+            case TUNE_SHOT_DATA_IDLE:
+                currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_IDLING;
                 break;
             default:
                 currentSuperState = CurrentSuperState.STOPPED;
