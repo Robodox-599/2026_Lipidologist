@@ -6,10 +6,10 @@ import frc.robot.Constants;
 
 public class FlywheelsConstants {
         // motor information
-        public static final int flywheelLeaderMotorID = 0;
-        public static final int flywheelFollower1MotorID = 0;
-        public static final int flywheelFollower2MotorID = 0;
-        public static final int flywheelFollower3MotorID = 0;
+        public static final int flywheelLeaderMotorID = 25;
+        public static final int flywheelFollower1MotorID = 26;
+        public static final int flywheelFollower2MotorID = 27;
+        public static final int flywheelFollower3MotorID = 28;
 
         public static final String flywheelCANBus = "rio";
 

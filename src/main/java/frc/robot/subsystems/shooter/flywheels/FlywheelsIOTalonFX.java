@@ -111,9 +111,9 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
         PhoenixUtil.tryUntilOk(10, () -> flywheelFollower3Motor.getConfigurator().apply(flywheelConfiguration, 1));
 
         flywheelFollower1Motor.setControl(new Follower(FlywheelsConstants.flywheelLeaderMotorID, MotorAlignmentValue.Aligned));
-        flywheelFollower2Motor.setControl(new Follower(FlywheelsConstants.flywheelLeaderMotorID, MotorAlignmentValue.Aligned));
-        flywheelFollower3Motor.setControl(new Follower(FlywheelsConstants.flywheelLeaderMotorID, MotorAlignmentValue.Aligned));
-
+        flywheelFollower2Motor.setControl(new Follower(FlywheelsConstants.flywheelLeaderMotorID, MotorAlignmentValue.Opposed));
+        flywheelFollower3Motor.setControl(new Follower(FlywheelsConstants.flywheelLeaderMotorID, MotorAlignmentValue.Opposed));
+        
         // status signals    
         flywheelLeaderVelocityRPS = flywheelLeaderMotor.getVelocity(); //VelocityRPS
         flywheelFollower1VelocityRPS = flywheelFollower1Motor.getVelocity();
