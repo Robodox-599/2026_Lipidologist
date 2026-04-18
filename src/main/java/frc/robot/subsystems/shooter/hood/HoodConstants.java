@@ -13,12 +13,12 @@ public class HoodConstants {
     public static final double stowPosition = 0.0;
    
     //real PID
-    public static final double hoodRealkP = 110;
+    public static final double hoodRealkP = 90;
     public static final double hoodRealkI = 0;
-    public static final double hoodRealkD = 10;
-    public static final double hoodRealkS = 0.48;
-    public static final double hoodRealkV = Constants.kMotors.kKrakenX60Foc.kV * hoodGearRatio;
-    public static final double hoodRealkG = 0;
+    public static final double hoodRealkD = 5;
+    public static final double hoodRealkS = 0.5;
+    public static final double hoodRealkV = 6.2;
+    public static final double hoodRealkG = 0.2;
 
     //sim PID
     public static final double hoodSimkP = 7;
@@ -45,6 +45,6 @@ public class HoodConstants {
     public static final double hoodMaxAngleRotations = 0.12;
 
     //cancoderstuff
-    public static final double hoodMagnetOffset = 0.9968;
-    public static final double absoluteDiscontinuityPoint = 0.56;
+    public static final double hoodMagnetOffset = -0.9735;
+    public static final double absoluteDiscontinuityPoint = 0.98;
 }

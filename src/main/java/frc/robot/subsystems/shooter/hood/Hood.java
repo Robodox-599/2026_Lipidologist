@@ -27,7 +27,7 @@ public class Hood {
     public void updateInputs() {
         Tracer.traceFunc("HoodUpdateInputs", io::updateInputs);
         handleStateTransitions();
-        // applyStates();
+        applyStates();
 
         DogLog.log("Hood/WantedState", wantedState);
         DogLog.log("Hood/CurrentState", currentState);

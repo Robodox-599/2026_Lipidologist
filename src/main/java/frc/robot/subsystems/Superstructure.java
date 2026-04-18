@@ -288,11 +288,12 @@ public class Superstructure extends SubsystemBase {
                 currentSuperState = CurrentSuperState.LIFTING_INTAKE_AUTO;
                 break;
             case TUNE_SHOT_DATA_SHOOT:
-                if (areSystemsReadyForHubShot()){
-                    currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_SHOOTING;
-                } else{
-                    currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_IDLING;
-                }
+                // if (areSystemsReadyForHubShot()){
+                //     currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_SHOOTING;
+                // } else{
+                //     currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_IDLING;
+                // }
+                currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_SHOOTING;
                 break;
             case TUNE_SHOT_DATA_IDLE:
                 currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_IDLING;
@@ -680,9 +681,11 @@ public class Superstructure extends SubsystemBase {
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.STOPPED);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.STOP);
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
-        indexer.setWantedState(Indexer.IndexerWantedState.PULSE_FUEL);
+        indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
-        setHoodAngleAndFlywheelsRPS();
+        // setHoodAngleAndFlywheelsRPS();
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 60);
+        hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.07);
         leds.setWantedState(LEDs.LEDsWantedState.SHOOT_HUB);
     }
 

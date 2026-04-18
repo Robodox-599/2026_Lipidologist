@@ -39,7 +39,7 @@ public class Feeder {
     Tracer.traceFunc("FeederUpdateInputs", io::updateInputs);
 
     handleFeederStateTransitions();
-    // applyStates();
+    applyStates();
 
     DogLog.log("Feeder/wantedState", wantedState);
     DogLog.log("Feeder/currentState", currentState);

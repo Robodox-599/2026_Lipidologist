@@ -17,11 +17,11 @@ public class FlywheelsConstants {
         public static final double flywheelMOI = 0.1;
 
         // // real PID
-        public static final double flywheelRealkP = 0.2;
+        public static final double flywheelRealkP = 0.7;
         public static final double flywheelRealkI = 0;
-        public static final double flywheelRealkD = 1;
-        public static final double flywheelRealkS = 0;
-        public static final double flywheelRealkV = 0;
+        public static final double flywheelRealkD = 0;
+        public static final double flywheelRealkS = 0.36;
+        public static final double flywheelRealkV = 0.122;
 
         // // sim PID
         // public static final double flywheelSimkP = 1.25;

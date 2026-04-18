@@ -37,7 +37,7 @@ public class Flywheels {
 
     public void updateInputs() {
         handleStateTransitions();
-        // applyStates();
+        applyStates();
 
         io.updateInputs();
 

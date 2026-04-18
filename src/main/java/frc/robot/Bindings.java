@@ -30,9 +30,9 @@ public class Bindings {
     driver.y().onTrue(superstructure.zeroPoseCommand());
 
     // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
-    driver.rightTrigger().and(driver.leftTrigger().negate())
-        .whileTrue(new RepeatCommand(setShootingStateCommand()))
-        .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    // driver.rightTrigger().and(driver.leftTrigger().negate())
+    //     .whileTrue(new RepeatCommand(setShootingStateCommand()))
+    //     .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
     // AUTOMATICALLY SHOOT WHILE AGITATING WHEN READY TO EITHER HUB OR ALLIANCE ZONE
     driver.leftTrigger().whileTrue(new RepeatCommand(setAgitatingShootingStateCommand())).onFalse(Commands.either(
@@ -63,7 +63,7 @@ public class Bindings {
 
     driver.rightTrigger()
       .onTrue(Commands.runOnce(() -> superstructure.setWantedSuperState(WantedSuperState.TUNE_SHOT_DATA_SHOOT)))
-      .onFalse(Commands.runOnce(() -> superstructure.setWantedSuperState(WantedSuperState.TUNE_SHOT_DATA_IDLE)));
+      .onFalse(Commands.runOnce(() -> superstructure.setWantedSuperState(WantedSuperState.IDLE)));
   }
 
   public Command setShootingStateCommand() {

@@ -84,7 +84,7 @@ public class HoodIOTalonFX extends HoodIO {
         CANCoderConfig = new CANcoderConfiguration()
                 .withMagnetSensor(new MagnetSensorConfigs()
                         .withMagnetOffset(HoodConstants.hoodMagnetOffset)
-                        .withSensorDirection(SensorDirectionValue.Clockwise_Positive)
+                        .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive)
                         .withAbsoluteSensorDiscontinuityPoint(HoodConstants.absoluteDiscontinuityPoint));
 
         motionMagic = new MotionMagicVoltage(targetPositionRots).withSlot(0).withEnableFOC(true);
