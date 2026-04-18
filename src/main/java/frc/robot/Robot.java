@@ -27,6 +27,7 @@ import dev.doglog.DogLogOptions;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -281,13 +282,16 @@ public class Robot extends TimedRobot {
     // AllianceFlipUtil.apply(FieldConstants.Tower.leftOuterTowerPose));
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
     Tracer.traceFunc("CommandScheduler", scheduler::run);
-    // flywheels.setWantedState(FlywheelWantedState.SET_RPS,
-    // SmartDashboard.getNumber("Flywheel Velocity", 45.0));
+    flywheels.setWantedState(FlywheelWantedState.SET_RPS, SmartDashboard.getNumber("Flywheel Velocity", 45.0));
     // hood.setWantedState(HoodWantedState.SET_POSITION,
     // SmartDashboard.getNumber("Hood Rotations", 0.0));
     // feeder.setWantedState(FeederWantedState.FEED_FUEL);
     // indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
     // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
+
+    //TUNING:
+    // superstructure.setWantedSuperState(WantedSuperState.TUNE_SHOT_DATA_SHOOT, SmartDashboard.getNumber("Flywheel Velocity", 0));
+    // superstructure.setWantedSuperState(WantedSuperState.TUNE_SHOT_DATA_IDLE);
 
     // Translation2d robotTranslation = drivetrain.getPose().getTranslation();
     // Translation2d hubTranslation =

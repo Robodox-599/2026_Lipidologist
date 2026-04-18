@@ -25,8 +25,10 @@ import frc.robot.subsystems.drive.constants.TunerConstants;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.feeder.Feeder.FeederWantedState;
 import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.Indexer.IndexerWantedState;
 // import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
+import frc.robot.subsystems.intake.intakeRollers.IntakeRollers.IntakeRollersWantedState;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.vision6.Vision;
@@ -38,6 +40,7 @@ import frc.robot.util.shootingutil.ShotData;
 import frc.robot.util.shootingutil.CalculateShot.AdjustedShot;
 import frc.robot.util.Tracer;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
+import frc.robot.subsystems.shooter.flywheels.Flywheels.FlywheelCurrentState;
 import frc.robot.subsystems.shooter.flywheels.Flywheels.FlywheelWantedState;
 import frc.robot.util.AllianceFlipUtil;
 
@@ -53,6 +56,7 @@ public class Superstructure extends SubsystemBase {
     // final Climb climb;
     final LEDs leds;
     final Vision vision;
+    private double tuningTargetRPS = 0;
 
     public enum WantedSuperState {
         OUTAKE,
@@ -355,6 +359,12 @@ public class Superstructure extends SubsystemBase {
             // case STOWING:
             // stowing();
             // break;
+            case TUNING_SHOT_DATA_IDLING:
+                tuningShotDataIdling();
+                break;
+            case TUNING_SHOT_DATA_SHOOTING:
+                tuningShotDataShooting();
+                break;
             case LIFTING_INTAKE_AUTO:
                 liftingIntakeAuto();
                 break;
@@ -655,6 +665,27 @@ public class Superstructure extends SubsystemBase {
     // flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 0);
     // hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.1);
     // }
+    
+    public void tuningShotDataIdling(){
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
+        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.STOP);
+        indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+        feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+        hood.setWantedState(Hood.HoodWantedState.STOPPED);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.STOPPED);
+        leds.setWantedState(LEDs.LEDsWantedState.IDLE);
+    }
+
+    public void tuningShotDataShooting(){
+        drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.STOPPED);
+        intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.STOP);
+        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
+        indexer.setWantedState(Indexer.IndexerWantedState.PULSE_FUEL);
+        feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, tuningTargetRPS);
+        leds.setWantedState(LEDs.LEDsWantedState.SHOOT_HUB);
+    }
 
     private boolean areSystemsReadyForHubShot(double flightTime) {
         return flywheels.atSetpoint() && hood.atSetpoint() &&
@@ -743,6 +774,11 @@ public class Superstructure extends SubsystemBase {
 
     public void setWantedSuperState(WantedSuperState state) {
         wantedSuperState = state;
+    }
+
+    public void setWantedSuperState(WantedSuperState state, double tuningTargetRPS){
+        wantedSuperState = state;
+        this.tuningTargetRPS = tuningTargetRPS;
     }
 
     public Pose2d getPose() {
