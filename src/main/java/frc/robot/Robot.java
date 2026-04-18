@@ -289,10 +289,6 @@ public class Robot extends TimedRobot {
     // indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
     // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
 
-    // TUNING:
-    superstructure.setWantedSuperStateToTuneShotDataShoot(SmartDashboard.getNumber("Flywheel Velocity", 0));
-    superstructure.setWantedSuperStateToTuneShotDataIdle(SmartDashboard.getNumber("Hood Angle", 0), SmartDashboard.getNumber("Hood Angle", 0));
-
     // Translation2d robotTranslation = drivetrain.getPose().getTranslation();
     // Translation2d hubTranslation =
     // AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());

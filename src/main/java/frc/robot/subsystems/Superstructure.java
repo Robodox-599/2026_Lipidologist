@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -56,9 +57,6 @@ public class Superstructure extends SubsystemBase {
     // final Climb climb;
     final LEDs leds;
     final Vision vision;
-
-    private double targetTuningRPS = 0;
-    private double targetTuningAngle = 0;
 
     public enum WantedSuperState {
         OUTAKE,
@@ -674,8 +672,7 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.STOP);
         indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
         feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
-        hood.setWantedState(Hood.HoodWantedState.SET_POSITION, targetTuningAngle);
-        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, targetTuningRPS);
+        setHoodAngleAndFlywheelsRPS();
         leds.setWantedState(LEDs.LEDsWantedState.IDLE);
     }
 
@@ -685,8 +682,7 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         indexer.setWantedState(Indexer.IndexerWantedState.PULSE_FUEL);
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
-        hood.setWantedState(Hood.HoodWantedState.STOPPED);
-        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, targetTuningRPS);
+        setHoodAngleAndFlywheelsRPS();
         leds.setWantedState(LEDs.LEDsWantedState.SHOOT_HUB);
     }
 
@@ -779,14 +775,9 @@ public class Superstructure extends SubsystemBase {
         wantedSuperState = state;
     }
 
-    public void setWantedSuperStateToTuneShotDataShoot(double targetTuningRPS){
-        wantedSuperState = WantedSuperState.TUNE_SHOT_DATA_SHOOT;
-        this.targetTuningRPS = targetTuningRPS;
-    }
-
-    public void setWantedSuperStateToTuneShotDataIdle(double targetTuningRPS, double targetTuningAngle){
-        wantedSuperState = WantedSuperState.TUNE_SHOT_DATA_IDLE;
-        this.targetTuningAngle = targetTuningAngle;
+    public void setHoodAngleAndFlywheelsRPS(){
+        flywheels.setWantedState(FlywheelWantedState.SET_RPS, SmartDashboard.getNumber("Flywheel Velocity", 0));
+        hood.setWantedState(Hood.HoodWantedState.SET_POSITION, SmartDashboard.getNumber("Hood Angle", 0));
     }
 
     public Pose2d getPose() {

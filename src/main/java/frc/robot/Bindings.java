@@ -60,6 +60,10 @@ public class Bindings {
 
     // driver.rightTrigger().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.TESTING))
     // .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+
+    driver.b()
+      .onTrue(Commands.runOnce(() -> superstructure.setWantedSuperState(WantedSuperState.TUNE_SHOT_DATA_SHOOT)))
+      .onFalse(Commands.runOnce(() -> superstructure.setWantedSuperState(WantedSuperState.TUNE_SHOT_DATA_IDLE)));
   }
 
   public Command setShootingStateCommand() {
