@@ -56,7 +56,9 @@ public class Superstructure extends SubsystemBase {
     // final Climb climb;
     final LEDs leds;
     final Vision vision;
-    private double tuningTargetRPS = 0;
+
+    private double targetTuningRPS = 0;
+    private double targetTuningAngle = 0;
 
     public enum WantedSuperState {
         OUTAKE,
@@ -672,8 +674,8 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.STOP);
         indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
         feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
-        hood.setWantedState(Hood.HoodWantedState.STOPPED);
-        flywheels.setWantedState(Flywheels.FlywheelWantedState.STOPPED);
+        hood.setWantedState(Hood.HoodWantedState.SET_POSITION, targetTuningAngle);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, targetTuningRPS);
         leds.setWantedState(LEDs.LEDsWantedState.IDLE);
     }
 
@@ -683,7 +685,8 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         indexer.setWantedState(Indexer.IndexerWantedState.PULSE_FUEL);
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
-        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, tuningTargetRPS);
+        hood.setWantedState(Hood.HoodWantedState.STOPPED);
+        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, targetTuningRPS);
         leds.setWantedState(LEDs.LEDsWantedState.SHOOT_HUB);
     }
 
@@ -776,9 +779,14 @@ public class Superstructure extends SubsystemBase {
         wantedSuperState = state;
     }
 
-    public void setWantedSuperState(WantedSuperState state, double tuningTargetRPS){
-        wantedSuperState = state;
-        this.tuningTargetRPS = tuningTargetRPS;
+    public void setWantedSuperStateToTuneShotDataShoot(double targetTuningRPS){
+        wantedSuperState = WantedSuperState.TUNE_SHOT_DATA_SHOOT;
+        this.targetTuningRPS = targetTuningRPS;
+    }
+
+    public void setWantedSuperStateToTuneShotDataIdle(double targetTuningRPS, double targetTuningAngle){
+        wantedSuperState = WantedSuperState.TUNE_SHOT_DATA_IDLE;
+        this.targetTuningAngle = targetTuningAngle;
     }
 
     public Pose2d getPose() {

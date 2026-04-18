@@ -229,8 +229,8 @@ public class Robot extends TimedRobot {
     RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
 
-    // SmartDashboard.putNumber("Flywheel Velocity", 45.0);
-    // SmartDashboard.putNumber("Hood Rotations", 0.0);
+    SmartDashboard.putNumber("Flywheel Velocity", 45.0);
+    SmartDashboard.putNumber("Hood Rotations", 0.0);
 
     // DogLog.log("LeftTrenchZone", FieldConstants.LeftTrench.trenchZone);
     // DogLog.log("RightTrenchZone", FieldConstants.RightTrench.trenchZone);
@@ -282,16 +282,16 @@ public class Robot extends TimedRobot {
     // AllianceFlipUtil.apply(FieldConstants.Tower.leftOuterTowerPose));
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
     Tracer.traceFunc("CommandScheduler", scheduler::run);
-    flywheels.setWantedState(FlywheelWantedState.SET_RPS, SmartDashboard.getNumber("Flywheel Velocity", 45.0));
+    // flywheels.setWantedState(FlywheelWantedState.SET_RPS, SmartDashboard.getNumber("Flywheel Velocity", 45.0));
     // hood.setWantedState(HoodWantedState.SET_POSITION,
     // SmartDashboard.getNumber("Hood Rotations", 0.0));
     // feeder.setWantedState(FeederWantedState.FEED_FUEL);
     // indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
     // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
 
-    //TUNING:
-    // superstructure.setWantedSuperState(WantedSuperState.TUNE_SHOT_DATA_SHOOT, SmartDashboard.getNumber("Flywheel Velocity", 0));
-    // superstructure.setWantedSuperState(WantedSuperState.TUNE_SHOT_DATA_IDLE);
+    // TUNING:
+    superstructure.setWantedSuperStateToTuneShotDataShoot(SmartDashboard.getNumber("Flywheel Velocity", 0));
+    superstructure.setWantedSuperStateToTuneShotDataIdle(SmartDashboard.getNumber("Hood Angle", 0), SmartDashboard.getNumber("Hood Angle", 0));
 
     // Translation2d robotTranslation = drivetrain.getPose().getTranslation();
     // Translation2d hubTranslation =
