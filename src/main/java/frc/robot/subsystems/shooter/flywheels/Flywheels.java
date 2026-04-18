@@ -5,14 +5,19 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 
 public class Flywheels {
-    private final FlywheelsIO[] io;
+    // private final FlywheelsIO[] io;
+    private final FlywheelsIO io;
     private FlywheelWantedState wantedState = FlywheelWantedState.STOPPED;
     private FlywheelCurrentState currentState = FlywheelCurrentState.STOPPING;
 
     private double targetRPS = 0;
     private boolean atTargetRPS = false;
 
-    public Flywheels(FlywheelsIO... io) {
+    // public Flywheels(FlywheelsIO... io) {
+    //     this.io = io;
+    // }
+
+    public Flywheels(FlywheelsIO io) {
         this.io = io;
     }
 
@@ -32,18 +37,20 @@ public class Flywheels {
 
     public void updateInputs() {
         handleStateTransitions();
-        applyStates();
+        // applyStates();
 
-        for (int i = 0; i < this.io.length; i++) {
-            this.io[i].updateInputs();
-        }
+        io.updateInputs();
+
+        // for (int i = 0; i < this.io.length; i++) {
+        //     this.io[i].updateInputs();
+        // }
         
-        allFlywheelsAtSetpoint();
+        // allFlywheelsAtSetpoint();
 
         DogLog.log("Flywheels/WantedState", wantedState);
         DogLog.log("Flywheels/CurrentState", currentState);
         DogLog.log("Flywheels/TargetRPS", targetRPS);
-        DogLog.log("Flywheels/areAllFlywheelsAtTargetRPS", this.atTargetRPS);
+        DogLog.log("Flywheels/areFlywheelsAtTargetRPS", io.isFlywheelAtSetpoint);
     }
 
     public void handleStateTransitions() {
@@ -87,34 +94,40 @@ public class Flywheels {
     }
 
     public void setRPS(double RPS) {
-        for (int i = 0; i < this.io.length; i++) {
-            this.io[i].setRPS(RPS);
-        }
+        // for (int i = 0; i < this.io.length; i++) {
+        //     this.io[i].setRPS(RPS);
+        // }
+
+        io.setRPS(RPS);
     }
 
     public void stop() {
-        for (int i = 0; i < this.io.length; i++) {
-            this.io[i].stop();
-        }
+        // for (int i = 0; i < this.io.length; i++) {
+        //     this.io[i].stop();
+        // }
+
+        io.stop();
     }
 
     public void setVoltage(double voltage) {
-        for (int i = 0; i < this.io.length; i++) {
-            this.io[i].setVoltage(voltage);
-        }
+        // for (int i = 0; i < this.io.length; i++) {
+        //     this.io[i].setVoltage(voltage);
+        // }
+
+        io.setVoltage(voltage);
     }
 
     public boolean atSetpoint() {
         return this.atTargetRPS;
     }
 
-    private void allFlywheelsAtSetpoint() {
-        boolean allFlywheelsAtSetpoint = true;
-        for (int i = 0; i < this.io.length; i++) {
-            allFlywheelsAtSetpoint = allFlywheelsAtSetpoint && this.io[i].isFlywheelAtSetpoint;
-        }
-        this.atTargetRPS = allFlywheelsAtSetpoint;
-    }
+    // private void allFlywheelsAtSetpoint() {
+    //     boolean allFlywheelsAtSetpoint = true;
+    //     for (int i = 0; i < this.io.length; i++) {
+    //         allFlywheelsAtSetpoint = allFlywheelsAtSetpoint && this.io[i].isFlywheelAtSetpoint;
+    //     }
+    //     this.atTargetRPS = allFlywheelsAtSetpoint;
+    // }
 
     public void setWantedState(Flywheels.FlywheelWantedState wantedState) {
         this.wantedState = wantedState;

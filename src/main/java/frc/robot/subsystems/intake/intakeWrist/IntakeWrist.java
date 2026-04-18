@@ -47,7 +47,7 @@ public class IntakeWrist {
         Tracer.traceFunc("IntakeWrist UpdateInputs", io::updateInputs);
 
         handleStateTransitions();
-        applyStates();
+        // applyStates();
 
         DogLog.log("Intake/Wrist/WantedState", wantedState);
         DogLog.log("Intake/Wrist/CurrentState", currentState);

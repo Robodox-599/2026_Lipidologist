@@ -31,7 +31,7 @@ public class IntakeRollers {
     public void updateInputs(){
         Tracer.traceFunc("IntakeRollers UpdateInputs", io::updateInputs);
         handleStateTransitions();
-        applyStates();
+        // applyStates();
         DogLog.log("Intake/Rollers/WantedState", this.wantedState);
         DogLog.log("Intake/Rollers/CurrentState", this.currentState);
     }

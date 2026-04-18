@@ -40,7 +40,7 @@ public class Indexer {
         Tracer.traceFunc("IndexerUpdateInputs", io::updateInputs);
     
     handleStateTransitions();
-    applyStates();
+    // applyStates();
 
     DogLog.log("Indexer/wantedState", wantedState);
     DogLog.log("Indexer/currentState", currentState);

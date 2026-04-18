@@ -38,13 +38,13 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     private final CANBus flywheelCANBus;
 
     private final TalonFX flywheelLeaderMotor;
-    private final TalonFX flywheelFollower1Motor;
-    private final TalonFX flywheelFollower2Motor;
-    private final TalonFX flywheelFollower3Motor;
+    private final TalonFX flywheelBottomLeftMotor;
+    private final TalonFX flywheelTopRightMotor;
+    private final TalonFX flywheelBottomRightMotor;
 
     TalonFXConfiguration flywheelConfiguration;
-    private final VelocityVoltage velocityVoltage;
-    // private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
+    // private final VelocityVoltage velocityVoltage;
+    private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
 
     // status signals
     private final StatusSignal<AngularVelocity> flywheelLeaderVelocityRPS; //VelocityRPS
@@ -75,9 +75,9 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
         // motors + configuration
         flywheelCANBus = new CANBus(FlywheelsConstants.flywheelCANBus);
         flywheelLeaderMotor = new TalonFX(FlywheelsConstants.flywheelLeaderMotorID, flywheelCANBus);
-        flywheelFollower1Motor = new TalonFX(FlywheelsConstants.flywheelFollower1MotorID, flywheelCANBus);
-        flywheelFollower2Motor = new TalonFX(FlywheelsConstants.flywheelFollower2MotorID, flywheelCANBus);
-        flywheelFollower3Motor = new TalonFX(FlywheelsConstants.flywheelFollower3MotorID, flywheelCANBus);
+        flywheelBottomLeftMotor = new TalonFX(FlywheelsConstants.flywheelBottomLeftMotorID, flywheelCANBus);
+        flywheelTopRightMotor = new TalonFX(FlywheelsConstants.flywheelTopRightMotorID, flywheelCANBus);
+        flywheelBottomRightMotor = new TalonFX(FlywheelsConstants.flywheelBottomRightMotorID, flywheelCANBus);
 
         flywheelConfiguration = new TalonFXConfiguration()
                 .withMotorOutput(
@@ -101,36 +101,36 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
                                 .withKS(FlywheelsConstants.flywheelRealkS)
                                 .withKV(FlywheelsConstants.flywheelRealkV));
 
-        velocityVoltage = new VelocityVoltage(super.targetRPS);
-        // velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
+        // velocityVoltage = new VelocityVoltage(super.targetRPS);
+        velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
 
         // Applying configuration
         PhoenixUtil.tryUntilOk(10, () -> flywheelLeaderMotor.getConfigurator().apply(flywheelConfiguration, 1));
-        PhoenixUtil.tryUntilOk(10, () -> flywheelFollower1Motor.getConfigurator().apply(flywheelConfiguration, 1));
-        PhoenixUtil.tryUntilOk(10, () -> flywheelFollower2Motor.getConfigurator().apply(flywheelConfiguration, 1));
-        PhoenixUtil.tryUntilOk(10, () -> flywheelFollower3Motor.getConfigurator().apply(flywheelConfiguration, 1));
+        PhoenixUtil.tryUntilOk(10, () -> flywheelBottomLeftMotor.getConfigurator().apply(flywheelConfiguration, 1));
+        PhoenixUtil.tryUntilOk(10, () -> flywheelTopRightMotor.getConfigurator().apply(flywheelConfiguration, 1));
+        PhoenixUtil.tryUntilOk(10, () -> flywheelBottomRightMotor.getConfigurator().apply(flywheelConfiguration, 1));
 
-        flywheelFollower1Motor.setControl(new Follower(FlywheelsConstants.flywheelLeaderMotorID, MotorAlignmentValue.Aligned));
-        flywheelFollower2Motor.setControl(new Follower(FlywheelsConstants.flywheelLeaderMotorID, MotorAlignmentValue.Opposed));
-        flywheelFollower3Motor.setControl(new Follower(FlywheelsConstants.flywheelLeaderMotorID, MotorAlignmentValue.Opposed));
+        flywheelBottomLeftMotor.setControl(new Follower(FlywheelsConstants.flywheelLeaderMotorID, MotorAlignmentValue.Aligned));
+        flywheelTopRightMotor.setControl(new Follower(FlywheelsConstants.flywheelLeaderMotorID, MotorAlignmentValue.Opposed));
+        flywheelBottomRightMotor.setControl(new Follower(FlywheelsConstants.flywheelLeaderMotorID, MotorAlignmentValue.Opposed));
         
         // status signals    
         flywheelLeaderVelocityRPS = flywheelLeaderMotor.getVelocity(); //VelocityRPS
-        flywheelFollower1VelocityRPS = flywheelFollower1Motor.getVelocity();
-        flywheelFollower2VelocityRPS = flywheelFollower2Motor.getVelocity();
-        flywheelFollower3VelocityRPS = flywheelFollower3Motor.getVelocity();
+        flywheelFollower1VelocityRPS = flywheelBottomLeftMotor.getVelocity();
+        flywheelFollower2VelocityRPS = flywheelTopRightMotor.getVelocity();
+        flywheelFollower3VelocityRPS = flywheelBottomRightMotor.getVelocity();
         flywheelLeaderStatorCurrent = flywheelLeaderMotor.getStatorCurrent(); //StatorCurrent
-        flywheelFollower1StatorCurrent = flywheelFollower1Motor.getStatorCurrent();
-        flywheelFollower2StatorCurrent = flywheelFollower2Motor.getStatorCurrent();
-        flywheelFollower3StatorCurrent = flywheelFollower3Motor.getStatorCurrent();
+        flywheelFollower1StatorCurrent = flywheelBottomLeftMotor.getStatorCurrent();
+        flywheelFollower2StatorCurrent = flywheelTopRightMotor.getStatorCurrent();
+        flywheelFollower3StatorCurrent = flywheelBottomRightMotor.getStatorCurrent();
         flywheelLeaderSupplyCurrent = flywheelLeaderMotor.getSupplyCurrent(); //SupplyCurrent
-        flywheelFollower1SupplyCurrent = flywheelFollower1Motor.getSupplyCurrent();
-        flywheelFollower2SupplyCurrent = flywheelFollower2Motor.getSupplyCurrent();
-        flywheelFollower3SupplyCurrent = flywheelFollower3Motor.getSupplyCurrent();
+        flywheelFollower1SupplyCurrent = flywheelBottomLeftMotor.getSupplyCurrent();
+        flywheelFollower2SupplyCurrent = flywheelTopRightMotor.getSupplyCurrent();
+        flywheelFollower3SupplyCurrent = flywheelBottomRightMotor.getSupplyCurrent();
         flywheelLeaderAppliedVolts = flywheelLeaderMotor.getMotorVoltage(); //
-        flywheelFollower1AppliedVolts = flywheelFollower1Motor.getMotorVoltage();
-        flywheelFollower2AppliedVolts = flywheelFollower2Motor.getMotorVoltage();
-        flywheelFollower3AppliedVolts = flywheelFollower3Motor.getMotorVoltage();
+        flywheelFollower1AppliedVolts = flywheelBottomLeftMotor.getMotorVoltage();
+        flywheelFollower2AppliedVolts = flywheelTopRightMotor.getMotorVoltage();
+        flywheelFollower3AppliedVolts = flywheelBottomRightMotor.getMotorVoltage();
         characterizationSignals = new BaseStatusSignal[]{
             flywheelLeaderVelocityRPS,
             flywheelFollower1VelocityRPS,
@@ -155,9 +155,9 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
         BaseStatusSignal.setUpdateFrequencyForAll(50, characterizationSignals);
 
         flywheelLeaderMotor.optimizeBusUtilization();
-        flywheelFollower1Motor.optimizeBusUtilization();
-        flywheelFollower2Motor.optimizeBusUtilization();
-        flywheelFollower3Motor.optimizeBusUtilization();
+        flywheelBottomLeftMotor.optimizeBusUtilization();
+        flywheelTopRightMotor.optimizeBusUtilization();
+        flywheelBottomRightMotor.optimizeBusUtilization();
     }
 
     @Override
@@ -180,8 +180,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     @Override
     public void setRPS(double RPS) {
         super.targetRPS = RPS;
-        flywheelLeaderMotor.setControl(velocityVoltage.withVelocity(RPS).withEnableFOC(true));
-        // flywheelMotor.setControl(velocityTorqueCurrentFOC.withVelocity(RPS));
+        // flywheelLeaderMotor.setControl(velocityVoltage.withVelocity(RPS).withEnableFOC(true));
+        flywheelLeaderMotor.setControl(velocityTorqueCurrentFOC.withVelocity(RPS));
     }
 
     @Override

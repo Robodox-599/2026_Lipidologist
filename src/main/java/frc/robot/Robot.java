@@ -13,10 +13,11 @@ import frc.robot.util.HubShiftUtil;
 import frc.robot.util.Tracer;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsConstants;
+import frc.robot.subsystems.shooter.flywheels.FlywheelsIO;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOSim;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOTalonFX;
 import frc.robot.subsystems.shooter.flywheels.Flywheels.FlywheelWantedState;
-import frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.FlywheelConstants;
+// import frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.FlywheelConstants;
 
 import java.lang.reflect.Field;
 
@@ -126,15 +127,17 @@ public class Robot extends TimedRobot {
         indexer = new Indexer(new IndexerIOTalonFX());
         intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
         intakeWrist = new IntakeWrist(new IntakeWristIOTalonFX());
-        flywheels = new Flywheels(new FlywheelsIOTalonFX(FlywheelsConstants.LeftFlywheel),
-            new FlywheelsIOTalonFX(FlywheelsConstants.MiddleFlywheel),
-            new FlywheelsIOTalonFX(FlywheelsConstants.RightFlywheel));
+        flywheels = new Flywheels(new FlywheelsIOTalonFX());
+        // flywheels = new Flywheels(new FlywheelsIOTalonFX(FlywheelsConstants.LeftFlywheel),
+        //     new FlywheelsIOTalonFX(FlywheelsConstants.MiddleFlywheel),
+        //     new FlywheelsIOTalonFX(FlywheelsConstants.RightFlywheel));
         hood = new Hood(new HoodIOTalonFX());
         vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
             new VisionIOReal(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-            new VisionIOReal(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
-            new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
-            new VisionIOReal(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose()));
+            // new VisionIOReal(VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
+            new VisionIOReal(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
+            // new VisionIOReal(VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose())
+            );
         leds = new LEDs(new LEDsIOReal());
         break;
       case SIM:
@@ -144,15 +147,15 @@ public class Robot extends TimedRobot {
         indexer = new Indexer(new IndexerIOSim());
         intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
         intakeWrist = new IntakeWrist(new IntakeWristIOSim());
-        flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
+        flywheels = new Flywheels(new FlywheelsIOSim());
         hood = new Hood(new HoodIOSim());
-        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds()
-        // new VisionIOSim(VisionConstants.frontLeftCameraConstants, () ->
-        // drivetrain.getPose())
+        vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
+        new VisionIOSim(VisionConstants.frontLeftCameraConstants, () ->
+        drivetrain.getPose()),
         // new VisionIOSim(VisionConstants.sideLeftCameraConstants, () ->
         // drivetrain.getPose()),
-        // new VisionIOSim(VisionConstants.frontRightCameraConstants, () ->
-        // drivetrain.getPose())
+        new VisionIOSim(VisionConstants.frontRightCameraConstants, () ->
+        drivetrain.getPose())
         // new VisionIOSim(VisionConstants.sideRightCameraConstants, () ->
         // drivetrain.getPose())
         );
@@ -165,15 +168,15 @@ public class Robot extends TimedRobot {
         indexer = new Indexer(new IndexerIOSim());
         intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
         intakeWrist = new IntakeWrist(new IntakeWristIOSim());
-        flywheels = new Flywheels(new FlywheelsIOSim(FlywheelsConstants.LeftFlywheelSim));
+        flywheels = new Flywheels(new FlywheelsIOSim());
         hood = new Hood(new HoodIOSim());
         vision = new Vision(drivetrain::addVisionMeasurement, () -> drivetrain.getFieldRelativeChassisSpeeds(),
             new VisionIOSim(VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-            new VisionIOSim(VisionConstants.sideLeftCameraConstants, () ->
-            drivetrain.getPose()),
-            new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
-        new VisionIOSim(VisionConstants.sideRightCameraConstants, () ->
-        drivetrain.getPose())
+            // new VisionIOSim(VisionConstants.sideLeftCameraConstants, () ->
+            // drivetrain.getPose()),
+            new VisionIOSim(VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
+        // new VisionIOSim(VisionConstants.sideRightCameraConstants, () ->
+        // drivetrain.getPose())
         );
         leds = new LEDs(new LEDsIO());
         break;
