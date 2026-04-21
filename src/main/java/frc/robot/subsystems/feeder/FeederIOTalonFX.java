@@ -27,8 +27,8 @@ public class FeederIOTalonFX extends FeederIO {
         private final TalonFX feederMotor;
         private final CANBus feederBus;
         private TalonFXConfiguration feederConfig;
-        // private VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
-        private VelocityVoltage velocityVoltage;
+        private VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
+        // private VelocityVoltage velocityVoltage;
         private Debouncer feederDebouncer;
 
         private final StatusSignal<AngularVelocity> feederVelocityRPS;
@@ -67,8 +67,8 @@ public class FeederIOTalonFX extends FeederIO {
                                                 new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake)
                                                                 .withInverted(InvertedValue.CounterClockwise_Positive));
 
-                // velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
-                velocityVoltage = new VelocityVoltage(0);
+                velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
+                // velocityVoltage = new VelocityVoltage(0);
 
                 PhoenixUtil.tryUntilOk(10, () -> feederMotor.getConfigurator().apply(feederConfig, 1));
 
@@ -115,8 +115,8 @@ public class FeederIOTalonFX extends FeederIO {
         @Override
         public void setFeederVelocity(double RPS) {
                 super.targetRPS = RPS;
-                feederMotor.setControl(velocityVoltage.withVelocity(super.targetRPS).withEnableFOC(true));
-                // feederMotor.setControl(velocityTorqueCurrentFOC.withVelocity(super.targetRPS));
+                // feederMotor.setControl(velocityVoltage.withVelocity(super.targetRPS).withEnableFOC(true));
+                feederMotor.setControl(velocityTorqueCurrentFOC.withVelocity(super.targetRPS));
         }
 
         @Override

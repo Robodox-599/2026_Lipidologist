@@ -43,8 +43,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     private final TalonFX flywheelBottomRightMotor;
 
     TalonFXConfiguration flywheelConfiguration;
-    private final VelocityVoltage velocityVoltage;
-    // private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
+    // private final VelocityVoltage velocityVoltage;
+    private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
 
     // status signals
     private final StatusSignal<AngularVelocity> flywheelLeaderVelocityRPS; //VelocityRPS
@@ -101,8 +101,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
                                 .withKS(FlywheelsConstants.flywheelRealkS)
                                 .withKV(FlywheelsConstants.flywheelRealkV));
 
-        velocityVoltage = new VelocityVoltage(super.targetRPS);
-        // velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
+        // velocityVoltage = new VelocityVoltage(super.targetRPS);
+        velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
 
         // Applying configuration
         PhoenixUtil.tryUntilOk(10, () -> flywheelLeaderMotor.getConfigurator().apply(flywheelConfiguration, 1));
@@ -180,8 +180,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     @Override
     public void setRPS(double RPS) {
         super.targetRPS = RPS;
-        flywheelLeaderMotor.setControl(velocityVoltage.withVelocity(RPS).withEnableFOC(true));
-        // flywheelLeaderMotor.setControl(velocityTorqueCurrentFOC.withVelocity(RPS));
+        // flywheelLeaderMotor.setControl(velocityVoltage.withVelocity(RPS).withEnableFOC(true));
+        flywheelLeaderMotor.setControl(velocityTorqueCurrentFOC.withVelocity(RPS));
     }
 
     @Override

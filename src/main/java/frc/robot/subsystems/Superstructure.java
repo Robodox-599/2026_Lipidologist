@@ -32,6 +32,7 @@ import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollers.IntakeRollersWantedState;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist;
 import frc.robot.subsystems.shooter.hood.Hood;
+import frc.robot.subsystems.shooter.hood.Hood.HoodWantedState;
 import frc.robot.subsystems.vision6.Vision;
 import frc.robot.subsystems.leds.LEDs;
 import frc.robot.util.HubShiftUtil;
@@ -288,11 +289,11 @@ public class Superstructure extends SubsystemBase {
                 currentSuperState = CurrentSuperState.LIFTING_INTAKE_AUTO;
                 break;
             case TUNE_SHOT_DATA_SHOOT:
-                // if (areSystemsReadyForHubShot()){
-                //     currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_SHOOTING;
-                // } else{
-                //     currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_IDLING;
-                // }
+                if (areSystemsReadyForHubShot()){
+                    currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_SHOOTING;
+                } else{
+                    currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_IDLING;
+                }
                 currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_SHOOTING;
                 break;
             case TUNE_SHOT_DATA_IDLE:
@@ -670,10 +671,12 @@ public class Superstructure extends SubsystemBase {
     public void tuningShotDataIdling(){
         drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
         intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
-        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.STOP);
+        intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
         indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
         feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
-        setHoodAngleAndFlywheelsRPS();
+        // setHoodAngleAndFlywheelsRPS();
+        flywheels.setWantedState(FlywheelWantedState.IDLE);
+        hood.setWantedState(HoodWantedState.STOW);
         leds.setWantedState(LEDs.LEDsWantedState.IDLE);
     }
 
@@ -683,9 +686,9 @@ public class Superstructure extends SubsystemBase {
         intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
         indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
         feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
-        // setHoodAngleAndFlywheelsRPS();
-        flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 60);
-        hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.07);
+        setHoodAngleAndFlywheelsRPS();
+        // flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 60);
+        // hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.07);
         leds.setWantedState(LEDs.LEDsWantedState.SHOOT_HUB);
     }
 
