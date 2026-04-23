@@ -124,11 +124,11 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         super.intakeRollersLeaderSupplyCurrent = intakeRollersLeaderSupplyCurrent.getValueAsDouble();
         super.intakeRollersLeaderTemperature = intakeRollersLeaderTemperature.getValueAsDouble();
 
-        DogLog.log("Intake/IntakeRollersOne/Velocity", super.intakeRollersLeaderVelocity);
-        DogLog.log("Intake/IntakeRollersOne/Voltage", super.intakeRollersLeaderVoltage);
-        DogLog.log("Intake/IntakeRollersOne/StatorCurrent", super.intakeRollersLeaderStatorCurrent);
-        DogLog.log("Intake/IntakeRollersOne/SupplyCurrent", super.intakeRollersLeaderSupplyCurrent);
-        DogLog.log("Intake/IntakeRollersOne/Temperature", super.intakeRollersLeaderTemperature);
+        DogLog.log("Intake/LeaderRollers/Velocity", super.intakeRollersLeaderVelocity);
+        DogLog.log("Intake/LeaderRollers/Voltage", super.intakeRollersLeaderVoltage);
+        DogLog.log("Intake/LeaderRollers/StatorCurrent", super.intakeRollersLeaderStatorCurrent);
+        DogLog.log("Intake/LeaderRollers/SupplyCurrent", super.intakeRollersLeaderSupplyCurrent);
+        DogLog.log("Intake/LeaderRollers/Temperature", super.intakeRollersLeaderTemperature);
 
         // intake rollers 2
         super.intakeRollersFollowerVelocity = intakeRollersFollowerVelocity.getValueAsDouble();
@@ -137,11 +137,11 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         super.intakeRollersFollowerSupplyCurrent = intakeRollersFollowerSupplyCurrent.getValueAsDouble();
         super.intakeRollersFollowerTemperature = intakeRollersFollowerTemperature.getValueAsDouble();
 
-        DogLog.log("Intake/IntakeRollersTwo/Velocity", super.intakeRollersFollowerVelocity);
-        DogLog.log("Intake/IntakeRollersTwo/Voltage", super.intakeRollersLeaderVoltage);
-        DogLog.log("Intake/IntakeRollersTwo/StatorCurrent", super.intakeRollersFollowerStatorCurrent);
-        DogLog.log("Intake/IntakeRollersTwo/SupplyCurrent", super.intakeRollersFollowerSupplyCurrent);
-        DogLog.log("Intake/IntakeRollersTwo/Temperature", super.intakeRollersFollowerTemperature);
+        DogLog.log("Intake/FollowerRollers/Velocity", super.intakeRollersFollowerVelocity);
+        DogLog.log("Intake/FollowerRollers/Voltage", super.intakeRollersLeaderVoltage);
+        DogLog.log("Intake/FollowerRollers/StatorCurrent", super.intakeRollersFollowerStatorCurrent);
+        DogLog.log("Intake/FollowerRollers/SupplyCurrent", super.intakeRollersFollowerSupplyCurrent);
+        DogLog.log("Intake/FollowerRollers/Temperature", super.intakeRollersFollowerTemperature);
     }
 
     @Override
