@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter.hood;
 
+import frc.robot.Constants;
+
 public class HoodConstants {
   // motor information
   public static final int hoodMotorID = 18;
@@ -11,12 +13,12 @@ public class HoodConstants {
   public static final double stowPosition = 0.0;
 
   // real PID
-  public static final double hoodRealkP = 90;
+  public static final double hoodRealkP = 250;
   public static final double hoodRealkI = 0;
-  public static final double hoodRealkD = 5;
-  public static final double hoodRealkS = 0.5;
-  public static final double hoodRealkV = 6.2;
-  public static final double hoodRealkG = 0.2;
+  public static final double hoodRealkD = 0;
+  public static final double hoodRealkS = 0.31;
+  public static final double hoodRealkV = hoodGearRatio * Constants.kMotors.kKrakenX60Foc.kV;
+  public static final double hoodRealkG = 0.18;
 
   // sim PID
   public static final double hoodSimkP = 7;
