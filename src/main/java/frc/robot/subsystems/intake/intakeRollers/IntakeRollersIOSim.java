@@ -28,21 +28,21 @@ public class IntakeRollersIOSim extends IntakeRollersIO {
     public void updateInputs() {
         //intake rollers 1
         intakeRollersMotorOneSim.update(0.02);
-        super.intakeRollersOneStatorCurrent = intakeRollersMotorOneSim.getCurrentDrawAmps();
-        super.intakeRollersOneVelocity = intakeRollersMotorOneSim.getAngularVelocityRPM();
-        super.intakeRollersOneVoltage = intakeRollersMotorOneSim.getInputVoltage();
-        DogLog.log("Intake/RollersOne/StatorCurrent", super.intakeRollersOneStatorCurrent);
-        DogLog.log("Intake/RollersOne/Velocity", super.intakeRollersOneVelocity);
-        DogLog.log("Intake/RollersOne/Voltage", super.intakeRollersOneVoltage);
+        super.intakeRollersLeaderStatorCurrent = intakeRollersMotorOneSim.getCurrentDrawAmps();
+        super.intakeRollersLeaderVelocity = intakeRollersMotorOneSim.getAngularVelocityRPM();
+        super.intakeRollersLeaderVoltage = intakeRollersMotorOneSim.getInputVoltage();
+        DogLog.log("Intake/RollersOne/StatorCurrent", super.intakeRollersLeaderStatorCurrent);
+        DogLog.log("Intake/RollersOne/Velocity", super.intakeRollersLeaderVelocity);
+        DogLog.log("Intake/RollersOne/Voltage", super.intakeRollersLeaderVoltage);
 
         //intake rollers 2
         intakeRollersMotorTwoSim.update(0.02);
-        super.intakeRollersTwoStatorCurrent = intakeRollersMotorTwoSim.getCurrentDrawAmps();
-        super.intakeRollersTwoVelocity = intakeRollersMotorTwoSim.getAngularVelocityRPM();
-        super.intakeRollersTwoVoltage = intakeRollersMotorTwoSim.getInputVoltage();
-        DogLog.log("Intake/RollersTwo/StatorCurrent", super.intakeRollersTwoStatorCurrent);
-        DogLog.log("Intake/RollersTwo/Velocity", super.intakeRollersTwoVelocity);
-        DogLog.log("Intake/RollersTwo/Voltage", super.intakeRollersTwoVoltage);
+        super.intakeRollersFollowerStatorCurrent = intakeRollersMotorTwoSim.getCurrentDrawAmps();
+        super.intakeRollersFollowerVelocity = intakeRollersMotorTwoSim.getAngularVelocityRPM();
+        super.intakeRollersFollowerVoltage = intakeRollersMotorTwoSim.getInputVoltage();
+        DogLog.log("Intake/RollersTwo/StatorCurrent", super.intakeRollersFollowerStatorCurrent);
+        DogLog.log("Intake/RollersTwo/Velocity", super.intakeRollersFollowerVelocity);
+        DogLog.log("Intake/RollersTwo/Voltage", super.intakeRollersFollowerVoltage);
 
     }
 
