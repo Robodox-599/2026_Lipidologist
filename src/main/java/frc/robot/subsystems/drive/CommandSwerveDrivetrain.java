@@ -295,12 +295,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         currentState = CurrentState.DRIVE_TO_POINT;
         break;
       case CHOREO_TRAJECTORY:
-        // if (!DriverStation.isAutonomous()) {
-        // wantedState = WantedState.TELEOP_DRIVE;
-        // currentState = CurrentState.TELEOP_DRIVE;
-        // } else {
-        // currentState = CurrentState.CHOREO_TRAJECTORY;
-        // }
         currentState = CurrentState.CHOREO_TRAJECTORY;
         break;
       case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
