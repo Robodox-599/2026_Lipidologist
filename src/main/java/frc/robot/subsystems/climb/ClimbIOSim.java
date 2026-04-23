@@ -1,13 +1,5 @@
 package frc.robot.subsystems.climb;
 
-import dev.doglog.DogLog;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-
 public class ClimbIOSim extends ClimbIO {
   // private final ProfiledPIDController positionController;
   // private double targetPositionInches = 0.0;
@@ -18,8 +10,9 @@ public class ClimbIOSim extends ClimbIO {
   // public ClimbIOSim() {
   //   positionController =
   //       new ProfiledPIDController(
-  //           ClimbConstants.simKP, ClimbConstants.simKI, ClimbConstants.simKD, 
-  //             new TrapezoidProfile.Constraints(ClimbConstants.maxVelocity, ClimbConstants.maxAcceleration));
+  //           ClimbConstants.simKP, ClimbConstants.simKI, ClimbConstants.simKD,
+  //             new TrapezoidProfile.Constraints(ClimbConstants.maxVelocity,
+  // ClimbConstants.maxAcceleration));
 
   //   climbSim = new DCMotorSim(LinearSystemId.createDCMotorSystem
   //     (climbGearbox, ClimbConstants.climbMOI, ClimbConstants.climbGearRatio), climbGearbox);
@@ -31,9 +24,11 @@ public class ClimbIOSim extends ClimbIO {
   // public void updateInputs() {
   //   climbSim.update(0.02);
 
-  //   super.velocityInchesPerSec = (climbSim.getAngularVelocityRPM() * ClimbConstants.inchesPerRev) / 60.0;
+  //   super.velocityInchesPerSec = (climbSim.getAngularVelocityRPM() * ClimbConstants.inchesPerRev)
+  // / 60.0;
   //   super.targetPositionInches = targetPositionInches;
-  //   super.positionInches = (climbSim.getAngularPositionRad() / (2 * Math.PI)) * ClimbConstants.inchesPerRev;
+  //   super.positionInches = (climbSim.getAngularPositionRad() / (2 * Math.PI)) *
+  // ClimbConstants.inchesPerRev;
   //   super.tempCelsius = 25.0;
 
   //   DogLog.log("Climb/VelocityInchesPerSec", super.velocityInchesPerSec);
@@ -45,11 +40,13 @@ public class ClimbIOSim extends ClimbIO {
 
   // @Override
   // public void setClimbHeight(double height) {
-  //   targetPositionInches = 
+  //   targetPositionInches =
   //     MathUtil.clamp
-  //       (ClimbConstants.convertToTicks(height), ClimbConstants.climbLowerLimit, ClimbConstants.climbUpperLimit);
+  //       (ClimbConstants.convertToTicks(height), ClimbConstants.climbLowerLimit,
+  // ClimbConstants.climbUpperLimit);
 
-  //   climbSim.setInputVoltage(positionController.calculate(super.positionInches, super.targetPositionInches));  
+  //   climbSim.setInputVoltage(positionController.calculate(super.positionInches,
+  // super.targetPositionInches));
   // }
 
   // @Override
@@ -67,4 +64,4 @@ public class ClimbIOSim extends ClimbIO {
   // @Override
   // public void zeroClimbPosition() {
   //   targetPositionInches = 0.0;
-  }
+}

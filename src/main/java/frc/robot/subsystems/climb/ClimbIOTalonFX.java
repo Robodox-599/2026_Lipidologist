@@ -16,9 +16,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
@@ -42,37 +40,38 @@ public class ClimbIOTalonFX extends ClimbIO {
   public ClimbIOTalonFX() {
     climbCanbus = new CANBus(ClimbConstants.climbCanbus);
     climbMotor = new TalonFX(ClimbConstants.climbMotorID, climbCanbus);
-    climbConfig = new TalonFXConfiguration()
-        .withCurrentLimits(
-            new CurrentLimitsConfigs()
-                .withStatorCurrentLimitEnable(true)
-                .withStatorCurrentLimit(ClimbConstants.statorCurrent)
-                .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(ClimbConstants.supplyCurrent)
-                .withSupplyCurrentLowerLimit(20)
-                .withSupplyCurrentLowerTime(0.5))
-        .withMotorOutput(
-            new MotorOutputConfigs()
-                .withNeutralMode(NeutralModeValue.Brake)
-                .withInverted(InvertedValue.Clockwise_Positive))
-        .withSlot0(
-            new Slot0Configs()
-                .withKP(ClimbConstants.kP)
-                .withKI(ClimbConstants.kI)
-                .withKD(ClimbConstants.kD)
-                .withKV(ClimbConstants.kV)
-                .withKS(ClimbConstants.kS)
-                .withKG(ClimbConstants.kG)
-                .withGravityType(GravityTypeValue.Elevator_Static))
-        .withMotionMagic(
-            new MotionMagicConfigs()
-                .withMotionMagicCruiseVelocity(ClimbConstants.maxVelocity)
-                .withMotionMagicAcceleration(ClimbConstants.maxAcceleration))
+    climbConfig =
+        new TalonFXConfiguration()
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withStatorCurrentLimitEnable(true)
+                    .withStatorCurrentLimit(ClimbConstants.statorCurrent)
+                    .withSupplyCurrentLimitEnable(true)
+                    .withSupplyCurrentLimit(ClimbConstants.supplyCurrent)
+                    .withSupplyCurrentLowerLimit(20)
+                    .withSupplyCurrentLowerTime(0.5))
+            .withMotorOutput(
+                new MotorOutputConfigs()
+                    .withNeutralMode(NeutralModeValue.Brake)
+                    .withInverted(InvertedValue.Clockwise_Positive))
+            .withSlot0(
+                new Slot0Configs()
+                    .withKP(ClimbConstants.kP)
+                    .withKI(ClimbConstants.kI)
+                    .withKD(ClimbConstants.kD)
+                    .withKV(ClimbConstants.kV)
+                    .withKS(ClimbConstants.kS)
+                    .withKG(ClimbConstants.kG)
+                    .withGravityType(GravityTypeValue.Elevator_Static))
+            .withMotionMagic(
+                new MotionMagicConfigs()
+                    .withMotionMagicCruiseVelocity(ClimbConstants.maxVelocity)
+                    .withMotionMagicAcceleration(ClimbConstants.maxAcceleration));
 
-    ;
     m_request = new MotionMagicVoltage(0);
     v_request = new VoltageOut(0);
-    stallDebouncer = new Debouncer(ClimbConstants.debounceTripStatorCurrent, Debouncer.DebounceType.kRising);
+    stallDebouncer =
+        new Debouncer(ClimbConstants.debounceTripStatorCurrent, Debouncer.DebounceType.kRising);
 
     PhoenixUtil.tryUntilOk(10, () -> climbMotor.getConfigurator().apply(climbConfig));
 
@@ -82,15 +81,16 @@ public class ClimbIOTalonFX extends ClimbIO {
     climbVoltage = climbMotor.getMotorVoltage();
     climbTemperature = climbMotor.getDeviceTemp();
 
-    BaseStatusSignal.setUpdateFrequencyForAll(50, climbPosition,
-        climbStatorCurrent, climbSupplyCurrent, climbVoltage, climbTemperature);
+    BaseStatusSignal.setUpdateFrequencyForAll(
+        50, climbPosition, climbStatorCurrent, climbSupplyCurrent, climbVoltage, climbTemperature);
 
     climbMotor.optimizeBusUtilization();
   }
 
   @Override
   public void updateInputs() {
-    BaseStatusSignal.refreshAll(climbPosition, climbStatorCurrent, climbSupplyCurrent, climbVoltage, climbTemperature);
+    BaseStatusSignal.refreshAll(
+        climbPosition, climbStatorCurrent, climbSupplyCurrent, climbVoltage, climbTemperature);
 
     super.position = climbPosition.getValueAsDouble();
     super.statorCurrent = climbStatorCurrent.getValueAsDouble();
@@ -121,11 +121,11 @@ public class ClimbIOTalonFX extends ClimbIO {
   }
 
   @Override
-  public void zeroClimb(){
-    if (stallDebouncer.calculate(super.statorCurrent > ClimbConstants.tripStatorCurrent )){
-      setPosition(0); 
-    } else{
-      climbMotor.setControl(v_request.withOutput(-1)); //voltage change may be needed
+  public void zeroClimb() {
+    if (stallDebouncer.calculate(super.statorCurrent > ClimbConstants.tripStatorCurrent)) {
+      setPosition(0);
+    } else {
+      climbMotor.setControl(v_request.withOutput(-1)); // voltage change may be needed
     }
   }
 }

@@ -1,12 +1,10 @@
 package frc.robot.util.shootingutil;
 
+import edu.wpi.first.math.MathUtil;
 import java.util.TreeMap;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
-
 public class InterpolatingShotTree {
-    private final TreeMap<Double, Shot> map = new TreeMap<>();
+  private final TreeMap<Double, Shot> map = new TreeMap<>();
 
   public record Shot(double hoodAngle, double RPS, double flightTime) {}
 
@@ -14,15 +12,13 @@ public class InterpolatingShotTree {
 
   /**
    * This method puts shooting data points into the treemap
-   * 
+   *
    * @param key the distance from the goal
    * @param value the shot's hood angle and RPS
-   * 
    */
   public void put(Double distance, Shot data) {
     map.put(distance, data);
   }
-
 
   public Shot get(Double distance) {
     Shot val = map.get(distance);
@@ -50,9 +46,8 @@ public class InterpolatingShotTree {
 
   private Shot interpolate(Shot startValue, Shot endValue, double t) {
     return new Shot(
-            MathUtil.interpolate(
-                startValue.hoodAngle(), endValue.hoodAngle(), t),
-        MathUtil.interpolate(startValue.RPS(), endValue.RPS(), t), 
+        MathUtil.interpolate(startValue.hoodAngle(), endValue.hoodAngle(), t),
+        MathUtil.interpolate(startValue.RPS(), endValue.RPS(), t),
         MathUtil.interpolate(startValue.flightTime(), endValue.flightTime(), t));
   }
 
@@ -71,7 +66,7 @@ public class InterpolatingShotTree {
     return deltaQuery / delta;
   }
 
-  /* 
+  /*
    * public void clear() {
     map.clear();
   }

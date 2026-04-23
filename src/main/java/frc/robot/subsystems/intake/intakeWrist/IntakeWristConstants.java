@@ -4,55 +4,54 @@
 
 package frc.robot.subsystems.intake.intakeWrist;
 
-import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
 /** Add your docs here. */
 public class IntakeWristConstants {
-    public static final int intakeWristMotorID = 13;
-    public static final int intakeWristCanCoderID = 15;
-    public static final String intakeWristCanBus = "rio";
+  public static final int intakeWristMotorID = 13;
+  public static final int intakeWristCanCoderID = 15;
+  public static final String intakeWristCanBus = "rio";
 
-    public static final double rotationalInertia = 0.01;
+  public static final double rotationalInertia = 0.01;
 
-    public static final double gearRatio = (44.0/8.0) * (44.0/18.0) * (36.0/12.0);
+  public static final double gearRatio = (44.0 / 8.0) * (44.0 / 18.0) * (36.0 / 12.0);
 
-    public static final double kP = 60.0;
-    public static final double kI = 0.0;
-    public static final double kD = 2;
-    public static final double kV = (Constants.kMotors.kKrakenX60Foc.kV * gearRatio);
-    public static final double kS = 0.36;
-    public static final double kG = 0.39;
+  public static final double kP = 60.0;
+  public static final double kI = 0.0;
+  public static final double kD = 2;
+  public static final double kV = (Constants.kMotors.kKrakenX60Foc.kV * gearRatio);
+  public static final double kS = 0.36;
+  public static final double kG = 0.39;
 
-    public static final double maxVelocity = (12 - kS - kG) / kV;
-    public static final double maxAcceleration = maxVelocity;
-    public static final double absoluteDiscontinuityPoint = 0.7;
-    public static final double magnetOffset = -0.33935546875;
-    public static final double supplyCurrentLimit = 25.0;
-    public static final double statorCurrentLimit = 80.0;
-    public static final double minAngleRotations = 0.0;
-    public static final double maxAngleRotations = 0.0;
-    public static final double startAngleRad = 0.0;
+  public static final double maxVelocity = (12 - kS - kG) / kV;
+  public static final double maxAcceleration = maxVelocity;
+  public static final double absoluteDiscontinuityPoint = 0.7;
+  public static final double magnetOffset = -0.33935546875;
+  public static final double supplyCurrentLimit = 25.0;
+  public static final double statorCurrentLimit = 80.0;
+  public static final double minAngleRotations = 0.0;
+  public static final double maxAngleRotations = 0.0;
+  public static final double startAngleRad = 0.0;
 
-    public static final double kPSim = 1.0; //1.28
-    public static final double kISim = 0.0;
-    public static final double kDSim = 0.0;
+  public static final double kPSim = 1.0; // 1.28
+  public static final double kISim = 0.0;
+  public static final double kDSim = 0.0;
 
-    public static final double kVSim = 0.0;
-    public static final double kSSim = 0.0;
-    public static final double kGSim = 0.0;
-    public static final double maxVelocitySim = 100.0;
-    public static final double maxAccelerationSim = 16.0;
+  public static final double kVSim = 0.0;
+  public static final double kSSim = 0.0;
+  public static final double kGSim = 0.0;
+  public static final double maxVelocitySim = 100.0;
+  public static final double maxAccelerationSim = 16.0;
 
-    public static final double wristLengthMeters = 0.5;
-    public static final double wristMassKg = 5.0;
-    public static final double agitationTime = 0.4;
+  public static final double wristLengthMeters = 0.5;
+  public static final double wristMassKg = 5.0;
+  public static final double agitationTime = 0.4;
 
-    public static final double statorCurrentTrip = 70; //must be changed and tested
-    public static final double velocityTrip = 1; //must be changed and tested
-    public static final double debounceTime = 0.3; // must be changed and tested
-    
-    public static final double totalAgitationTime = 3.0;
-    public static final double maxAgitationPosition = 0.25;
-    public static final double deltaAgitation = 0.08;
+  public static final double statorCurrentTrip = 70; // must be changed and tested
+  public static final double velocityTrip = 1; // must be changed and tested
+  public static final double debounceTime = 0.3; // must be changed and tested
+
+  public static final double totalAgitationTime = 3.0;
+  public static final double maxAgitationPosition = 0.25;
+  public static final double deltaAgitation = 0.08;
 }

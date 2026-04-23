@@ -1,26 +1,18 @@
 package frc.robot.subsystems.vision6;
 
+import dev.doglog.DogLog;
+import edu.wpi.first.math.geometry.Pose2d;
+import frc.robot.FieldConstants;
+import frc.robot.subsystems.vision6.VisionConstants.CameraConstants;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
-
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
-import dev.doglog.DogLog;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import frc.robot.FieldConstants;
-import frc.robot.subsystems.vision6.VisionConstants.CameraConstants;
 
 public class VisionIOReal extends VisionIO {
   protected final PhotonCamera camera;
@@ -33,8 +25,9 @@ public class VisionIOReal extends VisionIO {
     this.camera = new PhotonCamera(constants.name());
 
     this.robotPoseSupplier = robotPoseSupplier;
-    this.poseEstimator = new PhotonPoseEstimator(FieldConstants.AprilTags.aprilTagFieldLayout,
-        constants.robotToCamera());
+    this.poseEstimator =
+        new PhotonPoseEstimator(
+            FieldConstants.AprilTags.aprilTagFieldLayout, constants.robotToCamera());
 
     DogLog.log("Vision/" + constants.name() + "/robotToCamera", constants.robotToCamera());
   }
@@ -66,12 +59,12 @@ public class VisionIOReal extends VisionIO {
 
         // Add pose observation
         poseObservations.add(
-          new PoseObservation(
-            visionEst.timestampSeconds, // Timestamp
-            visionEst.estimatedPose, // 3D pose estimate
-            result.getBestTarget().getPoseAmbiguity(), // Ambiguity 
-            visionEst.targetsUsed.size(), // Number of tags
-            totalTagDistance / visionEst.targetsUsed.size())); // Average tag distance
+            new PoseObservation(
+                visionEst.timestampSeconds, // Timestamp
+                visionEst.estimatedPose, // 3D pose estimate
+                result.getBestTarget().getPoseAmbiguity(), // Ambiguity
+                visionEst.targetsUsed.size(), // Number of tags
+                totalTagDistance / visionEst.targetsUsed.size())); // Average tag distance
       }
     }
 

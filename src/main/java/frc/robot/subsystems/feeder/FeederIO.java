@@ -1,19 +1,19 @@
 package frc.robot.subsystems.feeder;
 
 public abstract class FeederIO {
-    protected double RPS = 0.0;
-    protected double targetRPS = 0.0;
-    protected double statorCurrent = 0.0;
-    protected double supplyCurrent = 0.0;
-    // protected double appliedVolts = 0.0;
-    protected double tempCelsius = 0.0;
-    protected boolean isFuelJammed = false;
+  protected double RPS = 0.0;
+  protected double targetRPS = 0.0;
+  protected double statorCurrent = 0.0;
+  protected double supplyCurrent = 0.0;
+  // protected double appliedVolts = 0.0;
+  protected double tempCelsius = 0.0;
+  protected boolean isFuelJammed = false;
 
-    public void updateInputs() {}
+  public void updateInputs() {}
 
-    public void setFeederVelocity(double RPS) {}
+  public void setFeederVelocity(double RPS) {}
 
-    public void stopFeeder() {}
+  public void stopFeeder() {}
 
-    public void setVoltage(double voltage) {}
+  public void setVoltage(double voltage) {}
 }

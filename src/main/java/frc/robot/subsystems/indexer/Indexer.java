@@ -5,15 +5,13 @@
 package frc.robot.subsystems.indexer;
 
 import dev.doglog.DogLog;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.Tracer;
 
 public class Indexer {
   private final IndexerIO io;
   private IndexerWantedState wantedState = IndexerWantedState.STOPPED;
   private IndexerCurrentState currentState = IndexerCurrentState.STOPPING;
 
-  public enum IndexerWantedState{
+  public enum IndexerWantedState {
     TRANSFER_FUEL,
     PULSE_FUEL,
     REVERSE,
@@ -22,7 +20,7 @@ public class Indexer {
     STOPPED,
   }
 
-  public enum IndexerCurrentState{
+  public enum IndexerCurrentState {
     TRANSFERING_FUEL,
     PULSING_FUEL,
     REVERSING,
@@ -37,44 +35,45 @@ public class Indexer {
   }
 
   public void updateInputs() {
-        Tracer.traceFunc("IndexerUpdateInputs", io::updateInputs);
-    
+    io.updateInputs();
+  }
+
+  public void updateStates() {
     handleStateTransitions();
     applyStates();
 
     DogLog.log("Indexer/wantedState", wantedState);
     DogLog.log("Indexer/currentState", currentState);
-
   }
 
-  public void handleStateTransitions(){
+  public void handleStateTransitions() {
     switch (wantedState) {
-        case STOPPED:
-            currentState = IndexerCurrentState.STOPPING;
-            break;
-        case TRANSFER_FUEL:
-            currentState = IndexerCurrentState.TRANSFERING_FUEL;
-            break;
-        case PULSE_FUEL:
-            currentState = IndexerCurrentState.PULSING_FUEL; // use time wpilib func
-            break;
-        case REVERSE:
-            currentState = IndexerCurrentState.REVERSING;
-            break;
-        case OUTAKE:
-            currentState = IndexerCurrentState.OUTAKING;
-            break;
-        case CLEAN:
-            currentState = IndexerCurrentState.CLEANING;
-            break;
-        default:
-            currentState = IndexerCurrentState.STOPPING;
-            break;
+      case STOPPED:
+        currentState = IndexerCurrentState.STOPPING;
+        break;
+      case TRANSFER_FUEL:
+        currentState = IndexerCurrentState.TRANSFERING_FUEL;
+        break;
+      case PULSE_FUEL:
+        currentState = IndexerCurrentState.PULSING_FUEL; // use time wpilib func
+        break;
+      case REVERSE:
+        currentState = IndexerCurrentState.REVERSING;
+        break;
+      case OUTAKE:
+        currentState = IndexerCurrentState.OUTAKING;
+        break;
+      case CLEAN:
+        currentState = IndexerCurrentState.CLEANING;
+        break;
+      default:
+        currentState = IndexerCurrentState.STOPPING;
+        break;
     }
   }
 
-  public void applyStates(){
-    switch(currentState){
+  public void applyStates() {
+    switch (currentState) {
       case STOPPING:
         stopIndexer();
         break;
@@ -99,19 +98,19 @@ public class Indexer {
     }
   }
 
-  public void setIndexerVoltage(double volts){
+  public void setIndexerVoltage(double volts) {
     io.setIndexerVoltage(volts);
   }
 
-  public void stopIndexer(){
+  public void stopIndexer() {
     io.stopIndexer();
   }
 
-  public void setWantedState(Indexer.IndexerWantedState wantedState){
+  public void setWantedState(Indexer.IndexerWantedState wantedState) {
     this.wantedState = wantedState;
   }
 
-  public void indexerPulseFuel(double volts){
+  public void indexerPulseFuel(double volts) {
     io.indexerPulseFuel(volts);
   }
 }

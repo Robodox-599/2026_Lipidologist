@@ -1,98 +1,99 @@
 package frc.robot.subsystems.intake.intakeRollers; // make sure the folder name is all lowercase
 
 import dev.doglog.DogLog;
-import frc.robot.util.Tracer;
 
 public class IntakeRollers {
-    private final IntakeRollersIO io;
-    private IntakeRollersWantedState wantedState = IntakeRollersWantedState.STOP;
-    private IntakeRollersCurrentState currentState = IntakeRollersCurrentState.STOPPED;
-    
-    public IntakeRollers(IntakeRollersIO io){
-        this.io = io;
-    }
+  private final IntakeRollersIO io;
+  private IntakeRollersWantedState wantedState = IntakeRollersWantedState.STOP;
+  private IntakeRollersCurrentState currentState = IntakeRollersCurrentState.STOPPED;
 
-    public enum IntakeRollersWantedState{
-        STOP,
-        INTAKE_FUEL,
-        CLEAN,
-        // AGITATE_FUEL,
-        OUTAKE
-    }
+  public IntakeRollers(IntakeRollersIO io) {
+    this.io = io;
+  }
 
-    public enum IntakeRollersCurrentState{
-        STOPPED,
-        INTAKING_FUEL,
-        CLEANING,
-        // AGITATING_FUEL,
-        OUTAKING
-    }
+  public enum IntakeRollersWantedState {
+    STOP,
+    INTAKE_FUEL,
+    CLEAN,
+    // AGITATE_FUEL,
+    OUTAKE
+  }
 
-    public void updateInputs(){
-        Tracer.traceFunc("IntakeRollers UpdateInputs", io::updateInputs);
-        handleStateTransitions();
-        // applyStates();
-        DogLog.log("Intake/Rollers/WantedState", this.wantedState);
-        DogLog.log("Intake/Rollers/CurrentState", this.currentState);
-    }
+  public enum IntakeRollersCurrentState {
+    STOPPED,
+    INTAKING_FUEL,
+    CLEANING,
+    // AGITATING_FUEL,
+    OUTAKING
+  }
 
-    private void handleStateTransitions(){
-        switch(wantedState){
-            case STOP:
-                currentState = IntakeRollersCurrentState.STOPPED;
-                break;
-            case INTAKE_FUEL:
-                currentState = IntakeRollersCurrentState.INTAKING_FUEL;
-                break;
-            // case AGITATE_FUEL:
-            //     currentState = IntakeRollersCurrentState.AGITATING_FUEL;
-            //     break;
-            case OUTAKE:
-                currentState = IntakeRollersCurrentState.OUTAKING;
-                break;
-            case CLEAN:
-                currentState = IntakeRollersCurrentState.CLEANING;
-                break;
-            default:
-                currentState = IntakeRollersCurrentState.STOPPED;
-                break;
-        }
-    } 
+  public void updateInputs() {
+    io.updateInputs();
+  }
 
-    private void applyStates(){
-        switch(currentState){
-            case STOPPED:
-                stop();
-                break;
-            case INTAKING_FUEL:
-                setVoltage(8);
-                break;
-            // case AGITATING_FUEL:
-            //     setVoltage(2);
-            //     break;
-            case OUTAKING:
-                setVoltage(-7);
-                break;
-            case CLEANING:
-                setVoltage(0.65);
-                break;
-            default:
-                stop();
-                break;
-        }
-    }
+  public void updateStates() {
+    handleStateTransitions();
+    applyStates();
 
-    public void stop(){
-        io.stop();
-    }
+    DogLog.log("Intake/Rollers/WantedState", this.wantedState);
+    DogLog.log("Intake/Rollers/CurrentState", this.currentState);
+  }
 
-    public void setWantedState(IntakeRollers.IntakeRollersWantedState wantedState){
-        this.wantedState = wantedState;
+  private void handleStateTransitions() {
+    switch (wantedState) {
+      case STOP:
+        currentState = IntakeRollersCurrentState.STOPPED;
+        break;
+      case INTAKE_FUEL:
+        currentState = IntakeRollersCurrentState.INTAKING_FUEL;
+        break;
+      // case AGITATE_FUEL:
+      //     currentState = IntakeRollersCurrentState.AGITATING_FUEL;
+      //     break;
+      case OUTAKE:
+        currentState = IntakeRollersCurrentState.OUTAKING;
+        break;
+      case CLEAN:
+        currentState = IntakeRollersCurrentState.CLEANING;
+        break;
+      default:
+        currentState = IntakeRollersCurrentState.STOPPED;
+        break;
     }
+  }
 
-    public void setVoltage(double voltage){
-        io.setVoltage(voltage);
+  private void applyStates() {
+    switch (currentState) {
+      case STOPPED:
+        stop();
+        break;
+      case INTAKING_FUEL:
+        setVoltage(8);
+        break;
+      // case AGITATING_FUEL:
+      //     setVoltage(2);
+      //     break;
+      case OUTAKING:
+        setVoltage(-7);
+        break;
+      case CLEANING:
+        setVoltage(0.65);
+        break;
+      default:
+        stop();
+        break;
     }
+  }
+
+  public void stop() {
+    io.stop();
+  }
+
+  public void setWantedState(IntakeRollers.IntakeRollersWantedState wantedState) {
+    this.wantedState = wantedState;
+  }
+
+  public void setVoltage(double voltage) {
+    io.setVoltage(voltage);
+  }
 }
-
-

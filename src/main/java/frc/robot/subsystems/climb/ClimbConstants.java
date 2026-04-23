@@ -21,11 +21,12 @@ public class ClimbConstants {
   public static double kP = 0.0;
   public static double kI = 0.0;
   public static double kD = 0.0;
-  public static double kV = Constants.kMotors.kKrakenX60Foc.kV * climbGearRatio;;
+  public static double kV = Constants.kMotors.kKrakenX60Foc.kV * climbGearRatio;
+  ;
   public static double kS = 0.0;
   public static double kG = 0.0;
 
-  public static final double simKP = 0.35;// 0.45
+  public static final double simKP = 0.35; // 0.45
   public static final double simKI = 0;
   public static final double simKD = 0.0;
   public static final double simKS = 0.0;
@@ -41,6 +42,8 @@ public class ClimbConstants {
   public static double tripStatorCurrent = 18.0;
   public static double debounceTripStatorCurrent = 0.2;
 
-  public static final Transform2d climbTransform = new Transform2d(new Translation2d(Units.inchesToMeters(3.546),
-      Units.inchesToMeters(13.568)), new Rotation2d());
+  public static final Transform2d climbTransform =
+      new Transform2d(
+          new Translation2d(Units.inchesToMeters(3.546), Units.inchesToMeters(13.568)),
+          new Rotation2d());
 }

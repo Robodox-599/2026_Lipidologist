@@ -4,11 +4,7 @@
 
 package frc.robot.subsystems.feeder;
 
-import java.util.spi.CurrencyNameProvider;
-
 import dev.doglog.DogLog;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.Tracer;
 
 public class Feeder {
   private final FeederIO io;
@@ -36,17 +32,18 @@ public class Feeder {
   }
 
   public void updateInputs() {
-    Tracer.traceFunc("FeederUpdateInputs", io::updateInputs);
+    io.updateInputs();
+  }
 
-    handleFeederStateTransitions();
+  public void updateStates() {
+    handleStateTransitions();
     applyStates();
 
     DogLog.log("Feeder/wantedState", wantedState);
     DogLog.log("Feeder/currentState", currentState);
-
   }
 
-  public void handleFeederStateTransitions() {
+  private void handleStateTransitions() {
     switch (wantedState) {
       case FEED_FUEL:
         currentState = FeederCurrentState.FEEDING_FUEL;
@@ -69,7 +66,7 @@ public class Feeder {
     }
   }
 
-  public void applyStates() {
+  private void applyStates() {
     switch (currentState) {
       case FEEDING_FUEL:
         setFeederVelocity(100);

@@ -1,13 +1,5 @@
 package frc.robot.subsystems.vision6;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Supplier;
-
-import org.photonvision.EstimatedRobotPose;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -15,16 +7,15 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.FieldConstants;
 import frc.robot.subsystems.vision6.VisionIO.PoseObservation;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Supplier;
 
 public class Vision {
   private final VisionConsumer consumer;
@@ -34,9 +25,11 @@ public class Vision {
   private Debouncer targetDebouncer = new Debouncer(2.0, DebounceType.kFalling);
 
   // private final Alert[] disconnectedAlerts;
-  // private final Alert cameraDisconnectedAlert = new Alert("One or more cameras are disconnected.", AlertType.kWarning);
+  // private final Alert cameraDisconnectedAlert = new Alert("One or more cameras are
+  // disconnected.", AlertType.kWarning);
 
-  public Vision(VisionConsumer consumer, Supplier<ChassisSpeeds> robotSpeedsSupplier, VisionIOReal... io) {
+  public Vision(
+      VisionConsumer consumer, Supplier<ChassisSpeeds> robotSpeedsSupplier, VisionIOReal... io) {
     this.consumer = consumer;
     this.robotSpeedsSupplier = robotSpeedsSupplier;
     this.io = io;
@@ -82,7 +75,9 @@ public class Vision {
         DogLog.log("Vision/" + io[cameraIndex].constants.name() + "/Observation", observation);
 
         // Check whether to reject pose
-        boolean rejectPose = shouldRejectPoseObservation(observation, io[cameraIndex].constants.shouldRejectSingleTag());
+        boolean rejectPose =
+            shouldRejectPoseObservation(
+                observation, io[cameraIndex].constants.shouldRejectSingleTag());
 
         // Log poses
         robotPoses.add(observation.pose());
@@ -94,7 +89,8 @@ public class Vision {
         }
 
         // Calculate standard deviations
-        double stdDevFactor = Math.pow(observation.averageTagDistance(), 2.0) / observation.tagCount();
+        double stdDevFactor =
+            Math.pow(observation.averageTagDistance(), 2.0) / observation.tagCount();
         double linearStdDev = VisionConstants.linearStdDevBaseline * stdDevFactor;
         double angularStdDev = VisionConstants.angularStdDevBaseline * stdDevFactor;
 
@@ -113,16 +109,20 @@ public class Vision {
 
         // linearStdDev *= io[cameraIndex].constants.stdDevFactor();
 
-        consumer.accept(observation.pose().toPose2d(), observation.timestamp(),
+        consumer.accept(
+            observation.pose().toPose2d(),
+            observation.timestamp(),
             VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
       }
 
       // // Log camera data
       // DogLog.log("Vision/" + io[cameraIndex].constants.name() + "/RobotPoses",
       //     robotPoses.toArray(new Pose3d[robotPoses.size()]));
-      DogLog.log("Vision/" + io[cameraIndex].constants.name() + "/RobotPosesAccepted",
+      DogLog.log(
+          "Vision/" + io[cameraIndex].constants.name() + "/RobotPosesAccepted",
           robotPosesAccepted.toArray(new Pose3d[robotPosesAccepted.size()]));
-      DogLog.log("Vision/" + io[cameraIndex].constants.name() + "/RobotPosesRejected",
+      DogLog.log(
+          "Vision/" + io[cameraIndex].constants.name() + "/RobotPosesRejected",
           robotPosesRejected.toArray(new Pose3d[robotPosesRejected.size()]));
       // allRobotPoses.addAll(robotPoses);
       allRobotPosesAccepted.addAll(robotPosesAccepted);
@@ -140,7 +140,8 @@ public class Vision {
     this.hasTargets = targetDebouncer.calculate(allRobotPosesAccepted.size() > 0);
   }
 
-  private boolean shouldRejectPoseObservation(PoseObservation observation, boolean shouldRejectSingleTag) {
+  private boolean shouldRejectPoseObservation(
+      PoseObservation observation, boolean shouldRejectSingleTag) {
     // Should have at least one tag
     if (observation.tagCount() <= 0) {
       return true;
@@ -168,7 +169,7 @@ public class Vision {
     if (Math.abs(observation.pose().getZ()) > VisionConstants.maxZError) {
       return true;
     }
-    
+
     if (Math.abs(observation.pose().getRotation().getY()) > VisionConstants.maxAngleError
         || Math.abs(observation.pose().getRotation().getX()) > VisionConstants.maxAngleError) {
       return true;

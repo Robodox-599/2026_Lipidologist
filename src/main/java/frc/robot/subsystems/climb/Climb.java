@@ -29,8 +29,11 @@ public class Climb {
 
   public void updateInputs() {
     io.updateInputs();
+  }
+
+  public void updateStates() {
     handleStateTransitions();
-    // applyStates();
+    applyStates();
 
     DogLog.log("Climb/WantedState", wantedState);
     DogLog.log("Climb/CurrentState", currentState);
@@ -96,7 +99,7 @@ public class Climb {
   public boolean atSetpoint(double targetPosition) {
     return Math.abs(targetPosition - io.position) < 0.02;
   }
-  
+
   public boolean atExtensionSetpoint() {
     return Math.abs(ClimbConstants.climbExtensionPosition - io.position) < 0.02;
   }

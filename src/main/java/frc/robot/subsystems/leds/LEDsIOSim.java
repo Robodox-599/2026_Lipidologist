@@ -1,5 +1,3 @@
 package frc.robot.subsystems.leds;
 
-public class LEDsIOSim {
-    
-}
+public class LEDsIOSim {}

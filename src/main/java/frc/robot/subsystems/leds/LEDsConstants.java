@@ -3,22 +3,22 @@ package frc.robot.subsystems.leds;
 import com.ctre.phoenix6.signals.RGBWColor;
 
 public class LEDsConstants {
-    //LED information
-    public static final int CANdleID = 23;
-    public static final String CANbus = "rio";
-    public static final int maxLEDs = 50;
+  // LED information
+  public static final int CANdleID = 23;
+  public static final String CANbus = "rio";
+  public static final int maxLEDs = 50;
 
-    public static final double colorScaler = 1;
-    public static final double frameRate = 6;
+  public static final double colorScaler = 1;
+  public static final double frameRate = 6;
 
-    //state colors
-    public static final RGBWColor white =  new RGBWColor(0, 0, 0, 255); //white
-    public static final RGBWColor purple =  new RGBWColor(255, 0, 255, 255); //purple
-    public static final RGBWColor pink =  new RGBWColor(255, 15, 122, 255); //pink
-    public static final RGBWColor yellow =  new RGBWColor(255, 255, 0, 255); //yellow
-    public static final RGBWColor green =  new RGBWColor(0, 255, 0, 255); //green 
-    public static final RGBWColor magenta =  new RGBWColor(220, 0, 180, 255); //magenta
-    public static final RGBWColor lilac =  new RGBWColor(195, 140, 235, 255); //lilac
-    public static final RGBWColor lime = new RGBWColor(200, 255, 0, 255); //lime
-    public static final RGBWColor red =  new RGBWColor(255, 0, 0, 255); //red
+  // state colors
+  public static final RGBWColor white = new RGBWColor(0, 0, 0, 255); // white
+  public static final RGBWColor purple = new RGBWColor(255, 0, 255, 255); // purple
+  public static final RGBWColor pink = new RGBWColor(255, 15, 122, 255); // pink
+  public static final RGBWColor yellow = new RGBWColor(255, 255, 0, 255); // yellow
+  public static final RGBWColor green = new RGBWColor(0, 255, 0, 255); // green
+  public static final RGBWColor magenta = new RGBWColor(220, 0, 180, 255); // magenta
+  public static final RGBWColor lilac = new RGBWColor(195, 140, 235, 255); // lilac
+  public static final RGBWColor lime = new RGBWColor(200, 255, 0, 255); // lime
+  public static final RGBWColor red = new RGBWColor(255, 0, 0, 255); // red
 }

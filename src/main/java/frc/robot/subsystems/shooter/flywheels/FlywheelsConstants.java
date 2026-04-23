@@ -1,72 +1,75 @@
 package frc.robot.subsystems.shooter.flywheels;
 
-import com.ctre.phoenix6.signals.InvertedValue;
-
-import frc.robot.Constants;
-
 public class FlywheelsConstants {
-        // motor information
-        public static final int flywheelLeaderMotorID = 29;
-        public static final int flywheelBottomLeftMotorID = 26;
-        public static final int flywheelTopRightMotorID = 27;
-        public static final int flywheelBottomRightMotorID = 28;
+  // motor information
+  public static final int flywheelLeaderMotorID = 29;
+  public static final int flywheelBottomLeftMotorID = 26;
+  public static final int flywheelTopRightMotorID = 27;
+  public static final int flywheelBottomRightMotorID = 28;
 
-        public static final String flywheelCANBus = "rio";
+  public static final String flywheelCANBus = "rio";
 
-        public static final double flywheelGearRatio = 1/1.2;
-        public static final double flywheelMOI = 0.1;
+  public static final double flywheelGearRatio = 1 / 1.2;
+  public static final double flywheelMOI = 0.1;
 
-        // // real PID
-        public static final double flywheelRealkP = 0.7;
-        public static final double flywheelRealkI = 0;
-        public static final double flywheelRealkD = 0;
-        public static final double flywheelRealkS = 0.36;
-        public static final double flywheelRealkV = 0.122;
+  // // real PID
+  public static final double flywheelRealkP = 0.7;
+  public static final double flywheelRealkI = 0;
+  public static final double flywheelRealkD = 0;
+  public static final double flywheelRealkS = 0.36;
+  public static final double flywheelRealkV = 0.122;
 
-        // // sim PID
-        // public static final double flywheelSimkP = 1.25;
-        // public static final double flywheelSimkI = 0;
-        // public static final double flywheelSimkD = 0;
-        // public static final double flywheelSimkS = 0;
-        // public static final double flywheelSimkV = 0;
+  // // sim PID
+  // public static final double flywheelSimkP = 1.25;
+  // public static final double flywheelSimkI = 0;
+  // public static final double flywheelSimkD = 0;
+  // public static final double flywheelSimkS = 0;
+  // public static final double flywheelSimkV = 0;
 
-        // sim 
-        public static final double flywheelMaxVelocity = 100;
-        public static final double flywheelMaxAcceleration = 50;
+  // sim
+  public static final double flywheelMaxVelocity = 100;
+  public static final double flywheelMaxAcceleration = 50;
 
-        // current limits
-        public static final double supplyCurrentLimit = 30;
-        public static final double statorCurrentLimit = 40;
+  // current limits
+  public static final double supplyCurrentLimit = 30;
+  public static final double statorCurrentLimit = 40;
 
-        // velocity tolerance
-        public static final double RPSTolerance = 5;
+  // velocity tolerance
+  public static final double RPSTolerance = 5;
 
-        // setpoints
-        public static final double idleRPS = 45;
+  // setpoints
+  public static final double idleRPS = 45;
 
-        // public record FlywheelConstants(String name, int motorID, String CANBus, double kP, double kI, double kD,
-        //                 double kS,
-        //                 double kV, InvertedValue invert) {
-        // }
+  // public record FlywheelConstants(String name, int motorID, String CANBus, double kP, double kI,
+  // double kD,
+  //                 double kS,
+  //                 double kV, InvertedValue invert) {
+  // }
 
-        // public static final FlywheelConstants LeftFlywheel = new FlywheelConstants("LeftFlywheel", 20, "rio", 0.45, 0, 0,
-        //                 .26, 0.119,
-        //                 InvertedValue.Clockwise_Positive);
-        // public static final FlywheelConstants MiddleFlywheel = new FlywheelConstants("MiddleFlywheel", 21, "rio", 0.45, 0,
-        //                 0, 0.27,
-        //                 0.119, InvertedValue.CounterClockwise_Positive);
-        // public static final FlywheelConstants RightFlywheel = new FlywheelConstants("RightFlywheel", 22, "rio", 0.45, 0, 0,
-        //                 0.29,
-        //                 0.12, InvertedValue.CounterClockwise_Positive); 
+  // public static final FlywheelConstants LeftFlywheel = new FlywheelConstants("LeftFlywheel", 20,
+  // "rio", 0.45, 0, 0,
+  //                 .26, 0.119,
+  //                 InvertedValue.Clockwise_Positive);
+  // public static final FlywheelConstants MiddleFlywheel = new FlywheelConstants("MiddleFlywheel",
+  // 21, "rio", 0.45, 0,
+  //                 0, 0.27,
+  //                 0.119, InvertedValue.CounterClockwise_Positive);
+  // public static final FlywheelConstants RightFlywheel = new FlywheelConstants("RightFlywheel",
+  // 22, "rio", 0.45, 0, 0,
+  //                 0.29,
+  //                 0.12, InvertedValue.CounterClockwise_Positive);
 
-        // public static final FlywheelConstants LeftFlywheelSim = new FlywheelConstants("LeftFlywheel", 20, "rio", 1.25,
-        //                 0, 0, 0, 0,
-        //                 InvertedValue.Clockwise_Positive);
-        // public static final FlywheelConstants MiddleFlywheelSim = new FlywheelConstants("MiddleFlywheel", 21, "rio",
-        //                 1.25, 0, 0, 0,
-        //                 0, InvertedValue.CounterClockwise_Positive);
-        // public static final FlywheelConstants RightFlywheelSim = new FlywheelConstants("RightFlywheel", 22, "rio", 1.25,
-        //                 0, 0, 0,
-        //                 0, InvertedValue.CounterClockwise_Positive);
+  // public static final FlywheelConstants LeftFlywheelSim = new FlywheelConstants("LeftFlywheel",
+  // 20, "rio", 1.25,
+  //                 0, 0, 0, 0,
+  //                 InvertedValue.Clockwise_Positive);
+  // public static final FlywheelConstants MiddleFlywheelSim = new
+  // FlywheelConstants("MiddleFlywheel", 21, "rio",
+  //                 1.25, 0, 0, 0,
+  //                 0, InvertedValue.CounterClockwise_Positive);
+  // public static final FlywheelConstants RightFlywheelSim = new FlywheelConstants("RightFlywheel",
+  // 22, "rio", 1.25,
+  //                 0, 0, 0,
+  //                 0, InvertedValue.CounterClockwise_Positive);
 
 }

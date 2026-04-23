@@ -4,12 +4,10 @@
 
 package frc.robot.subsystems.feeder;
 
-import frc.robot.Constants;
-
 public class FeederConstants {
   public static final int feederMotorID = 17;
   public static final String feederCANBus = "rio";
-  public static final double feederGearRatio = 42.0/23.0;
+  public static final double feederGearRatio = 42.0 / 23.0;
   public static final double feederMOI = 0.01;
 
   public static final double kP = 0.47;

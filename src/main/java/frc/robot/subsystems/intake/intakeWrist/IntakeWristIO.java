@@ -6,24 +6,26 @@ package frc.robot.subsystems.intake.intakeWrist;
 
 /** Add your docs here. */
 public class IntakeWristIO {
-    protected double targetPosition = 0;
-    protected double currentPosition = 0;
-    protected double velocity = 0;
-    protected double voltage = 0;
-    protected double statorCurrent = 0;
-    protected double supplyCurrent = 0;
-    protected double temperature = 0;
+  protected double targetPosition = 0;
+  protected double currentPosition = 0;
+  protected double velocity = 0;
+  protected double voltage = 0;
+  protected double statorCurrent = 0;
+  protected double supplyCurrent = 0;
+  protected double temperature = 0;
 
-    protected boolean atSetpoint = false;
-    protected boolean isWristJammed = false;
+  protected boolean atSetpoint = false;
+  protected boolean isWristJammed = false;
 
-    public void updateInputs(){}
+  public void updateInputs() {}
 
-    public void stop(){}
-    public void setPosition(double position){}
-    public double getPosition(){
-        return 0.0;
-    }
-    public void setVoltage(double voltage) {}
+  public void stop() {}
 
+  public void setPosition(double position) {}
+
+  public double getPosition() {
+    return 0.0;
+  }
+
+  public void setVoltage(double voltage) {}
 }

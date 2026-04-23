@@ -12,22 +12,27 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class IndexerIOSim extends IndexerIO {
   private final DCMotorSim indexerSimMotor;
-  
+
   private final Timer pulseTimer = new Timer();
   private boolean pulseOn = false;
 
   /** Creates a new IndexerIOSim. */
   public IndexerIOSim() {
-    indexerSimMotor = new DCMotorSim(LinearSystemId.createDCMotorSystem
-      (DCMotor.getKrakenX60Foc(1), IndexerConstants.indexerMOI, 
-        IndexerConstants.indexerGearRatio), DCMotor.getKrakenX60Foc(1));
+    indexerSimMotor =
+        new DCMotorSim(
+            LinearSystemId.createDCMotorSystem(
+                DCMotor.getKrakenX60Foc(1),
+                IndexerConstants.indexerMOI,
+                IndexerConstants.indexerGearRatio),
+            DCMotor.getKrakenX60Foc(1));
   }
 
   @Override
-  public void updateInputs(){
+  public void updateInputs() {
     indexerSimMotor.update(0.02);
 
-    super.velocity = indexerSimMotor.getAngularVelocityRPM() / 60.0; // converting minutes to seconds
+    super.velocity =
+        indexerSimMotor.getAngularVelocityRPM() / 60.0; // converting minutes to seconds
     super.appliedVolts = indexerSimMotor.getInputVoltage();
     super.tempCelsius = 25.0;
 
@@ -37,30 +42,29 @@ public class IndexerIOSim extends IndexerIO {
   }
 
   @Override
-  public void stopIndexer(){
+  public void stopIndexer() {
     indexerSimMotor.setInputVoltage(0);
   }
 
   @Override
-  public void setIndexerVoltage(double volts){
+  public void setIndexerVoltage(double volts) {
     indexerSimMotor.setInputVoltage(volts);
   }
 
   @Override
-    public void indexerPulseFuel(double volts) {
-      if(!pulseTimer.isRunning()){
-        pulseTimer.start();
-      }
-
-      if (pulseTimer.get() > IndexerConstants.pulseTimeInterval) {
-        if(!pulseOn){
-          indexerSimMotor.setInputVoltage(volts);
-        } else{
-          indexerSimMotor.setInputVoltage(0);
-        }
-        pulseOn = !pulseOn;
-        pulseTimer.reset();
-      }
+  public void indexerPulseFuel(double volts) {
+    if (!pulseTimer.isRunning()) {
+      pulseTimer.start();
     }
-  
+
+    if (pulseTimer.get() > IndexerConstants.pulseTimeInterval) {
+      if (!pulseOn) {
+        indexerSimMotor.setInputVoltage(volts);
+      } else {
+        indexerSimMotor.setInputVoltage(0);
+      }
+      pulseOn = !pulseOn;
+      pulseTimer.reset();
+    }
+  }
 }

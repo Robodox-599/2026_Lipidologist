@@ -1,6 +1,8 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2026.1.1"
+    id 'com.diffplug.spotless' version '8.0.0'
+    id "java-library"
 }
 
 java {
@@ -73,6 +75,8 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    
+    implementation 'com.google.code.gson:gson:2.10.1'
 }
 
 test {
@@ -104,4 +108,24 @@ wpi.java.configureTestTasks(test)
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
+}
+
+project.compileJava.dependsOn(spotlessApply)
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
+spotless {
+    lineEndings 'UNIX'
+    java {
+        target fileTree('.') {
+            include '**/*.java'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        toggleOffOn()
+        googleJavaFormat()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }

@@ -6,21 +6,21 @@ package frc.robot.subsystems.intake.intakeRollers; // make sure the folder name 
 
 /** Add your docs here. */
 public class IntakeRollersConstants {
-    public static final int intakeRollersMotorOneID = 14;
-    public static final int intkaeRollersMotorTwoID = 25;
-    public static final String intakeRollersCanBusOne = "rio";
-    public static final String intakeRollersCanBusTwo = "rio";
+  public static final int intakeRollersMotorOneID = 14;
+  public static final int intkaeRollersMotorTwoID = 25;
+  public static final String intakeRollersCanBusOne = "rio";
+  public static final String intakeRollersCanBusTwo = "rio";
 
-    public static final int intakeRollersGearRatio = 1;
+  public static final int intakeRollersGearRatio = 1;
 
-    public static final double rotationalInertia = 0.01;
+  public static final double rotationalInertia = 0.01;
 
-    public static final double kP = 0;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double kS = 0;
-    public static final double kV = 0;
+  public static final double kP = 0;
+  public static final double kI = 0;
+  public static final double kD = 0;
+  public static final double kS = 0;
+  public static final double kV = 0;
 
-    public static final double supplyCurrentLimit = 20;
-    public static final double statorCurrentLimit = 60;
+  public static final double supplyCurrentLimit = 20;
+  public static final double statorCurrentLimit = 60;
 }

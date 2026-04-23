@@ -14,13 +14,17 @@ public class FeederIOSim extends FeederIO {
 
   /** Creates a new IndexerIOSim. */
   public FeederIOSim() {
-    feederSimMotor = new DCMotorSim(LinearSystemId.createDCMotorSystem
-      (DCMotor.getKrakenX60Foc(1), FeederConstants.feederMOI, 
-        FeederConstants.feederGearRatio), DCMotor.getKrakenX60Foc(1));
+    feederSimMotor =
+        new DCMotorSim(
+            LinearSystemId.createDCMotorSystem(
+                DCMotor.getKrakenX60Foc(1),
+                FeederConstants.feederMOI,
+                FeederConstants.feederGearRatio),
+            DCMotor.getKrakenX60Foc(1));
   }
 
   @Override
-  public void updateInputs(){
+  public void updateInputs() {
     feederSimMotor.update(0.02);
 
     super.RPS = feederSimMotor.getAngularVelocityRPM() / 60.0; // converting minutes to seconds
@@ -32,13 +36,13 @@ public class FeederIOSim extends FeederIO {
   }
 
   @Override
-  public void stopFeeder(){
+  public void stopFeeder() {
     feederSimMotor.setInputVoltage(0);
   }
 
   @Override
-  public void setFeederVelocity(double RPS){
+  public void setFeederVelocity(double RPS) {
     super.targetRPS = RPS;
     feederSimMotor.setAngularVelocity(RPS);
-  }  
+  }
 }

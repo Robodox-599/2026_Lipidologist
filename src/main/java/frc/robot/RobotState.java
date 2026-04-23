@@ -1,5 +1,3 @@
 package frc.robot;
 
-public class RobotState {
-
-}
+public class RobotState {}
