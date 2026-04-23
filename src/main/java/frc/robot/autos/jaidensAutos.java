@@ -106,7 +106,6 @@ public class jaidensAutos {
         .onTrue(
             Commands.parallel(
                 disregardRequirements(trench_only_1.resetOdometry()),
-                Commands.runOnce(() -> drivetrain.setWantedState(WantedState.CHOREO_TRAJECTORY)),
                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                 trench_only_1.cmd()));
 
@@ -162,7 +161,6 @@ public class jaidensAutos {
         .onTrue(
             Commands.parallel(
                 disregardRequirements(trench_and_bump_1.resetOdometry()),
-                Commands.runOnce(() -> drivetrain.setWantedState(WantedState.CHOREO_TRAJECTORY)),
                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                 trench_and_bump_1.cmd()));
 
@@ -223,7 +221,6 @@ public class jaidensAutos {
         .onTrue(
             Commands.parallel(
                 disregardRequirements(trench_and_bump_1.resetOdometry()),
-                Commands.runOnce(() -> drivetrain.setWantedState(WantedState.CHOREO_TRAJECTORY)),
                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                 trench_and_bump_1.cmd()));
 
@@ -289,7 +286,6 @@ public class jaidensAutos {
         .onTrue(
             Commands.parallel(
                 disregardRequirements(trench_only_1.resetOdometry()),
-                Commands.runOnce(() -> drivetrain.setWantedState(WantedState.CHOREO_TRAJECTORY)),
                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                 trench_only_1.cmd()));
 
@@ -345,7 +341,6 @@ public class jaidensAutos {
         .onTrue(
             Commands.parallel(
                 disregardRequirements(trench_and_bump_1.resetOdometry()),
-                Commands.runOnce(() -> drivetrain.setWantedState(WantedState.CHOREO_TRAJECTORY)),
                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                 trench_and_bump_1.cmd()));
 
@@ -404,8 +399,6 @@ public class jaidensAutos {
             Commands.sequence(
                 Commands.parallel(
                     disregardRequirements(bump_only_1_safe.resetOdometry()),
-                    Commands.runOnce(
-                        () -> drivetrain.setWantedState(WantedState.CHOREO_TRAJECTORY)),
                     superstructureCommands.setWantedSuperStateCommand(
                         WantedSuperState.LIFT_INTAKE_AUTO)),
                 new WaitCommand(1.5),
@@ -447,8 +440,6 @@ public class jaidensAutos {
             Commands.sequence(
                 Commands.parallel(
                     disregardRequirements(bump_only_1_greedy.resetOdometry()),
-                    Commands.runOnce(
-                        () -> drivetrain.setWantedState(WantedState.CHOREO_TRAJECTORY)),
                     superstructureCommands.setWantedSuperStateCommand(
                         WantedSuperState.LIFT_INTAKE_AUTO)),
                 new WaitCommand(1.5),
