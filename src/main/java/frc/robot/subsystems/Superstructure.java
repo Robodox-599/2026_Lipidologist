@@ -18,7 +18,6 @@ import frc.robot.subsystems.intake.intakeWrist.IntakeWrist;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.flywheels.Flywheels.FlywheelWantedState;
 import frc.robot.subsystems.shooter.hood.Hood;
-import frc.robot.subsystems.shooter.hood.Hood.HoodWantedState;
 import frc.robot.subsystems.vision6.Vision;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.HubShiftUtil;
@@ -130,7 +129,7 @@ public class Superstructure extends SubsystemBase {
     Tracer.traceFunc("Feeder UpdateStates", feeder::updateStates);
     Tracer.traceFunc("Indexer UpdateStates", indexer::updateStates);
     Tracer.traceFunc("IntakeRollers UpdateStates", intakeRollers::updateStates);
-    Tracer.traceFunc("IntakeWrist UpdateStates", intakeWrist::updateStates);
+    // Tracer.traceFunc("IntakeWrist UpdateStates", intakeWrist::updateStates);
     Tracer.traceFunc("Flywheels UpdateStates", flywheels::updateStates);
     Tracer.traceFunc("Hood UpdateStates", hood::updateStates);
 
@@ -253,14 +252,25 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = CurrentSuperState.LIFTING_INTAKE_AUTO;
         break;
       case TUNE_SHOT_DATA_SHOOT:
-        if (areSystemsReadyForHubShot()) {
+        this.adjustedShot =
+            CalculateShot.calculateHubAdjustedShot(
+                drivetrain.getPose(),
+                drivetrain.getFieldRelativeChassisSpeeds(),
+                drivetrain.getFieldRelativeAccelerations());
+        if (isFuelJammed()) {
+          currentSuperState = CurrentSuperState.UNJAMMING;
+        } else if (areSystemsReadyForHubShot()) {
           currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_SHOOTING;
         } else {
           currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_IDLING;
         }
-        currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_SHOOTING;
         break;
       case TUNE_SHOT_DATA_IDLE:
+        this.adjustedShot =
+            CalculateShot.calculateHubAdjustedShot(
+                drivetrain.getPose(),
+                drivetrain.getFieldRelativeChassisSpeeds(),
+                drivetrain.getFieldRelativeAccelerations());
         currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_IDLING;
         break;
       default:
@@ -600,23 +610,31 @@ public class Superstructure extends SubsystemBase {
   // }
 
   public void tuningShotDataIdling() {
-    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
+    drivetrain.setWantedState(
+        CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
     indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
     feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
-    // setHoodAngleAndFlywheelsRPS();
-    flywheels.setWantedState(FlywheelWantedState.IDLE);
-    hood.setWantedState(HoodWantedState.STOW);
+    flywheels.setWantedState(
+        FlywheelWantedState.SET_RPS, SmartDashboard.getNumber("Flywheel Velocity", 0));
+    hood.setWantedState(
+        Hood.HoodWantedState.SET_POSITION, SmartDashboard.getNumber("Hood Rotations", 0));
+    // flywheels.setWantedState(FlywheelWantedState.IDLE);
+    // hood.setWantedState(HoodWantedState.STOW);
   }
 
   public void tuningShotDataShooting() {
-    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.STOPPED);
-    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.STOP);
+    drivetrain.setWantedState(
+        CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
     indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
     feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
-    setHoodAngleAndFlywheelsRPS();
+    flywheels.setWantedState(
+        FlywheelWantedState.SET_RPS, SmartDashboard.getNumber("Flywheel Velocity", 0));
+    hood.setWantedState(
+        Hood.HoodWantedState.SET_POSITION, SmartDashboard.getNumber("Hood Rotations", 0));
     // flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 60);
     // hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.07);
   }
@@ -694,13 +712,6 @@ public class Superstructure extends SubsystemBase {
 
   public void setWantedSuperState(WantedSuperState state) {
     wantedSuperState = state;
-  }
-
-  public void setHoodAngleAndFlywheelsRPS() {
-    flywheels.setWantedState(
-        FlywheelWantedState.SET_RPS, SmartDashboard.getNumber("Flywheel Velocity", 0));
-    hood.setWantedState(
-        Hood.HoodWantedState.SET_POSITION, SmartDashboard.getNumber("Hood Angle", 0));
   }
 
   public Pose2d getPose() {

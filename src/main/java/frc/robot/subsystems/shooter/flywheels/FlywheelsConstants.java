@@ -13,11 +13,11 @@ public class FlywheelsConstants {
   public static final double flywheelMOI = 0.1;
 
   // // real PID
-  public static final double flywheelRealkP = 0.7;
+  public static final double flywheelRealkP = 9;
   public static final double flywheelRealkI = 0;
   public static final double flywheelRealkD = 0;
-  public static final double flywheelRealkS = 0.36;
-  public static final double flywheelRealkV = 0.122;
+  public static final double flywheelRealkS = 7.3;
+  public static final double flywheelRealkV = 0.059;
 
   // // sim PID
   // public static final double flywheelSimkP = 1.25;
@@ -31,14 +31,14 @@ public class FlywheelsConstants {
   public static final double flywheelMaxAcceleration = 50;
 
   // current limits
-  public static final double supplyCurrentLimit = 30;
+  public static final double supplyCurrentLimit = 40;
   public static final double statorCurrentLimit = 40;
 
   // velocity tolerance
-  public static final double RPSTolerance = 5;
+  public static final double RPSTolerance = 3;
 
   // setpoints
-  public static final double idleRPS = 45;
+  public static final double idleRPS = 0;
 
   // public record FlywheelConstants(String name, int motorID, String CANBus, double kP, double kI,
   // double kD,

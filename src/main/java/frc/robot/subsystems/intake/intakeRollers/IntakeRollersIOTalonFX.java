@@ -10,9 +10,11 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -25,11 +27,10 @@ import frc.robot.util.PhoenixUtil;
 public class IntakeRollersIOTalonFX extends IntakeRollersIO {
   private final TalonFX intakeRollersLeaderMotor;
   private final CANBus intakeRollersLeaderCanBus;
-  private final TalonFXConfiguration intakeRollersLeaderConfig;
+  private final TalonFXConfiguration rollersConfig;
 
   private final TalonFX intakeRollersFollowerMotor;
   private final CANBus intakeRollersFollowerCanBus;
-  private final TalonFXConfiguration intakeRollersFollowerConfig;
 
   private final VoltageOut v_leader_request;
   private final VoltageOut v_follower_request;
@@ -56,44 +57,32 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         new TalonFX(
             IntakeRollersConstants.intakeRollersFollowerMotorID, intakeRollersFollowerCanBus);
 
-    intakeRollersLeaderConfig =
+    rollersConfig =
         new TalonFXConfiguration()
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
                     .withSupplyCurrentLimit(IntakeRollersConstants.supplyCurrentLimit)
-                    .withSupplyCurrentLimitEnable(true)
+                    .withSupplyCurrentLimitEnable(false)
                     .withStatorCurrentLimit(IntakeRollersConstants.statorCurrentLimit)
                     .withStatorCurrentLimitEnable(true))
             .withMotorOutput(
                 new MotorOutputConfigs()
                     .withInverted(InvertedValue.CounterClockwise_Positive)
-                    .withNeutralMode(NeutralModeValue.Brake))
+                    .withNeutralMode(NeutralModeValue.Coast))
     // .withOpenLoopRamps(new
     // OpenLoopRampsConfigs().withVoltageOpenLoopRampPeriod(1.0))
     ;
     v_leader_request = new VoltageOut(0);
     v_follower_request = new VoltageOut(0);
-
-    intakeRollersFollowerConfig =
-        new TalonFXConfiguration()
-            .withCurrentLimits(
-                new CurrentLimitsConfigs()
-                    .withSupplyCurrentLimit(IntakeRollersConstants.supplyCurrentLimit)
-                    .withSupplyCurrentLimitEnable(true)
-                    .withStatorCurrentLimit(IntakeRollersConstants.statorCurrentLimit)
-                    .withStatorCurrentLimitEnable(true))
-            .withMotorOutput(
-                new MotorOutputConfigs()
-                    .withInverted(InvertedValue.CounterClockwise_Positive)
-                    .withNeutralMode(NeutralModeValue.Brake))
-    // .withOpenLoopRamps(new
-    // OpenLoopRampsConfigs().withVoltageOpenLoopRampPeriod(1.0))
     ;
     PhoenixUtil.tryUntilOk(
-        10, () -> intakeRollersLeaderMotor.getConfigurator().apply(intakeRollersLeaderConfig, 1));
+        10, () -> intakeRollersLeaderMotor.getConfigurator().apply(rollersConfig, 1));
     PhoenixUtil.tryUntilOk(
-        10,
-        () -> intakeRollersFollowerMotor.getConfigurator().apply(intakeRollersFollowerConfig, 1));
+        10, () -> intakeRollersFollowerMotor.getConfigurator().apply(rollersConfig, 1));
+
+    intakeRollersFollowerMotor.setControl(
+        new Follower(
+            IntakeRollersConstants.intakeRollersLeaderMotorID, MotorAlignmentValue.Aligned));
 
     intakeRollersLeaderVelocity = intakeRollersLeaderMotor.getVelocity();
     intakeRollersLeaderAppliedVolts = intakeRollersLeaderMotor.getMotorVoltage();

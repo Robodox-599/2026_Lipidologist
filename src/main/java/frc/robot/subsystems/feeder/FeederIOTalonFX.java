@@ -4,7 +4,6 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -41,10 +40,6 @@ public class FeederIOTalonFX extends FeederIO {
 
     feederConfig =
         new TalonFXConfiguration()
-            .withMotionMagic(
-                new MotionMagicConfigs()
-                    .withMotionMagicCruiseVelocity(FeederConstants.maxVelocityRotsPerSec)
-                    .withMotionMagicAcceleration(FeederConstants.maxAccelerationRotationsPerSecSQ))
             .withSlot0(
                 new Slot0Configs()
                     .withKP(FeederConstants.kP)
@@ -55,12 +50,12 @@ public class FeederIOTalonFX extends FeederIO {
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
                     .withStatorCurrentLimit(FeederConstants.statorCurrentLimitAmps)
-                    .withStatorCurrentLimitEnable(true)
+                    .withStatorCurrentLimitEnable(false)
                     .withSupplyCurrentLimit(FeederConstants.supplyCurrentLimitAmps)
                     .withSupplyCurrentLimitEnable(true))
             .withMotorOutput(
                 new MotorOutputConfigs()
-                    .withNeutralMode(NeutralModeValue.Brake)
+                    .withNeutralMode(NeutralModeValue.Coast)
                     .withInverted(InvertedValue.CounterClockwise_Positive));
 
     velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);

@@ -211,7 +211,7 @@ public class Robot extends TimedRobot {
     RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
 
-    SmartDashboard.putNumber("Flywheel Velocity", 45.0);
+    SmartDashboard.putNumber("Flywheel Velocity", 10.0);
     SmartDashboard.putNumber("Hood Rotations", 0.0);
 
     // DogLog.log("LeftTrenchZone", FieldConstants.LeftTrench.trenchZone);

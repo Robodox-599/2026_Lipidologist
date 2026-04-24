@@ -10,7 +10,7 @@ public class HoodConstants {
   public static final double hoodMOI = 0.1;
 
   // positions
-  public static final double stowPosition = 0.0;
+  public static final double stowPosition = 0.01;
 
   // real PID
   public static final double hoodRealkP = 250;
@@ -32,8 +32,8 @@ public class HoodConstants {
   public static final double hoodMaxAcceleration = hoodMaxVelocity * 2;
 
   // current limits
-  public static final double supplyCurrentLimit = 20;
-  public static final double statorCurrentLimit = 50; // reduce if overshooting too much
+  public static final double supplyCurrentLimit = 25;
+  public static final double statorCurrentLimit = 120; // reduce if overshooting too much
 
   // sim stuff
   public static final double armLengthMeters = 0;
@@ -45,6 +45,6 @@ public class HoodConstants {
   public static final double hoodMaxAngleRotations = 0.12;
 
   // cancoderstuff
-  public static final double hoodMagnetOffset = -0.9735;
-  public static final double absoluteDiscontinuityPoint = 0.98;
+  public static final double hoodMagnetOffset = -0.974609375;
+  public static final double absoluteDiscontinuityPoint = 0.7;
 }
