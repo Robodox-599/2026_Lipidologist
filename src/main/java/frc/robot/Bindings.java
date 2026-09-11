@@ -3,14 +3,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.WantedSuperState;
 import frc.robot.util.AllianceFlipUtil;
-import frc.robot.util.HubShiftUtil;
 import java.util.Set;
 
 public class Bindings {
@@ -20,48 +17,53 @@ public class Bindings {
   public Bindings(CommandXboxController driver, Superstructure superstructure) {
     this.superstructure = superstructure;
 
-    driver.y().onTrue(superstructure.zeroPoseCommand());
-
-    // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
+    // driver.y().onTrue(superstructure.zeroPoseCommand());
     driver
         .rightTrigger()
-        .and(driver.leftTrigger().negate())
-        .whileTrue(new RepeatCommand(setShootingStateCommand()))
-        .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+        .onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.DEMO))
+        .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
 
-    // AUTOMATICALLY SHOOT WHILE AGITATING WHEN READY TO EITHER HUB OR ALLIANCE ZONE
-    driver
-        .leftTrigger()
-        .whileTrue(new RepeatCommand(setAgitatingShootingStateCommand()))
-        .onFalse(
-            Commands.either(
-                Commands.none(),
-                superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE),
-                driver.rightTrigger()));
+    // // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
+    // driver
+    //     .rightTrigger()
+    //     .and(driver.leftTrigger().negate())
+    //     .whileTrue(new RepeatCommand(setShootingStateCommand()))
+    //     .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    // SHOOT MANUALLY (IN FRONT OF HUB)
-    driver
-        .a()
-        .and(driver.leftTrigger().negate())
-        .and(driver.rightTrigger().negate())
-        .and(driver.rightBumper().negate())
-        .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB_MANUAL))
-        .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    // // AUTOMATICALLY SHOOT WHILE AGITATING WHEN READY TO EITHER HUB OR ALLIANCE ZONE
+    // driver
+    //     .leftTrigger()
+    //     .whileTrue(new RepeatCommand(setAgitatingShootingStateCommand()))
+    //     .onFalse(
+    //         Commands.either(
+    //             Commands.none(),
+    //             superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE),
+    //             driver.rightTrigger()));
 
-    // OUTAKE FUEL
-    driver
-        .rightBumper()
-        .and(driver.leftTrigger().negate())
-        .and(driver.rightTrigger().negate())
-        .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.OUTAKE))
-        .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
+    // // SHOOT MANUALLY (IN FRONT OF HUB)
+    // driver
+    //     .a()
+    //     .and(driver.leftTrigger().negate())
+    //     .and(driver.rightTrigger().negate())
+    //     .and(driver.rightBumper().negate())
+    //     .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB_MANUAL))
+    //     .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    // CLEAN SYSTEMs
-    // driver.x()
-    //     .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLEAN))
-    //     .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
+    // // OUTAKE FUEL
+    // driver
+    //     .rightBumper()
+    //     .and(driver.leftTrigger().negate())
+    //     .and(driver.rightTrigger().negate())
+    //     .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.OUTAKE))
+    //     .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
-    new Trigger(() -> HubShiftUtil.isHubActiveSoon(5)).onTrue(rumbleDriverSwapping(driver, 0.5, 5));
+    // // CLEAN SYSTEMs
+    // // driver.x()
+    // //     .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLEAN))
+    // //     .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
+
+    // new Trigger(() -> HubShiftUtil.isHubActiveSoon(5)).onTrue(rumbleDriverSwapping(driver, 0.5,
+    // 5));
 
     // // AUTOMATICALLY CLIMB
     // driver.a().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLIMB)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));

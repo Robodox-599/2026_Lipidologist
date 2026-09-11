@@ -78,12 +78,13 @@ public class Superstructure extends SubsystemBase {
     TESTING,
     TUNING_SHOT_DATA_IDLING,
     TUNING_SHOT_DATA_SHOOTING,
+    PREPARING_DEMO,
     DEMO
     // STOWING
   }
 
-  private WantedSuperState wantedSuperState = WantedSuperState.IDLE;
-  private CurrentSuperState currentSuperState = CurrentSuperState.IDLING;
+  private WantedSuperState wantedSuperState = WantedSuperState.STOP;
+  private CurrentSuperState currentSuperState = CurrentSuperState.STOPPED;
   private AdjustedShot adjustedShot = new AdjustedShot(Rotation2d.kZero, 0, 0, 0);
 
   public Superstructure(
@@ -276,8 +277,12 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_IDLING;
         break;
       case DEMO:
-      currentSuperState = CurrentSuperState.DEMO;
-      break;
+        if (flywheels.atSetpoint()) {
+          currentSuperState = CurrentSuperState.DEMO;
+        } else {
+          currentSuperState = CurrentSuperState.PREPARING_DEMO;
+        }
+        break;
       default:
         currentSuperState = CurrentSuperState.STOPPED;
         break;
@@ -348,6 +353,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case LIFTING_INTAKE_AUTO:
         liftingIntakeAuto();
+        break;
+      case PREPARING_DEMO:
+        preparingDemo();
         break;
       case DEMO:
         demo();
@@ -647,15 +655,27 @@ public class Superstructure extends SubsystemBase {
     // hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.07);
   }
 
+  public void preparingDemo() {
+    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.STOPPED);
+    feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+    flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 25);
+    if (isHoodUnsafe()) {
+      hood.setWantedState(Hood.HoodWantedState.STOW);
+    } else {
+      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.04);
+    }
+  }
+
   public void demo() {
-    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
+    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.STOPPED);
     feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
     indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 25);
     if (isHoodUnsafe()) {
       hood.setWantedState(Hood.HoodWantedState.STOW);
     } else {
-      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.08);
+      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.04);
     }
   }
 
