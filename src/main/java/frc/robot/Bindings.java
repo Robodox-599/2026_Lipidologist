@@ -20,6 +20,11 @@ public class Bindings {
   public Bindings(CommandXboxController driver, Superstructure superstructure) {
     this.superstructure = superstructure;
 
+    driver
+        .x()
+        .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.SIM_TEST))
+        .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.SIM_TEST_STOP));
+
     driver.y().onTrue(superstructure.zeroPoseCommand());
 
     // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE

@@ -12,57 +12,59 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 /** Add your docs here. */
 public class IntakeRollersIOSim extends IntakeRollersIO {
-	private final DCMotorSim intakeRollersLeaderSim;
-	private final DCMotorSim intakeRollersFollowerSim;
+  private final DCMotorSim intakeRollersLeaderSim;
+  private final DCMotorSim intakeRollersFollowerSim;
 
-	public IntakeRollersIOSim() {
-		intakeRollersLeaderSim =
-				new DCMotorSim(
-						LinearSystemId.createDCMotorSystem(
-								DCMotor.getKrakenX44Foc(1),
-								IntakeRollersConstants.rotationalInertia,
-								IntakeRollersConstants.intakeRollersLeader.gearRatio()),
-						DCMotor.getKrakenX44Foc(1));
-		intakeRollersFollowerSim =
-				new DCMotorSim(
-						LinearSystemId.createDCMotorSystem(
-								DCMotor.getKrakenX44Foc(1),
-								IntakeRollersConstants.rotationalInertia,
-								IntakeRollersConstants.intakeRollersFollower.gearRatio()),
-						DCMotor.getKrakenX44Foc(1));
-	}
+  public IntakeRollersIOSim() {
+    intakeRollersLeaderSim =
+        new DCMotorSim(
+            LinearSystemId.createDCMotorSystem(
+                DCMotor.getKrakenX44Foc(1),
+                IntakeRollersConstants.rotationalInertia,
+                IntakeRollersConstants.intakeRollersLeader.gearRatio()),
+            DCMotor.getKrakenX44Foc(1));
+    intakeRollersFollowerSim =
+        new DCMotorSim(
+            LinearSystemId.createDCMotorSystem(
+                DCMotor.getKrakenX44Foc(1),
+                IntakeRollersConstants.rotationalInertia,
+                IntakeRollersConstants.intakeRollersFollower.gearRatio()),
+            DCMotor.getKrakenX44Foc(1));
+  }
 
-	@Override
-	public void updateInputs() {
-		intakeRollersLeaderSim.update(0.02);
-		super.intakeRollersLeaderVelocity = intakeRollersLeaderSim.getAngularVelocityRPM() / 60.0; // converts to rotations per second
-		super.intakeRollersLeaderVoltage = intakeRollersLeaderSim.getInputVoltage();
-		super.intakeRollersLeaderStatorCurrent = intakeRollersLeaderSim.getCurrentDrawAmps();
+  @Override
+  public void updateInputs() {
+    intakeRollersLeaderSim.update(0.02);
+    super.intakeRollersLeaderVelocity =
+        intakeRollersLeaderSim.getAngularVelocityRPM() / 60.0; // converts to rotations per second
+    super.intakeRollersLeaderVoltage = intakeRollersLeaderSim.getInputVoltage();
+    super.intakeRollersLeaderStatorCurrent = intakeRollersLeaderSim.getCurrentDrawAmps();
 
-		DogLog.log("Intake/LeaderRollers/Velocity", super.intakeRollersLeaderVelocity);
-		DogLog.log("Intake/LeaderRollers/Voltage", super.intakeRollersLeaderVoltage);
-		DogLog.log("Intake/LeaderRollers/StatorCurrent", super.intakeRollersLeaderStatorCurrent);
+    DogLog.log("Intake/LeaderRollers/Velocity", super.intakeRollersLeaderVelocity);
+    DogLog.log("Intake/LeaderRollers/Voltage", super.intakeRollersLeaderVoltage);
+    DogLog.log("Intake/LeaderRollers/StatorCurrent", super.intakeRollersLeaderStatorCurrent);
 
-		intakeRollersFollowerSim.update(0.02);
-		super.intakeRollersFollowerVelocity = intakeRollersFollowerSim.getAngularVelocityRPM() / 60.0; // converts to rotations per second
-		super.intakeRollersFollowerVoltage = intakeRollersFollowerSim.getInputVoltage();
-		super.intakeRollersFollowerStatorCurrent = intakeRollersFollowerSim.getCurrentDrawAmps();
+    intakeRollersFollowerSim.update(0.02);
+    super.intakeRollersFollowerVelocity =
+        intakeRollersFollowerSim.getAngularVelocityRPM() / 60.0; // converts to rotations per second
+    super.intakeRollersFollowerVoltage = intakeRollersFollowerSim.getInputVoltage();
+    super.intakeRollersFollowerStatorCurrent = intakeRollersFollowerSim.getCurrentDrawAmps();
 
-		DogLog.log("Intake/FollowerRollers/Velocity", super.intakeRollersFollowerVelocity);
-		DogLog.log("Intake/FollowerRollers/Voltage", super.intakeRollersFollowerVoltage);
-		DogLog.log("Intake/FollowerRollers/StatorCurrent", super.intakeRollersFollowerStatorCurrent);
-	}
+    DogLog.log("Intake/FollowerRollers/Velocity", super.intakeRollersFollowerVelocity);
+    DogLog.log("Intake/FollowerRollers/Voltage", super.intakeRollersFollowerVoltage);
+    DogLog.log("Intake/FollowerRollers/StatorCurrent", super.intakeRollersFollowerStatorCurrent);
+  }
 
-	@Override
-	public void setVoltage(double voltage) {
-		double clampedVoltage = MathUtil.clamp(voltage, -12.0, 12.0);
-		intakeRollersLeaderSim.setInputVoltage(clampedVoltage);
-		intakeRollersFollowerSim.setInputVoltage(clampedVoltage);
-	}
+  @Override
+  public void setVoltage(double voltage) {
+    double clampedVoltage = MathUtil.clamp(voltage, -12.0, 12.0);
+    intakeRollersLeaderSim.setInputVoltage(clampedVoltage);
+    intakeRollersFollowerSim.setInputVoltage(clampedVoltage);
+  }
 
-	@Override
-	public void stop() {
-		intakeRollersLeaderSim.setInputVoltage(0.0);
-		intakeRollersFollowerSim.setInputVoltage(0.0);
-	}
+  @Override
+  public void stop() {
+    intakeRollersLeaderSim.setInputVoltage(0.0);
+    intakeRollersFollowerSim.setInputVoltage(0.0);
+  }
 }

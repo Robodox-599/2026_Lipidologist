@@ -96,4 +96,3 @@ public class FeederIOTalonFX extends FeederIO {
     feederMotor.setVoltage(voltage);
   }
 }
-

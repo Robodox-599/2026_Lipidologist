@@ -25,7 +25,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
   private final VoltageOut v_leader_request;
   private final VoltageOut v_follower_request;
 
-  //status signals
+  // status signals
   private final StatusSignal<AngularVelocity> intakeRollersLeaderVelocity;
   private final StatusSignal<Voltage> intakeRollersLeaderAppliedVolts;
   private final StatusSignal<Current> intakeRollersLeaderSupplyCurrent;
@@ -143,4 +143,3 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         v_follower_request.withOutput(voltage).withEnableFOC(true));
   }
 }
-

@@ -10,38 +10,55 @@ public class IntakeRollersConstants {
 
   public static final double rotationalInertia = 0.01;
 
-  public static final MotorConstants intakeRollersLeader = new MotorConstants(
-      "IntakeRollersLeader",
-      14, 
-      intakeRollersCanBus,
-      InvertedValue.CounterClockwise_Positive,
-      NeutralModeValue.Brake,
-      1.0, 
-      50.0, 20.0, 
-      0.0, 0.0, 
-      0.0, 0.0, 
-      0.0, 0.0, 0.0, 
-      0.0, 0.0, 0.0, 
-      0.0, 
-      0.0, 
-      FeedbackSensorSourceValue.FusedCANcoder, 0, null
-  );
+  public static final MotorConstants intakeRollersLeader =
+      new MotorConstants(
+          "IntakeRollersLeader",
+          14,
+          intakeRollersCanBus,
+          InvertedValue.CounterClockwise_Positive,
+          NeutralModeValue.Brake,
+          1.0,
+          50.0,
+          20.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          FeedbackSensorSourceValue.FusedCANcoder,
+          0,
+          null);
 
-  public static final MotorConstants intakeRollersFollower = new MotorConstants(
-      "IntakeRollersFollower",
-      25, 
-      intakeRollersCanBus,
-      InvertedValue.CounterClockwise_Positive,
-      NeutralModeValue.Brake,
-      1.0, 
-      50.0, 20.0, 
-      0.0, 0.0, 
-      0.0, 0.0, 
-      0.0, 0.0, 0.0, 
-      0.0, 0.0, 0.0, 
-      0.0, 
-      0.0, 
-      FeedbackSensorSourceValue.FusedCANcoder, 0, null
-  );
+  public static final MotorConstants intakeRollersFollower =
+      new MotorConstants(
+          "IntakeRollersFollower",
+          25,
+          intakeRollersCanBus,
+          InvertedValue.CounterClockwise_Positive,
+          NeutralModeValue.Brake,
+          1.0,
+          50.0,
+          20.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          FeedbackSensorSourceValue.FusedCANcoder,
+          0,
+          null);
 }
-

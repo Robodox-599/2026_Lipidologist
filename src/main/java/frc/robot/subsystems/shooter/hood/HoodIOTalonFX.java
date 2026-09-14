@@ -15,11 +15,11 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
-import frc.robot.util.PhoenixUtil;
 import frc.robot.util.Motor.TalonFXWrapper;
+import frc.robot.util.PhoenixUtil;
 
 public class HoodIOTalonFX extends HoodIO {
-  
+
   private final TalonFXWrapper hoodMotorWrapper;
   private final TalonFX hoodMotor;
 
@@ -28,7 +28,7 @@ public class HoodIOTalonFX extends HoodIO {
 
   private MotionMagicVoltage motionMagic;
 
-  //status signals
+  // status signals
   private final StatusSignal<AngularVelocity> hoodVelocityRotsPerSec;
   private final StatusSignal<Temperature> hoodTemperature;
   private final StatusSignal<Angle> hoodPosition;
@@ -40,7 +40,7 @@ public class HoodIOTalonFX extends HoodIO {
     hoodMotorWrapper = new TalonFXWrapper(HoodConstants.hoodMotor);
     hoodMotor = hoodMotorWrapper.getTalonFX();
 
-    //CANCoder
+    // CANCoder
     hoodCANCoder = new CANcoder(HoodConstants.hoodCANCoderID, HoodConstants.hoodCANBus);
     CANCoderConfig =
         new CANcoderConfiguration()
@@ -55,7 +55,7 @@ public class HoodIOTalonFX extends HoodIO {
 
     motionMagic = new MotionMagicVoltage(targetPositionRots).withSlot(0).withEnableFOC(true);
 
-    //status signal stuff
+    // status signal stuff
     hoodVelocityRotsPerSec = hoodMotor.getVelocity();
     hoodTemperature = hoodMotor.getDeviceTemp();
     hoodPosition = hoodCANCoder.getAbsolutePosition();
@@ -119,4 +119,3 @@ public class HoodIOTalonFX extends HoodIO {
     hoodMotorWrapper.stop();
   }
 }
-

@@ -53,8 +53,7 @@ public class FlywheelsIOSim extends FlywheelsIO {
   @Override
   public void setRPS(double RPS) {
     super.targetRPS = RPS;
-    double voltage =
-        velocityController.calculate(super.RPS, RPS) + feedforward.calculate(RPS);
+    double voltage = velocityController.calculate(super.RPS, RPS) + feedforward.calculate(RPS);
     setVoltage(voltage);
   }
 

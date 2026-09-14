@@ -27,22 +27,29 @@ public class HoodConstants {
   public static final double hoodSimkV = 0;
   public static final double hoodSimkG = 0;
 
-  public static final MotorConstants hoodMotor = new MotorConstants(
-      "Hood",
-      18,
-      hoodCANBus,
-      InvertedValue.Clockwise_Positive,
-      NeutralModeValue.Brake,
-      51.0,
-      120.0, 25.0, 
-      hoodMaxAngleRotations, hoodMinAngleRotations, 
-      0.0, 0.0, 
-      250.0, 0.0, 0.0, 0.31,
-      51.0 * Constants.kMotors.kKrakenX60Foc.kV, 0.18,
-      ((12.0 - 0.31) / (51.0 * Constants.kMotors.kKrakenX60Foc.kV)),
-      (((12.0 - 0.31) / (51.0 * Constants.kMotors.kKrakenX60Foc.kV)) * 2.0),
-      FeedbackSensorSourceValue.RemoteCANcoder, hoodCANCoderID, null
-  );
+  public static final MotorConstants hoodMotor =
+      new MotorConstants(
+          "Hood",
+          18,
+          hoodCANBus,
+          InvertedValue.Clockwise_Positive,
+          NeutralModeValue.Brake,
+          51.0,
+          120.0,
+          25.0,
+          hoodMaxAngleRotations,
+          hoodMinAngleRotations,
+          0.0,
+          0.0,
+          250.0,
+          0.0,
+          0.0,
+          0.31,
+          51.0 * Constants.kMotors.kKrakenX60Foc.kV,
+          0.18,
+          ((12.0 - 0.31) / (51.0 * Constants.kMotors.kKrakenX60Foc.kV)),
+          (((12.0 - 0.31) / (51.0 * Constants.kMotors.kKrakenX60Foc.kV)) * 2.0),
+          FeedbackSensorSourceValue.RemoteCANcoder,
+          hoodCANCoderID,
+          null);
 }
-
-

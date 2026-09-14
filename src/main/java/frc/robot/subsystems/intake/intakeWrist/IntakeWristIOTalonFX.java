@@ -17,8 +17,8 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
-import frc.robot.util.PhoenixUtil;
 import frc.robot.util.Motor.TalonFXWrapper;
+import frc.robot.util.PhoenixUtil;
 
 public class IntakeWristIOTalonFX extends IntakeWristIO {
   private final TalonFXWrapper intakeWristMotorWrapper;
@@ -28,7 +28,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
   public final CANBus intakeWristCanBus;
   private MotionMagicVoltage m_request;
 
-  //status signal
+  // status signal
   public final StatusSignal<Angle> intakeWristPosition;
   public final StatusSignal<AngularVelocity> intakeWristVelocity;
   public final StatusSignal<Voltage> intakeWristAppliedVolts;
@@ -40,7 +40,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
 
   public IntakeWristIOTalonFX() {
     intakeWristCanBus = new CANBus(IntakeWristConstants.intakeWristCanBus);
-    
+
     intakeWristMotorWrapper = new TalonFXWrapper(IntakeWristConstants.intakeWristMotor);
     intakeWristMotor = intakeWristMotorWrapper.getTalonFX();
 
@@ -128,4 +128,3 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
     return intakeWristMotor.getPosition().getValueAsDouble();
   }
 }
-

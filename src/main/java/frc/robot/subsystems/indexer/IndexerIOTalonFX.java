@@ -82,4 +82,3 @@ public class IndexerIOTalonFX extends IndexerIO {
     indexerMotor.setControl(voltageOut.withOutput(voltage).withEnableFOC(true));
   }
 }
-

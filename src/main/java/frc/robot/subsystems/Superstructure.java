@@ -53,6 +53,8 @@ public class Superstructure extends SubsystemBase {
     TESTING,
     TUNE_SHOT_DATA_IDLE,
     TUNE_SHOT_DATA_SHOOT,
+    SIM_TEST,
+    SIM_TEST_STOP
     // STOW
   }
 
@@ -76,7 +78,9 @@ public class Superstructure extends SubsystemBase {
     STOPPED,
     TESTING,
     TUNING_SHOT_DATA_IDLING,
-    TUNING_SHOT_DATA_SHOOTING
+    TUNING_SHOT_DATA_SHOOTING,
+    SIM_TESTING,
+    SIM_TESTING_STOPPED
     // STOWING
   }
 
@@ -129,7 +133,7 @@ public class Superstructure extends SubsystemBase {
     Tracer.traceFunc("Feeder UpdateStates", feeder::updateStates);
     Tracer.traceFunc("Indexer UpdateStates", indexer::updateStates);
     Tracer.traceFunc("IntakeRollers UpdateStates", intakeRollers::updateStates);
-    // Tracer.traceFunc("IntakeWrist UpdateStates", intakeWrist::updateStates);
+    Tracer.traceFunc("IntakeWrist UpdateStates", intakeWrist::updateStates);
     Tracer.traceFunc("Flywheels UpdateStates", flywheels::updateStates);
     Tracer.traceFunc("Hood UpdateStates", hood::updateStates);
 
@@ -273,6 +277,9 @@ public class Superstructure extends SubsystemBase {
                 drivetrain.getFieldRelativeAccelerations());
         currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_IDLING;
         break;
+      case SIM_TEST:
+        currentSuperState = CurrentSuperState.SIM_TESTING;
+        break;
       default:
         currentSuperState = CurrentSuperState.STOPPED;
         break;
@@ -344,10 +351,33 @@ public class Superstructure extends SubsystemBase {
       case LIFTING_INTAKE_AUTO:
         liftingIntakeAuto();
         break;
+      case SIM_TESTING:
+        simTesting();
+        break;
       default:
         stop();
         break;
     }
+  }
+
+  public void simTesting() {
+    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.STOPPED);
+    feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
+    indexer.setWantedState(Indexer.IndexerWantedState.PULSE_FUEL);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+    intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
+    flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
+    hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
+  }
+
+  public void simTestingStopped() {
+    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.STOPPED);
+    feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.STOP);
+    intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.INTAKE_FUEL);
+    flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 0);
+    hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0);
   }
 
   public void outaking() {
