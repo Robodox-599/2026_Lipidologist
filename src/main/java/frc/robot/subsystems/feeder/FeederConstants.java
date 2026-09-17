@@ -1,6 +1,5 @@
 package frc.robot.subsystems.feeder;
 
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.util.Motor.MotorConstants;
@@ -21,14 +20,14 @@ public class FeederConstants {
       NeutralModeValue.Brake,
       42.0 / 23.0,
       120.0, 40.0, 
-      0.0, 0.0, 
+      null, null,
       0.0, 
       0.0,
       11.0, 0.0, 0.0, 
       6.5, 0.031, 0.0,
       0.0, 
       0.0, 
-      FeedbackSensorSourceValue.FusedCANcoder, 0, null
+      null, null, null
   );
 }
 

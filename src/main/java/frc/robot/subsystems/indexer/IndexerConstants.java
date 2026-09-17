@@ -1,6 +1,5 @@
 package frc.robot.subsystems.indexer;
 
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.util.Motor.MotorConstants;
@@ -28,13 +27,13 @@ public class IndexerConstants {
       NeutralModeValue.Brake,
       2.0, 
       120.0, 25.0,  
-      0.0, 0.0,   
+      null, null,
       0.0, 0.0,   
       0.45, 0.0, 0.0, 
       0.03, (0.124 * 2.0), 0.0, 
       maxVelocityRotsPerSec,
       maxAccelerationRotationsPerSecSQ,
-      FeedbackSensorSourceValue.FusedCANcoder, 0, null
+      null, null, null
   );
 }
 
