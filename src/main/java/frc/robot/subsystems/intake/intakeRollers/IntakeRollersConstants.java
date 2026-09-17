@@ -18,13 +18,13 @@ public class IntakeRollersConstants {
       NeutralModeValue.Brake,
       1.0, 
       50.0, 20.0, 
-      0.0, 0.0, 
+      null, null, 
       0.0, 0.0, 
       0.0, 0.0, 0.0, 
       0.0, 0.0, 0.0, 
       0.0, 
       0.0, 
-      FeedbackSensorSourceValue.FusedCANcoder, 0, null
+      null, 0, null
   );
 
   public static final MotorConstants intakeRollersFollower = new MotorConstants(
