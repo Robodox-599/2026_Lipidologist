@@ -11,9 +11,9 @@ public class HoodIO {
 
   public void updateInputs() {}
 
-  public void setPosition(double position) {}
+  public void setHoodPosition(double position) {}
 
-  public void setVoltage(double voltage) {}
+  public void setHoodVoltage(double voltage) {}
 
-  public void stop() {}
+  public void stopHood() {}
 }

@@ -11,9 +11,9 @@ public class FlywheelsIO {
 
   public void updateInputs() {}
 
-  public void setRPS(double RPS) {}
+  public void setFlywheelsRPS(double RPS) {}
 
-  public void setVoltage(double voltage) {}
+  public void setFlywheelsVoltage(double voltage) {}
 
-  public void stop() {}
+  public void stopFlywheels() {}
 }

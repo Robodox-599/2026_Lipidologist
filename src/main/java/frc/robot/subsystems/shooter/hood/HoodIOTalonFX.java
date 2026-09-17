@@ -99,7 +99,7 @@ public class HoodIOTalonFX extends HoodIO {
   }
 
   @Override
-  public void setPosition(double position) {
+  public void setHoodPosition(double position) {
     targetPositionRots =
         MathUtil.clamp(
             position, HoodConstants.hoodMinAngleRotations, HoodConstants.hoodMaxAngleRotations);
@@ -110,12 +110,12 @@ public class HoodIOTalonFX extends HoodIO {
   }
 
   @Override
-  public void setVoltage(double voltage) {
+  public void setHoodVoltage(double voltage) {
     hoodMotorWrapper.setVoltage(voltage);
   }
 
   @Override
-  public void stop() {
+  public void stopHood() {
     hoodMotorWrapper.stop();
   }
 }

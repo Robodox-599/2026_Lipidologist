@@ -20,9 +20,9 @@ public abstract class IntakeRollersIO {
 
   public void updateInputs() {}
 
-  public void stop() {}
+  public void stopIntakeRollers() {}
 
-  public void setPosition(double position) {}
+  public void setIntakeRollersPosition(double position) {}
 
-  public void setVoltage(double voltage) {}
+  public void setIntakeRollersVoltage(double voltage) {}
 }

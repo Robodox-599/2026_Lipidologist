@@ -54,14 +54,14 @@ public class IntakeRollersIOSim extends IntakeRollersIO {
 	}
 
 	@Override
-	public void setVoltage(double voltage) {
+	public void setIntakeRollersVoltage(double voltage) {
 		double clampedVoltage = MathUtil.clamp(voltage, -12.0, 12.0);
 		intakeRollersLeaderSim.setInputVoltage(clampedVoltage);
 		intakeRollersFollowerSim.setInputVoltage(clampedVoltage);
 	}
 
 	@Override
-	public void stop() {
+	public void stopIntakeRollers() {
 		intakeRollersLeaderSim.setInputVoltage(0.0);
 		intakeRollersFollowerSim.setInputVoltage(0.0);
 	}

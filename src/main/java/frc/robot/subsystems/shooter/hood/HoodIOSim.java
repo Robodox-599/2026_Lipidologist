@@ -48,21 +48,21 @@ public class HoodIOSim extends HoodIO {
 	}
 
 	@Override
-	public void setVoltage(double voltage) {
+	public void setHoodVoltage(double voltage) {
 		hoodMotorSim.setInputVoltage(MathUtil.clamp(voltage, -12.0, 12.0));
 	}
 
 	@Override
-	public void setPosition(double position) {
+	public void setHoodPosition(double position) {
 		super.targetPositionRots =
 				MathUtil.clamp(
 						position, HoodConstants.hoodMinAngleRotations, HoodConstants.hoodMaxAngleRotations);
-		setVoltage(pid.calculate(hoodMotorSim.getAngularPositionRotations(), super.targetPositionRots));
+		setHoodVoltage(pid.calculate(hoodMotorSim.getAngularPositionRotations(), super.targetPositionRots));
 	}
 
 	@Override
-	public void stop() {
+	public void stopHood() {
 		super.targetPositionRots = 0.0;
-		setVoltage(pid.calculate(hoodMotorSim.getAngularPositionRotations(), 0.0));
+		setHoodVoltage(pid.calculate(hoodMotorSim.getAngularPositionRotations(), 0.0));
 	}
 }

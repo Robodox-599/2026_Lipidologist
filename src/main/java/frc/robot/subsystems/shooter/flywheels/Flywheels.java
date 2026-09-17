@@ -87,15 +87,15 @@ public class Flywheels {
   }
 
   public void setRPS(double RPS) {
-    io.setRPS(RPS);
+    io.setFlywheelsRPS(RPS);
   }
 
   public void stop() {
-    io.stop();
+    io.stopFlywheels();
   }
 
   public void setVoltage(double voltage) {
-    io.setVoltage(voltage);
+    io.setFlywheelsVoltage(voltage);
   }
 
   public boolean atSetpoint() {

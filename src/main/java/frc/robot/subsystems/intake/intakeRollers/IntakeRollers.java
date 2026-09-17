@@ -86,7 +86,7 @@ public class IntakeRollers {
   }
 
   public void stop() {
-    io.stop();
+    io.stopIntakeRollers();
   }
 
   public void setWantedState(IntakeRollers.IntakeRollersWantedState wantedState) {
@@ -94,6 +94,6 @@ public class IntakeRollers {
   }
 
   public void setVoltage(double voltage) {
-    io.setVoltage(voltage);
+    io.setIntakeRollersVoltage(voltage);
   }
 }

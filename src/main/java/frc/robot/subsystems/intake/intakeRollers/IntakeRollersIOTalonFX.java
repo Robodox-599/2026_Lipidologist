@@ -108,11 +108,11 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
     super.intakeRollersLeaderSupplyCurrent = intakeRollersLeaderSupplyCurrent.getValueAsDouble();
     super.intakeRollersLeaderTemperature = intakeRollersLeaderTemperature.getValueAsDouble();
 
-    DogLog.log("Intake/LeaderRollers/Velocity", super.intakeRollersLeaderVelocity);
-    DogLog.log("Intake/LeaderRollers/Voltage", super.intakeRollersLeaderVoltage);
-    DogLog.log("Intake/LeaderRollers/StatorCurrent", super.intakeRollersLeaderStatorCurrent);
-    DogLog.log("Intake/LeaderRollers/SupplyCurrent", super.intakeRollersLeaderSupplyCurrent);
-    DogLog.log("Intake/LeaderRollers/Temperature", super.intakeRollersLeaderTemperature);
+    DogLog.log("Intake/Rollers/Leader/Velocity", super.intakeRollersLeaderVelocity);
+    DogLog.log("Intake/Rollers/Leader/Voltage", super.intakeRollersLeaderVoltage);
+    DogLog.log("Intake/Rollers/Leader/StatorCurrent", super.intakeRollersLeaderStatorCurrent);
+    DogLog.log("Intake/Rollers/Leader/SupplyCurrent", super.intakeRollersLeaderSupplyCurrent);
+    DogLog.log("Intake/Rollers/Leader/Temperature", super.intakeRollersLeaderTemperature);
 
     // intake rollers 2
     super.intakeRollersFollowerVelocity = intakeRollersFollowerVelocity.getValueAsDouble();
@@ -123,21 +123,21 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         intakeRollersFollowerSupplyCurrent.getValueAsDouble();
     super.intakeRollersFollowerTemperature = intakeRollersFollowerTemperature.getValueAsDouble();
 
-    DogLog.log("Intake/FollowerRollers/Velocity", super.intakeRollersFollowerVelocity);
-    DogLog.log("Intake/FollowerRollers/Voltage", super.intakeRollersFollowerVoltage);
-    DogLog.log("Intake/FollowerRollers/StatorCurrent", super.intakeRollersFollowerStatorCurrent);
-    DogLog.log("Intake/FollowerRollers/SupplyCurrent", super.intakeRollersFollowerSupplyCurrent);
-    DogLog.log("Intake/FollowerRollers/Temperature", super.intakeRollersFollowerTemperature);
+    DogLog.log("Intake/Rollers/Follower/Velocity", super.intakeRollersFollowerVelocity);
+    DogLog.log("Intake/Rollers/Follower/Voltage", super.intakeRollersFollowerVoltage);
+    DogLog.log("Intake/Rollers/Follower/StatorCurrent", super.intakeRollersFollowerStatorCurrent);
+    DogLog.log("Intake/Rollers/Follower/SupplyCurrent", super.intakeRollersFollowerSupplyCurrent);
+    DogLog.log("Intake/Rollers/Follower/Temperature", super.intakeRollersFollowerTemperature);
   }
 
   @Override
-  public void stop() {
+  public void stopIntakeRollers() {
     intakeRollersLeaderWrapper.stop();
     intakeRollersFollowerWrapper.stop();
   }
 
   @Override
-  public void setVoltage(double voltage) {
+  public void setIntakeRollersVoltage(double voltage) {
     intakeRollersLeaderMotor.setControl(v_leader_request.withOutput(voltage).withEnableFOC(true));
     intakeRollersFollowerMotor.setControl(
         v_follower_request.withOutput(voltage).withEnableFOC(true));

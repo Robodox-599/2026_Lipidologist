@@ -165,7 +165,7 @@ public class IntakeWrist {
   }
 
   public void stop() {
-    io.stop();
+    io.stopIntakeWrist();
   }
 
   public void setWantedState(IntakeWrist.IntakeWristWantedState wantedState) {
@@ -174,7 +174,7 @@ public class IntakeWrist {
   }
 
   public void setPosition(double position) {
-    io.setPosition(position);
+    io.setIntakeWristPosition(position);
   }
 
   public boolean atSetpoint() {

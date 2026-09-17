@@ -113,18 +113,18 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
   }
 
   @Override
-  public void stop() {
+  public void stopIntakeWrist() {
     intakeWristMotorWrapper.stop();
   }
 
   @Override
-  public void setPosition(double position) {
+  public void setIntakeWristPosition(double position) {
     super.targetPosition = position;
     intakeWristMotor.setControl(m_request.withPosition(position).withEnableFOC(true));
   }
 
   @Override
-  public double getPosition() {
+  public double getIntakeWristPosition() {
     return intakeWristMotor.getPosition().getValueAsDouble();
   }
 }

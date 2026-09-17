@@ -92,7 +92,7 @@ public class FeederIOTalonFX extends FeederIO {
   }
 
   @Override
-  public void setVoltage(double voltage) {
+  public void setFeederVoltage(double voltage) {
     feederMotor.setVoltage(voltage);
   }
 }

@@ -70,15 +70,15 @@ public class Hood {
   }
 
   public void setPosition(double position) {
-    io.setPosition(position);
+    io.setHoodPosition(position);
   }
 
   public void stop() {
-    io.stop();
+    io.stopHood();
   }
 
   public void setVoltage(double voltage) {
-    io.setVoltage(voltage);
+    io.setHoodVoltage(voltage);
   }
 
   public boolean atSetpoint() {
