@@ -42,10 +42,13 @@ public class IndexerIOTalonFX extends IndexerIO {
     BaseStatusSignal.setUpdateFrequencyForAll(
         50,
         indexerVelocityRad,
-        indexerTemperature,
-        indexerAppliedVolts,
         indexerStatorCurrent,
         indexerSupplyCurrent);
+    
+    BaseStatusSignal.setUpdateFrequencyForAll(
+        5, 
+        indexerTemperature,
+        indexerAppliedVolts);
 
     indexerMotor.optimizeBusUtilization();
   }

@@ -39,7 +39,6 @@ public class HoodIOTalonFX extends HoodIO {
   public HoodIOTalonFX() {
     hoodMotorWrapper = new TalonFXWrapper(HoodConstants.hoodMotor);
     hoodMotor = hoodMotorWrapper.getTalonFX();
-
     //CANCoder
     hoodCANCoder = new CANcoder(HoodConstants.hoodCANCoderID, HoodConstants.hoodCANBus);
     CANCoderConfig =
@@ -66,11 +65,14 @@ public class HoodIOTalonFX extends HoodIO {
     BaseStatusSignal.setUpdateFrequencyForAll(
         50,
         hoodVelocityRotsPerSec,
-        hoodTemperature,
         hoodPosition,
-        hoodAppliedVolts,
         hoodStatorCurrent,
         hoodSupplyCurrent);
+    
+    BaseStatusSignal.setUpdateFrequencyForAll(
+        5,
+        hoodTemperature,
+        hoodAppliedVolts);
 
     hoodMotor.optimizeBusUtilization();
     hoodCANCoder.optimizeBusUtilization();

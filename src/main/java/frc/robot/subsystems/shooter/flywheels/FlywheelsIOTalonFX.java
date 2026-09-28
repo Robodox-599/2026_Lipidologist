@@ -45,7 +45,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     private final StatusSignal<Voltage> flywheelFollower1AppliedVolts;
     private final StatusSignal<Voltage> flywheelFollower2AppliedVolts;
     private final StatusSignal<Voltage> flywheelFollower3AppliedVolts;
-    private final BaseStatusSignal[] characterizationSignals;
+    private final BaseStatusSignal[] criticalSignals;
+    private final BaseStatusSignal[] lowPrioritySignals;
 
     private final Debouncer rpmDebouncer = new Debouncer(0.1, DebounceType.kBoth);
 
@@ -88,14 +89,19 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
         flywheelFollower2AppliedVolts = flywheelTopRightMotor.getMotorVoltage();
         flywheelFollower3AppliedVolts = flywheelBottomRightMotor.getMotorVoltage();
 
-        characterizationSignals = new BaseStatusSignal[] {
+        criticalSignals = new BaseStatusSignal[] {
             flywheelLeaderVelocityRPS, flywheelFollower1VelocityRPS, flywheelFollower2VelocityRPS, flywheelFollower3VelocityRPS,
             flywheelLeaderStatorCurrent, flywheelFollower1StatorCurrent, flywheelFollower2StatorCurrent, flywheelFollower3StatorCurrent,
             flywheelLeaderSupplyCurrent, flywheelFollower1SupplyCurrent, flywheelFollower2SupplyCurrent, flywheelFollower3SupplyCurrent,
+        };
+
+        lowPrioritySignals = new BaseStatusSignal[] {
             flywheelLeaderAppliedVolts, flywheelFollower1AppliedVolts, flywheelFollower2AppliedVolts, flywheelFollower3AppliedVolts
         };
 
-        BaseStatusSignal.setUpdateFrequencyForAll(50, characterizationSignals);
+        BaseStatusSignal.setUpdateFrequencyForAll(50, criticalSignals);
+
+        BaseStatusSignal.setUpdateFrequencyForAll(5, lowPrioritySignals);
 
         flywheelLeaderMotor.optimizeBusUtilization();
         flywheelBottomLeftMotor.optimizeBusUtilization();
@@ -105,7 +111,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
 
     @Override
     public void updateInputs() {
-        BaseStatusSignal.refreshAll(characterizationSignals);
+        BaseStatusSignal.refreshAll(criticalSignals);
+        BaseStatusSignal.refreshAll(lowPrioritySignals);
 
         super.RPS = flywheelLeaderVelocityRPS.getValueAsDouble();
         super.statorCurrent = flywheelLeaderStatorCurrent.getValueAsDouble();
