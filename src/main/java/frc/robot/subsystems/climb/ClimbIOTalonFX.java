@@ -82,7 +82,10 @@ public class ClimbIOTalonFX extends ClimbIO {
     climbTemperature = climbMotor.getDeviceTemp();
 
     BaseStatusSignal.setUpdateFrequencyForAll(
-        50, climbPosition, climbStatorCurrent, climbSupplyCurrent, climbVoltage, climbTemperature);
+        50, climbPosition, climbStatorCurrent, climbSupplyCurrent);
+    
+    BaseStatusSignal.setUpdateFrequencyForAll(
+        5, climbTemperature, climbVoltage);
 
     climbMotor.optimizeBusUtilization();
   }

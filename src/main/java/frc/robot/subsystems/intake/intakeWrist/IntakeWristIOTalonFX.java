@@ -71,10 +71,13 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
         50,
         intakeWristPosition,
         intakeWristVelocity,
-        intakeWristAppliedVolts,
         intakeWristStatorCurrent,
-        intakeWristSupplyCurrent,
-        intakeWristTemperature);
+        intakeWristSupplyCurrent);
+    
+    BaseStatusSignal.setUpdateFrequencyForAll(
+      5, 
+      intakeWristTemperature,
+      intakeWristAppliedVolts);
 
     intakeWristMotor.optimizeBusUtilization();
     intakeWristCanCoder.optimizeBusUtilization();

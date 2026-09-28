@@ -71,16 +71,21 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         50,
         // intake rollers 1
         intakeRollersLeaderVelocity,
-        intakeRollersLeaderAppliedVolts,
         intakeRollersLeaderStatorCurrent,
         intakeRollersLeaderSupplyCurrent,
-        intakeRollersLeaderTemperature,
         // intake rollers 2
         intakeRollersFollowerVelocity,
-        intakeRollersFollowerAppliedVolts,
         intakeRollersFollowerStatorCurrent,
-        intakeRollersFollowerSupplyCurrent,
-        intakeRollersFollowerTemperature);
+        intakeRollersFollowerSupplyCurrent);
+    
+    BaseStatusSignal.setUpdateFrequencyForAll(
+      5, 
+      // intake rollers 1
+      intakeRollersLeaderTemperature,
+      intakeRollersLeaderAppliedVolts,
+      // intake rollers 2
+      intakeRollersFollowerTemperature,
+      intakeRollersFollowerAppliedVolts);
 
     intakeRollersLeaderMotor.optimizeBusUtilization();
     intakeRollersFollowerMotor.optimizeBusUtilization();
