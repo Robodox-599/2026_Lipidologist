@@ -101,6 +101,12 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
         wristStallDebouncer.calculate(
             (super.statorCurrent > IntakeWristConstants.statorCurrentTrip)
                 && (Math.abs(super.velocity) < IntakeWristConstants.velocityTrip));
+    super.isWristReadyToZero = 
+        wristStallDebouncer.calculate(
+            (super.statorCurrent > IntakeWristConstants.statorCurrentTrip)
+                && (Math.abs(super.velocity) < IntakeWristConstants.velocityTrip))
+                    && (super.velocity < 0.0);
+        
 
     DogLog.log("Intake/Wrist/Position", super.currentPosition);
     DogLog.log("Intake/Wrist/TargetPosition", super.targetPosition);
@@ -126,6 +132,13 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
   @Override
   public double getIntakeWristPosition() {
     return intakeWristMotor.getPosition().getValueAsDouble();
+  }
+
+  @Override
+  public void zeroWrist(){
+    if (!super.isWristReadyToZero){
+      intakeWristMotor.setVoltage(0.0); //enter a negative number to move the wrist downwards until it hits the limit switch
+    } 
   }
 }
 

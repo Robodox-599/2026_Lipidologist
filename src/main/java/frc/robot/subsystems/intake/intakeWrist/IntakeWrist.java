@@ -27,6 +27,7 @@ public class IntakeWrist {
     LIFT,
     STOW, // pack
     AGITATE_FUEL,
+    ZERO_WRIST
   }
 
   public enum IntakeWristCurrentState {
@@ -36,7 +37,8 @@ public class IntakeWrist {
     LIFTING,
     WRIST_RETRACTING,
     WRIST_EXTENDING,
-    UNJAM
+    UNJAM,
+    ZEROING_WRIST
   }
 
   public void updateInputs() {
@@ -128,6 +130,9 @@ public class IntakeWrist {
           currentState = IntakeWristCurrentState.WRIST_RETRACTING;
         }
         break;
+      case ZERO_WRIST:
+        currentState = IntakeWristCurrentState.ZEROING_WRIST;
+        break;
       default:
         currentState = IntakeWristCurrentState.STOPPED;
         break;
@@ -158,6 +163,9 @@ public class IntakeWrist {
       case UNJAM:
         setPosition(0.33);
         break;
+      case ZEROING_WRIST:
+        zeroWrist();
+        break;
       default:
         stop();
         break;
@@ -175,6 +183,10 @@ public class IntakeWrist {
 
   public void setPosition(double position) {
     io.setIntakeWristPosition(position);
+  }
+
+  public void zeroWrist(){
+    io.zeroWrist();
   }
 
   public boolean atSetpoint() {

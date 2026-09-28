@@ -16,6 +16,7 @@ public class IntakeWristIO {
 
   protected boolean atSetpoint = false;
   protected boolean isWristJammed = false;
+  protected boolean isWristReadyToZero = false;
 
   public void updateInputs() {}
 
@@ -28,4 +29,6 @@ public class IntakeWristIO {
   }
 
   public void setIntakeWristVoltage(double voltage) {}
+
+  public void zeroWrist(){}
 }
