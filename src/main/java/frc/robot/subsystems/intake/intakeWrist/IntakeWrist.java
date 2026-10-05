@@ -27,7 +27,7 @@ public class IntakeWrist {
     LIFT,
     STOW, // pack
     AGITATE_FUEL,
-    ZERO_WRIST
+    HOME
   }
 
   public enum IntakeWristCurrentState {
@@ -38,7 +38,7 @@ public class IntakeWrist {
     WRIST_RETRACTING,
     WRIST_EXTENDING,
     UNJAM,
-    ZEROING_WRIST
+    HOMING
   }
 
   public void updateInputs() {
@@ -130,8 +130,13 @@ public class IntakeWrist {
           currentState = IntakeWristCurrentState.WRIST_RETRACTING;
         }
         break;
-      case ZERO_WRIST:
-        currentState = IntakeWristCurrentState.ZEROING_WRIST;
+      case HOME:
+        if (isWristReadyToHome()) {
+          homeIntakeWrist();
+          currentState = IntakeWristCurrentState.STOPPED;
+        } else {
+          currentState = IntakeWristCurrentState.HOMING;
+        } 
         break;
       default:
         currentState = IntakeWristCurrentState.STOPPED;
@@ -163,8 +168,8 @@ public class IntakeWrist {
       case UNJAM:
         setPosition(0.33);
         break;
-      case ZEROING_WRIST:
-        zeroWrist();
+      case HOMING:
+        setVoltage(-1.0);
         break;
       default:
         stop();
@@ -185,11 +190,19 @@ public class IntakeWrist {
     io.setIntakeWristPosition(position);
   }
 
-  public void zeroWrist(){
-    io.zeroWrist();
+  public void setVoltage(double voltage){
+    io.setIntakeWristVoltage(voltage);
   }
 
   public boolean atSetpoint() {
     return io.atSetpoint;
+  }
+
+  public void homeIntakeWrist(){
+    io.homeIntakeWrist();
+  }
+
+  public boolean isWristReadyToHome(){
+    return io.isWristReadyToHome();
   }
 }
