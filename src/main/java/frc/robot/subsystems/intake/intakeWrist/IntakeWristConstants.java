@@ -8,12 +8,8 @@ import frc.robot.util.Motor.MotorConstants;
 
 public class IntakeWristConstants {
   public static final String intakeWristCanBus = "rio";
-  public static final int intakeWristCANCoderID = 15;
-
   public static final double rotationalInertia = 0.01;
   public static final double gearRatio = (44.0 / 8.0) * (44.0 / 18.0) * (36.0 / 12.0);
-  public static final double absoluteDiscontinuityPoint = 0.7;
-  public static final double magnetOffset = 0.16015625;
   public static final double minAngleRotations = 0.0;
   public static final double maxAngleRotations = 0.0;
   public static final double startAngleRad = 0.0;
@@ -48,14 +44,14 @@ public class IntakeWristConstants {
       NeutralModeValue.Brake,
       gearRatio,
       80.0, 40.0, 
-      maxAngleRotations, minAngleRotations,
+      null, null,
       0.0, 
       0.0, 
       60.0, 0.0, 2.0, 0.36, 
       (Constants.kMotors.kKrakenX60Foc.kV * gearRatio), 0.39, 
       ((12.0 - 0.36 - 0.39) / (Constants.kMotors.kKrakenX60Foc.kV * gearRatio)), 
       ((12.0 - 0.36 - 0.39) / (Constants.kMotors.kKrakenX60Foc.kV * gearRatio)),
-      FeedbackSensorSourceValue.RemoteCANcoder, 15, gearRatio
+      FeedbackSensorSourceValue.RotorSensor, null, null
   );
 }
 

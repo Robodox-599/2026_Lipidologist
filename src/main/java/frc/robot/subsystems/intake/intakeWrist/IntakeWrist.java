@@ -13,6 +13,7 @@ public class IntakeWrist {
   private IntakeWristWantedState previousWantedState = IntakeWristWantedState.STOP;
   private IntakeWristWantedState wantedState = IntakeWristWantedState.STOP;
   private IntakeWristCurrentState currentState = IntakeWristCurrentState.STOPPED;
+  private boolean homeComplete = false;
   private Timer agitationTimer = new Timer();
   private Timer liftingAgitationTimer = new Timer();
   private double currentAgitationPosition = 0;
@@ -131,12 +132,15 @@ public class IntakeWrist {
         }
         break;
       case HOME:
-        if (isWristReadyToHome()) {
+        if (homeComplete) {
+          currentState = IntakeWristCurrentState.STOPPED;
+        } else if (isWristReadyToHome()) {
           homeIntakeWrist();
+          homeComplete = true;
           currentState = IntakeWristCurrentState.STOPPED;
         } else {
           currentState = IntakeWristCurrentState.HOMING;
-        } 
+        }
         break;
       default:
         currentState = IntakeWristCurrentState.STOPPED;
@@ -182,6 +186,10 @@ public class IntakeWrist {
   }
 
   public void setWantedState(IntakeWrist.IntakeWristWantedState wantedState) {
+    if (this.wantedState == IntakeWristWantedState.HOME
+        && wantedState != IntakeWristWantedState.HOME) {
+      homeComplete = false;
+    }
     this.previousWantedState = this.wantedState;
     this.wantedState = wantedState;
   }
