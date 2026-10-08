@@ -81,6 +81,7 @@ public class Robot extends TimedRobot {
   public Robot() {
     Tracer.enableSingleThreadedMode();
     Tracer.enableTracingForCurrentThread();
+    Tracer.disableGcLoggingForCurrentThread();
 
     DogLog.setOptions(
         new DogLogOptions()
@@ -88,7 +89,7 @@ public class Robot extends TimedRobot {
             .withCaptureNt(true)
             .withNtPublish(true)
             .withCaptureConsole(true)
-            .withUseLogThread(false));
+            .withUseLogThread(true));
 
     switch (Constants.currentMode) {
       case REAL:
