@@ -3,7 +3,7 @@ package frc.robot.subsystems.indexer;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import dev.doglog.DogLog;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -23,7 +23,7 @@ public class IndexerIOTalonFX extends IndexerIO {
   private final StatusSignal<Current> indexerStatorCurrent;
   private final StatusSignal<Current> indexerSupplyCurrent;
 
-  private final VoltageOut voltageOut;
+  private final DutyCycleOut dutyCycleOut;
 
   public IndexerIOTalonFX() {
     indexerCANBus = new CANBus(IndexerConstants.indexerMotor.canBus());
@@ -31,7 +31,7 @@ public class IndexerIOTalonFX extends IndexerIO {
     indexerMotorWrapper = new TalonFXWrapper(IndexerConstants.indexerMotor);
     indexerMotor = indexerMotorWrapper.getTalonFX();
 
-    voltageOut = new VoltageOut(0);
+    dutyCycleOut = new DutyCycleOut(0);
 
     indexerVelocityRad = indexerMotor.getVelocity();
     indexerTemperature = indexerMotor.getDeviceTemp();
@@ -81,8 +81,8 @@ public class IndexerIOTalonFX extends IndexerIO {
   }
 
   @Override
-  public void setIndexerVoltage(double voltage) {
-    indexerMotor.setControl(voltageOut.withOutput(voltage).withEnableFOC(true));
+  public void setIndexerDutyCycle(double dutyCycle) {
+    indexerMotor.setControl(dutyCycleOut.withOutput(dutyCycle).withEnableFOC(true));
   }
 }
 

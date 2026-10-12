@@ -55,11 +55,15 @@ public class FlywheelsIOSim extends FlywheelsIO {
     super.targetRPS = RPS;
     double voltage =
         velocityController.calculate(super.RPS, RPS) + feedforward.calculate(RPS);
-    setFlywheelsVoltage(voltage);
+    setInputVoltage(voltage);
   }
 
   @Override
-  public void setFlywheelsVoltage(double voltage) {
+  public void setFlywheelsDutyCycle(double dutyCycle) {
+    setInputVoltage(MathUtil.clamp(dutyCycle, -1.0, 1.0) * 12.0);
+  }
+
+  private void setInputVoltage(double voltage) {
     double clampedVoltage = MathUtil.clamp(voltage, -12.0, 12.0);
     flywheelMotorSim.setInputVoltage(clampedVoltage);
   }
@@ -68,6 +72,6 @@ public class FlywheelsIOSim extends FlywheelsIO {
   public void stopFlywheels() {
     super.targetRPS = 0.0;
     velocityController.reset();
-    setFlywheelsVoltage(0.0);
+    setInputVoltage(0.0);
   }
 }

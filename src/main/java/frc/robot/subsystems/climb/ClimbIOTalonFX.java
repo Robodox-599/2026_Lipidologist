@@ -8,8 +8,8 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -28,7 +28,7 @@ public class ClimbIOTalonFX extends ClimbIO {
   private TalonFXConfiguration climbConfig;
 
   private MotionMagicVoltage m_request;
-  private VoltageOut v_request;
+  private DutyCycleOut dutyCycleRequest;
   private final Debouncer stallDebouncer;
 
   private StatusSignal<Angle> climbPosition;
@@ -69,7 +69,7 @@ public class ClimbIOTalonFX extends ClimbIO {
                     .withMotionMagicAcceleration(ClimbConstants.maxAcceleration));
 
     m_request = new MotionMagicVoltage(0);
-    v_request = new VoltageOut(0);
+    dutyCycleRequest = new DutyCycleOut(0);
     stallDebouncer =
         new Debouncer(ClimbConstants.debounceTripStatorCurrent, Debouncer.DebounceType.kRising);
 
@@ -128,7 +128,7 @@ public class ClimbIOTalonFX extends ClimbIO {
     if (stallDebouncer.calculate(super.statorCurrent > ClimbConstants.tripStatorCurrent)) {
       setPosition(0);
     } else {
-      climbMotor.setControl(v_request.withOutput(-1)); // voltage change may be needed
+      climbMotor.setControl(dutyCycleRequest.withOutput(-1.0 / 12.0));
     }
   }
 }

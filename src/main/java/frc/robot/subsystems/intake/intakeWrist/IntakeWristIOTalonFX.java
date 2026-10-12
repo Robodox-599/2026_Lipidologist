@@ -3,6 +3,7 @@ package frc.robot.subsystems.intake.intakeWrist;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import dev.doglog.DogLog;
@@ -20,6 +21,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
   public final TalonFX intakeWristMotor;
   public final CANBus intakeWristCanBus;
   private MotionMagicVoltage m_request;
+  private final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
 
   //status signal
   public final StatusSignal<Angle> intakeWristPosition;
@@ -109,8 +111,8 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
   }
 
   @Override
-  public void setIntakeWristVoltage(double voltage) {
-    intakeWristMotorWrapper.setVoltage(voltage);
+  public void setIntakeWristDutyCycle(double dutyCycle) {
+    intakeWristMotor.setControl(dutyCycleRequest.withOutput(dutyCycle).withEnableFOC(true));
   }
 
   @Override

@@ -78,19 +78,19 @@ public class Indexer {
         stopIndexer();
         break;
       case TRANSFERING_FUEL:
-        setIndexerVoltage(12);
+        setIndexerDutyCycle(1.0);
         break;
       case PULSING_FUEL:
-        indexerPulseFuel(1);
+        indexerPulseFuel(1.0 / 12.0);
         break;
       case REVERSING:
-        setIndexerVoltage(-1);
+        setIndexerDutyCycle(-1.0 / 12.0);
         break;
       case OUTAKING:
-        setIndexerVoltage(-12);
+        setIndexerDutyCycle(-1.0);
         break;
       case CLEANING:
-        setIndexerVoltage(0.65);
+        setIndexerDutyCycle(0.65 / 12.0);
         break;
       default:
         stopIndexer();
@@ -98,8 +98,8 @@ public class Indexer {
     }
   }
 
-  public void setIndexerVoltage(double volts) {
-    io.setIndexerVoltage(volts);
+  public void setIndexerDutyCycle(double dutyCycle) {
+    io.setIndexerDutyCycle(dutyCycle);
   }
 
   public void stopIndexer() {
@@ -110,7 +110,7 @@ public class Indexer {
     this.wantedState = wantedState;
   }
 
-  public void indexerPulseFuel(double volts) {
-    io.indexerPulseFuel(volts);
+  public void indexerPulseFuel(double dutyCycle) {
+    io.indexerPulseFuel(dutyCycle);
   }
 }

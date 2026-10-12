@@ -54,10 +54,10 @@ public class IntakeRollersIOSim extends IntakeRollersIO {
 	}
 
 	@Override
-	public void setIntakeRollersVoltage(double voltage) {
-		double clampedVoltage = MathUtil.clamp(voltage, -12.0, 12.0);
-		intakeRollersLeaderSim.setInputVoltage(clampedVoltage);
-		intakeRollersFollowerSim.setInputVoltage(clampedVoltage);
+	public void setIntakeRollersDutyCycle(double dutyCycle) {
+		double clampedDutyCycle = MathUtil.clamp(dutyCycle, -1.0, 1.0);
+		intakeRollersLeaderSim.setInputVoltage(clampedDutyCycle * 12.0);
+		intakeRollersFollowerSim.setInputVoltage(clampedDutyCycle * 12.0);
 	}
 
 	@Override

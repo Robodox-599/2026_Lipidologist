@@ -3,8 +3,8 @@ package frc.robot.subsystems.intake.intakeRollers;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import dev.doglog.DogLog;
@@ -22,8 +22,8 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
   public final CANBus intakeRollersLeaderCanBus;
   public final CANBus intakeRollersFollowerCanBus;
 
-  private final VoltageOut v_leader_request;
-  private final VoltageOut v_follower_request;
+  private final DutyCycleOut leaderDutyCycleRequest;
+  private final DutyCycleOut followerDutyCycleRequest;
 
   //status signals
   private final StatusSignal<AngularVelocity> intakeRollersLeaderVelocity;
@@ -48,8 +48,8 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
     intakeRollersFollowerWrapper = new TalonFXWrapper(IntakeRollersConstants.intakeRollersFollower);
     intakeRollersFollowerMotor = intakeRollersFollowerWrapper.getTalonFX();
 
-    v_leader_request = new VoltageOut(0);
-    v_follower_request = new VoltageOut(0);
+    leaderDutyCycleRequest = new DutyCycleOut(0);
+    followerDutyCycleRequest = new DutyCycleOut(0);
 
     intakeRollersFollowerMotor.setControl(
         new Follower(
@@ -142,10 +142,11 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
   }
 
   @Override
-  public void setIntakeRollersVoltage(double voltage) {
-    intakeRollersLeaderMotor.setControl(v_leader_request.withOutput(voltage).withEnableFOC(true));
+  public void setIntakeRollersDutyCycle(double dutyCycle) {
+    intakeRollersLeaderMotor.setControl(
+        leaderDutyCycleRequest.withOutput(dutyCycle).withEnableFOC(true));
     intakeRollersFollowerMotor.setControl(
-        v_follower_request.withOutput(voltage).withEnableFOC(true));
+        followerDutyCycleRequest.withOutput(dutyCycle).withEnableFOC(true));
   }
 }
 

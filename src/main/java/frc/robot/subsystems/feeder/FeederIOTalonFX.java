@@ -3,6 +3,7 @@ package frc.robot.subsystems.feeder;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import dev.doglog.DogLog;
@@ -18,6 +19,7 @@ public class FeederIOTalonFX extends FeederIO {
   private final TalonFXWrapper feederMotorWrapper;
   private final TalonFX feederMotor;
   private final CANBus feederCANBus;
+  private final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
   private VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
   private Debouncer feederDebouncer;
 
@@ -95,8 +97,8 @@ public class FeederIOTalonFX extends FeederIO {
   }
 
   @Override
-  public void setFeederVoltage(double voltage) {
-    feederMotor.setVoltage(voltage);
+  public void setFeederDutyCycle(double dutyCycle) {
+    feederMotor.setControl(dutyCycleRequest.withOutput(dutyCycle));
   }
 }
 

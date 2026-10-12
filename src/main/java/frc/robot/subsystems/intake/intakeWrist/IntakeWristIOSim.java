@@ -51,13 +51,13 @@ public class IntakeWristIOSim extends IntakeWristIO {
 
   @Override
   public void stopIntakeWrist() {
-    setIntakeWristVoltage(0);
+    intakeWristMotorSim.setInputVoltage(0.0);
   }
 
   @Override
   public void setIntakeWristPosition(double position) {
     super.targetPosition = position;
-    setIntakeWristVoltage(pid.calculate(super.currentPosition, super.targetPosition));
+    setInputVoltage(pid.calculate(super.currentPosition, super.targetPosition));
   }
 
   @Override
@@ -66,7 +66,11 @@ public class IntakeWristIOSim extends IntakeWristIO {
   }
 
   @Override
-  public void setIntakeWristVoltage(double voltage) {
+  public void setIntakeWristDutyCycle(double dutyCycle) {
+    setInputVoltage(MathUtil.clamp(dutyCycle, -1.0, 1.0) * 12.0);
+  }
+
+  private void setInputVoltage(double voltage) {
     double clampedVoltage = MathUtil.clamp(voltage, -12.0, 12.0);
     super.voltage = clampedVoltage;
     intakeWristMotorSim.setInputVoltage(clampedVoltage);

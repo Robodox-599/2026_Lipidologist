@@ -24,5 +24,5 @@ public abstract class IntakeRollersIO {
 
   public void setIntakeRollersPosition(double position) {}
 
-  public void setIntakeRollersVoltage(double voltage) {}
+  public void setIntakeRollersDutyCycle(double dutyCycle) {}
 }

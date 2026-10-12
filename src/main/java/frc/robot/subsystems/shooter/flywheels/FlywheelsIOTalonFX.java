@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter.flywheels;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -27,6 +28,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     private final TalonFX flywheelBottomRightMotor;
 
     private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
+    private final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
 
     //status signals
     private final StatusSignal<AngularVelocity> flywheelLeaderVelocityRPS;
@@ -136,8 +138,8 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     }
 
     @Override
-    public void setFlywheelsVoltage(double voltage) {
-        flywheelLeaderWrapper.setVoltage(voltage);
+    public void setFlywheelsDutyCycle(double dutyCycle) {
+        flywheelLeaderMotor.setControl(dutyCycleRequest.withOutput(dutyCycle).withEnableFOC(true));
     }
 
     @Override

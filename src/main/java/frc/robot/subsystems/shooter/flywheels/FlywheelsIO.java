@@ -13,7 +13,7 @@ public class FlywheelsIO {
 
   public void setFlywheelsRPS(double RPS) {}
 
-  public void setFlywheelsVoltage(double voltage) {}
+  public void setFlywheelsDutyCycle(double dutyCycle) {}
 
   public void stopFlywheels() {}
 }

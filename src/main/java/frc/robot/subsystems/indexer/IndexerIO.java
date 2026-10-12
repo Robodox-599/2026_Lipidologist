@@ -10,9 +10,9 @@ public abstract class IndexerIO {
 
   public void updateInputs() {}
 
-  public void indexerPulseFuel(double volts) {}
+  public void indexerPulseFuel(double dutyCycle) {}
 
-  public void setIndexerVoltage(double volts) {}
+  public void setIndexerDutyCycle(double dutyCycle) {}
 
   public void stopIndexer() {}
 }

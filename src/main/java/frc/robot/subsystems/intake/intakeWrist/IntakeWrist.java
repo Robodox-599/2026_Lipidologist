@@ -174,7 +174,7 @@ public class IntakeWrist {
         setPosition(0.33);
         break;
       case HOMING:
-        setVoltage(-1.0);
+        setDutyCycle(-1.0 / 12.0);
         break;
       case HOMED:
         stop();
@@ -197,8 +197,8 @@ public class IntakeWrist {
     io.setIntakeWristPosition(position);
   }
 
-  public void setVoltage(double voltage){
-    io.setIntakeWristVoltage(voltage);
+  public void setDutyCycle(double dutyCycle) {
+    io.setIntakeWristDutyCycle(dutyCycle);
   }
 
   public boolean atSetpoint() {

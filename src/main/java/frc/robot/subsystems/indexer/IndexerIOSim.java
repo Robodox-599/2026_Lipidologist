@@ -49,19 +49,19 @@ public class IndexerIOSim extends IndexerIO {
 	}
 
 	@Override
-	public void setIndexerVoltage(double volts) {
-		indexerSimMotor.setInputVoltage(MathUtil.clamp(volts, -12.0, 12.0));
+	public void setIndexerDutyCycle(double dutyCycle) {
+		indexerSimMotor.setInputVoltage(MathUtil.clamp(dutyCycle, -1.0, 1.0) * 12.0);
 	}
 
 	@Override
-	public void indexerPulseFuel(double volts) {
+	public void indexerPulseFuel(double dutyCycle) {
 		if (!pulseTimer.isRunning()) {
 			pulseTimer.start();
 		}
 
 		if (pulseTimer.get() > IndexerConstants.pulseTimeInterval) {
 			if (!pulseOn) {
-				indexerSimMotor.setInputVoltage(MathUtil.clamp(volts, -12.0, 12.0));
+				indexerSimMotor.setInputVoltage(MathUtil.clamp(dutyCycle, -1.0, 1.0) * 12.0);
 			} else {
 				indexerSimMotor.setInputVoltage(0.0);
 			}

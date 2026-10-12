@@ -48,7 +48,7 @@ public class FeederIOSim extends FeederIO {
   }
 
   @Override
-  public void setFeederVoltage(double voltage) {
-    feederSimMotor.setInputVoltage(MathUtil.clamp(voltage, -12.0, 12.0));
+  public void setFeederDutyCycle(double dutyCycle) {
+    feederSimMotor.setInputVoltage(MathUtil.clamp(dutyCycle, -1.0, 1.0) * 12.0);
   }
 }

@@ -27,7 +27,7 @@ public class IntakeWristIO {
     return 0.0;
   }
 
-  public void setIntakeWristVoltage(double voltage) {}
+  public void setIntakeWristDutyCycle(double dutyCycle) {}
 
   public void homeIntakeWrist(){}
 
