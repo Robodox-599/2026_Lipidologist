@@ -86,7 +86,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
     super.isWristJammed =
         wristStallDebouncer.calculate(
             (super.statorCurrent > IntakeWristConstants.agitateStatorCurrentTrip)
-                && (Math.abs(super.velocity) < IntakeWristConstants.velocityTrip));
+                && (Math.abs(super.velocity) < IntakeWristConstants.agitateVelocityTrip));
 
     DogLog.log("Intake/Wrist/Position", super.currentPosition);
     DogLog.log("Intake/Wrist/TargetPosition", super.targetPosition);
@@ -129,7 +129,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
   public boolean isWristReadyToHome(){
     return wristHomeDebouncer.calculate(
         super.statorCurrent > IntakeWristConstants.homeStatorCurrentTrip
-            && Math.abs(super.velocity) < IntakeWristConstants.velocityTrip);
+            && super.voltage < IntakeWristConstants.homeVoltageTrip);
   }
 }
 
