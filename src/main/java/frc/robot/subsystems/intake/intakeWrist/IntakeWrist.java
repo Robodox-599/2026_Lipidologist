@@ -13,7 +13,6 @@ public class IntakeWrist {
   private IntakeWristWantedState previousWantedState = IntakeWristWantedState.STOP;
   private IntakeWristWantedState wantedState = IntakeWristWantedState.STOP;
   private IntakeWristCurrentState currentState = IntakeWristCurrentState.STOPPED;
-  private boolean homeComplete = false;
   private Timer agitationTimer = new Timer();
   private Timer liftingAgitationTimer = new Timer();
   private double currentAgitationPosition = 0;
@@ -39,7 +38,8 @@ public class IntakeWrist {
     WRIST_RETRACTING,
     WRIST_EXTENDING,
     UNJAM,
-    HOMING
+    HOMING,
+    HOMED
   }
 
   public void updateInputs() {
@@ -132,20 +132,21 @@ public class IntakeWrist {
         }
         break;
       case HOME:
-        if (homeComplete) {
-          currentState = IntakeWristCurrentState.STOPPED;
-        } else if (isWristReadyToHome()) {
-          homeIntakeWrist();
-          homeComplete = true;
-          currentState = IntakeWristCurrentState.STOPPED;
-        } else {
-          currentState = IntakeWristCurrentState.HOMING;
+        if (currentState != IntakeWristCurrentState.HOMED) {
+          if (isWristReadyToHome()) {
+            homeIntakeWrist();
+            currentState = IntakeWristCurrentState.HOMED;
+          } else {
+            currentState = IntakeWristCurrentState.HOMING;
+          }
         }
         break;
       default:
         currentState = IntakeWristCurrentState.STOPPED;
         break;
     }
+
+    previousWantedState = wantedState;
   }
 
   public void applyStates() {
@@ -175,6 +176,9 @@ public class IntakeWrist {
       case HOMING:
         setVoltage(-1.0);
         break;
+      case HOMED:
+        stop();
+        break;
       default:
         stop();
         break;
@@ -186,11 +190,6 @@ public class IntakeWrist {
   }
 
   public void setWantedState(IntakeWrist.IntakeWristWantedState wantedState) {
-    if (this.wantedState == IntakeWristWantedState.HOME
-        && wantedState != IntakeWristWantedState.HOME) {
-      homeComplete = false;
-    }
-    this.previousWantedState = this.wantedState;
     this.wantedState = wantedState;
   }
 
