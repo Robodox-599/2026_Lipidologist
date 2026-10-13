@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.WantedSuperState;
-import frc.robot.subsystems.intake.intakeWrist.IntakeWrist;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.HubShiftUtil;
 import java.util.Set;
@@ -17,15 +16,9 @@ import java.util.Set;
 public class Bindings {
 
   private final Superstructure superstructure;
-  private final IntakeWrist intakeWrist;
 
-  public Bindings(CommandXboxController driver, Superstructure superstructure, IntakeWrist intakeWrist) {
+  public Bindings(CommandXboxController driver, Superstructure superstructure) {
     this.superstructure = superstructure;
-    this.intakeWrist = intakeWrist;
-    
-    driver.
-      povDown()
-      .onTrue(Commands.runOnce(() -> intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.HOME)));
 
     driver.y().onTrue(superstructure.zeroPoseCommand());
 
