@@ -134,13 +134,12 @@ public class IntakeWrist {
       case HOME:
         if (currentState != IntakeWristCurrentState.HOMED) {
           if (currentState == IntakeWristCurrentState.HOMING && isWristReadyToHome()) {
-            homeIntakeWrist();
             currentState = IntakeWristCurrentState.HOMED;
           } else {
             if (currentState != IntakeWristCurrentState.HOMING) {
               io.resetHomeDetection();
             }
-            currentState = IntakeWristCurrentState.HOMING;
+          currentState = IntakeWristCurrentState.HOMING;
           }
         }
         break;
@@ -180,7 +179,7 @@ public class IntakeWrist {
         setDutyCycle(-1.0 / 12.0);
         break;
       case HOMED:
-        stop();
+        homeIntakeWrist();
         break;
       default:
         stop();
