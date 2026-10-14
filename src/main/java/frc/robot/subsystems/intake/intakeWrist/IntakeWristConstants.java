@@ -38,22 +38,29 @@ public class IntakeWristConstants {
   public static final double maxAgitationPosition = 0.25;
   public static final double deltaAgitation = 0.08;
 
-  public static final MotorConstants intakeWristMotor = new MotorConstants(
-      "IntakeWrist",
-      13, 
-      intakeWristCanBus,
-      InvertedValue.Clockwise_Positive,
-      NeutralModeValue.Brake,
-      gearRatio,
-      80.0, 40.0, 
-      null, null,
-      0.0, 
-      0.0, 
-      60.0, 0.0, 2.0, 0.36, 
-      (Constants.kMotors.kKrakenX60Foc.kV * gearRatio), 0.39, 
-      ((12.0 - 0.36 - 0.39) / (Constants.kMotors.kKrakenX60Foc.kV * gearRatio)), 
-      ((12.0 - 0.36 - 0.39) / (Constants.kMotors.kKrakenX60Foc.kV * gearRatio)),
-      FeedbackSensorSourceValue.RotorSensor, null, null
-  );
+  public static final MotorConstants intakeWristMotor =
+      new MotorConstants(
+          "IntakeWrist",
+          13,
+          intakeWristCanBus,
+          InvertedValue.Clockwise_Positive,
+          NeutralModeValue.Brake,
+          gearRatio,
+          80.0,
+          40.0,
+          null,
+          null,
+          0.0,
+          0.0,
+          60.0,
+          0.0,
+          2.0,
+          0.36,
+          (Constants.kMotors.kKrakenX60Foc.kV * gearRatio),
+          0.39,
+          ((12.0 - 0.36 - 0.39) / (Constants.kMotors.kKrakenX60Foc.kV * gearRatio)),
+          ((12.0 - 0.36 - 0.39) / (Constants.kMotors.kKrakenX60Foc.kV * gearRatio)),
+          FeedbackSensorSourceValue.RotorSensor,
+          null,
+          null);
 }
-

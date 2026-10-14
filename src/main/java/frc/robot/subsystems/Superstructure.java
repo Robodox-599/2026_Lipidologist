@@ -12,7 +12,6 @@ import frc.robot.FieldConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.indexer.Indexer;
-// import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
@@ -710,8 +709,7 @@ public class Superstructure extends SubsystemBase {
     return Commands.runOnce(() -> setWantedSuperState(wantedState));
   }
 
-  public Command setIntakeWristWantedStateCommand(
-      IntakeWrist.IntakeWristWantedState wantedState) {
+  public Command setIntakeWristWantedStateCommand(IntakeWrist.IntakeWristWantedState wantedState) {
     return Commands.runOnce(() -> intakeWrist.setWantedState(wantedState));
   }
 

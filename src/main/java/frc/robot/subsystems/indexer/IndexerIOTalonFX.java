@@ -40,15 +40,9 @@ public class IndexerIOTalonFX extends IndexerIO {
     indexerSupplyCurrent = indexerMotor.getSupplyCurrent();
 
     BaseStatusSignal.setUpdateFrequencyForAll(
-        50,
-        indexerVelocityRad,
-        indexerStatorCurrent,
-        indexerSupplyCurrent);
-    
-    BaseStatusSignal.setUpdateFrequencyForAll(
-        5, 
-        indexerTemperature,
-        indexerAppliedVolts);
+        50, indexerVelocityRad, indexerStatorCurrent, indexerSupplyCurrent);
+
+    BaseStatusSignal.setUpdateFrequencyForAll(5, indexerTemperature, indexerAppliedVolts);
 
     indexerMotor.optimizeBusUtilization();
   }
@@ -85,4 +79,3 @@ public class IndexerIOTalonFX extends IndexerIO {
     indexerMotor.setControl(dutyCycleOut.withOutput(dutyCycle).withEnableFOC(true));
   }
 }
-

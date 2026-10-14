@@ -12,22 +12,29 @@ public class FeederConstants {
   public static final double jammedRPSTolerance = 4;
   public static final double fuelDebounce = 0.5;
 
-  public static final MotorConstants feederMotor = new MotorConstants(
-      "Feeder",
-      17, 
-      feederCANBus,
-      InvertedValue.CounterClockwise_Positive,
-      NeutralModeValue.Brake,
-      42.0 / 23.0,
-      120.0, 40.0, 
-      null, null,
-      0.0, 
-      0.0,
-      11.0, 0.0, 0.0, 
-      6.5, 0.031, 0.0,
-      0.0, 
-      0.0, 
-      null, null, null
-  );
+  public static final MotorConstants feederMotor =
+      new MotorConstants(
+          "Feeder",
+          17,
+          feederCANBus,
+          InvertedValue.CounterClockwise_Positive,
+          NeutralModeValue.Brake,
+          42.0 / 23.0,
+          120.0,
+          40.0,
+          null,
+          null,
+          0.0,
+          0.0,
+          11.0,
+          0.0,
+          0.0,
+          6.5,
+          0.031,
+          0.0,
+          0.0,
+          0.0,
+          null,
+          null,
+          null);
 }
-

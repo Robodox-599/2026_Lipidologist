@@ -207,11 +207,11 @@ public class IntakeWrist {
     return io.atSetpoint;
   }
 
-  public void homeIntakeWrist(){
+  public void homeIntakeWrist() {
     io.homeIntakeWrist();
   }
 
-  public boolean isWristReadyToHome(){
+  public boolean isWristReadyToHome() {
     return io.isWristReadyToHome();
   }
 }

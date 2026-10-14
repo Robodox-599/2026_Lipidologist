@@ -9,60 +9,61 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class HoodIOSim extends HoodIO {
-	private final DCMotorSim hoodMotorSim;
-	private final ProfiledPIDController pid;
+  private final DCMotorSim hoodMotorSim;
+  private final ProfiledPIDController pid;
 
-	public HoodIOSim() {
-		hoodMotorSim =
-				new DCMotorSim(
-						LinearSystemId.createDCMotorSystem(
-								DCMotor.getKrakenX60Foc(1),
-								HoodConstants.hoodMOI,
-								HoodConstants.hoodMotor.gearRatio()),
-						DCMotor.getKrakenX60Foc(1));
+  public HoodIOSim() {
+    hoodMotorSim =
+        new DCMotorSim(
+            LinearSystemId.createDCMotorSystem(
+                DCMotor.getKrakenX60Foc(1),
+                HoodConstants.hoodMOI,
+                HoodConstants.hoodMotor.gearRatio()),
+            DCMotor.getKrakenX60Foc(1));
 
-		pid =
-				new ProfiledPIDController(
-						HoodConstants.hoodSimkP,
-						HoodConstants.hoodSimkI,
-						HoodConstants.hoodSimkD,
-						new Constraints(
-								HoodConstants.hoodMotor.mmCruiseVelocity(),
-								HoodConstants.hoodMotor.mmAcceleration()));
-	}
+    pid =
+        new ProfiledPIDController(
+            HoodConstants.hoodSimkP,
+            HoodConstants.hoodSimkI,
+            HoodConstants.hoodSimkD,
+            new Constraints(
+                HoodConstants.hoodMotor.mmCruiseVelocity(),
+                HoodConstants.hoodMotor.mmAcceleration()));
+  }
 
-	@Override
-	public void updateInputs() {
-		hoodMotorSim.update(0.02);
+  @Override
+  public void updateInputs() {
+    hoodMotorSim.update(0.02);
 
-		super.positionRotations = hoodMotorSim.getAngularPositionRotations();
-		super.statorCurrent = hoodMotorSim.getCurrentDrawAmps();
-		super.isHoodInPosition =
-				Math.abs(super.positionRotations - super.targetPositionRots)
-						< HoodConstants.positionTolerance;
+    super.positionRotations = hoodMotorSim.getAngularPositionRotations();
+    super.statorCurrent = hoodMotorSim.getCurrentDrawAmps();
+    super.isHoodInPosition =
+        Math.abs(super.positionRotations - super.targetPositionRots)
+            < HoodConstants.positionTolerance;
 
-		DogLog.log("Hood/Position", super.positionRotations);
-		DogLog.log("Hood/TargetPosition", super.targetPositionRots);
-		DogLog.log("Hood/StatorCurrent", super.statorCurrent);
-		DogLog.log("Hood/IsHoodAtPosition", super.isHoodInPosition);
-	}
+    DogLog.log("Hood/Position", super.positionRotations);
+    DogLog.log("Hood/TargetPosition", super.targetPositionRots);
+    DogLog.log("Hood/StatorCurrent", super.statorCurrent);
+    DogLog.log("Hood/IsHoodAtPosition", super.isHoodInPosition);
+  }
 
-	@Override
-	public void setHoodVoltage(double voltage) {
-		hoodMotorSim.setInputVoltage(MathUtil.clamp(voltage, -12.0, 12.0));
-	}
+  @Override
+  public void setHoodVoltage(double voltage) {
+    hoodMotorSim.setInputVoltage(MathUtil.clamp(voltage, -12.0, 12.0));
+  }
 
-	@Override
-	public void setHoodPosition(double position) {
-		super.targetPositionRots =
-				MathUtil.clamp(
-						position, HoodConstants.hoodMinAngleRotations, HoodConstants.hoodMaxAngleRotations);
-		setHoodVoltage(pid.calculate(hoodMotorSim.getAngularPositionRotations(), super.targetPositionRots));
-	}
+  @Override
+  public void setHoodPosition(double position) {
+    super.targetPositionRots =
+        MathUtil.clamp(
+            position, HoodConstants.hoodMinAngleRotations, HoodConstants.hoodMaxAngleRotations);
+    setHoodVoltage(
+        pid.calculate(hoodMotorSim.getAngularPositionRotations(), super.targetPositionRots));
+  }
 
-	@Override
-	public void stopHood() {
-		super.targetPositionRots = 0.0;
-		setHoodVoltage(pid.calculate(hoodMotorSim.getAngularPositionRotations(), 0.0));
-	}
+  @Override
+  public void stopHood() {
+    super.targetPositionRots = 0.0;
+    setHoodVoltage(pid.calculate(hoodMotorSim.getAngularPositionRotations(), 0.0));
+  }
 }

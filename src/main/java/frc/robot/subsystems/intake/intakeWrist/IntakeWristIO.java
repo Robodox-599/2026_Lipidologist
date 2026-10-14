@@ -29,11 +29,11 @@ public class IntakeWristIO {
 
   public void setIntakeWristDutyCycle(double dutyCycle) {}
 
-  public void homeIntakeWrist(){}
+  public void homeIntakeWrist() {}
 
-  public void resetHomeDetection(){}
+  public void resetHomeDetection() {}
 
-  public boolean isWristReadyToHome(){
+  public boolean isWristReadyToHome() {
     return false;
   }
 }

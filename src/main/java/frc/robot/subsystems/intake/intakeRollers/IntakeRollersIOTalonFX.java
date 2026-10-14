@@ -25,7 +25,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
   private final DutyCycleOut leaderDutyCycleRequest;
   private final DutyCycleOut followerDutyCycleRequest;
 
-  //status signals
+  // status signals
   private final StatusSignal<AngularVelocity> intakeRollersLeaderVelocity;
   private final StatusSignal<Voltage> intakeRollersLeaderAppliedVolts;
   private final StatusSignal<Current> intakeRollersLeaderSupplyCurrent;
@@ -77,15 +77,15 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         intakeRollersFollowerVelocity,
         intakeRollersFollowerStatorCurrent,
         intakeRollersFollowerSupplyCurrent);
-    
+
     BaseStatusSignal.setUpdateFrequencyForAll(
-      5, 
-      // intake rollers 1
-      intakeRollersLeaderTemperature,
-      intakeRollersLeaderAppliedVolts,
-      // intake rollers 2
-      intakeRollersFollowerTemperature,
-      intakeRollersFollowerAppliedVolts);
+        5,
+        // intake rollers 1
+        intakeRollersLeaderTemperature,
+        intakeRollersLeaderAppliedVolts,
+        // intake rollers 2
+        intakeRollersFollowerTemperature,
+        intakeRollersFollowerAppliedVolts);
 
     intakeRollersLeaderMotor.optimizeBusUtilization();
     intakeRollersFollowerMotor.optimizeBusUtilization();
@@ -149,4 +149,3 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         followerDutyCycleRequest.withOutput(dutyCycle).withEnableFOC(true));
   }
 }
-

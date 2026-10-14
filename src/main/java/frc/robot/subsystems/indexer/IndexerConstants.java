@@ -19,21 +19,29 @@ public class IndexerConstants {
   public static final double jammedVelocityTolerance = 2;
   public static final double fuelDebounce = 0.2;
 
-  public static final MotorConstants indexerMotor = new MotorConstants(
-      "Indexer",
-      16, 
-      indexerCANBus,
-      InvertedValue.CounterClockwise_Positive,
-      NeutralModeValue.Brake,
-      2.0, 
-      120.0, 25.0,  
-      null, null,
-      0.0, 0.0,   
-      0.45, 0.0, 0.0, 
-      0.03, (0.124 * 2.0), 0.0, 
-      maxVelocityRotsPerSec,
-      maxAccelerationRotationsPerSecSQ,
-      null, null, null
-  );
+  public static final MotorConstants indexerMotor =
+      new MotorConstants(
+          "Indexer",
+          16,
+          indexerCANBus,
+          InvertedValue.CounterClockwise_Positive,
+          NeutralModeValue.Brake,
+          2.0,
+          120.0,
+          25.0,
+          null,
+          null,
+          0.0,
+          0.0,
+          0.45,
+          0.0,
+          0.0,
+          0.03,
+          (0.124 * 2.0),
+          0.0,
+          maxVelocityRotsPerSec,
+          maxAccelerationRotationsPerSecSQ,
+          null,
+          null,
+          null);
 }
-

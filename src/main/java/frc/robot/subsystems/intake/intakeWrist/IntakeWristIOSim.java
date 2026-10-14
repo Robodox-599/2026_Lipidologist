@@ -23,7 +23,7 @@ public class IntakeWristIOSim extends IntakeWristIO {
             LinearSystemId.createDCMotorSystem(
                 DCMotor.getKrakenX60Foc(1),
                 IntakeWristConstants.rotationalInertia,
-          IntakeWristConstants.intakeWristMotor.gearRatio()),
+                IntakeWristConstants.intakeWristMotor.gearRatio()),
             DCMotor.getKrakenX60Foc(1));
     pid =
         new ProfiledPIDController(
