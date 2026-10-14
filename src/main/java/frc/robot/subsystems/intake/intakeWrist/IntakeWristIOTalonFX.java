@@ -30,10 +30,10 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
   public final StatusSignal<Current> intakeWristStatorCurrent;
   public final StatusSignal<Current> intakeWristSupplyCurrent;
   public final StatusSignal<Temperature> intakeWristTemperature;
-  private final Debouncer wristStallDebouncer =
+  private Debouncer wristStallDebouncer =
       new Debouncer(IntakeWristConstants.debounceTime, DebounceType.kBoth);
-    private final Debouncer wristHomeDebouncer =
-      new Debouncer(IntakeWristConstants.debounceTime, DebounceType.kRising);
+  private Debouncer wristHomeDebouncer =
+    new Debouncer(IntakeWristConstants.debounceTime, DebounceType.kRising);
 
   public IntakeWristIOTalonFX() {
     intakeWristCanBus = new CANBus(IntakeWristConstants.intakeWristCanBus);
@@ -127,8 +127,8 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
 
   @Override
   public void resetHomeDetection() {
-    wristHomeDebouncer.reset();
-  }
+    wristHomeDebouncer = new Debouncer(IntakeWristConstants.debounceTime, DebounceType.kRising);
+    }
 
   @Override
   public boolean isWristReadyToHome(){
