@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.WantedSuperState;
+import frc.robot.subsystems.intake.intakeWrist.IntakeWrist.IntakeWristWantedState;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.HubShiftUtil;
 import java.util.Set;
@@ -21,6 +22,9 @@ public class Bindings {
     this.superstructure = superstructure;
 
     driver.y().onTrue(superstructure.zeroPoseCommand());
+  driver
+    .povDown()
+    .onTrue(superstructure.setIntakeWristWantedStateCommand(IntakeWristWantedState.HOME));
 
     // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
     driver

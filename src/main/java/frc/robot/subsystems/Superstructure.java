@@ -710,6 +710,11 @@ public class Superstructure extends SubsystemBase {
     return Commands.runOnce(() -> setWantedSuperState(wantedState));
   }
 
+  public Command setIntakeWristWantedStateCommand(
+      IntakeWrist.IntakeWristWantedState wantedState) {
+    return Commands.runOnce(() -> intakeWrist.setWantedState(wantedState));
+  }
+
   public void setWantedSuperState(WantedSuperState state) {
     wantedSuperState = state;
   }
