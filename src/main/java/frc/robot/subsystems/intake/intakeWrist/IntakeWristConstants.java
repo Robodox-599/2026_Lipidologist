@@ -30,7 +30,8 @@ public class IntakeWristConstants {
   public static final double agitateStatorCurrentTrip = 70; // must be changed and tested
   public static final double agitateVelocityTrip = 1.0; // must be changed and tested
   public static final double homeStatorCurrentTrip = 5; // must be changed and tested
-  public static final double homeVoltageTrip = -1.0; // must be changed and tested
+  public static final double homeVelocityTrip = 1.0; // must be changed and tested
+  public static final double homeVoltageTrip = -0.5; // must be changed and tested
   public static final double debounceTime = 0.3; // must be changed and tested
 
   public static final double totalAgitationTime = 3.0;

@@ -54,13 +54,13 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
         50,
         intakeWristPosition,
         intakeWristVelocity,
+        intakeWristAppliedVolts,
         intakeWristStatorCurrent,
         intakeWristSupplyCurrent);
     
     BaseStatusSignal.setUpdateFrequencyForAll(
       5, 
-      intakeWristTemperature,
-      intakeWristAppliedVolts);
+      intakeWristTemperature);
 
     intakeWristMotor.optimizeBusUtilization();
   }
@@ -126,9 +126,15 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
   }
 
   @Override
+  public void resetHomeDetection() {
+    wristHomeDebouncer.reset();
+  }
+
+  @Override
   public boolean isWristReadyToHome(){
     return wristHomeDebouncer.calculate(
         super.statorCurrent > IntakeWristConstants.homeStatorCurrentTrip
+            && Math.abs(super.velocity) < IntakeWristConstants.homeVelocityTrip
             && super.voltage < IntakeWristConstants.homeVoltageTrip);
   }
 }

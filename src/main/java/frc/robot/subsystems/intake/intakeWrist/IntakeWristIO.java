@@ -31,6 +31,8 @@ public class IntakeWristIO {
 
   public void homeIntakeWrist(){}
 
+  public void resetHomeDetection(){}
+
   public boolean isWristReadyToHome(){
     return false;
   }

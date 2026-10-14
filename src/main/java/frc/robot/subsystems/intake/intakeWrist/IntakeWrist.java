@@ -133,10 +133,13 @@ public class IntakeWrist {
         break;
       case HOME:
         if (currentState != IntakeWristCurrentState.HOMED) {
-          if (isWristReadyToHome()) {
+          if (currentState == IntakeWristCurrentState.HOMING && isWristReadyToHome()) {
             homeIntakeWrist();
             currentState = IntakeWristCurrentState.HOMED;
           } else {
+            if (currentState != IntakeWristCurrentState.HOMING) {
+              io.resetHomeDetection();
+            }
             currentState = IntakeWristCurrentState.HOMING;
           }
         }
