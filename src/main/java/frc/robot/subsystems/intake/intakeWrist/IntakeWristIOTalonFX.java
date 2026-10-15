@@ -33,7 +33,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
   private Debouncer wristStallDebouncer =
       new Debouncer(IntakeWristConstants.debounceTime, DebounceType.kBoth);
   private Debouncer wristHomeDebouncer =
-      new Debouncer(IntakeWristConstants.debounceTime, DebounceType.kRising);
+      new Debouncer(IntakeWristConstants.homingDebounceTime, DebounceType.kRising);
 
   public IntakeWristIOTalonFX() {
     intakeWristCanBus = new CANBus(IntakeWristConstants.intakeWristCanBus);
@@ -97,8 +97,10 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
 
   @Override
   public void stopIntakeWrist() {
+    intakeWristMotor.setControl(dutyCycleRequest.withOutput(0.0));
     intakeWristMotorWrapper.stop();
   }
+
 
   @Override
   public void setIntakeWristPosition(double position) {
@@ -119,19 +121,14 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
 
   @Override
   public void homeIntakeWrist() {
-    intakeWristMotor.setPosition(0);
+    intakeWristMotor.setPosition(IntakeWristConstants.homingZero * IntakeWristConstants.gearRatio);
+    super.targetPosition = IntakeWristConstants.homingZero;
+    stopIntakeWrist();
   }
 
-  @Override
-  public void resetHomeDetection() {
-    wristHomeDebouncer = new Debouncer(IntakeWristConstants.debounceTime, DebounceType.kRising);
-  }
 
   @Override
   public boolean isWristReadyToHome() {
-    return wristHomeDebouncer.calculate(
-        super.statorCurrent > IntakeWristConstants.homeStatorCurrentTrip
-            && Math.abs(super.velocity) < IntakeWristConstants.homeVelocityTrip
-            && super.voltage < IntakeWristConstants.homeVoltageTrip);
+    return wristHomeDebouncer.calculate(Math.abs(super.velocity) < IntakeWristConstants.homingVelocityThreshold);
   }
 }

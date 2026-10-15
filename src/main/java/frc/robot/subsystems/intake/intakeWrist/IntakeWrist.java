@@ -15,6 +15,7 @@ public class IntakeWrist {
   private IntakeWristCurrentState currentState = IntakeWristCurrentState.STOPPED;
   private Timer agitationTimer = new Timer();
   private Timer liftingAgitationTimer = new Timer();
+  private boolean isHomed = false;
   private double currentAgitationPosition = 0;
 
   public IntakeWrist(IntakeWristIO io) {
@@ -131,20 +132,17 @@ public class IntakeWrist {
           currentState = IntakeWristCurrentState.WRIST_RETRACTING;
         }
         break;
-      case HOME:
-        if (currentState != IntakeWristCurrentState.HOMED) {
-          if (currentState == IntakeWristCurrentState.HOMING && isWristReadyToHome()) {
+    case HOME:
+        if (!isHomed) {
+          if (io.isWristReadyToHome()) {
+            isHomed = true;
             currentState = IntakeWristCurrentState.HOMED;
           } else {
-            if (currentState != IntakeWristCurrentState.HOMING) {
-              io.resetHomeDetection();
-            }
-          currentState = IntakeWristCurrentState.HOMING;
+            currentState = IntakeWristCurrentState.HOMING;
           }
+        } else {
+          currentState = IntakeWristCurrentState.HOMED;
         }
-        break;
-      default:
-        currentState = IntakeWristCurrentState.STOPPED;
         break;
     }
 
@@ -176,7 +174,7 @@ public class IntakeWrist {
         setPosition(0.33);
         break;
       case HOMING:
-        setDutyCycle(-1.0 / 12.0);
+        setDutyCycle(IntakeWristConstants.homingDutyCycle);
         break;
       case HOMED:
         homeIntakeWrist();
@@ -192,12 +190,20 @@ public class IntakeWrist {
   }
 
   public void setWantedState(IntakeWrist.IntakeWristWantedState wantedState) {
+    if (wantedState == IntakeWristWantedState.HOME && this.wantedState != IntakeWristWantedState.HOME) {
+      this.isHomed = false;
+    }
     this.wantedState = wantedState;
   }
 
   public void setPosition(double position) {
-    io.setIntakeWristPosition(position);
+    if (isHomed) {
+      io.setIntakeWristPosition(position);
+    } else {
+      stop();
+    }
   }
+
 
   public void setDutyCycle(double dutyCycle) {
     io.setIntakeWristDutyCycle(dutyCycle);
@@ -209,6 +215,15 @@ public class IntakeWrist {
 
   public void homeIntakeWrist() {
     io.homeIntakeWrist();
+  }
+
+  public boolean isHomed() {
+    return isHomed;
+  }
+
+  public void manualHome() {
+    io.homeIntakeWrist();
+    this.isHomed = true;
   }
 
   public boolean isWristReadyToHome() {

@@ -29,10 +29,13 @@ public class IntakeWristConstants {
 
   public static final double agitateStatorCurrentTrip = 70; // must be changed and tested
   public static final double agitateVelocityTrip = 1.0; // must be changed and tested
-  public static final double homeStatorCurrentTrip = 5; // must be changed and tested
-  public static final double homeVelocityTrip = 1.0; // must be changed and tested
-  public static final double homeVoltageTrip = -0.5; // must be changed and tested
   public static final double debounceTime = 0.3; // must be changed and tested
+
+  // Homing configuration constants
+  public static final double homingDutyCycle = -0.07; // 7% power downwards
+  public static final double homingVelocityThreshold = 0.5; // Stall velocity limit
+  public static final double homingDebounceTime = 0.1;
+  public static final double homingZero = -2.0; 
 
   public static final double totalAgitationTime = 3.0;
   public static final double maxAgitationPosition = 0.25;
