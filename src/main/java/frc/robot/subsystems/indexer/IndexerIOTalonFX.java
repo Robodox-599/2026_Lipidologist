@@ -75,7 +75,7 @@ public class IndexerIOTalonFX extends IndexerIO {
   }
 
   @Override
-  public void setIndexerDutyCycle(double dutyCycle) {
-    indexerMotor.setControl(dutyCycleOut.withOutput(dutyCycle).withEnableFOC(true));
+  public void setIndexerVoltage(double voltage) {
+    indexerMotor.setControl(dutyCycleOut.withOutput(voltage).withEnableFOC(true));
   }
 }

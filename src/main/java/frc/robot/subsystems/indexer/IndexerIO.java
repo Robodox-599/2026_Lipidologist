@@ -12,7 +12,7 @@ public abstract class IndexerIO {
 
   public void indexerPulseFuel(double dutyCycle) {}
 
-  public void setIndexerDutyCycle(double dutyCycle) {}
+  public void setIndexerVoltage(double dutyCycle) {}
 
   public void stopIndexer() {}
 }
