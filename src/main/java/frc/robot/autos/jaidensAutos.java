@@ -44,11 +44,10 @@ public class jaidensAutos {
 
         routine
                 .active()
-                .onTrue(
+                .onTrue(Commands.sequence(trench_and_bump_1.resetOdometry(),
                         Commands.parallel(
-                                disregardRequirements(trench_and_bump_1.resetOdometry()),
                                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                trench_and_bump_1.cmd()));
+                                trench_and_bump_1.cmd())));
 
         trench_and_bump_1
                 .done()
@@ -96,11 +95,11 @@ public class jaidensAutos {
 
         routine
                 .active()
-                .onTrue(
+                .onTrue(Commands.sequence(trench_and_bump_1.resetOdometry(),
                         Commands.parallel(
-                                disregardRequirements(trench_and_bump_1.resetOdometry()),
+
                                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                                trench_and_bump_1.cmd()));
+                                trench_and_bump_1.cmd())));
 
         trench_and_bump_1
                 .done()
@@ -138,7 +137,8 @@ public class jaidensAutos {
 
         AutoTrajectory bump_to_depot = routine.trajectory("bump_to_depot");
 
-        routine.active().onTrue(Commands.sequence(bump_to_depot.resetOdometry(),
+        routine.active().onTrue(
+            Commands.sequence(bump_to_depot.resetOdometry(),
                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
                 bump_to_depot.cmd()));
 
@@ -150,7 +150,7 @@ public class jaidensAutos {
                                 superstructureCommands.setWantedSuperStateCommand(
                                         WantedSuperState.SHOOT_HUB_AND_AGITATE),
                                 new WaitCommand(shoot_with_agitation_secs),
-                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.STOP)));
+                                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE)));
 
         return routine;
     }

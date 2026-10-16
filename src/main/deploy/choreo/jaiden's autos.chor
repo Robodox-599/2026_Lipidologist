@@ -7,8 +7,8 @@
    "bumperRadius":{
     "dimension":"Length",
     "var":{
-     "exp":"35.25 in / 2",
-     "val":0.447675
+     "exp":"35.5 in / 2",
+     "val":0.45085
     }
    },
    "centerLTrench":{
@@ -100,7 +100,7 @@
    "BUMP":{
     "x":{
      "exp":"TRENCH_SHOOTING.x",
-     "val":2.399925
+     "val":2.39675
     },
     "y":{
      "exp":"255 in - (73 / 2 in) - 5 in",
@@ -128,7 +128,7 @@
    "DEPOT_INSIDE":{
     "x":{
      "exp":"bumperRadius + intakeExtension",
-     "val":0.650875
+     "val":0.6540499999999999
     },
     "y":{
      "exp":"(fieldWidth / 2) + 75.93 in",
@@ -142,7 +142,7 @@
    "DEPOT_OUTSIDE":{
     "x":{
      "exp":"27 in + bumperRadius + intakeExtension + 12 in",
-     "val":1.641475
+     "val":1.64465
     },
     "y":{
      "exp":"(fieldWidth / 2) + 75.93 in",
@@ -170,7 +170,7 @@
    "TRENCH_CLOSE_THRU":{
     "x":{
      "exp":"startingLine - bumperRadius - 6 in",
-     "val":3.399925
+     "val":3.39675
     },
     "y":{
      "exp":"fieldWidth - (trenchOpeningWidth / 2)",
@@ -198,7 +198,7 @@
    "TRENCH_SHOOTING":{
     "x":{
      "exp":"TRENCH_CLOSE_THRU.x - 1 m",
-     "val":2.399925
+     "val":2.39675
     },
     "y":{
      "exp":"7 m",
@@ -212,11 +212,11 @@
    "TRENCH_START":{
     "x":{
      "exp":"startingLine + bumperRadius",
-     "val":4.447675
+     "val":4.45085
     },
     "y":{
      "exp":"fieldWidth - bumperRadius - 1 in",
-     "val":7.595925
+     "val":7.59275
     },
     "heading":{
      "exp":"270 deg",

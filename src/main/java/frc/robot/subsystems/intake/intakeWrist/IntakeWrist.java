@@ -24,8 +24,8 @@ public class IntakeWrist {
 
   public enum IntakeWristWantedState {
     STOP,
-    INTAKE_FUEL,
-    LIFT,
+    DEPLOY,
+    // LIFT,
     STOW,
     AGITATE_FUEL,
     HOME
@@ -33,9 +33,9 @@ public class IntakeWrist {
 
   public enum IntakeWristCurrentState {
     STOPPED,
-    INTAKING_FUEL,
+    DEPLOYING,
     STOWING,
-    LIFTING,
+    // LIFTING,
     WRIST_RETRACTING,
     WRIST_EXTENDING,
     UNJAM,
@@ -62,17 +62,17 @@ public class IntakeWrist {
       case STOP:
         currentState = IntakeWristCurrentState.STOPPED;
         break;
-      case INTAKE_FUEL:
+      case DEPLOY:
         if (io.isWristJammed) { // if in auto and wrist is jammed, unjam
           // hopper
           currentState = IntakeWristCurrentState.UNJAM;
         } else {
-          currentState = IntakeWristCurrentState.INTAKING_FUEL;
+          currentState = IntakeWristCurrentState.DEPLOYING;
         }
         break;
-      case LIFT:
-        currentState = IntakeWristCurrentState.LIFTING;
-        break;
+      // case LIFT:
+      //   currentState = IntakeWristCurrentState.LIFTING;
+      //   break;
       case STOW:
         currentState = IntakeWristCurrentState.STOWING;
         break;
@@ -155,12 +155,12 @@ public class IntakeWrist {
       case STOPPED:
         stop();
         break;
-      case INTAKING_FUEL:
+      case DEPLOYING:
         setPosition(0.0);
         break;
-      case LIFTING:
-        setPosition(0.0);
-        break;
+      // case LIFTING:
+      //   setPosition(0.0);
+      //   break;
       case STOWING:
         setPosition(.35);
         break;

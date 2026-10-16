@@ -89,7 +89,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     ROTATION_LOCK,
     DRIVE_TO_POINT,
     CHOREO_TRAJECTORY,
-    ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
+    // ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
     STOPPED,
   }
 
@@ -98,7 +98,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     ROTATION_LOCK,
     DRIVE_TO_POINT,
     CHOREO_TRAJECTORY,
-    ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
+    // ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
     STOPPED,
   }
 
@@ -297,15 +297,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
       case CHOREO_TRAJECTORY:
         currentState = CurrentState.CHOREO_TRAJECTORY;
         break;
-      case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
-        // // if (!DriverStation.isAutonomous()) {
-        // // wantedState = WantedState.TELEOP_DRIVE;
-        // // currentState = CurrentState.TELEOP_DRIVE;
-        // // } else {
-        // // currentState = CurrentState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY;
-        // // }
-        currentState = CurrentState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY;
-        break;
+      // case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
+      //   // // if (!DriverStation.isAutonomous()) {
+      //   // // wantedState = WantedState.TELEOP_DRIVE;
+      //   // // currentState = CurrentState.TELEOP_DRIVE;
+      //   // // } else {
+      //   // // currentState = CurrentState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY;
+      //   // // }
+      //   currentState = CurrentState.ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY;
+      //   break;
       case STOPPED:
         currentState = CurrentState.STOPPED;
         break;
@@ -413,34 +413,34 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
           setControl(m_pathApplyFieldSpeeds.withSpeeds(targetSpeeds));
         }
         break;
-      case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
-        if (choreoSampleToBeApplied != null) {
-          SwerveSample sample = choreoSampleToBeApplied;
-          choreoSampleToBeApplied = null;
+      // case ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY:
+      //   if (choreoSampleToBeApplied != null) {
+      //     SwerveSample sample = choreoSampleToBeApplied;
+      //     choreoSampleToBeApplied = null;
 
-          var pose = getState().Pose;
+      //     var pose = getState().Pose;
 
-          var targetSpeeds = sample.getChassisSpeeds();
-          DogLog.log("Drive/Choreo/SwerveSample", sample);
-          DogLog.log("Drive/Choreo/SwerveSample/ChoreoPosition", sample.getPose());
-          targetSpeeds.vxMetersPerSecond += choreoXController.calculate(pose.getX(), sample.x);
-          targetSpeeds.vyMetersPerSecond += choreoYController.calculate(pose.getY(), sample.y);
-          targetSpeeds.omegaRadiansPerSecond +=
-              choreoRotationLockPID.calculate(
-                  pose.getRotation().getRadians(),
-                  AllianceFlipUtil.shouldFlip()
-                      ? this.targetRotation.rotateBy(kRedAlliancePerspectiveRotation).getRadians()
-                      : this.targetRotation.getRadians()); // not sure if this works as intended
+      //     var targetSpeeds = sample.getChassisSpeeds();
+      //     DogLog.log("Drive/Choreo/SwerveSample", sample);
+      //     DogLog.log("Drive/Choreo/SwerveSample/ChoreoPosition", sample.getPose());
+      //     targetSpeeds.vxMetersPerSecond += choreoXController.calculate(pose.getX(), sample.x);
+      //     targetSpeeds.vyMetersPerSecond += choreoYController.calculate(pose.getY(), sample.y);
+      //     targetSpeeds.omegaRadiansPerSecond +=
+      //         choreoRotationLockPID.calculate(
+      //             pose.getRotation().getRadians(),
+      //             AllianceFlipUtil.shouldFlip()
+      //                 ? this.targetRotation.rotateBy(kRedAlliancePerspectiveRotation).getRadians()
+      //                 : this.targetRotation.getRadians()); // not sure if this works as intended
 
-          DogLog.log("Drive/Choreo/RobotSetpointSpeedsAfterPID", targetSpeeds);
+      //     DogLog.log("Drive/Choreo/RobotSetpointSpeedsAfterPID", targetSpeeds);
 
-          setControl(
-              m_pathApplyFieldSpeeds
-                  .withSpeeds(targetSpeeds)
-                  .withWheelForceFeedforwardsX(sample.moduleForcesX())
-                  .withWheelForceFeedforwardsY(sample.moduleForcesY()));
-        }
-        break;
+      //     setControl(
+      //         m_pathApplyFieldSpeeds
+      //             .withSpeeds(targetSpeeds)
+      //             .withWheelForceFeedforwardsX(sample.moduleForcesX())
+      //             .withWheelForceFeedforwardsY(sample.moduleForcesY()));
+      //   }
+      //   break;
       case STOPPED:
         setControl(drive.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
         break;
@@ -486,7 +486,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   // }
 
   public boolean isAtTargetRotation() {
-    return driveAtAngle.HeadingController.getPositionError() < Units.degreesToRadians(5);
+    return Math.abs(driveAtAngle.HeadingController.getPositionError()) < Units.degreesToRadians(5);
   }
 
   public boolean isAtTargetPose() {
