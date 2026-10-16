@@ -122,7 +122,6 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
   @Override
   public void homeIntakeWrist() {
     intakeWristMotor.setPosition(IntakeWristConstants.homingZero * IntakeWristConstants.gearRatio);
-    super.targetPosition = IntakeWristConstants.homingZero;
     stopIntakeWrist();
   }
 

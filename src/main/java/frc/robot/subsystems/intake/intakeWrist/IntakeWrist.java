@@ -190,11 +190,17 @@ public class IntakeWrist {
   }
 
   public void setWantedState(IntakeWrist.IntakeWristWantedState wantedState) {
+    if (!isHomed && this.wantedState == IntakeWristWantedState.HOME && wantedState != IntakeWristWantedState.HOME) {
+      return; 
+    }
+
     if (wantedState == IntakeWristWantedState.HOME && this.wantedState != IntakeWristWantedState.HOME) {
       this.isHomed = false;
     }
     this.wantedState = wantedState;
   }
+
+
 
   public void setPosition(double position) {
     if (isHomed) {

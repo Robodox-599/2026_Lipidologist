@@ -209,8 +209,19 @@ public class Robot extends TimedRobot {
     // autoRoutines::leftHamburgerWithOnions);
     SmartDashboard.putData("AutoChooser", autoChooser);
 
-    RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
-    RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> HubShiftUtil.initialize()));
+    RobotModeTriggers.autonomous().onTrue(
+        Commands.runOnce(() -> {
+          HubShiftUtil.initialize();
+          intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.HOME);
+        })
+    );
+    
+    RobotModeTriggers.teleop().onTrue(
+        Commands.runOnce(() -> {
+          HubShiftUtil.initialize();
+          intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.HOME);
+        })
+    );
 
     SmartDashboard.putNumber("Flywheel Velocity", 10.0);
     SmartDashboard.putNumber("Hood Rotations", 0.0);
