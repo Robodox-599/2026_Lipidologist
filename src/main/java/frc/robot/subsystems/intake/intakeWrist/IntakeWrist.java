@@ -132,7 +132,7 @@ public class IntakeWrist {
         }
         break;
       case HOME:
-        if (this.previousWantedState != IntakeWristWantedState.HOME) {
+        if (currentState != IntakeWristCurrentState.HOMING) {
           isHomed = false;
           homingStallTimer.stop();
           homingStallTimer.reset();
@@ -150,7 +150,6 @@ public class IntakeWrist {
           } else {
             currentState = IntakeWristCurrentState.HOMING;
           }
-
         } else {
           homingStallTimer.stop();
           homingStallTimer.reset();

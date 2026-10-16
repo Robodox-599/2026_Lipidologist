@@ -24,7 +24,8 @@ public class Bindings {
     driver.y().onTrue(superstructure.zeroPoseCommand());
     driver
         .povDown()
-        .onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.HOME)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
+        .onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.HOME))
+        .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
 
     // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
     driver
@@ -62,8 +63,8 @@ public class Bindings {
 
     // CLEAN SYSTEMs
     // driver.x()
-    //     .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLEAN))
-    //     .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
+    // .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.CLEAN))
+    // .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
 
     new Trigger(() -> HubShiftUtil.isHubActiveSoon(5)).onTrue(rumbleDriverSwapping(driver, 0.5, 5));
 
@@ -74,13 +75,15 @@ public class Bindings {
     // .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
     // driver
-    //     .rightTrigger()
-    //     .onTrue(
-    //         Commands.runOnce(
-    //             () -> superstructure.setWantedSuperState(WantedSuperState.TUNE_SHOT_DATA_SHOOT)))
-    //     .onFalse(
-    //         Commands.runOnce(
-    //             () -> superstructure.setWantedSuperState(WantedSuperState.TUNE_SHOT_DATA_IDLE)));
+    // .rightTrigger()
+    // .onTrue(
+    // Commands.runOnce(
+    // () ->
+    // superstructure.setWantedSuperState(WantedSuperState.TUNE_SHOT_DATA_SHOOT)))
+    // .onFalse(
+    // Commands.runOnce(
+    // () ->
+    // superstructure.setWantedSuperState(WantedSuperState.TUNE_SHOT_DATA_IDLE)));
   }
 
   public Command setShootingStateCommand() {
@@ -104,15 +107,13 @@ public class Bindings {
 
   public WantedSuperState returnShootingState() {
     if (AllianceFlipUtil.shouldFlip()) { // if red
-      if (superstructure.getPose().getX()
-          > AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
+      if (superstructure.getPose().getX() > AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
         return WantedSuperState.SHOOT_HUB;
       } else {
         return WantedSuperState.SHOOT_ALLIANCE_ZONE;
       }
     } else {
-      if (superstructure.getPose().getX()
-          < AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
+      if (superstructure.getPose().getX() < AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
         return WantedSuperState.SHOOT_HUB;
       } else {
         return WantedSuperState.SHOOT_ALLIANCE_ZONE;
@@ -122,15 +123,13 @@ public class Bindings {
 
   public WantedSuperState returnAgitatingShootingState() {
     if (AllianceFlipUtil.shouldFlip()) { // if red
-      if (superstructure.getPose().getX()
-          > AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
+      if (superstructure.getPose().getX() > AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
         return WantedSuperState.SHOOT_HUB_AND_AGITATE;
       } else {
         return WantedSuperState.SHOOT_ALLIANCE_ZONE_AND_AGITATE;
       }
     } else {
-      if (superstructure.getPose().getX()
-          < AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
+      if (superstructure.getPose().getX() < AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
         return WantedSuperState.SHOOT_HUB_AND_AGITATE;
       } else {
         return WantedSuperState.SHOOT_ALLIANCE_ZONE_AND_AGITATE;
@@ -158,20 +157,20 @@ public class Bindings {
 
   public Command rumbleDriverContinuous(CommandXboxController driver, double totalTime) {
     return new StartEndCommand(
-            () -> driver.getHID().setRumble(RumbleType.kBothRumble, 1),
-            () -> driver.getHID().setRumble(RumbleType.kBothRumble, 0))
+        () -> driver.getHID().setRumble(RumbleType.kBothRumble, 1),
+        () -> driver.getHID().setRumble(RumbleType.kBothRumble, 0))
         .withTimeout(totalTime);
   }
 
   public Command rumbleDriverSwapping(
       CommandXboxController driver, double swapTime, double totalTime) {
     return Commands.sequence(
-            Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kLeftRumble, 1)),
-            Commands.waitSeconds(swapTime),
-            Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kLeftRumble, 0)),
-            Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kRightRumble, 1)),
-            Commands.waitSeconds(swapTime),
-            Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kRightRumble, 0)))
+        Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kLeftRumble, 1)),
+        Commands.waitSeconds(swapTime),
+        Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kLeftRumble, 0)),
+        Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kRightRumble, 1)),
+        Commands.waitSeconds(swapTime),
+        Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kRightRumble, 0)))
         .repeatedly()
         .withTimeout(totalTime)
         .finallyDo(() -> driver.getHID().setRumble(RumbleType.kBothRumble, 0));

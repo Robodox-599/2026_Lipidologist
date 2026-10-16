@@ -16,7 +16,6 @@ public class IntakeWristIO {
 
   protected boolean atSetpoint = false;
   protected boolean isWristJammed = false;
-  protected boolean isHomed = false;
 
   public void updateInputs() {}
 
