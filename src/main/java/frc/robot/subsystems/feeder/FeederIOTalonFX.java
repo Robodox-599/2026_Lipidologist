@@ -1,7 +1,7 @@
 package frc.robot.subsystems.feeder;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.CANBus;
+// import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
@@ -18,7 +18,7 @@ import frc.robot.util.Motor.TalonFXWrapper;
 public class FeederIOTalonFX extends FeederIO {
   private final TalonFXWrapper feederMotorWrapper;
   private final TalonFX feederMotor;
-  private final CANBus feederCANBus;
+  // private final CANBus feederCANBus;
   private final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
   private VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
   private Debouncer feederDebouncer;
@@ -30,7 +30,7 @@ public class FeederIOTalonFX extends FeederIO {
   private final StatusSignal<Current> feederSupplyCurrent;
 
   public FeederIOTalonFX() {
-    feederCANBus = new CANBus(FeederConstants.feederMotor.canBus());
+    // feederCANBus = new CANBus(FeederConstants.feederMotor.canBus());
 
     feederMotorWrapper = new TalonFXWrapper(FeederConstants.feederMotor);
     feederMotor = feederMotorWrapper.getTalonFX();

@@ -1,7 +1,7 @@
 package frc.robot.subsystems.indexer;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.CANBus;
+// import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -15,7 +15,7 @@ import frc.robot.util.Motor.TalonFXWrapper;
 public class IndexerIOTalonFX extends IndexerIO {
   private final TalonFXWrapper indexerMotorWrapper;
   private final TalonFX indexerMotor;
-  private final CANBus indexerCANBus;
+  // private final CANBus indexerCANBus;
 
   private final StatusSignal<AngularVelocity> indexerVelocityRad;
   private final StatusSignal<Temperature> indexerTemperature;
@@ -26,7 +26,7 @@ public class IndexerIOTalonFX extends IndexerIO {
   private final VoltageOut voltageOut;
 
   public IndexerIOTalonFX() {
-    indexerCANBus = new CANBus(IndexerConstants.indexerMotor.canBus());
+    // indexerCANBus = new CANBus(IndexerConstants.indexerMotor.canBus());
 
     indexerMotorWrapper = new TalonFXWrapper(IndexerConstants.indexerMotor);
     indexerMotor = indexerMotorWrapper.getTalonFX();

@@ -119,15 +119,19 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
     return intakeWristPosition.getValueAsDouble() / IntakeWristConstants.gearRatio;
   }
 
-  @Override
-  public void homeIntakeWrist() {
-    intakeWristMotor.setPosition(IntakeWristConstants.homingZero * IntakeWristConstants.gearRatio);
-    stopIntakeWrist();
-  }
+@Override
+public void homeIntakeWrist() {
+  intakeWristMotor.setPosition(super.currentPosition + IntakeWristConstants.homingSafetyOffset);
+  stopIntakeWrist();
+}
 
 
-  @Override
-  public boolean isWristReadyToHome() {
-    return wristHomeDebouncer.calculate(Math.abs(super.velocity) < IntakeWristConstants.homingVelocityThreshold);
-  }
+
+@Override
+public boolean isWristReadyToHome() {
+  return wristHomeDebouncer.calculate(
+      (Math.abs(super.velocity) < IntakeWristConstants.homingVelocityThreshold) 
+      && (super.statorCurrent > IntakeWristConstants.homingCurrentThreshold)
+  );
+}
 }
