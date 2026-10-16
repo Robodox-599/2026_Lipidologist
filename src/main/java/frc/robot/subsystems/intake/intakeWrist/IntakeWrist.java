@@ -26,7 +26,7 @@ public class IntakeWrist {
     STOP,
     INTAKE_FUEL,
     LIFT,
-    STOW, // pack
+    STOW,
     AGITATE_FUEL,
     HOME
   }
@@ -34,7 +34,7 @@ public class IntakeWrist {
   public enum IntakeWristCurrentState {
     STOPPED,
     INTAKING_FUEL,
-    STOWING, // packing
+    STOWING,
     LIFTING,
     WRIST_RETRACTING,
     WRIST_EXTENDING,
@@ -138,6 +138,7 @@ public class IntakeWrist {
             isHomed = true;
             currentState = IntakeWristCurrentState.HOMED;
           } else {
+            isHomed = false;
             currentState = IntakeWristCurrentState.HOMING;
           }
         } else {
@@ -203,18 +204,12 @@ public class IntakeWrist {
 
 
   public void setPosition(double position) {
-    if (wantedState == IntakeWristWantedState.HOME) {
-      return;
-    }
-
     if (isHomed) { 
       io.setIntakeWristPosition(position);
     } else {
       stop();
     }
   }
-
-
 
   public void setDutyCycle(double dutyCycle) {
     io.setIntakeWristDutyCycle(dutyCycle);
