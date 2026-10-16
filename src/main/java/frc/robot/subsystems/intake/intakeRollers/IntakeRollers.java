@@ -68,16 +68,16 @@ public class IntakeRollers {
         stop();
         break;
       case INTAKING_FUEL:
-        setVoltage(9);
+        setDutyCycle(9.0 / 12.0);
         break;
       // case AGITATING_FUEL:
       //     setVoltage(2);
       //     break;
       case OUTAKING:
-        setVoltage(-7);
+        setDutyCycle(-7.0 / 12.0);
         break;
       case CLEANING:
-        setVoltage(0.65);
+        setDutyCycle(0.65 / 12.0);
         break;
       default:
         stop();
@@ -86,14 +86,14 @@ public class IntakeRollers {
   }
 
   public void stop() {
-    io.stop();
+    io.stopIntakeRollers();
   }
 
   public void setWantedState(IntakeRollers.IntakeRollersWantedState wantedState) {
     this.wantedState = wantedState;
   }
 
-  public void setVoltage(double voltage) {
-    io.setVoltage(voltage);
+  public void setDutyCycle(double dutyCycle) {
+    io.setIntakeRollersDutyCycle(dutyCycle);
   }
 }

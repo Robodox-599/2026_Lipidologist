@@ -75,13 +75,13 @@ public class Feeder {
         stopFeeder();
         break;
       case REVERSE:
-        setVoltage(-3);
+        setFeederDutyCycle(-3.0 / 12.0);
         break;
       case OUTAKING:
-        setVoltage(-12);
+        setFeederDutyCycle(-1.0);
         break;
       case CLEANING:
-        setVoltage(0.5);
+        setFeederDutyCycle(0.5 / 12.0);
         break;
       default:
         stopFeeder();
@@ -93,8 +93,8 @@ public class Feeder {
     io.setFeederVelocity(RPS);
   }
 
-  private void setVoltage(double voltage) {
-    io.setVoltage(voltage);
+  private void setFeederDutyCycle(double dutyCycle) {
+    io.setFeederDutyCycle(dutyCycle);
   }
 
   public void stopFeeder() {

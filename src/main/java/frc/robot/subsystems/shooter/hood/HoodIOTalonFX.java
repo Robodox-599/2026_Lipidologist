@@ -29,16 +29,13 @@ import edu.wpi.first.units.measure.Voltage;
 import frc.robot.util.PhoenixUtil;
 
 public class HoodIOTalonFX extends HoodIO {
-  // motors + configuration
   private final TalonFX hoodMotor;
-  TalonFXConfiguration hoodConfiguration;
   private final CANBus hoodCANBus;
+  private final TalonFXConfiguration hoodConfig;
 
-  // cancoder + configuration
   private final CANcoder hoodCANCoder;
-  CANcoderConfiguration CANCoderConfig;
+  private CANcoderConfiguration CANCoderConfig;
 
-  // motion magic
   private MotionMagicVoltage motionMagic;
 
   // status signals
@@ -50,11 +47,9 @@ public class HoodIOTalonFX extends HoodIO {
   private final StatusSignal<Current> hoodSupplyCurrent;
 
   public HoodIOTalonFX() {
-    // motors + configuration
     hoodCANBus = new CANBus();
     hoodMotor = new TalonFX(HoodConstants.hoodMotorID, hoodCANBus);
-    hoodCANCoder = new CANcoder(HoodConstants.hoodCANCoderID, hoodCANBus);
-    hoodConfiguration =
+    hoodConfig =
         new TalonFXConfiguration()
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
@@ -84,6 +79,8 @@ public class HoodIOTalonFX extends HoodIO {
                     .withMotionMagicCruiseVelocity(HoodConstants.hoodMaxVelocity)
                     .withMotionMagicAcceleration(HoodConstants.hoodMaxAcceleration));
 
+    // CANCoder
+    hoodCANCoder = new CANcoder(HoodConstants.hoodCANCoderID, HoodConstants.hoodCANBus);
     CANCoderConfig =
         new CANcoderConfiguration()
             .withMagnetSensor(
@@ -93,13 +90,12 @@ public class HoodIOTalonFX extends HoodIO {
                     .withAbsoluteSensorDiscontinuityPoint(
                         HoodConstants.absoluteDiscontinuityPoint));
 
+    PhoenixUtil.tryUntilOk(10, () -> hoodCANCoder.getConfigurator().apply(CANCoderConfig, 1));
+    PhoenixUtil.tryUntilOk(10, () -> hoodMotor.getConfigurator().apply(hoodConfig, 1));
+
     motionMagic = new MotionMagicVoltage(targetPositionRots).withSlot(0).withEnableFOC(true);
 
-    // applying configuration
-    PhoenixUtil.tryUntilOk(10, () -> hoodMotor.getConfigurator().apply(hoodConfiguration, 1));
-    PhoenixUtil.tryUntilOk(10, () -> hoodCANCoder.getConfigurator().apply(CANCoderConfig, 1));
-
-    // status signals
+    // status signal stuff
     hoodVelocityRotsPerSec = hoodMotor.getVelocity();
     hoodTemperature = hoodMotor.getDeviceTemp();
     hoodPosition = hoodCANCoder.getAbsolutePosition();
@@ -107,15 +103,10 @@ public class HoodIOTalonFX extends HoodIO {
     hoodStatorCurrent = hoodMotor.getStatorCurrent();
     hoodSupplyCurrent = hoodMotor.getSupplyCurrent();
 
-    // Update Frequency
     BaseStatusSignal.setUpdateFrequencyForAll(
-        50,
-        hoodVelocityRotsPerSec,
-        hoodTemperature,
-        hoodPosition,
-        hoodAppliedVolts,
-        hoodStatorCurrent,
-        hoodSupplyCurrent);
+        50, hoodVelocityRotsPerSec, hoodPosition, hoodStatorCurrent, hoodSupplyCurrent);
+
+    BaseStatusSignal.setUpdateFrequencyForAll(5, hoodTemperature, hoodAppliedVolts);
 
     hoodMotor.optimizeBusUtilization();
     hoodCANCoder.optimizeBusUtilization();
@@ -144,7 +135,7 @@ public class HoodIOTalonFX extends HoodIO {
   }
 
   @Override
-  public void setPosition(double position) {
+  public void setHoodPosition(double position) {
     targetPositionRots =
         MathUtil.clamp(
             position, HoodConstants.hoodMinAngleRotations, HoodConstants.hoodMaxAngleRotations);
@@ -155,12 +146,12 @@ public class HoodIOTalonFX extends HoodIO {
   }
 
   @Override
-  public void setVoltage(double voltage) {
+  public void setHoodVoltage(double voltage) {
     hoodMotor.setVoltage(voltage);
   }
 
   @Override
-  public void stop() {
+  public void stopHood() {
     hoodMotor.setVoltage(0);
   }
 }

@@ -15,6 +15,7 @@ public class IntakeWrist {
   private IntakeWristCurrentState currentState = IntakeWristCurrentState.STOPPED;
   private Timer agitationTimer = new Timer();
   private Timer liftingAgitationTimer = new Timer();
+  private boolean isHomed = false;
   private double currentAgitationPosition = 0;
 
   public IntakeWrist(IntakeWristIO io) {
@@ -25,18 +26,21 @@ public class IntakeWrist {
     STOP,
     INTAKE_FUEL,
     LIFT,
-    STOW, // pack
+    STOW,
     AGITATE_FUEL,
+    HOME
   }
 
   public enum IntakeWristCurrentState {
     STOPPED,
     INTAKING_FUEL,
-    STOWING, // packing
+    STOWING,
     LIFTING,
     WRIST_RETRACTING,
     WRIST_EXTENDING,
-    UNJAM
+    UNJAM,
+    HOMING,
+    HOMED
   }
 
   public void updateInputs() {
@@ -128,10 +132,22 @@ public class IntakeWrist {
           currentState = IntakeWristCurrentState.WRIST_RETRACTING;
         }
         break;
-      default:
-        currentState = IntakeWristCurrentState.STOPPED;
+    case HOME:
+        if (!isHomed) {
+          if (io.isWristReadyToHome()) {
+            isHomed = true;
+            currentState = IntakeWristCurrentState.HOMED;
+          } else {
+            isHomed = false;
+            currentState = IntakeWristCurrentState.HOMING;
+          }
+        } else {
+          currentState = IntakeWristCurrentState.HOMED;
+        }
         break;
     }
+
+    previousWantedState = wantedState;
   }
 
   public void applyStates() {
@@ -158,6 +174,12 @@ public class IntakeWrist {
       case UNJAM:
         setPosition(0.33);
         break;
+      case HOMING:
+        setDutyCycle(IntakeWristConstants.homingDutyCycle);
+        break;
+      case HOMED:
+        homeIntakeWrist();
+        break;
       default:
         stop();
         break;
@@ -165,19 +187,52 @@ public class IntakeWrist {
   }
 
   public void stop() {
-    io.stop();
+    io.stopIntakeWrist();
   }
 
   public void setWantedState(IntakeWrist.IntakeWristWantedState wantedState) {
-    this.previousWantedState = this.wantedState;
+    if (!isHomed && this.wantedState == IntakeWristWantedState.HOME && wantedState != IntakeWristWantedState.HOME) {
+      return; 
+    }
+
+    if (wantedState == IntakeWristWantedState.HOME && this.wantedState != IntakeWristWantedState.HOME) {
+      this.isHomed = false;
+    }
     this.wantedState = wantedState;
   }
 
+
+
   public void setPosition(double position) {
-    io.setPosition(position);
+    if (isHomed) { 
+      io.setIntakeWristPosition(position);
+    } else {
+      stop();
+    }
+  }
+
+  public void setDutyCycle(double dutyCycle) {
+    io.setIntakeWristDutyCycle(dutyCycle);
   }
 
   public boolean atSetpoint() {
     return io.atSetpoint;
+  }
+
+  public void homeIntakeWrist() {
+    io.homeIntakeWrist();
+  }
+
+  public boolean isHomed() {
+    return isHomed;
+  }
+
+  public void manualHome() {
+    io.homeIntakeWrist();
+    this.isHomed = true;
+  }
+
+  public boolean isWristReadyToHome() {
+    return io.isWristReadyToHome();
   }
 }

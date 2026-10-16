@@ -67,6 +67,8 @@ public class IndexerIOTalonFX extends IndexerIO {
         indexerStatorCurrent,
         indexerSupplyCurrent);
 
+    PhoenixUtil.tryUntilOk(10, () -> indexerMotor.getConfigurator().apply(indexerConfig, 1));
+
     indexerMotor.optimizeBusUtilization();
   }
 

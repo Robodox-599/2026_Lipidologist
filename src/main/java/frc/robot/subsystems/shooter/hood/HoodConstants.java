@@ -5,6 +5,7 @@ import frc.robot.Constants;
 public class HoodConstants {
   // motor information
   public static final int hoodMotorID = 18;
+  public static final String hoodCANBus = "rio";
   public static final int hoodCANCoderID = 19;
   public static final double hoodGearRatio = 51;
   public static final double hoodMOI = 0.1;

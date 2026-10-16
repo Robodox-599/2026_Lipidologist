@@ -19,13 +19,20 @@ public class IntakeWristIO {
 
   public void updateInputs() {}
 
-  public void stop() {}
+  public void stopIntakeWrist() {}
 
-  public void setPosition(double position) {}
+  public void setIntakeWristPosition(double position) {}
 
-  public double getPosition() {
+  public double getIntakeWristPosition() {
     return 0.0;
   }
 
-  public void setVoltage(double voltage) {}
+  public void setIntakeWristDutyCycle(double dutyCycle) {}
+
+  public void homeIntakeWrist() {}
+
+  public boolean isWristReadyToHome() {
+    return false;
+  }
+
 }

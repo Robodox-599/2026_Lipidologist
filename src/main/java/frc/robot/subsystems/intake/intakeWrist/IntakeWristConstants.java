@@ -9,7 +9,6 @@ import frc.robot.Constants;
 /** Add your docs here. */
 public class IntakeWristConstants {
   public static final int intakeWristMotorID = 13;
-  public static final int intakeWristCanCoderID = 15;
   public static final String intakeWristCanBus = "rio";
 
   public static final double rotationalInertia = 0.01;
@@ -56,4 +55,14 @@ public class IntakeWristConstants {
   public static final double totalAgitationTime = 3.0;
   public static final double maxAgitationPosition = 0.25;
   public static final double deltaAgitation = 0.08;
+
+  public static final double agitateStatorCurrentTrip = 70; // must be changed and tested
+  public static final double agitateVelocityTrip = 1.0; // must be changed and tested
+
+  // Homing configuration constants
+  public static final double homingDutyCycle = -0.10; // 7% power downwards
+  public static final double homingVelocityThreshold = 0.5; // Stall velocity limit
+  public static final double homingDebounceTime = 0.1;
+  public static final double homingCurrentThreshold = 0.0;
+  public static final double homingSafetyOffset = 0.05; 
 }

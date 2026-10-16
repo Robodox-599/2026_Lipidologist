@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.intake.intakeRollers;
 
 import com.ctre.phoenix6.BaseStatusSignal;
@@ -10,12 +6,13 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import dev.doglog.DogLog;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -23,18 +20,16 @@ import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.util.PhoenixUtil;
 
-/** Add your docs here. */
 public class IntakeRollersIOTalonFX extends IntakeRollersIO {
-  private final TalonFX intakeRollersLeaderMotor;
-  private final CANBus intakeRollersLeaderCanBus;
-  private final TalonFXConfiguration rollersConfig;
+  public final TalonFX intakeRollersLeaderMotor;
+  public final TalonFX intakeRollersFollowerMotor;
+  public final TalonFXConfiguration intakeRollersConfig;
+  public final CANBus intakeRollersCanBus;
 
-  private final TalonFX intakeRollersFollowerMotor;
-  private final CANBus intakeRollersFollowerCanBus;
+  private final DutyCycleOut leaderDutyCycleRequest;
+  private final DutyCycleOut followerDutyCycleRequest;
 
-  private final VoltageOut v_leader_request;
-  private final VoltageOut v_follower_request;
-
+  // status signals
   private final StatusSignal<AngularVelocity> intakeRollersLeaderVelocity;
   private final StatusSignal<Voltage> intakeRollersLeaderAppliedVolts;
   private final StatusSignal<Current> intakeRollersLeaderSupplyCurrent;
@@ -48,16 +43,13 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
   private final StatusSignal<Temperature> intakeRollersFollowerTemperature;
 
   public IntakeRollersIOTalonFX() {
-    intakeRollersLeaderCanBus = new CANBus(IntakeRollersConstants.intakeRollersLeaderCanBus);
+    intakeRollersCanBus = new CANBus(IntakeRollersConstants.intakeRollersCanBus);
     intakeRollersLeaderMotor =
-        new TalonFX(IntakeRollersConstants.intakeRollersLeaderMotorID, intakeRollersLeaderCanBus);
-
-    intakeRollersFollowerCanBus = new CANBus(IntakeRollersConstants.intakeRollersFollowerCanBus);
+        new TalonFX(IntakeRollersConstants.intakeRollersLeaderMotorID, intakeRollersCanBus);
     intakeRollersFollowerMotor =
-        new TalonFX(
-            IntakeRollersConstants.intakeRollersFollowerMotorID, intakeRollersFollowerCanBus);
+        new TalonFX(IntakeRollersConstants.intakeRollersFollowerMotorID, intakeRollersCanBus);
 
-    rollersConfig =
+    intakeRollersConfig =
         new TalonFXConfiguration()
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
@@ -72,13 +64,9 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
     // .withOpenLoopRamps(new
     // OpenLoopRampsConfigs().withVoltageOpenLoopRampPeriod(1.0))
     ;
-    v_leader_request = new VoltageOut(0);
-    v_follower_request = new VoltageOut(0);
-    ;
-    PhoenixUtil.tryUntilOk(
-        10, () -> intakeRollersLeaderMotor.getConfigurator().apply(rollersConfig, 1));
-    PhoenixUtil.tryUntilOk(
-        10, () -> intakeRollersFollowerMotor.getConfigurator().apply(rollersConfig, 1));
+  
+    leaderDutyCycleRequest = new DutyCycleOut(0);
+    followerDutyCycleRequest = new DutyCycleOut(0);
 
     intakeRollersFollowerMotor.setControl(
         new Follower(
@@ -100,16 +88,24 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         50,
         // intake rollers 1
         intakeRollersLeaderVelocity,
-        intakeRollersLeaderAppliedVolts,
         intakeRollersLeaderStatorCurrent,
         intakeRollersLeaderSupplyCurrent,
-        intakeRollersLeaderTemperature,
         // intake rollers 2
         intakeRollersFollowerVelocity,
-        intakeRollersFollowerAppliedVolts,
         intakeRollersFollowerStatorCurrent,
-        intakeRollersFollowerSupplyCurrent,
-        intakeRollersFollowerTemperature);
+        intakeRollersFollowerSupplyCurrent);
+
+    BaseStatusSignal.setUpdateFrequencyForAll(
+        5,
+        // intake rollers 1
+        intakeRollersLeaderTemperature,
+        intakeRollersLeaderAppliedVolts,
+        // intake rollers 2
+        intakeRollersFollowerTemperature,
+        intakeRollersFollowerAppliedVolts);
+
+    PhoenixUtil.tryUntilOk(10, () -> intakeRollersLeaderMotor.getConfigurator().apply(intakeRollersConfig, 1));
+    PhoenixUtil.tryUntilOk(10, () -> intakeRollersFollowerMotor.getConfigurator().apply(intakeRollersConfig, 1));
 
     intakeRollersLeaderMotor.optimizeBusUtilization();
     intakeRollersFollowerMotor.optimizeBusUtilization();
@@ -122,9 +118,8 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         intakeRollersLeaderStatorCurrent,
         intakeRollersLeaderSupplyCurrent,
         intakeRollersLeaderAppliedVolts,
-        intakeRollersLeaderTemperature
+        intakeRollersLeaderTemperature,
         // intake rollers 2
-        ,
         intakeRollersFollowerVelocity,
         intakeRollersFollowerStatorCurrent,
         intakeRollersFollowerSupplyCurrent,
@@ -138,11 +133,11 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
     super.intakeRollersLeaderSupplyCurrent = intakeRollersLeaderSupplyCurrent.getValueAsDouble();
     super.intakeRollersLeaderTemperature = intakeRollersLeaderTemperature.getValueAsDouble();
 
-    DogLog.log("Intake/LeaderRollers/Velocity", super.intakeRollersLeaderVelocity);
-    DogLog.log("Intake/LeaderRollers/Voltage", super.intakeRollersLeaderVoltage);
-    DogLog.log("Intake/LeaderRollers/StatorCurrent", super.intakeRollersLeaderStatorCurrent);
-    DogLog.log("Intake/LeaderRollers/SupplyCurrent", super.intakeRollersLeaderSupplyCurrent);
-    DogLog.log("Intake/LeaderRollers/Temperature", super.intakeRollersLeaderTemperature);
+    DogLog.log("Intake/Rollers/Leader/Velocity", super.intakeRollersLeaderVelocity);
+    DogLog.log("Intake/Rollers/Leader/Voltage", super.intakeRollersLeaderVoltage);
+    DogLog.log("Intake/Rollers/Leader/StatorCurrent", super.intakeRollersLeaderStatorCurrent);
+    DogLog.log("Intake/Rollers/Leader/SupplyCurrent", super.intakeRollersLeaderSupplyCurrent);
+    DogLog.log("Intake/Rollers/Leader/Temperature", super.intakeRollersLeaderTemperature);
 
     // intake rollers 2
     super.intakeRollersFollowerVelocity = intakeRollersFollowerVelocity.getValueAsDouble();
@@ -153,23 +148,24 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         intakeRollersFollowerSupplyCurrent.getValueAsDouble();
     super.intakeRollersFollowerTemperature = intakeRollersFollowerTemperature.getValueAsDouble();
 
-    DogLog.log("Intake/FollowerRollers/Velocity", super.intakeRollersFollowerVelocity);
-    DogLog.log("Intake/FollowerRollers/Voltage", super.intakeRollersLeaderVoltage);
-    DogLog.log("Intake/FollowerRollers/StatorCurrent", super.intakeRollersFollowerStatorCurrent);
-    DogLog.log("Intake/FollowerRollers/SupplyCurrent", super.intakeRollersFollowerSupplyCurrent);
-    DogLog.log("Intake/FollowerRollers/Temperature", super.intakeRollersFollowerTemperature);
+    DogLog.log("Intake/Rollers/Follower/Velocity", super.intakeRollersFollowerVelocity);
+    DogLog.log("Intake/Rollers/Follower/Voltage", super.intakeRollersFollowerVoltage);
+    DogLog.log("Intake/Rollers/Follower/StatorCurrent", super.intakeRollersFollowerStatorCurrent);
+    DogLog.log("Intake/Rollers/Follower/SupplyCurrent", super.intakeRollersFollowerSupplyCurrent);
+    DogLog.log("Intake/Rollers/Follower/Temperature", super.intakeRollersFollowerTemperature);
   }
 
   @Override
-  public void stop() {
+  public void stopIntakeRollers() {
     intakeRollersLeaderMotor.setVoltage(0);
     intakeRollersFollowerMotor.setVoltage(0);
   }
 
   @Override
-  public void setVoltage(double voltage) {
-    intakeRollersLeaderMotor.setControl(v_leader_request.withOutput(voltage).withEnableFOC(true));
+  public void setIntakeRollersDutyCycle(double dutyCycle) {
+    intakeRollersLeaderMotor.setControl(
+        leaderDutyCycleRequest.withOutput(dutyCycle).withEnableFOC(true));
     intakeRollersFollowerMotor.setControl(
-        v_follower_request.withOutput(voltage).withEnableFOC(true));
+        followerDutyCycleRequest.withOutput(dutyCycle).withEnableFOC(true));
   }
 }

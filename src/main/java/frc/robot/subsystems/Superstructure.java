@@ -12,7 +12,6 @@ import frc.robot.FieldConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.indexer.Indexer;
-// import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.intake.intakeWrist.IntakeWrist;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
@@ -53,7 +52,6 @@ public class Superstructure extends SubsystemBase {
     TESTING,
     TUNE_SHOT_DATA_IDLE,
     TUNE_SHOT_DATA_SHOOT,
-    DEMO
     // STOW
   }
 
@@ -77,14 +75,12 @@ public class Superstructure extends SubsystemBase {
     STOPPED,
     TESTING,
     TUNING_SHOT_DATA_IDLING,
-    TUNING_SHOT_DATA_SHOOTING,
-    PREPARING_DEMO,
-    DEMO
+    TUNING_SHOT_DATA_SHOOTING
     // STOWING
   }
 
-  private WantedSuperState wantedSuperState = WantedSuperState.STOP;
-  private CurrentSuperState currentSuperState = CurrentSuperState.STOPPED;
+  private WantedSuperState wantedSuperState = WantedSuperState.IDLE;
+  private CurrentSuperState currentSuperState = CurrentSuperState.IDLING;
   private AdjustedShot adjustedShot = new AdjustedShot(Rotation2d.kZero, 0, 0, 0);
 
   public Superstructure(
@@ -113,8 +109,8 @@ public class Superstructure extends SubsystemBase {
     Tracer.traceFunc("Drivetrain UpdateInputs", drivetrain::updateInputs);
     Tracer.traceFunc("Feeder UpdateInputs", feeder::updateInputs);
     Tracer.traceFunc("Indexer UpdateInputs", indexer::updateInputs);
-    // Tracer.traceFunc("IntakeRollers UpdateInputs", intakeRollers::updateInputs);
-    // Tracer.traceFunc("IntakeWrist UpdateInputs", intakeWrist::updateInputs);
+    Tracer.traceFunc("IntakeRollers UpdateInputs", intakeRollers::updateInputs);
+    Tracer.traceFunc("IntakeWrist UpdateInputs", intakeWrist::updateInputs);
     Tracer.traceFunc("Flywheels UpdateInputs", flywheels::updateInputs);
     Tracer.traceFunc("Hood UpdateInputs", hood::updateInputs);
     Tracer.traceFunc("Vision UpdateInputs", vision::updateInputs);
@@ -131,7 +127,7 @@ public class Superstructure extends SubsystemBase {
     Tracer.traceFunc("Drivetrain UpdateStates", drivetrain::updateStates);
     Tracer.traceFunc("Feeder UpdateStates", feeder::updateStates);
     Tracer.traceFunc("Indexer UpdateStates", indexer::updateStates);
-    // Tracer.traceFunc("IntakeRollers UpdateStates", intakeRollers::updateStates);
+    Tracer.traceFunc("IntakeRollers UpdateStates", intakeRollers::updateStates);
     // Tracer.traceFunc("IntakeWrist UpdateStates", intakeWrist::updateStates);
     Tracer.traceFunc("Flywheels UpdateStates", flywheels::updateStates);
     Tracer.traceFunc("Hood UpdateStates", hood::updateStates);
@@ -276,13 +272,6 @@ public class Superstructure extends SubsystemBase {
                 drivetrain.getFieldRelativeAccelerations());
         currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_IDLING;
         break;
-      case DEMO:
-        if (flywheels.atSetpoint()) {
-          currentSuperState = CurrentSuperState.DEMO;
-        } else {
-          currentSuperState = CurrentSuperState.PREPARING_DEMO;
-        }
-        break;
       default:
         currentSuperState = CurrentSuperState.STOPPED;
         break;
@@ -353,12 +342,6 @@ public class Superstructure extends SubsystemBase {
         break;
       case LIFTING_INTAKE_AUTO:
         liftingIntakeAuto();
-        break;
-      case PREPARING_DEMO:
-        preparingDemo();
-        break;
-      case DEMO:
-        demo();
         break;
       default:
         stop();
@@ -655,30 +638,6 @@ public class Superstructure extends SubsystemBase {
     // hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.07);
   }
 
-  public void preparingDemo() {
-    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.STOPPED);
-    feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
-    flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 25);
-    if (isHoodUnsafe()) {
-      hood.setWantedState(Hood.HoodWantedState.STOW);
-    } else {
-      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.04);
-    }
-  }
-
-  public void demo() {
-    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.STOPPED);
-    feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
-    indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-    flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, 25);
-    if (isHoodUnsafe()) {
-      hood.setWantedState(Hood.HoodWantedState.STOW);
-    } else {
-      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, 0.04);
-    }
-  }
-
   private boolean areSystemsReadyForHubShot(double flightTime) {
     return flywheels.atSetpoint()
         && hood.atSetpoint()
@@ -748,6 +707,10 @@ public class Superstructure extends SubsystemBase {
 
   public Command setWantedSuperStateCommand(WantedSuperState wantedState) {
     return Commands.runOnce(() -> setWantedSuperState(wantedState));
+  }
+
+  public Command setIntakeWristWantedStateCommand(IntakeWrist.IntakeWristWantedState wantedState) {
+    return Commands.runOnce(() -> intakeWrist.setWantedState(wantedState));
   }
 
   public void setWantedSuperState(WantedSuperState state) {
