@@ -24,7 +24,7 @@ public class Bindings {
     driver.y().onTrue(superstructure.zeroPoseCommand());
     driver
         .povDown()
-        .onTrue(superstructure.setIntakeWristWantedStateCommand(IntakeWristWantedState.HOME));
+        .onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.HOME)).onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
 
     // AUTOMATICALLY SHOOT WHEN READY TO EITHER HUB OR ALLIANCE ZONE
     driver

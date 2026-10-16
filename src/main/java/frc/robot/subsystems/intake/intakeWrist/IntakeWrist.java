@@ -18,6 +18,8 @@ public class IntakeWrist {
   private boolean isHomed = false;
   private double currentAgitationPosition = 0;
 
+  private final Timer homingStallTimer = new Timer();
+
   public IntakeWrist(IntakeWristIO io) {
     this.io = io;
   }
@@ -40,7 +42,6 @@ public class IntakeWrist {
     WRIST_EXTENDING,
     UNJAM,
     HOMING,
-    HOMED
   }
 
   public void updateInputs() {
@@ -55,6 +56,7 @@ public class IntakeWrist {
     DogLog.log("Intake/Wrist/WantedState", wantedState);
     DogLog.log("Intake/Wrist/CurrentState", currentState);
     DogLog.log("Intake/Wrist/PreviousWantedState", previousWantedState);
+    DogLog.log("Intake/Wrist/IsHomed", isHomed);
   }
 
   public void handleStateTransitions() {
@@ -71,8 +73,8 @@ public class IntakeWrist {
         }
         break;
       // case LIFT:
-      //   currentState = IntakeWristCurrentState.LIFTING;
-      //   break;
+      // currentState = IntakeWristCurrentState.LIFTING;
+      // break;
       case STOW:
         currentState = IntakeWristCurrentState.STOWING;
         break;
@@ -96,33 +98,30 @@ public class IntakeWrist {
         if (this.previousWantedState != IntakeWristWantedState.AGITATE_FUEL) {
           liftingAgitationTimer.restart();
           agitationTimer.restart();
-          currentAgitationPosition =
-              Math.max(
-                  Math.min(
-                          liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
-                          1.0)
-                      * IntakeWristConstants.maxAgitationPosition,
-                  0.005 + IntakeWristConstants.deltaAgitation);
+          currentAgitationPosition = Math.max(
+              Math.min(
+                  liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
+                  1.0)
+                  * IntakeWristConstants.maxAgitationPosition,
+              0.005 + IntakeWristConstants.deltaAgitation);
         }
         if (agitationTimer.get() > IntakeWristConstants.agitationTime) {
           if (currentState == IntakeWristCurrentState.WRIST_RETRACTING) {
-            currentAgitationPosition =
-                Math.max(
-                    Math.min(
-                            liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
-                            1.0)
-                        * IntakeWristConstants.maxAgitationPosition,
-                    0.005 + IntakeWristConstants.deltaAgitation);
+            currentAgitationPosition = Math.max(
+                Math.min(
+                    liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
+                    1.0)
+                    * IntakeWristConstants.maxAgitationPosition,
+                0.005 + IntakeWristConstants.deltaAgitation);
             currentState = IntakeWristCurrentState.WRIST_EXTENDING;
             agitationTimer.restart();
           } else {
-            currentAgitationPosition =
-                Math.max(
-                    Math.min(
-                            liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
-                            1.0)
-                        * IntakeWristConstants.maxAgitationPosition,
-                    0.005 + IntakeWristConstants.deltaAgitation);
+            currentAgitationPosition = Math.max(
+                Math.min(
+                    liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
+                    1.0)
+                    * IntakeWristConstants.maxAgitationPosition,
+                0.005 + IntakeWristConstants.deltaAgitation);
             currentState = IntakeWristCurrentState.WRIST_RETRACTING;
             agitationTimer.restart();
           }
@@ -132,21 +131,33 @@ public class IntakeWrist {
           currentState = IntakeWristCurrentState.WRIST_RETRACTING;
         }
         break;
-    case HOME:
-        if (!isHomed) {
-          if (io.isWristReadyToHome()) {
+      case HOME:
+        if (this.previousWantedState != IntakeWristWantedState.HOME) {
+          isHomed = false;
+          homingStallTimer.stop();
+          homingStallTimer.reset();
+        }
+
+        if (io.isWristReadyToHome()) {
+          if (!homingStallTimer.isRunning()) {
+            homingStallTimer.restart();
+          }
+          if (homingStallTimer.hasElapsed(IntakeWristConstants.HOMING_STALL_TIME)) {
+            homeIntakeWrist();
             isHomed = true;
-            currentState = IntakeWristCurrentState.HOMED;
+            wantedState = IntakeWristWantedState.DEPLOY;
+            currentState = IntakeWristCurrentState.DEPLOYING;
           } else {
-            isHomed = false;
             currentState = IntakeWristCurrentState.HOMING;
           }
+
         } else {
-          currentState = IntakeWristCurrentState.HOMED;
+          homingStallTimer.stop();
+          homingStallTimer.reset();
+          currentState = IntakeWristCurrentState.HOMING;
         }
         break;
     }
-
     previousWantedState = wantedState;
   }
 
@@ -159,8 +170,8 @@ public class IntakeWrist {
         setPosition(0.0);
         break;
       // case LIFTING:
-      //   setPosition(0.0);
-      //   break;
+      // setPosition(0.0);
+      // break;
       case STOWING:
         setPosition(.35);
         break;
@@ -177,9 +188,6 @@ public class IntakeWrist {
       case HOMING:
         setDutyCycle(IntakeWristConstants.homingDutyCycle);
         break;
-      case HOMED:
-        homeIntakeWrist();
-        break;
       default:
         stop();
         break;
@@ -191,20 +199,11 @@ public class IntakeWrist {
   }
 
   public void setWantedState(IntakeWrist.IntakeWristWantedState wantedState) {
-    if (!isHomed && this.wantedState == IntakeWristWantedState.HOME && wantedState != IntakeWristWantedState.HOME) {
-      return; 
-    }
-
-    if (wantedState == IntakeWristWantedState.HOME && this.wantedState != IntakeWristWantedState.HOME) {
-      this.isHomed = false;
-    }
     this.wantedState = wantedState;
   }
 
-
-
   public void setPosition(double position) {
-    if (isHomed) { 
+    if (isHomed) {
       io.setIntakeWristPosition(position);
     } else {
       stop();

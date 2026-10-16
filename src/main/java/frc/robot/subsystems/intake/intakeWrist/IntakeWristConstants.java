@@ -13,7 +13,7 @@ public class IntakeWristConstants {
 
   public static final double rotationalInertia = 0.01;
 
-  public static final double gearRatio = (44.0 / 8.0) * (44.0 / 18.0) * (36.0 / 12.0);
+  public static final double gearRatio = (34.0 / 14.0) * (32.0 / 20.0) * (64.0 / 16.0)* (36.0 / 12.0);
 
   public static final double kP = 60.0;
   public static final double kI = 0.0;
@@ -60,9 +60,8 @@ public class IntakeWristConstants {
   public static final double agitateVelocityTrip = 1.0; // must be changed and tested
 
   // Homing configuration constants
-  public static final double homingDutyCycle = -0.10; // 7% power downwards
-  public static final double homingVelocityThreshold = 0.5; // Stall velocity limit
-  public static final double homingDebounceTime = 0.1;
-  public static final double homingCurrentThreshold = 0.0;
-  public static final double homingSafetyOffset = 0.05; 
+  public static final double homingDutyCycle = -0.08; 
+  public static final double homingVelocityThreshold = 0.05; 
+  public static final double homingCurrentThreshold = 20.0;
+  public static final double HOMING_STALL_TIME = 0.10;
 }
