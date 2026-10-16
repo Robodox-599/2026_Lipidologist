@@ -27,7 +27,7 @@ public class IntakeWristConstants {
   public static final double absoluteDiscontinuityPoint = 0.7;
   public static final double magnetOffset = 0.16015625;
 
-  public static final double supplyCurrentLimit = 40;
+  public static final double supplyCurrentLimit = 30;
   public static final double statorCurrentLimit = 80;
   public static final double minAngleRotations = 0.0;
 
