@@ -3,7 +3,7 @@ package frc.robot.subsystems.indexer;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import dev.doglog.DogLog;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -23,7 +23,7 @@ public class IndexerIOTalonFX extends IndexerIO {
   private final StatusSignal<Current> indexerStatorCurrent;
   private final StatusSignal<Current> indexerSupplyCurrent;
 
-  private final DutyCycleOut dutyCycleOut;
+  private final VoltageOut voltageOut;
 
   public IndexerIOTalonFX() {
     indexerCANBus = new CANBus(IndexerConstants.indexerMotor.canBus());
@@ -31,7 +31,7 @@ public class IndexerIOTalonFX extends IndexerIO {
     indexerMotorWrapper = new TalonFXWrapper(IndexerConstants.indexerMotor);
     indexerMotor = indexerMotorWrapper.getTalonFX();
 
-    dutyCycleOut = new DutyCycleOut(0);
+    voltageOut = new VoltageOut(0);
 
     indexerVelocityRad = indexerMotor.getVelocity();
     indexerTemperature = indexerMotor.getDeviceTemp();
@@ -40,9 +40,15 @@ public class IndexerIOTalonFX extends IndexerIO {
     indexerSupplyCurrent = indexerMotor.getSupplyCurrent();
 
     BaseStatusSignal.setUpdateFrequencyForAll(
-        50, indexerVelocityRad, indexerStatorCurrent, indexerSupplyCurrent);
-
-    BaseStatusSignal.setUpdateFrequencyForAll(5, indexerTemperature, indexerAppliedVolts);
+        50,
+        indexerVelocityRad,
+        indexerStatorCurrent,
+        indexerSupplyCurrent);
+    
+    BaseStatusSignal.setUpdateFrequencyForAll(
+        5, 
+        indexerTemperature,
+        indexerAppliedVolts);
 
     indexerMotor.optimizeBusUtilization();
   }
@@ -76,6 +82,6 @@ public class IndexerIOTalonFX extends IndexerIO {
 
   @Override
   public void setIndexerVoltage(double voltage) {
-    indexerMotor.setControl(dutyCycleOut.withOutput(voltage).withEnableFOC(true));
+    indexerMotor.setControl(voltageOut.withOutput(voltage).withEnableFOC(true));
   }
 }

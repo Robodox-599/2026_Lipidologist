@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.indexer;
 
 import dev.doglog.DogLog;
@@ -78,19 +74,19 @@ public class Indexer {
         stopIndexer();
         break;
       case TRANSFERING_FUEL:
-        setIndexerVoltage(1.0);
+        setIndexerVoltage(12);
         break;
       case PULSING_FUEL:
-        indexerPulseFuel(1.0 / 12.0);
+        indexerPulseFuel(1);
         break;
       case REVERSING:
-        setIndexerVoltage(-1.0 / 12.0);
+        setIndexerVoltage(-1);
         break;
       case OUTAKING:
-        setIndexerVoltage(-1.0);
+        setIndexerVoltage(-12);
         break;
       case CLEANING:
-        setIndexerVoltage(0.65 / 12.0);
+        setIndexerVoltage(0.65);
         break;
       default:
         stopIndexer();
@@ -98,8 +94,8 @@ public class Indexer {
     }
   }
 
-  public void setIndexerVoltage(double voltage) {
-    io.setIndexerVoltage(voltage);
+  public void setIndexerVoltage(double volts) {
+    io.setIndexerVoltage(volts);
   }
 
   public void stopIndexer() {
@@ -110,7 +106,7 @@ public class Indexer {
     this.wantedState = wantedState;
   }
 
-  public void indexerPulseFuel(double dutyCycle) {
-    io.indexerPulseFuel(dutyCycle);
+  public void indexerPulseFuel(double volts) {
+    io.indexerPulseFuel(volts);
   }
 }
