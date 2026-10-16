@@ -203,12 +203,17 @@ public class IntakeWrist {
 
 
   public void setPosition(double position) {
-    if (isHomed) {
+    if (wantedState == IntakeWristWantedState.HOME) {
+      return;
+    }
+
+    if (isHomed) { 
       io.setIntakeWristPosition(position);
     } else {
       stop();
     }
   }
+
 
 
   public void setDutyCycle(double dutyCycle) {
