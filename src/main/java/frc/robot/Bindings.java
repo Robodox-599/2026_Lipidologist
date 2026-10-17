@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.WantedSuperState;
-import frc.robot.subsystems.intake.intakeWrist.IntakeWrist.IntakeWristWantedState;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.HubShiftUtil;
 import java.util.Set;
@@ -107,13 +106,15 @@ public class Bindings {
 
   public WantedSuperState returnShootingState() {
     if (AllianceFlipUtil.shouldFlip()) { // if red
-      if (superstructure.getPose().getX() > AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
+      if (superstructure.getPose().getX()
+          > AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
         return WantedSuperState.SHOOT_HUB;
       } else {
         return WantedSuperState.SHOOT_ALLIANCE_ZONE;
       }
     } else {
-      if (superstructure.getPose().getX() < AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
+      if (superstructure.getPose().getX()
+          < AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
         return WantedSuperState.SHOOT_HUB;
       } else {
         return WantedSuperState.SHOOT_ALLIANCE_ZONE;
@@ -123,13 +124,15 @@ public class Bindings {
 
   public WantedSuperState returnAgitatingShootingState() {
     if (AllianceFlipUtil.shouldFlip()) { // if red
-      if (superstructure.getPose().getX() > AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
+      if (superstructure.getPose().getX()
+          > AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
         return WantedSuperState.SHOOT_HUB_AND_AGITATE;
       } else {
         return WantedSuperState.SHOOT_ALLIANCE_ZONE_AND_AGITATE;
       }
     } else {
-      if (superstructure.getPose().getX() < AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
+      if (superstructure.getPose().getX()
+          < AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
         return WantedSuperState.SHOOT_HUB_AND_AGITATE;
       } else {
         return WantedSuperState.SHOOT_ALLIANCE_ZONE_AND_AGITATE;
@@ -157,20 +160,20 @@ public class Bindings {
 
   public Command rumbleDriverContinuous(CommandXboxController driver, double totalTime) {
     return new StartEndCommand(
-        () -> driver.getHID().setRumble(RumbleType.kBothRumble, 1),
-        () -> driver.getHID().setRumble(RumbleType.kBothRumble, 0))
+            () -> driver.getHID().setRumble(RumbleType.kBothRumble, 1),
+            () -> driver.getHID().setRumble(RumbleType.kBothRumble, 0))
         .withTimeout(totalTime);
   }
 
   public Command rumbleDriverSwapping(
       CommandXboxController driver, double swapTime, double totalTime) {
     return Commands.sequence(
-        Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kLeftRumble, 1)),
-        Commands.waitSeconds(swapTime),
-        Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kLeftRumble, 0)),
-        Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kRightRumble, 1)),
-        Commands.waitSeconds(swapTime),
-        Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kRightRumble, 0)))
+            Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kLeftRumble, 1)),
+            Commands.waitSeconds(swapTime),
+            Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kLeftRumble, 0)),
+            Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kRightRumble, 1)),
+            Commands.waitSeconds(swapTime),
+            Commands.runOnce(() -> driver.getHID().setRumble(RumbleType.kRightRumble, 0)))
         .repeatedly()
         .withTimeout(totalTime)
         .finallyDo(() -> driver.getHID().setRumble(RumbleType.kBothRumble, 0));

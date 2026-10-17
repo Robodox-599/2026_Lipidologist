@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -127,13 +126,13 @@ public class Superstructure extends SubsystemBase {
     Tracer.traceFunc("HandleStateTransitions", this::handleStateTransitions);
     Tracer.traceFunc("ApplyStates", this::applyStates);
 
-    Tracer.traceFunc("Drivetrain UpdateStates", drivetrain::updateStates);
-    Tracer.traceFunc("Feeder UpdateStates", feeder::updateStates);
-    Tracer.traceFunc("Indexer UpdateStates", indexer::updateStates);
-    Tracer.traceFunc("IntakeRollers UpdateStates", intakeRollers::updateStates);
-    Tracer.traceFunc("IntakeWrist UpdateStates", intakeWrist::updateStates);
-    Tracer.traceFunc("Flywheels UpdateStates", flywheels::updateStates);
-    Tracer.traceFunc("Hood UpdateStates", hood::updateStates);
+    // Tracer.traceFunc("Drivetrain UpdateStates", drivetrain::updateStates);
+    // Tracer.traceFunc("Feeder UpdateStates", feeder::updateStates);
+    // Tracer.traceFunc("Indexer UpdateStates", indexer::updateStates);
+    // Tracer.traceFunc("IntakeRollers UpdateStates", intakeRollers::updateStates);
+    // Tracer.traceFunc("IntakeWrist UpdateStates", intakeWrist::updateStates);
+    // Tracer.traceFunc("Flywheels UpdateStates", flywheels::updateStates);
+    // Tracer.traceFunc("Hood UpdateStates", hood::updateStates);
 
     // This method will be called once per scheduler run
     DogLog.log("Superstructure/WantedSuperState", wantedSuperState);
@@ -277,7 +276,7 @@ public class Superstructure extends SubsystemBase {
         break;
       case HOME:
         if (!intakeWrist.isHomed()) {
-        currentSuperState = CurrentSuperState.HOMING;
+          currentSuperState = CurrentSuperState.HOMING;
         } else {
           wantedSuperState = WantedSuperState.STOP;
           currentSuperState = CurrentSuperState.STOPPED;
@@ -405,7 +404,7 @@ public class Superstructure extends SubsystemBase {
     // if (isHoodUnsafe()) {
     //   hood.setWantedState(Hood.HoodWantedState.STOW);
     // } else {
-      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
+    hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
     // }
   }
 
@@ -420,7 +419,7 @@ public class Superstructure extends SubsystemBase {
     // if (isHoodUnsafe()) {
     //   hood.setWantedState(Hood.HoodWantedState.STOW);
     // } else {
-      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
+    hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
     // }
   }
 
@@ -432,7 +431,8 @@ public class Superstructure extends SubsystemBase {
   //   indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
   //   intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
   //   intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
-  //   flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
+  //   flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
+  // this.adjustedShot.shootSpeed());
   //   if (isHoodUnsafe()) {
   //     hood.setWantedState(Hood.HoodWantedState.STOW);
   //   } else {
@@ -451,7 +451,7 @@ public class Superstructure extends SubsystemBase {
     // if (isHoodUnsafe()) {
     //   hood.setWantedState(Hood.HoodWantedState.STOW);
     // } else {
-      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
+    hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
     // }
   }
 
@@ -466,7 +466,7 @@ public class Superstructure extends SubsystemBase {
     // if (isHoodUnsafe()) {
     //   hood.setWantedState(Hood.HoodWantedState.STOW);
     // } else {
-      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
+    hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
     // }
   }
 
@@ -478,7 +478,8 @@ public class Superstructure extends SubsystemBase {
   //   indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
   //   intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
   //   intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
-  //   flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
+  //   flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS,
+  // this.adjustedShot.shootSpeed());
   //   if (isHoodUnsafe()) {
   //     hood.setWantedState(Hood.HoodWantedState.STOW);
   //   } else {
@@ -497,7 +498,7 @@ public class Superstructure extends SubsystemBase {
     // if (isHoodUnsafe()) {
     //   hood.setWantedState(Hood.HoodWantedState.STOW);
     // } else {
-      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
+    hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
     // }
   }
 
@@ -512,7 +513,7 @@ public class Superstructure extends SubsystemBase {
     // if (isHoodUnsafe()) {
     //   hood.setWantedState(Hood.HoodWantedState.STOW);
     // } else {
-      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
+    hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
     // }
   }
 
@@ -527,7 +528,7 @@ public class Superstructure extends SubsystemBase {
     // if (isHoodUnsafe()) {
     //   hood.setWantedState(Hood.HoodWantedState.STOW);
     // } else {
-      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
+    hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
     // }
   }
 
@@ -542,7 +543,7 @@ public class Superstructure extends SubsystemBase {
     // if (isHoodUnsafe()) {
     //   hood.setWantedState(Hood.HoodWantedState.STOW);
     // } else {
-      hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
+    hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
     // }
   }
 
@@ -554,7 +555,7 @@ public class Superstructure extends SubsystemBase {
     // if (vision.hasTargets() && isIntakeUnsafe()) {
     //   intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.LIFT);
     // } else {
-      intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
+    intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
     // }
     flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
     hood.setWantedState(Hood.HoodWantedState.STOW);
@@ -679,13 +680,15 @@ public class Superstructure extends SubsystemBase {
 
   public boolean isWithinAllianceZone() {
     if (AllianceFlipUtil.shouldFlip()) { // if red
-      if (getPose().getX() + TunerConstants.bumperRadius > AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
+      if (getPose().getX() + TunerConstants.bumperRadius
+          > AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
         return true;
       } else {
         return false;
       }
     } else {
-      if (getPose().getX() - TunerConstants.bumperRadius < AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
+      if (getPose().getX() - TunerConstants.bumperRadius
+          < AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone)) {
         return true;
       } else {
         return false;
@@ -733,7 +736,8 @@ public class Superstructure extends SubsystemBase {
     return Commands.runOnce(() -> setWantedSuperState(wantedState));
   }
 
-  // public Command setIntakeWristWantedStateCommand(IntakeWrist.IntakeWristWantedState wantedState) {
+  // public Command setIntakeWristWantedStateCommand(IntakeWrist.IntakeWristWantedState wantedState)
+  // {
   //   return Commands.runOnce(() -> intakeWrist.setWantedState(wantedState));
   // }
 

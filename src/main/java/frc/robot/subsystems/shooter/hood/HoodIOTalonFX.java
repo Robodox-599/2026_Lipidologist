@@ -47,7 +47,7 @@ public class HoodIOTalonFX extends HoodIO {
   private final StatusSignal<Current> hoodSupplyCurrent;
 
   public HoodIOTalonFX() {
-    hoodCANBus = new CANBus();
+    hoodCANBus = new CANBus(HoodConstants.hoodCANBus);
     hoodMotor = new TalonFX(HoodConstants.hoodMotorID, hoodCANBus);
     hoodConfig =
         new TalonFXConfiguration()

@@ -12,7 +12,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -64,7 +63,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
     // .withOpenLoopRamps(new
     // OpenLoopRampsConfigs().withVoltageOpenLoopRampPeriod(1.0))
     ;
-  
+
     leaderDutyCycleRequest = new DutyCycleOut(0);
     followerDutyCycleRequest = new DutyCycleOut(0);
 
@@ -104,8 +103,10 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
         intakeRollersFollowerTemperature,
         intakeRollersFollowerAppliedVolts);
 
-    PhoenixUtil.tryUntilOk(10, () -> intakeRollersLeaderMotor.getConfigurator().apply(intakeRollersConfig, 1));
-    PhoenixUtil.tryUntilOk(10, () -> intakeRollersFollowerMotor.getConfigurator().apply(intakeRollersConfig, 1));
+    PhoenixUtil.tryUntilOk(
+        10, () -> intakeRollersLeaderMotor.getConfigurator().apply(intakeRollersConfig, 1));
+    PhoenixUtil.tryUntilOk(
+        10, () -> intakeRollersFollowerMotor.getConfigurator().apply(intakeRollersConfig, 1));
 
     intakeRollersLeaderMotor.optimizeBusUtilization();
     intakeRollersFollowerMotor.optimizeBusUtilization();

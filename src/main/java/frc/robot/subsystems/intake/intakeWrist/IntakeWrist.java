@@ -98,30 +98,33 @@ public class IntakeWrist {
         if (this.previousWantedState != IntakeWristWantedState.AGITATE_FUEL) {
           liftingAgitationTimer.restart();
           agitationTimer.restart();
-          currentAgitationPosition = Math.max(
-              Math.min(
-                  liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
-                  1.0)
-                  * IntakeWristConstants.maxAgitationPosition,
-              0.005 + IntakeWristConstants.deltaAgitation);
+          currentAgitationPosition =
+              Math.max(
+                  Math.min(
+                          liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
+                          1.0)
+                      * IntakeWristConstants.maxAgitationPosition,
+                  0.005 + IntakeWristConstants.deltaAgitation);
         }
         if (agitationTimer.get() > IntakeWristConstants.agitationTime) {
           if (currentState == IntakeWristCurrentState.WRIST_RETRACTING) {
-            currentAgitationPosition = Math.max(
-                Math.min(
-                    liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
-                    1.0)
-                    * IntakeWristConstants.maxAgitationPosition,
-                0.005 + IntakeWristConstants.deltaAgitation);
+            currentAgitationPosition =
+                Math.max(
+                    Math.min(
+                            liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
+                            1.0)
+                        * IntakeWristConstants.maxAgitationPosition,
+                    0.005 + IntakeWristConstants.deltaAgitation);
             currentState = IntakeWristCurrentState.WRIST_EXTENDING;
             agitationTimer.restart();
           } else {
-            currentAgitationPosition = Math.max(
-                Math.min(
-                    liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
-                    1.0)
-                    * IntakeWristConstants.maxAgitationPosition,
-                0.005 + IntakeWristConstants.deltaAgitation);
+            currentAgitationPosition =
+                Math.max(
+                    Math.min(
+                            liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
+                            1.0)
+                        * IntakeWristConstants.maxAgitationPosition,
+                    0.005 + IntakeWristConstants.deltaAgitation);
             currentState = IntakeWristCurrentState.WRIST_RETRACTING;
             agitationTimer.restart();
           }

@@ -83,11 +83,11 @@ public class TunerConstants {
                   // impacting performance.
                   .withStatorCurrentLimit(Amps.of(60))
                   .withStatorCurrentLimitEnable(true)
-                //   .withSupplyCurrentLimit(40)
-                //   .withSupplyCurrentLimitEnable(true)
-                //   .withSupplyCurrentLowerLimit(20)
-                //   .withSupplyCurrentLowerTime(0.5))
-          );
+              //   .withSupplyCurrentLimit(40)
+              //   .withSupplyCurrentLimitEnable(true)
+              //   .withSupplyCurrentLowerLimit(20)
+              //   .withSupplyCurrentLowerTime(0.5))
+              );
   private static final CANcoderConfiguration encoderInitialConfigs = new CANcoderConfiguration();
   // Configs for the Pigeon 2; leave this null to skip applying Pigeon 2 configs
   private static final Pigeon2Configuration pigeonConfigs = null;

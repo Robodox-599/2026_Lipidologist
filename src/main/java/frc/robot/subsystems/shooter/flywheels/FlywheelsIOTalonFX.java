@@ -16,7 +16,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
@@ -90,7 +89,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
                     .withKD(FlywheelsConstants.flywheelRealkD)
                     .withKS(FlywheelsConstants.flywheelRealkS)
                     .withKV(FlywheelsConstants.flywheelRealkV));
-        
+
     velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
 
     flywheelBottomLeftMotor.setControl(
@@ -143,11 +142,14 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
 
     BaseStatusSignal.setUpdateFrequencyForAll(5, lowPrioritySignals);
 
-    PhoenixUtil.tryUntilOk(10, () -> flywheelBottomLeftMotor.getConfigurator().apply(flywheelConfig, 1));
-    PhoenixUtil.tryUntilOk(10, () -> flywheelBottomRightMotor.getConfigurator().apply(flywheelConfig, 1));
-    PhoenixUtil.tryUntilOk(10, () -> flywheelLeaderMotor.getConfigurator().apply(flywheelConfig, 1));
-    PhoenixUtil.tryUntilOk(10, () -> flywheelTopRightMotor.getConfigurator().apply(flywheelConfig, 1));
-
+    PhoenixUtil.tryUntilOk(
+        10, () -> flywheelBottomLeftMotor.getConfigurator().apply(flywheelConfig, 1));
+    PhoenixUtil.tryUntilOk(
+        10, () -> flywheelBottomRightMotor.getConfigurator().apply(flywheelConfig, 1));
+    PhoenixUtil.tryUntilOk(
+        10, () -> flywheelLeaderMotor.getConfigurator().apply(flywheelConfig, 1));
+    PhoenixUtil.tryUntilOk(
+        10, () -> flywheelTopRightMotor.getConfigurator().apply(flywheelConfig, 1));
 
     flywheelLeaderMotor.optimizeBusUtilization();
     flywheelBottomLeftMotor.optimizeBusUtilization();

@@ -25,5 +25,4 @@ public class FeederConstants {
   public static final double stallingStatorCurrentAmps = 90;
   public static final double jammedRPSTolerance = 4;
   public static final double fuelDebounce = 0.5;
-
 }

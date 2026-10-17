@@ -34,5 +34,4 @@ public class IntakeWristIO {
   public boolean isWristReadyToHome() {
     return false;
   }
-
 }

@@ -429,7 +429,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
       //         choreoRotationLockPID.calculate(
       //             pose.getRotation().getRadians(),
       //             AllianceFlipUtil.shouldFlip()
-      //                 ? this.targetRotation.rotateBy(kRedAlliancePerspectiveRotation).getRadians()
+      //                 ?
+      // this.targetRotation.rotateBy(kRedAlliancePerspectiveRotation).getRadians()
       //                 : this.targetRotation.getRadians()); // not sure if this works as intended
 
       //     DogLog.log("Drive/Choreo/RobotSetpointSpeedsAfterPID", targetSpeeds);

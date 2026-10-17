@@ -13,11 +13,9 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import dev.doglog.DogLog;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
@@ -42,39 +40,42 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
   public final StatusSignal<Current> intakeWristStatorCurrent;
   public final StatusSignal<Current> intakeWristSupplyCurrent;
   public final StatusSignal<Temperature> intakeWristTemperature;
-  private Debouncer wristStallDebouncer = new Debouncer(IntakeWristConstants.debounceTime, DebounceType.kBoth);
+  private Debouncer wristStallDebouncer =
+      new Debouncer(IntakeWristConstants.debounceTime, DebounceType.kBoth);
 
   public IntakeWristIOTalonFX() {
     intakeWristCanBus = new CANBus(IntakeWristConstants.intakeWristCanBus);
     intakeWristMotor = new TalonFX(IntakeWristConstants.intakeWristMotorID, intakeWristCanBus);
     m_request = new MotionMagicVoltage(0);
 
-    intakeWristConfig = new TalonFXConfiguration()
-        .withCurrentLimits(
-            new CurrentLimitsConfigs()
-                .withSupplyCurrentLimit(IntakeWristConstants.supplyCurrentLimit)
-                .withSupplyCurrentLimitEnable(true)
-                .withStatorCurrentLimit(IntakeWristConstants.statorCurrentLimit)
-                .withStatorCurrentLimitEnable(true))
-        .withSlot0(
-            new Slot0Configs()
-                .withKP(IntakeWristConstants.kP)
-                .withKI(IntakeWristConstants.kI)
-                .withKD(IntakeWristConstants.kD)
-                .withKV(IntakeWristConstants.kV)
-                .withKS(IntakeWristConstants.kS)
-                .withKG(IntakeWristConstants.kG)
-                .withGravityType(GravityTypeValue.Arm_Cosine))
-        .withClosedLoopGeneral(new ClosedLoopGeneralConfigs().withContinuousWrap(false))
-        .withMotionMagic(
-            new MotionMagicConfigs()
-                .withMotionMagicCruiseVelocity(IntakeWristConstants.maxVelocity)
-                .withMotionMagicAcceleration(IntakeWristConstants.maxAcceleration))
-        .withMotorOutput(
-            new MotorOutputConfigs()
-                .withInverted(InvertedValue.CounterClockwise_Positive)
-                .withNeutralMode(NeutralModeValue.Brake))
-        .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(IntakeWristConstants.gearRatio));
+    intakeWristConfig =
+        new TalonFXConfiguration()
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withSupplyCurrentLimit(IntakeWristConstants.supplyCurrentLimit)
+                    .withSupplyCurrentLimitEnable(true)
+                    .withStatorCurrentLimit(IntakeWristConstants.statorCurrentLimit)
+                    .withStatorCurrentLimitEnable(true))
+            .withSlot0(
+                new Slot0Configs()
+                    .withKP(IntakeWristConstants.kP)
+                    .withKI(IntakeWristConstants.kI)
+                    .withKD(IntakeWristConstants.kD)
+                    .withKV(IntakeWristConstants.kV)
+                    .withKS(IntakeWristConstants.kS)
+                    .withKG(IntakeWristConstants.kG)
+                    .withGravityType(GravityTypeValue.Arm_Cosine))
+            .withClosedLoopGeneral(new ClosedLoopGeneralConfigs().withContinuousWrap(false))
+            .withMotionMagic(
+                new MotionMagicConfigs()
+                    .withMotionMagicCruiseVelocity(IntakeWristConstants.maxVelocity)
+                    .withMotionMagicAcceleration(IntakeWristConstants.maxAcceleration))
+            .withMotorOutput(
+                new MotorOutputConfigs()
+                    .withInverted(InvertedValue.CounterClockwise_Positive)
+                    .withNeutralMode(NeutralModeValue.Brake))
+            .withFeedback(
+                new FeedbackConfigs().withSensorToMechanismRatio(IntakeWristConstants.gearRatio));
 
     intakeWristPosition = intakeWristMotor.getPosition();
     intakeWristVelocity = intakeWristMotor.getVelocity();
@@ -93,7 +94,8 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
 
     BaseStatusSignal.setUpdateFrequencyForAll(5, intakeWristTemperature);
 
-    PhoenixUtil.tryUntilOk(10, () -> intakeWristMotor.getConfigurator().apply(intakeWristConfig, 1));
+    PhoenixUtil.tryUntilOk(
+        10, () -> intakeWristMotor.getConfigurator().apply(intakeWristConfig, 1));
 
     intakeWristMotor.optimizeBusUtilization();
   }
@@ -115,9 +117,10 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
     super.temperature = intakeWristTemperature.getValueAsDouble();
 
     super.atSetpoint = Math.abs(super.currentPosition - super.targetPosition) < 0.02;
-    super.isWristJammed = wristStallDebouncer.calculate(
-        (super.statorCurrent > IntakeWristConstants.agitateStatorCurrentTrip)
-            && (Math.abs(super.velocity) < IntakeWristConstants.agitateVelocityTrip));
+    super.isWristJammed =
+        wristStallDebouncer.calculate(
+            (super.statorCurrent > IntakeWristConstants.agitateStatorCurrentTrip)
+                && (Math.abs(super.velocity) < IntakeWristConstants.agitateVelocityTrip));
 
     DogLog.log("Intake/Wrist/Position", super.currentPosition);
     DogLog.log("Intake/Wrist/TargetPosition", super.targetPosition);
@@ -137,8 +140,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
   @Override
   public void setIntakeWristPosition(double position) {
     super.targetPosition = position;
-    intakeWristMotor.setControl(
-        m_request.withPosition(position).withEnableFOC(true));
+    intakeWristMotor.setControl(m_request.withPosition(position).withEnableFOC(true));
   }
 
   @Override
