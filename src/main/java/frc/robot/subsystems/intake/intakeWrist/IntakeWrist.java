@@ -107,7 +107,7 @@ public class IntakeWrist {
                   Math.min(
                           liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
                           1.0)
-                      * IntakeWristConstants.maxAngleRotations,
+                      * IntakeWristConstants.maxAgitationPosition,
                   0.005 + IntakeWristConstants.deltaAgitation);
         }
         if (agitationTimer.get() > IntakeWristConstants.agitationTime) {
@@ -117,7 +117,7 @@ public class IntakeWrist {
                     Math.min(
                             liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
                             1.0)
-                        * IntakeWristConstants.maxAngleRotations,
+                        * IntakeWristConstants.maxAgitationPosition,
                     0.005 + IntakeWristConstants.deltaAgitation);
             currentState = IntakeWristCurrentState.WRIST_EXTENDING;
             agitationTimer.restart();
@@ -127,7 +127,7 @@ public class IntakeWrist {
                     Math.min(
                             liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
                             1.0)
-                        * IntakeWristConstants.maxAngleRotations,
+                        * IntakeWristConstants.maxAgitationPosition,
                     0.005 + IntakeWristConstants.deltaAgitation);
             currentState = IntakeWristCurrentState.WRIST_RETRACTING;
             agitationTimer.restart();
