@@ -397,7 +397,7 @@ public class Superstructure extends SubsystemBase {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
@@ -412,7 +412,7 @@ public class Superstructure extends SubsystemBase {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
@@ -491,7 +491,7 @@ public class Superstructure extends SubsystemBase {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
@@ -506,7 +506,7 @@ public class Superstructure extends SubsystemBase {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());

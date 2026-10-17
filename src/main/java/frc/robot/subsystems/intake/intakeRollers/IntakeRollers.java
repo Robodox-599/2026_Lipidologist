@@ -68,16 +68,16 @@ public class IntakeRollers {
         stop();
         break;
       case INTAKING_FUEL:
-        setDutyCycle(9.0 / 12.0);
+        setDutyCycle(1);
         break;
       // case AGITATING_FUEL:
       //     setVoltage(2);
       //     break;
       case OUTAKING:
-        setDutyCycle(-7.0 / 12.0);
+        setDutyCycle(-0.5);
         break;
       case CLEANING:
-        setDutyCycle(0.65 / 12.0);
+        setDutyCycle(0.05);
         break;
       default:
         stop();

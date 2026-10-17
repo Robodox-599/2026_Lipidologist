@@ -75,7 +75,7 @@ public class Flywheels {
         setRPS(FlywheelsConstants.idleRPS);
         break;
       case CLEANING:
-        setDutyCycle(0.5 / 12.0);
+        setDutyCycle(0.05);
         break;
       case STOPPING:
         stop();

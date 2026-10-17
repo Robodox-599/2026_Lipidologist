@@ -55,8 +55,6 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
   private final BaseStatusSignal[] criticalSignals;
   private final BaseStatusSignal[] lowPrioritySignals;
 
-  private final Debouncer rpmDebouncer = new Debouncer(0.1, DebounceType.kBoth);
-
   public FlywheelsIOTalonFX() {
     // motor stuff
     flywheelCANBus = new CANBus(FlywheelsConstants.flywheelCANBus);
@@ -165,15 +163,14 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     super.RPS = flywheelLeaderVelocityRPS.getValueAsDouble();
     super.statorCurrent = flywheelLeaderStatorCurrent.getValueAsDouble();
     super.supplyCurrent = flywheelLeaderSupplyCurrent.getValueAsDouble();
-    super.isFlywheelAtSetpoint =
-        rpmDebouncer.calculate(
-            Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSTolerance);
+    if (super.isFlywheelAtSetpoint) {
+        super.isFlywheelAtSetpoint = Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSExitTolerance;
+    } else {
+        super.isFlywheelAtSetpoint = Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSEntryTolerance;
+    }
 
     DogLog.log("Flywheels/RPS", super.RPS);
     DogLog.log("Flywheels/isFlywheelAtSpeed", super.isFlywheelAtSetpoint);
-    DogLog.log(
-        "Flywheels/isFlywheelAtSpeedRaw",
-        Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSTolerance);
     DogLog.log("Flywheels/statorCurrent", super.statorCurrent);
     DogLog.log("Flywheels/supplyCurrent", super.supplyCurrent);
     DogLog.log("Flywheels/temperature", super.temperature);
