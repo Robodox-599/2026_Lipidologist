@@ -15,7 +15,7 @@ public class IntakeRollers {
     STOP,
     INTAKE_FUEL,
     CLEAN,
-    // AGITATE_FUEL,
+    SHOOT_FUEL,
     OUTAKE
   }
 
@@ -23,7 +23,7 @@ public class IntakeRollers {
     STOPPED,
     INTAKING_FUEL,
     CLEANING,
-    // AGITATING_FUEL,
+    SHOOT_FUEL,
     OUTAKING
   }
 
@@ -47,9 +47,9 @@ public class IntakeRollers {
       case INTAKE_FUEL:
         currentState = IntakeRollersCurrentState.INTAKING_FUEL;
         break;
-      // case AGITATE_FUEL:
-      //     currentState = IntakeRollersCurrentState.AGITATING_FUEL;
-      //     break;
+      case SHOOT_FUEL:
+        currentState = IntakeRollersCurrentState.SHOOT_FUEL;
+        break;
       case OUTAKE:
         currentState = IntakeRollersCurrentState.OUTAKING;
         break;
@@ -70,9 +70,9 @@ public class IntakeRollers {
       case INTAKING_FUEL:
         setDutyCycle(1);
         break;
-      // case AGITATING_FUEL:
-      //     setVoltage(2);
-      //     break;
+      case SHOOT_FUEL:
+        setDutyCycle(0.5);
+        break;
       case OUTAKING:
         setDutyCycle(-0.5);
         break;

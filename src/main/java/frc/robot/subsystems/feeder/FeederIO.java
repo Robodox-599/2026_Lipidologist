@@ -15,5 +15,7 @@ public abstract class FeederIO {
 
   public void stopFeeder() {}
 
+  public void setFeederVoltage(double voltage) {}
+
   public void setFeederDutyCycle(double dutyCycle) {}
 }

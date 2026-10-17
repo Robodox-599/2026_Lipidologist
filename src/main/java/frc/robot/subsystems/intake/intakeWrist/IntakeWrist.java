@@ -17,6 +17,7 @@ public class IntakeWrist {
   private Timer liftingAgitationTimer = new Timer();
   private boolean isHomed = false;
   private double currentAgitationPosition = 0;
+  private double unjamPosition = 0;
 
   private final Timer homingStallTimer = new Timer();
 
@@ -67,6 +68,9 @@ public class IntakeWrist {
       case DEPLOY:
         if (io.isWristJammed) { // if in auto and wrist is jammed, unjam
           // hopper
+          if (currentState != IntakeWristCurrentState.UNJAM) {
+            unjamPosition = Math.min(0.3, getIntakeWristPosition() + 0.05);
+          }
           currentState = IntakeWristCurrentState.UNJAM;
         } else {
           currentState = IntakeWristCurrentState.DEPLOYING;
@@ -103,7 +107,7 @@ public class IntakeWrist {
                   Math.min(
                           liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
                           1.0)
-                      * IntakeWristConstants.maxAgitationPosition,
+                      * IntakeWristConstants.maxAngleRotations,
                   0.005 + IntakeWristConstants.deltaAgitation);
         }
         if (agitationTimer.get() > IntakeWristConstants.agitationTime) {
@@ -113,7 +117,7 @@ public class IntakeWrist {
                     Math.min(
                             liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
                             1.0)
-                        * IntakeWristConstants.maxAgitationPosition,
+                        * IntakeWristConstants.maxAngleRotations,
                     0.005 + IntakeWristConstants.deltaAgitation);
             currentState = IntakeWristCurrentState.WRIST_EXTENDING;
             agitationTimer.restart();
@@ -123,7 +127,7 @@ public class IntakeWrist {
                     Math.min(
                             liftingAgitationTimer.get() / IntakeWristConstants.totalAgitationTime,
                             1.0)
-                        * IntakeWristConstants.maxAgitationPosition,
+                        * IntakeWristConstants.maxAngleRotations,
                     0.005 + IntakeWristConstants.deltaAgitation);
             currentState = IntakeWristCurrentState.WRIST_RETRACTING;
             agitationTimer.restart();
@@ -175,7 +179,7 @@ public class IntakeWrist {
       // setPosition(0.0);
       // break;
       case STOWING:
-        setPosition(.35);
+        setPosition(IntakeWristConstants.maxAngleRotations);
         break;
       case WRIST_RETRACTING:
         setPosition(currentAgitationPosition);
@@ -185,7 +189,7 @@ public class IntakeWrist {
             Math.max(currentAgitationPosition - IntakeWristConstants.deltaAgitation, 0.005));
         break;
       case UNJAM:
-        setPosition(0.33);
+        setPosition(unjamPosition);
         break;
       case HOMING:
         setDutyCycle(IntakeWristConstants.homingDutyCycle);
@@ -210,6 +214,10 @@ public class IntakeWrist {
     } else {
       stop();
     }
+  }
+
+  public double getIntakeWristPosition() {
+    return io.getIntakeWristPosition();
   }
 
   public void setDutyCycle(double dutyCycle) {

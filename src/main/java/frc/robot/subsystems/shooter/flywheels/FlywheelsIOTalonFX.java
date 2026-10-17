@@ -17,8 +17,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
-import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
@@ -164,9 +162,11 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     super.statorCurrent = flywheelLeaderStatorCurrent.getValueAsDouble();
     super.supplyCurrent = flywheelLeaderSupplyCurrent.getValueAsDouble();
     if (super.isFlywheelAtSetpoint) {
-        super.isFlywheelAtSetpoint = Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSExitTolerance;
+      super.isFlywheelAtSetpoint =
+          Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSExitTolerance;
     } else {
-        super.isFlywheelAtSetpoint = Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSEntryTolerance;
+      super.isFlywheelAtSetpoint =
+          Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSEntryTolerance;
     }
 
     DogLog.log("Flywheels/RPS", super.RPS);

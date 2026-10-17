@@ -21,7 +21,7 @@ public class Bindings {
     this.superstructure = superstructure;
 
     driver.y().onTrue(superstructure.zeroPoseCommand());
-    
+
     driver
         .start()
         .and(driver.back())

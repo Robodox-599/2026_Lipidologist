@@ -81,8 +81,8 @@ public class Superstructure extends SubsystemBase {
     // STOWING
   }
 
-  private WantedSuperState wantedSuperState = WantedSuperState.IDLE;
-  private CurrentSuperState currentSuperState = CurrentSuperState.IDLING;
+  private WantedSuperState wantedSuperState = WantedSuperState.STOP;
+  private CurrentSuperState currentSuperState = CurrentSuperState.STOPPED;
   private AdjustedShot adjustedShot = new AdjustedShot(Rotation2d.kZero, 0, 0, 0);
 
   public Superstructure(
@@ -398,7 +398,7 @@ public class Superstructure extends SubsystemBase {
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
     indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
-    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
     // if (isHoodUnsafe()) {
@@ -413,7 +413,7 @@ public class Superstructure extends SubsystemBase {
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
     indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
-    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
     // if (isHoodUnsafe()) {
@@ -445,7 +445,7 @@ public class Superstructure extends SubsystemBase {
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
     indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
     // if (isHoodUnsafe()) {
@@ -460,7 +460,7 @@ public class Superstructure extends SubsystemBase {
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
     indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
     // if (isHoodUnsafe()) {
@@ -492,7 +492,7 @@ public class Superstructure extends SubsystemBase {
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
     indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
-    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
     // if (isHoodUnsafe()) {
@@ -507,7 +507,7 @@ public class Superstructure extends SubsystemBase {
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
     indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
-    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
     // if (isHoodUnsafe()) {
@@ -522,7 +522,7 @@ public class Superstructure extends SubsystemBase {
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
     indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
     // if (isHoodUnsafe()) {
@@ -537,7 +537,7 @@ public class Superstructure extends SubsystemBase {
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
     indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
-    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
     // if (isHoodUnsafe()) {
