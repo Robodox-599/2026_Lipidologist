@@ -126,13 +126,13 @@ public class Superstructure extends SubsystemBase {
     Tracer.traceFunc("HandleStateTransitions", this::handleStateTransitions);
     Tracer.traceFunc("ApplyStates", this::applyStates);
 
-    // Tracer.traceFunc("Drivetrain UpdateStates", drivetrain::updateStates);
-    // Tracer.traceFunc("Feeder UpdateStates", feeder::updateStates);
-    // Tracer.traceFunc("Indexer UpdateStates", indexer::updateStates);
-    // Tracer.traceFunc("IntakeRollers UpdateStates", intakeRollers::updateStates);
-    // Tracer.traceFunc("IntakeWrist UpdateStates", intakeWrist::updateStates);
-    // Tracer.traceFunc("Flywheels UpdateStates", flywheels::updateStates);
-    // Tracer.traceFunc("Hood UpdateStates", hood::updateStates);
+    Tracer.traceFunc("Drivetrain UpdateStates", drivetrain::updateStates);
+    Tracer.traceFunc("Feeder UpdateStates", feeder::updateStates);
+    Tracer.traceFunc("Indexer UpdateStates", indexer::updateStates);
+    Tracer.traceFunc("IntakeRollers UpdateStates", intakeRollers::updateStates);
+    Tracer.traceFunc("IntakeWrist UpdateStates", intakeWrist::updateStates);
+    Tracer.traceFunc("Flywheels UpdateStates", flywheels::updateStates);
+    Tracer.traceFunc("Hood UpdateStates", hood::updateStates);
 
     // This method will be called once per scheduler run
     DogLog.log("Superstructure/WantedSuperState", wantedSuperState);
@@ -275,7 +275,7 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = CurrentSuperState.TUNING_SHOT_DATA_IDLING;
         break;
       case HOME:
-        if (!intakeWrist.isHomed()) {
+        if (!intakeWrist.isHomed() || currentSuperState != CurrentSuperState.HOMING) {
           currentSuperState = CurrentSuperState.HOMING;
         } else {
           wantedSuperState = WantedSuperState.STOP;

@@ -21,8 +21,10 @@ public class Bindings {
     this.superstructure = superstructure;
 
     driver.y().onTrue(superstructure.zeroPoseCommand());
+    
     driver
-        .povDown()
+        .start()
+        .and(driver.back())
         .onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.HOME))
         .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.STOP));
 

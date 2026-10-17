@@ -16,12 +16,12 @@ public class IntakeWristConstants {
   public static final double gearRatio =
       (34.0 / 14.0) * (32.0 / 20.0) * (64.0 / 16.0) * (36.0 / 12.0);
 
-  public static final double kP = 60.0;
+  public static final double kP = 70.0;
   public static final double kI = 0.0;
   public static final double kD = 2;
   public static final double kV = (Constants.kMotors.kKrakenX60Foc.kV * gearRatio);
-  public static final double kS = 0.36;
-  public static final double kG = 0.39;
+  public static final double kS = 0.35;
+  public static final double kG = 0.49;
 
   public static final double maxVelocity = (12 - kS - kG) / kV;
   public static final double maxAcceleration = maxVelocity;
