@@ -8,7 +8,7 @@ import frc.robot.Constants;
 
 /** Add your docs here. */
 public class IntakeWristConstants {
-  public static final int intakeWristMotorID = 13;
+  public static final int intakeWristMotorID = 16;
   public static final String intakeWristCanBus = "rio";
 
   public static final double rotationalInertia = 0.01;
