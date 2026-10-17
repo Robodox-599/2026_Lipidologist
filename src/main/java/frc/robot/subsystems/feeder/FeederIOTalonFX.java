@@ -53,7 +53,7 @@ public class FeederIOTalonFX extends FeederIO {
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
                     .withStatorCurrentLimit(FeederConstants.statorCurrentLimitAmps)
-                    .withStatorCurrentLimitEnable(false)
+                    .withStatorCurrentLimitEnable(true)
                     .withSupplyCurrentLimit(FeederConstants.supplyCurrentLimitAmps)
                     .withSupplyCurrentLimitEnable(true))
             .withMotorOutput(

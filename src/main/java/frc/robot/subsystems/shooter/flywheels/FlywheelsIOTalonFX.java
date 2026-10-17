@@ -75,7 +75,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
                     .withSupplyCurrentLimit(FlywheelsConstants.supplyCurrentLimit)
-                    .withSupplyCurrentLimitEnable(false)
+                    .withSupplyCurrentLimitEnable(true)
                     .withStatorCurrentLimit(FlywheelsConstants.statorCurrentLimit)
                     .withStatorCurrentLimitEnable(true))
             .withSlot0(

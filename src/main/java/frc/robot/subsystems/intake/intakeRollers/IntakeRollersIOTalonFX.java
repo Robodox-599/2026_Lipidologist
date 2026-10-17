@@ -53,7 +53,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
                     .withSupplyCurrentLimit(IntakeRollersConstants.supplyCurrentLimit)
-                    .withSupplyCurrentLimitEnable(false)
+                    .withSupplyCurrentLimitEnable(true)
                     .withStatorCurrentLimit(IntakeRollersConstants.statorCurrentLimit)
                     .withStatorCurrentLimitEnable(true))
             .withMotorOutput(
