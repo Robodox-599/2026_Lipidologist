@@ -47,11 +47,10 @@ public class jaidensAutos {
     routine
         .active()
         .onTrue(
-            Commands.sequence(
-                trench_and_bump_1.resetOdometry(),
-                Commands.parallel(
-                    superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                    trench_and_bump_1.cmd())));
+            Commands.parallel(
+                disregardRequirements(trench_and_bump_1.resetOdometry()),
+                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                trench_and_bump_1.cmd()));
 
     trench_and_bump_1
         .done()
@@ -103,11 +102,10 @@ public class jaidensAutos {
     routine
         .active()
         .onTrue(
-            Commands.sequence(
-                trench_and_bump_1.resetOdometry(),
-                Commands.parallel(
-                    superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
-                    trench_and_bump_1.cmd())));
+            Commands.parallel(
+                disregardRequirements(trench_and_bump_1.resetOdometry()),
+                superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+                trench_and_bump_1.cmd()));
 
     trench_and_bump_1
         .done()

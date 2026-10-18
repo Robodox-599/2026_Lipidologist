@@ -53,7 +53,7 @@ public class Superstructure extends SubsystemBase {
     TUNE_SHOT_DATA_IDLE,
     TUNE_SHOT_DATA_SHOOT,
     HOME,
-    // STOW
+    STOW
   }
 
   public enum CurrentSuperState {
@@ -78,7 +78,7 @@ public class Superstructure extends SubsystemBase {
     TUNING_SHOT_DATA_IDLING,
     TUNING_SHOT_DATA_SHOOTING,
     HOMING,
-    // STOWING
+    STOWING
   }
 
   private WantedSuperState wantedSuperState = WantedSuperState.STOP;
@@ -282,6 +282,9 @@ public class Superstructure extends SubsystemBase {
           currentSuperState = CurrentSuperState.STOPPED;
         }
         break;
+      case STOW:
+        currentSuperState = CurrentSuperState.STOWING;
+        break;
       default:
         currentSuperState = CurrentSuperState.STOPPED;
         break;
@@ -356,10 +359,23 @@ public class Superstructure extends SubsystemBase {
       case HOMING:
         homing();
         break;
+      case STOWING:
+        stow();
+        break;
       default:
         stop();
         break;
     }
+  }
+
+  public void stow() {
+    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
+    feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.STOP);
+    intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.STOW);
+    flywheels.setWantedState(Flywheels.FlywheelWantedState.STOPPED);
+    hood.setWantedState(Hood.HoodWantedState.STOW);
   }
 
   public void outaking() {
@@ -397,7 +413,7 @@ public class Superstructure extends SubsystemBase {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
@@ -412,7 +428,7 @@ public class Superstructure extends SubsystemBase {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
@@ -491,7 +507,7 @@ public class Superstructure extends SubsystemBase {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
@@ -506,7 +522,7 @@ public class Superstructure extends SubsystemBase {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
