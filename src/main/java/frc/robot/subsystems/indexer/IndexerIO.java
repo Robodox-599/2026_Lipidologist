@@ -14,5 +14,7 @@ public abstract class IndexerIO {
 
   public void setIndexerVoltage(double volts) {}
 
+  public void setIndexerDutyCycle(double dutyCycle) {}
+
   public void stopIndexer() {}
 }

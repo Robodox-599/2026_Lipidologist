@@ -78,7 +78,7 @@ public class Feeder {
         setFeederVoltage(-3);
         break;
       case OUTAKING:
-        setFeederDutyCycle(-1.0);
+        setFeederDutyCycle(-0.25);
         break;
       case CLEANING:
         setFeederDutyCycle(0.05);

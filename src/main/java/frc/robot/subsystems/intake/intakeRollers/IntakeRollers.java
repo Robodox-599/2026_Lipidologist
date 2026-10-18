@@ -74,7 +74,7 @@ public class IntakeRollers {
         setDutyCycle(0.5);
         break;
       case OUTAKING:
-        setDutyCycle(-0.5);
+        setDutyCycle(-1);
         break;
       case CLEANING:
         setDutyCycle(0.05);
@@ -93,7 +93,7 @@ public class IntakeRollers {
     this.wantedState = wantedState;
   }
 
-  public void setDutyCycle(double dutyCycle) {
-    io.setIntakeRollersDutyCycle(dutyCycle);
+  public void setDutyCycle(double dutyCycleOut) {
+    io.setIntakeRollersDutyCycle(dutyCycleOut);
   }
 }

@@ -364,7 +364,7 @@ public class Superstructure extends SubsystemBase {
 
   public void outaking() {
     drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
-    feeder.setWantedState(Feeder.FeederWantedState.OUTAKE);
+    feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
     indexer.setWantedState(Indexer.IndexerWantedState.OUTAKE);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.OUTAKE);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);

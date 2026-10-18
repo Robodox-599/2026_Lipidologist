@@ -7,6 +7,7 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -31,6 +32,8 @@ public class IndexerIOTalonFX extends IndexerIO {
 
   private final VoltageOut voltageOut;
 
+  private final DutyCycleOut indexerDutyCycle;
+
   public IndexerIOTalonFX() {
     indexerCANBus = new CANBus(IndexerConstants.indexerCANBus);
     indexerMotor = new TalonFX(IndexerConstants.indexerMotorID, indexerCANBus);
@@ -52,6 +55,8 @@ public class IndexerIOTalonFX extends IndexerIO {
     PhoenixUtil.tryUntilOk(10, () -> indexerMotor.getConfigurator().apply(indexerConfig, 1));
 
     voltageOut = new VoltageOut(0);
+
+    indexerDutyCycle = new DutyCycleOut(0);
 
     indexerVelocityRad = indexerMotor.getVelocity();
     indexerTemperature = indexerMotor.getDeviceTemp();
@@ -102,5 +107,10 @@ public class IndexerIOTalonFX extends IndexerIO {
   @Override
   public void setIndexerVoltage(double voltage) {
     indexerMotor.setControl(voltageOut.withOutput(voltage).withEnableFOC(true));
+  }
+
+  @Override
+  public void setIndexerDutyCycle(double dutyCycle) {
+    indexerMotor.setControl(indexerDutyCycle.withOutput(dutyCycle).withEnableFOC(true));
   }
 }
