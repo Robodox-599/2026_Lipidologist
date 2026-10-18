@@ -72,7 +72,7 @@ public class Flywheels {
         setRPS(this.targetRPS);
         break;
       case IDLING:
-        setRPS(FlywheelsConstants.idleRPS);
+        setVoltage(0.0);
         break;
       case CLEANING:
         setDutyCycle(0.05);
@@ -96,6 +96,10 @@ public class Flywheels {
 
   public void setDutyCycle(double dutyCycle) {
     io.setFlywheelsDutyCycle(dutyCycle);
+  }
+
+  public void setVoltage(double voltage) {
+    io.setFlywheelVoltage(voltage);
   }
 
   public boolean atSetpoint() {

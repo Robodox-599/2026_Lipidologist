@@ -26,7 +26,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
   public final CANBus intakeRollersCanBus;
 
   private final DutyCycleOut leaderDutyCycleRequest;
-  private final DutyCycleOut followerDutyCycleRequest;
+  //   private final DutyCycleOut followerDutyCycleRequest;
 
   // status signals
   private final StatusSignal<AngularVelocity> intakeRollersLeaderVelocity;
@@ -65,7 +65,7 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
     ;
 
     leaderDutyCycleRequest = new DutyCycleOut(0);
-    followerDutyCycleRequest = new DutyCycleOut(0);
+    // followerDutyCycleRequest = new DutyCycleOut(0);
 
     intakeRollersFollowerMotor.setControl(
         new Follower(
@@ -159,14 +159,14 @@ public class IntakeRollersIOTalonFX extends IntakeRollersIO {
   @Override
   public void stopIntakeRollers() {
     intakeRollersLeaderMotor.setVoltage(0);
-    intakeRollersFollowerMotor.setVoltage(0);
+    // intakeRollersFollowerMotor.setVoltage(0);
   }
 
   @Override
   public void setIntakeRollersDutyCycle(double dutyCycle) {
     intakeRollersLeaderMotor.setControl(
         leaderDutyCycleRequest.withOutput(dutyCycle).withEnableFOC(true));
-    intakeRollersFollowerMotor.setControl(
-        followerDutyCycleRequest.withOutput(dutyCycle).withEnableFOC(true));
+    // intakeRollersFollowerMotor.setControl(
+    //     followerDutyCycleRequest.withOutput(dutyCycle).withEnableFOC(true));
   }
 }

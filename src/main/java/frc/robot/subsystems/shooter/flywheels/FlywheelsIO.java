@@ -15,5 +15,7 @@ public class FlywheelsIO {
 
   public void setFlywheelsDutyCycle(double dutyCycle) {}
 
+  public void setFlywheelVoltage(double voltage) {}
+
   public void stopFlywheels() {}
 }

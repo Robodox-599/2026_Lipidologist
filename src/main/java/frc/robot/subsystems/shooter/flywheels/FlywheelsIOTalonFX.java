@@ -12,6 +12,7 @@ import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -32,6 +33,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
 
   private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
   private final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
+  private final VoltageOut voltageOut;
 
   // status signals
   private final StatusSignal<AngularVelocity> flywheelLeaderVelocityRPS;
@@ -87,6 +89,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
                     .withKV(FlywheelsConstants.flywheelRealkV));
 
     velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
+    voltageOut = new VoltageOut(0.0);
 
     flywheelBottomLeftMotor.setControl(
         new Follower(flywheelLeaderMotor.getDeviceID(), MotorAlignmentValue.Aligned));
@@ -190,5 +193,10 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
   @Override
   public void stopFlywheels() {
     flywheelLeaderMotor.setVoltage(0);
+  }
+
+  @Override
+  public void setFlywheelVoltage(double voltage) {
+    flywheelLeaderMotor.setControl(voltageOut.withOutput(voltage).withEnableFOC(true));
   }
 }

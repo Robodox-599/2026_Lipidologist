@@ -5,7 +5,7 @@ import frc.robot.util.shootingutil.InterpolatingShotTree.Shot;
 public class ShotData {
   public static final InterpolatingShotTree hubShotMap = new InterpolatingShotTree();
   public static final InterpolatingShotTree allianceZoneShotMap = new InterpolatingShotTree();
-  public static final double shotMultiplier = 1.05;
+  public static final double shotMultiplier = 1.1;
 
   static {
     hubShotMap.put(1.553, new Shot(0.003, 29.297 * shotMultiplier, 1.14));
@@ -19,6 +19,7 @@ public class ShotData {
 
   static {
     allianceZoneShotMap.put(2.5, new Shot(0.11, 30, 1));
+    allianceZoneShotMap.put(9.0, new Shot(0.11, 40, 1));
     allianceZoneShotMap.put(16.5, new Shot(0.11, 45, 1));
   }
 
