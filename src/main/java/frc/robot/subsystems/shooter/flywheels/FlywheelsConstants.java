@@ -36,7 +36,7 @@ public class FlywheelsConstants {
 
   // velocity tolerance
   public static final double RPSExitTolerance = 5;
-  public static final double RPSEntryTolerance = 5;
+  public static final double RPSEntryTolerance = 2;
 
   // setpoints
   public static final double idleRPS = 0;

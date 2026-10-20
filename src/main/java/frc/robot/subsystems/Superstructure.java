@@ -81,8 +81,8 @@ public class Superstructure extends SubsystemBase {
     STOWING
   }
 
-  private WantedSuperState wantedSuperState = WantedSuperState.STOW;
-  private CurrentSuperState currentSuperState = CurrentSuperState.STOWING;
+  private WantedSuperState wantedSuperState = WantedSuperState.IDLE;
+  private CurrentSuperState currentSuperState = CurrentSuperState.IDLING;
   private AdjustedShot adjustedShot = new AdjustedShot(Rotation2d.kZero, 0, 0, 0);
 
   public Superstructure(
@@ -413,7 +413,7 @@ public class Superstructure extends SubsystemBase {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
@@ -428,7 +428,7 @@ public class Superstructure extends SubsystemBase {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
@@ -507,7 +507,7 @@ public class Superstructure extends SubsystemBase {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());
@@ -522,7 +522,7 @@ public class Superstructure extends SubsystemBase {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, adjustedShot.targetRotation());
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
-    indexer.setWantedState(Indexer.IndexerWantedState.STOPPED);
+    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
     intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
     flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, adjustedShot.shootSpeed());

@@ -73,7 +73,7 @@ public class IntakeWristIOTalonFX extends IntakeWristIO {
             .withMotorOutput(
                 new MotorOutputConfigs()
                     .withInverted(InvertedValue.Clockwise_Positive)
-                    .withNeutralMode(NeutralModeValue.Coast))
+                    .withNeutralMode(NeutralModeValue.Brake))
             .withFeedback(
                 new FeedbackConfigs().withSensorToMechanismRatio(IntakeWristConstants.gearRatio));
 
