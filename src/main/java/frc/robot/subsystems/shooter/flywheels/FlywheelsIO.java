@@ -7,6 +7,8 @@ public class FlywheelsIO {
   protected double supplyCurrent = 0;
   protected double temperature = 0;
   protected boolean isFlywheelAtSetpoint = false;
+  protected boolean withinEntryTolerance = false;
+  protected boolean withinExitTolerance = false;
   protected double targetRPS = 0;
 
   public void updateInputs() {}

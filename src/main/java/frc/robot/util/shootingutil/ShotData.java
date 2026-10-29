@@ -8,20 +8,23 @@ public class ShotData {
   public static final double shotMultiplier = 1.00;
 
   static {
-    hubShotMap.put(1.553, new Shot(0.003, 29.297 * shotMultiplier, 1.14));
-    hubShotMap.put(1.862, new Shot(0.005, 29.870 * shotMultiplier, 1.14));
-    hubShotMap.put(2.287, new Shot(0.008, 31.244 * shotMultiplier, 1.14));
-    hubShotMap.put(3.179, new Shot(0.019, 33.822 * shotMultiplier, 1.14));
-    hubShotMap.put(3.535, new Shot(0.025, 34.662 * shotMultiplier, 1.14));
-    hubShotMap.put(4.194, new Shot(0.035, 35.345 * shotMultiplier, 1.14));
-    hubShotMap.put(4.404, new Shot(0.035, 36.5 * shotMultiplier, 1.14));
+    hubShotMap.put(1.514, new Shot(0.007,  30.00 * shotMultiplier, 1.14));
+    hubShotMap.put(1.918, new Shot(0.015,  30.00 * shotMultiplier, 1.14));
+    hubShotMap.put(2.244, new Shot(0.0243, 30.00 * shotMultiplier, 1.14));
+    hubShotMap.put(2.672, new Shot(0.0456, 31.50 * shotMultiplier, 1.14));
+    hubShotMap.put(3.369, new Shot(0.0456, 32.50 * shotMultiplier, 1.14));
+    hubShotMap.put(3.840, new Shot(0.0473, 32.50 * shotMultiplier, 1.14));
+    hubShotMap.put(4.310, new Shot(0.047,  33.85 * shotMultiplier, 1.14));
+    hubShotMap.put(4.741, new Shot(0.040,  34.00 * shotMultiplier, 1.14));
   }
 
-  static {
-    allianceZoneShotMap.put(2.5, new Shot(0.11, 30, 1));
-    allianceZoneShotMap.put(9.0, new Shot(0.11, 40, 1));
-    allianceZoneShotMap.put(16.5, new Shot(0.11, 45, 1));
+    static {
+    allianceZoneShotMap.put(2.5, new Shot(0.08, 25.0, 1));
+    allianceZoneShotMap.put(6.0, new Shot(0.06, 32.0, 1));
+    allianceZoneShotMap.put(10.0, new Shot(0.04, 38.0, 1));
+    allianceZoneShotMap.put(14.0, new Shot(0.02, 45.0, 1));
   }
+
 
   public static double getHubHoodAngle(double distance) {
     return hubShotMap.get(distance).hoodAngle();

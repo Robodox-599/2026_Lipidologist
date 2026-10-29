@@ -2,7 +2,7 @@ package frc.robot.subsystems.shooter.flywheels;
 
 public class FlywheelsConstants {
   // motor information
-  public static final int flywheelLeaderMotorID = 29;
+  public static final int flywheelTopLeftMotorID = 29;
   public static final int flywheelBottomLeftMotorID = 26;
   public static final int flywheelTopRightMotorID = 27;
   public static final int flywheelBottomRightMotorID = 28;
@@ -35,8 +35,12 @@ public class FlywheelsConstants {
   public static final double statorCurrentLimit = 90;
 
   // velocity tolerance
-  public static final double RPSExitTolerance = 3;
-  public static final double RPSEntryTolerance = 3;
+  public static final double RPSExitTolerance = 5;
+  public static final double RPSEntryTolerance = 2;
+
+  public static final double exitDebounceTime = 0.1;
+  public static final double entryDebounceTime = 0.05;
+
 
   // setpoints
   public static final double idleRPS = 0;
