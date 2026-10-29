@@ -41,7 +41,6 @@ public class FlywheelsConstants {
   public static final double exitDebounceTime = 0.1;
   public static final double entryDebounceTime = 0.05;
 
-
   // setpoints
   public static final double idleRPS = 0;
 

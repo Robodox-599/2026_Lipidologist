@@ -18,12 +18,12 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import dev.doglog.DogLog;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.util.PhoenixUtil;
-import edu.wpi.first.math.filter.Debouncer;
 
 public class FlywheelsIOTalonFX extends FlywheelsIO {
   private final TalonFX flywheelTopLeftMotor;
@@ -60,7 +60,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
   private final StatusSignal<Voltage> flywheelTopRightAppliedVolts;
   private final StatusSignal<Voltage> flywheelBottomRightAppliedVolts;
   private final StatusSignal<Temperature> flywheelTopLeftTemperature;
-  
+
   private final BaseStatusSignal[] criticalSignals;
   private final BaseStatusSignal[] lowPrioritySignals;
 
@@ -100,8 +100,10 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(super.targetRPS);
     voltageOut = new VoltageOut(0.0);
 
-    entryDebouncer = new Debouncer(FlywheelsConstants.entryDebounceTime, Debouncer.DebounceType.kRising);
-    exitDebouncer = new Debouncer(FlywheelsConstants.exitDebounceTime, Debouncer.DebounceType.kFalling);
+    entryDebouncer =
+        new Debouncer(FlywheelsConstants.entryDebounceTime, Debouncer.DebounceType.kRising);
+    exitDebouncer =
+        new Debouncer(FlywheelsConstants.exitDebounceTime, Debouncer.DebounceType.kFalling);
 
     // status signal stuff
     flywheelTopLeftVelocityRPS = flywheelTopLeftMotor.getVelocity();
@@ -128,9 +130,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
 
     criticalSignals =
         new BaseStatusSignal[] {
-          flywheelTopLeftVelocityRPS,
-          flywheelTopLeftStatorCurrent,
-          flywheelTopLeftSupplyCurrent
+          flywheelTopLeftVelocityRPS, flywheelTopLeftStatorCurrent, flywheelTopLeftSupplyCurrent
         };
 
     lowPrioritySignals =
@@ -150,7 +150,6 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
           flywheelBottomRightAppliedVolts,
           flywheelTopLeftTemperature
         };
-
 
     BaseStatusSignal.setUpdateFrequencyForAll(50, criticalSignals);
 
@@ -188,8 +187,10 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
     super.supplyCurrent = flywheelTopLeftSupplyCurrent.getValueAsDouble();
     super.temperature = flywheelTopLeftTemperature.getValueAsDouble();
 
-    super.withinExitTolerance = Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSExitTolerance;
-    super.withinEntryTolerance = Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSEntryTolerance;
+    super.withinExitTolerance =
+        Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSExitTolerance;
+    super.withinEntryTolerance =
+        Math.abs(super.RPS - super.targetRPS) < FlywheelsConstants.RPSEntryTolerance;
 
     if (super.isFlywheelAtSetpoint) {
       super.isFlywheelAtSetpoint = exitDebouncer.calculate(withinExitTolerance);
@@ -197,21 +198,24 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
       super.isFlywheelAtSetpoint = entryDebouncer.calculate(withinEntryTolerance);
     }
 
-
     DogLog.log("Flywheel/TopLeft/RPS", super.RPS);
     DogLog.log("Flywheel/BottomLeft/RPS", flywheelBottomLeftVelocityRPS.getValueAsDouble());
     DogLog.log("Flywheel/TopRight/RPS", flywheelTopRightVelocityRPS.getValueAsDouble());
     DogLog.log("Flywheel/BottomRight/RPS", flywheelBottomRightVelocityRPS.getValueAsDouble());
-   
+
     DogLog.log("Flywheel/TopLeft/statorCurrent", super.statorCurrent);
-    DogLog.log("Flywheel/BottomLeft/statorCurrent", flywheelBottomLeftStatorCurrent.getValueAsDouble());
+    DogLog.log(
+        "Flywheel/BottomLeft/statorCurrent", flywheelBottomLeftStatorCurrent.getValueAsDouble());
     DogLog.log("Flywheel/TopRight/statorCurrent", flywheelTopRightStatorCurrent.getValueAsDouble());
-    DogLog.log("Flywheel/BottomRight/statorCurrent", flywheelBottomRightStatorCurrent.getValueAsDouble());
+    DogLog.log(
+        "Flywheel/BottomRight/statorCurrent", flywheelBottomRightStatorCurrent.getValueAsDouble());
 
     DogLog.log("Flywheel/TopLeft/supplyCurrent", super.supplyCurrent);
-    DogLog.log("Flywheel/BottomLeft/supplyCurrent", flywheelBottomLeftSupplyCurrent.getValueAsDouble());
+    DogLog.log(
+        "Flywheel/BottomLeft/supplyCurrent", flywheelBottomLeftSupplyCurrent.getValueAsDouble());
     DogLog.log("Flywheel/TopRight/supplyCurrent", flywheelTopRightSupplyCurrent.getValueAsDouble());
-    DogLog.log("Flywheel/BottomRight/supplyCurrent", flywheelBottomRightSupplyCurrent.getValueAsDouble());
+    DogLog.log(
+        "Flywheel/BottomRight/supplyCurrent", flywheelBottomRightSupplyCurrent.getValueAsDouble());
 
     DogLog.log("Flywheel/TopLeft/temperature", super.temperature);
 
