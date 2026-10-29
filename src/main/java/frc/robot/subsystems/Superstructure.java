@@ -81,8 +81,8 @@ public class Superstructure extends SubsystemBase {
     STOWING
   }
 
-  private WantedSuperState wantedSuperState = WantedSuperState.IDLE;
-  private CurrentSuperState currentSuperState = CurrentSuperState.IDLING;
+  private WantedSuperState wantedSuperState = WantedSuperState.STOP;
+  private CurrentSuperState currentSuperState = CurrentSuperState.STOPPED;
   private AdjustedShot adjustedShot = new AdjustedShot(Rotation2d.kZero, 0, 0, 0);
 
   public Superstructure(
@@ -129,8 +129,8 @@ public class Superstructure extends SubsystemBase {
     Tracer.traceFunc("Drivetrain UpdateStates", drivetrain::updateStates);
     Tracer.traceFunc("Feeder UpdateStates", feeder::updateStates);
     Tracer.traceFunc("Indexer UpdateStates", indexer::updateStates);
-    Tracer.traceFunc("IntakeRollers UpdateStates", intakeRollers::updateStates);
-    Tracer.traceFunc("IntakeWrist UpdateStates", intakeWrist::updateStates);
+    // Tracer.traceFunc("IntakeRollers UpdateStates", intakeRollers::updateStates);
+    // Tracer.traceFunc("IntakeWrist UpdateStates", intakeWrist::updateStates);
     Tracer.traceFunc("Flywheels UpdateStates", flywheels::updateStates);
     Tracer.traceFunc("Hood UpdateStates", hood::updateStates);
 

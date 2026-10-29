@@ -43,7 +43,7 @@ public class HoodConstants {
   // positon tolerances
   public static final double positionTolerance = 0.02;
   public static final double hoodMinAngleRotations = 0;
-  public static final double hoodMaxAngleRotations = 0.12;
+  public static final double hoodMaxAngleRotations = 0.092;
 
   // cancoderstuff
   public static final double hoodMagnetOffset = -0.974609375;

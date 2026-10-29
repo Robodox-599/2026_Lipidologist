@@ -6,6 +6,7 @@ import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -44,6 +45,7 @@ import frc.robot.subsystems.vision6.Vision;
 import frc.robot.subsystems.vision6.VisionConstants;
 import frc.robot.subsystems.vision6.VisionIOReal;
 import frc.robot.subsystems.vision6.VisionIOSim;
+import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.HubShiftUtil;
 import frc.robot.util.Tracer;
 
@@ -260,19 +262,21 @@ public class Robot extends TimedRobot {
     // indexer.setWantedState(IndexerWantedState.TRANSFER_FUEL);
     // intakeWrist.setWantedState(IntakeWristWantedState.INTAKE_FUEL);
 
-    // Translation2d robotTranslation = drivetrain.getPose().getTranslation();
-    // Translation2d hubTranslation =
-    // AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
+    Translation2d robotTranslation = drivetrain.getPose().getTranslation();
+    Translation2d hubTranslation =
+        AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
 
-    // double distance = robotTranslation.getDistance(hubTranslation);
+    double distance = robotTranslation.getDistance(hubTranslation);
 
-    // Rotation2d targetRotation = Rotation2d
-    // .fromRadians(Math.atan2(robotTranslation.getY() - hubTranslation.getY(),
-    // robotTranslation.getX() - hubTranslation.getX()));
+    // Rotation2d targetRotation =
+    //     Rotation2d.fromRadians(
+    //         Math.atan2(
+    //             robotTranslation.getY() - hubTranslation.getY(),
+    //             robotTranslation.getX() - hubTranslation.getX()));
 
     // drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.ROTATION_LOCK,
     // targetRotation);
-    // DogLog.log("DistanceToHub", distance);
+    DogLog.log("DistanceToHub", distance);
   }
 
   @Override
