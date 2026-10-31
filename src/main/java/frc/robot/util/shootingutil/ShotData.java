@@ -8,14 +8,14 @@ public class ShotData {
   public static final double shotMultiplier = 1.00;
 
   static {
-    hubShotMap.put(1.514, new Shot(0.007, 30.00 * shotMultiplier, 1.14));
-    hubShotMap.put(1.918, new Shot(0.015, 30.00 * shotMultiplier, 1.14));
-    hubShotMap.put(2.244, new Shot(0.0243, 30.00 * shotMultiplier, 1.14));
-    hubShotMap.put(2.672, new Shot(0.0456, 31.425 * shotMultiplier, 1.14));
-    hubShotMap.put(3.369, new Shot(0.0456, 32.45 * shotMultiplier, 1.14));
-    hubShotMap.put(3.840, new Shot(0.0473, 32.50 * shotMultiplier, 1.14));
-    hubShotMap.put(4.310, new Shot(0.047, 33.85 * shotMultiplier, 1.14));
-    hubShotMap.put(4.741, new Shot(0.0493, 37.5 * shotMultiplier, 1.14));
+    hubShotMap.put(1.514, new Shot(0.690, 28.20 * shotMultiplier, 1.14));
+    hubShotMap.put(1.862, new Shot(0.795, 28.80 * shotMultiplier, 1.20));
+    hubShotMap.put(2.244, new Shot(0.850, 29.80 * shotMultiplier, 1.28)); 
+    hubShotMap.put(2.672, new Shot(1.060, 31.42 * shotMultiplier, 1.35));
+    hubShotMap.put(3.369, new Shot(1.190, 32.45 * shotMultiplier, 1.42));
+    hubShotMap.put(3.840, new Shot(1.290, 33.15 * shotMultiplier, 1.48));
+    hubShotMap.put(4.310, new Shot(1.390, 34.15 * shotMultiplier, 1.55));
+    hubShotMap.put(4.741, new Shot(1.530, 35.10 * shotMultiplier, 1.62));
   }
 
   static {
