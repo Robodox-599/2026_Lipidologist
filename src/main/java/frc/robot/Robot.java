@@ -106,12 +106,12 @@ public class Robot extends TimedRobot {
                 () -> drivetrain.getFieldRelativeChassisSpeeds(),
                 new VisionIOReal(
                     VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-                // new VisionIOReal(VisionConstants.sideLeftCameraConstants, () ->
-                // drivetrain.getPose()),
+                new VisionIOReal(VisionConstants.sideLeftCameraConstants, () ->
+                drivetrain.getPose()),
                 new VisionIOReal(
-                    VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose())
-                // new VisionIOReal(VisionConstants.sideRightCameraConstants, () ->
-                // drivetrain.getPose())
+                    VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
+                new VisionIOReal(VisionConstants.sideRightCameraConstants, () ->
+                drivetrain.getPose())
                 );
         break;
       case SIM:
