@@ -27,9 +27,9 @@ public class ShotData {
   // hubShotMap.put(4.741, new Shot(0.0493, 37.5 * shotMultiplier, 1.380));
 
   static {
-    allianceZoneShotMap.put(2.5, new Shot(0.08, 29.0, 1));
-    allianceZoneShotMap.put(6.0, new Shot(0.08, 34.0, 1));
-    allianceZoneShotMap.put(10.0, new Shot(0.08, 39.0, 1));
+    allianceZoneShotMap.put(2.5, new Shot(0.08, 30.0, 1));
+    allianceZoneShotMap.put(6.0, new Shot(0.08, 36.0, 1));
+    allianceZoneShotMap.put(10.0, new Shot(0.08, 40.0, 1));
     allianceZoneShotMap.put(14.0, new Shot(0.08, 45.0, 1));
   }
 

@@ -20,6 +20,6 @@ public class IntakeRollersConstants {
   public static final double kS = 0;
   public static final double kV = 0;
 
-  public static final double supplyCurrentLimit = 30;
+  public static final double supplyCurrentLimit = 28;
   public static final double statorCurrentLimit = 80;
 }

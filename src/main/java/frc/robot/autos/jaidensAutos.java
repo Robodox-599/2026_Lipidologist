@@ -139,7 +139,7 @@ public class jaidensAutos {
   }
 
   public AutoRoutine bumpToDepot() {
-    AutoRoutine routine = autoFactory.newRoutine("LeftHamburgerWithOnions");
+    AutoRoutine routine = autoFactory.newRoutine("bumpToDepot");
 
     AutoTrajectory bump_to_depot = routine.trajectory("bump_to_depot");
 

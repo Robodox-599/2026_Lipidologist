@@ -106,13 +106,12 @@ public class Robot extends TimedRobot {
                 () -> drivetrain.getFieldRelativeChassisSpeeds(),
                 new VisionIOReal(
                     VisionConstants.frontLeftCameraConstants, () -> drivetrain.getPose()),
-                new VisionIOReal(VisionConstants.sideLeftCameraConstants, () ->
-                drivetrain.getPose()),
+                new VisionIOReal(
+                    VisionConstants.sideLeftCameraConstants, () -> drivetrain.getPose()),
                 new VisionIOReal(
                     VisionConstants.frontRightCameraConstants, () -> drivetrain.getPose()),
-                new VisionIOReal(VisionConstants.sideRightCameraConstants, () ->
-                drivetrain.getPose())
-                );
+                new VisionIOReal(
+                    VisionConstants.sideRightCameraConstants, () -> drivetrain.getPose()));
         break;
       case SIM:
         drivetrain = TunerConstants.createDrivetrain(driver);
@@ -186,6 +185,7 @@ public class Robot extends TimedRobot {
     autoChooser.addRoutine("Left Double Outside", () -> autoRoutines.DoubleOutside(true));
     autoChooser.addRoutine("Right Double Inside", () -> autoRoutines.DoubleInside(false));
     autoChooser.addRoutine("Right Double Outside", () -> autoRoutines.DoubleOutside(false));
+    autoChooser.addRoutine("Bump to Depot", () -> autoRoutines.bumpToDepot());
     // autoChooser.addRoutine("Left Cheeseburger", autoRoutines::leftCheeseburger);
     // autoChooser.addRoutine("Right Cheeseburger",
     // autoRoutines::rightCheeseburger);
