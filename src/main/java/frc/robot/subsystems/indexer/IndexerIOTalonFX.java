@@ -45,6 +45,7 @@ public class IndexerIOTalonFX extends IndexerIO {
                     .withStatorCurrentLimit(IndexerConstants.statorCurrentLimitAmps)
                     .withStatorCurrentLimitEnable(true)
                     .withSupplyCurrentLimit(IndexerConstants.supplyCurrentLimitAmps)
+                    .withSupplyCurrentLowerLimit(IndexerConstants.supplyCurrentLimitAmps)
                     .withSupplyCurrentLimitEnable(true))
             .withMotorOutput(
                 new MotorOutputConfigs()
