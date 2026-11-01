@@ -135,22 +135,7 @@ public class FlywheelsIOTalonFX extends FlywheelsIO {
         };
 
     lowPrioritySignals =
-        new BaseStatusSignal[] {
-          //   flywheelBottomLeftVelocityRPS,
-          //   flywheelTopRightVelocityRPS,
-          //   flywheelBottomRightVelocityRPS,
-          //   flywheelBottomLeftStatorCurrent,
-          //   flywheelTopRightStatorCurrent,
-          //   flywheelBottomRightStatorCurrent,
-          //   flywheelBottomLeftSupplyCurrent,
-          //   flywheelTopRightSupplyCurrent,
-          //   flywheelBottomRightSupplyCurrent,
-          flywheelTopLeftAppliedVolts,
-          //   flywheelBottomLeftAppliedVolts,
-          //   flywheelTopRightAppliedVolts,
-          //   flywheelBottomRightAppliedVolts,
-          flywheelTopLeftTemperature
-        };
+        new BaseStatusSignal[] {flywheelTopLeftAppliedVolts, flywheelTopLeftTemperature};
 
     BaseStatusSignal.setUpdateFrequencyForAll(50, criticalSignals);
 

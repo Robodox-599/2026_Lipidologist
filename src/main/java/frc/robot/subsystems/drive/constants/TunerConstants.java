@@ -84,8 +84,8 @@ public class TunerConstants {
                   // impacting performance.
                   .withStatorCurrentLimit(Amps.of(60))
                   .withStatorCurrentLimitEnable(true)
-              //   .withSupplyCurrentLimit(40)
-              //   .withSupplyCurrentLimitEnable(true)
+                  .withSupplyCurrentLimit(40)
+                  .withSupplyCurrentLimitEnable(true)
               //   .withSupplyCurrentLowerLimit(20)
               //   .withSupplyCurrentLowerTime(0.5))
               );
