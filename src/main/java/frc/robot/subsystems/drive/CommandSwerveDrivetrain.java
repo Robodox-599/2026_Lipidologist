@@ -73,7 +73,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
           .withRotationalDeadband(0) // Add a 10% deadband
           .withDriveRequestType(
               DriveRequestType.Velocity); // Use open-loop control for drive motors
- 
+
   private final SwerveRequest.FieldCentricFacingAngle driveAtAngle =
       new SwerveRequest.FieldCentricFacingAngle()
           .withDriveRequestType(SwerveModule.DriveRequestType.Velocity);
