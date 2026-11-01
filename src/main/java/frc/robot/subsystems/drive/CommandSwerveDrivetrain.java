@@ -73,7 +73,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
           .withRotationalDeadband(0) // Add a 10% deadband
           .withDriveRequestType(
               DriveRequestType.Velocity); // Use open-loop control for drive motors
-
+ 
   private final SwerveRequest.FieldCentricFacingAngle driveAtAngle =
       new SwerveRequest.FieldCentricFacingAngle()
           .withDriveRequestType(SwerveModule.DriveRequestType.Velocity);
@@ -81,12 +81,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   private final SwerveRequest.ApplyFieldSpeeds m_pathApplyFieldSpeeds =
       new SwerveRequest.ApplyFieldSpeeds().withDriveRequestType(DriveRequestType.Velocity);
 
+  private final SwerveRequest.SwerveDriveBrake brakeRequest =
+      new SwerveRequest.SwerveDriveBrake().withDriveRequestType(DriveRequestType.Velocity);
+
   private CurrentState currentState = CurrentState.TELEOP_DRIVE;
   private WantedState wantedState = WantedState.TELEOP_DRIVE;
 
   public enum WantedState {
     TELEOP_DRIVE,
     ROTATION_LOCK,
+    XLOCK,
     DRIVE_TO_POINT,
     CHOREO_TRAJECTORY,
     // ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
@@ -96,6 +100,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   public enum CurrentState {
     TELEOP_DRIVE,
     ROTATION_LOCK,
+    XLOCK,
     DRIVE_TO_POINT,
     CHOREO_TRAJECTORY,
     // ROTATION_LOCK_AND_FOLLOW_CHOREO_TRAJECTORY,
@@ -291,6 +296,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
       case ROTATION_LOCK:
         currentState = CurrentState.ROTATION_LOCK;
         break;
+      case XLOCK:
+        currentState = CurrentState.XLOCK;
+        break;
       case DRIVE_TO_POINT:
         currentState = CurrentState.DRIVE_TO_POINT;
         break;
@@ -346,6 +354,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         DogLog.log(
             "Drive/RotationLock/TargetRotation",
             new Rotation2d(targetRotation.getRadians() + Math.PI));
+        break;
+      case XLOCK:
+        setControl(brakeRequest);
         break;
       case DRIVE_TO_POINT:
         Translation2d translationToTarget =

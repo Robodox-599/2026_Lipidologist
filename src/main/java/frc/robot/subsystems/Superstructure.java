@@ -519,8 +519,9 @@ public class Superstructure extends SubsystemBase {
   // }
 
   public void shootingHub() {
-    drivetrain.setWantedState(
-        CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
+    // drivetrain.setWantedState(
+    //     CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
+    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.XLOCK);
     feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
     indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
@@ -534,8 +535,9 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void shootingHubAndAgitating() {
-    drivetrain.setWantedState(
-        CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
+    // drivetrain.setWantedState(
+    //     CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
+    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.XLOCK);
     feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
     indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
@@ -549,7 +551,8 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void shootingHubManual() {
-    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
+    // drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
+    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.XLOCK);
     feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
     indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
