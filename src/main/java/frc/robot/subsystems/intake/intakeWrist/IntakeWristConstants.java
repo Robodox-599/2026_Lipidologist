@@ -54,7 +54,7 @@ public class IntakeWristConstants {
   public static final double debounceTime = 0.3; // must be changed and tested
 
   public static final double totalAgitationTime = 2.5;
-  public static final double maxAgitationPosition = 0.25;
+  public static final double maxAgitationPosition = 0.3;
   public static final double deltaAgitation = 0.08;
 
   public static final double agitateStatorCurrentTrip = 70; // must be changed and tested

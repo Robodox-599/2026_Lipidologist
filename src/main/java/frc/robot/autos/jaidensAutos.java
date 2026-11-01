@@ -17,7 +17,7 @@ public class jaidensAutos {
   private CommandSwerveDrivetrain drivetrain;
 
   private static double shoot_without_agitation_secs = 0.5;
-  private static double shoot_with_agitation_secs = 2.5;
+  private static double shoot_with_agitation_secs = 3;
 
   public jaidensAutos(
       AutoFactory autoFactory,
@@ -82,6 +82,35 @@ public class jaidensAutos {
 
     return routine;
   }
+
+  //   public AutoRoutine TrenchTrench(boolean isLeft) {
+  //     AutoRoutine routine = autoFactory.newRoutine("TrenchTrench");
+
+  //     AutoTrajectory trench_trench =
+  //         isLeft
+  //             ? routine.trajectory("trench_trench")
+  //             : routine.trajectory("trench_trench").mirrorY();
+
+  //     routine
+  //         .active()
+  //         .onTrue(
+  //             Commands.sequence(
+  //                 disregardRequirements(trench_trench.resetOdometry()),
+  //                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.IDLE_AUTO),
+  //                 trench_trench.cmd()));
+
+  //     trench_trench
+  //         .done()
+  //         .onTrue(
+  //             Commands.sequence(
+  //                 superstructureCommands.setWantedSuperStateCommand(WantedSuperState.SHOOT_HUB),
+  //                 new WaitCommand(shoot_without_agitation_secs),
+  //                 superstructureCommands.setWantedSuperStateCommand(
+  //                     WantedSuperState.SHOOT_HUB_AND_AGITATE),
+  //                 new WaitCommand(shoot_with_agitation_secs)));
+
+  //     return routine;
+  //   }
 
   public AutoRoutine DoubleOutside(boolean isLeft) {
     AutoRoutine routine = autoFactory.newRoutine("DoubleOutside");

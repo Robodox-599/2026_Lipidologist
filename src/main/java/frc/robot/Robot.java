@@ -186,6 +186,8 @@ public class Robot extends TimedRobot {
     autoChooser.addRoutine("Right Double Inside", () -> autoRoutines.DoubleInside(false));
     autoChooser.addRoutine("Right Double Outside", () -> autoRoutines.DoubleOutside(false));
     autoChooser.addRoutine("Bump to Depot", () -> autoRoutines.bumpToDepot());
+    // autoChooser.addRoutine("Left Trench Trench", () -> autoRoutines.TrenchTrench(true));
+    // autoChooser.addRoutine("Right Trench Trench", () -> autoRoutines.TrenchTrench(false));
     // autoChooser.addRoutine("Left Cheeseburger", autoRoutines::leftCheeseburger);
     // autoChooser.addRoutine("Right Cheeseburger",
     // autoRoutines::rightCheeseburger);

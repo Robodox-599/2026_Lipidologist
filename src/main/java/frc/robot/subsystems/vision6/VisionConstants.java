@@ -12,7 +12,7 @@ public class VisionConstants {
   public static final double maxAmbiguity = 0.2; // 0.3
 
   public static double linearStdDevBaseline = 0.03; // Meters (0.4)
-  public static double angularStdDevBaseline = 0.1; // Radians (0.4)
+  public static double angularStdDevBaseline = 0.15; // Radians (0.4)
   public static final double singleTagMaxDistanceMeters = 5;
   public static final double maxAngleError = Units.degreesToRadians(20);
 

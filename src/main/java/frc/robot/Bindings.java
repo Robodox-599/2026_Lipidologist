@@ -64,6 +64,12 @@ public class Bindings {
         .whileTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.OUTAKE))
         .onFalse(superstructure.setWantedSuperStateCommand(WantedSuperState.IDLE));
 
+    driver
+        .povRight()
+        .onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.ALIGN_RIGHT));
+
+    driver.povLeft().onTrue(superstructure.setWantedSuperStateCommand(WantedSuperState.ALIGN_LEFT));
+
     // CLEAN SYSTEMs
     // driver
     //     .x()

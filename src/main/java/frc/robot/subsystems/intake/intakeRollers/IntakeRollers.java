@@ -71,7 +71,8 @@ public class IntakeRollers {
         setDutyCycle(1);
         break;
       case SHOOT_FUEL:
-        setDutyCycle(0.5);
+        // setDutyCycle(0.5);
+        stop();
         break;
       case OUTAKING:
         setDutyCycle(-1);

@@ -53,6 +53,8 @@ public class Superstructure extends SubsystemBase {
     TUNE_SHOT_DATA_IDLE,
     TUNE_SHOT_DATA_SHOOT,
     HOME,
+    ALIGN_LEFT,
+    ALIGN_RIGHT,
     STOW
   }
 
@@ -60,11 +62,13 @@ public class Superstructure extends SubsystemBase {
     OUTAKING,
     UNJAMMING,
     PREPARING_HUB_SHOT,
+    PREPARING_HUB_SHOT_MANUAL,
     PREPARING_HUB_SHOT_AND_AGITATING,
     PREPARING_ALLIANCE_ZONE_SHOT,
     PREPARING_ALLIANCE_ZONE_SHOT_AND_AGITATING,
     // PREPARING_SOTM_HUB_AUTO,
     SHOOTING_HUB,
+    SHOOTING_HUB_MANUAL,
     SHOOTING_HUB_AND_AGITATING,
     SHOOTING_ALLIANCE_ZONE,
     SHOOTING_ALLIANCE_ZONE_AND_AGITATING,
@@ -78,6 +82,8 @@ public class Superstructure extends SubsystemBase {
     TUNING_SHOT_DATA_IDLING,
     TUNING_SHOT_DATA_SHOOTING,
     HOMING,
+    ALIGNING_LEFT,
+    ALIGNING_RIGHT,
     STOWING
   }
 
@@ -197,10 +203,10 @@ public class Superstructure extends SubsystemBase {
         this.adjustedShot = CalculateShot.calculateManualShot();
         if (isFuelJammed()) {
           currentSuperState = CurrentSuperState.UNJAMMING;
-        } else if (areSystemsReadyForHubShot()) {
-          currentSuperState = CurrentSuperState.SHOOTING_HUB;
+        } else if (areSystemsReadyForManualShot()) {
+          currentSuperState = CurrentSuperState.SHOOTING_HUB_MANUAL;
         } else {
-          currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT;
+          currentSuperState = CurrentSuperState.PREPARING_HUB_SHOT_MANUAL;
         }
         break;
       case SHOOT_ALLIANCE_ZONE:
@@ -282,6 +288,12 @@ public class Superstructure extends SubsystemBase {
           currentSuperState = CurrentSuperState.STOPPED;
         }
         break;
+      case ALIGN_LEFT:
+        currentSuperState = CurrentSuperState.ALIGNING_LEFT;
+        break;
+      case ALIGN_RIGHT:
+        currentSuperState = CurrentSuperState.ALIGNING_RIGHT;
+        break;
       case STOW:
         currentSuperState = CurrentSuperState.STOWING;
         break;
@@ -308,8 +320,14 @@ public class Superstructure extends SubsystemBase {
       // case PREPARING_SOTM_HUB_AUTO:
       //   preparingHubSOTMAuto();
       //   break;
+      case PREPARING_HUB_SHOT_MANUAL:
+        preparingHubShotManual();
+        break;
       case SHOOTING_HUB:
         shootingHub();
+        break;
+      case SHOOTING_HUB_MANUAL:
+        shootingHubManual();
         break;
       case SHOOTING_HUB_AND_AGITATING:
         shootingHubAndAgitating();
@@ -359,6 +377,12 @@ public class Superstructure extends SubsystemBase {
       case HOMING:
         homing();
         break;
+      case ALIGNING_LEFT:
+        aligningLeft();
+        break;
+      case ALIGNING_RIGHT:
+        aligningRight();
+        break;
       case STOWING:
         stow();
         break;
@@ -398,6 +422,30 @@ public class Superstructure extends SubsystemBase {
     hood.setWantedState(Hood.HoodWantedState.STOPPED);
   }
 
+  public void aligningLeft() {
+    drivetrain.setWantedState(
+        CommandSwerveDrivetrain.WantedState.ROTATION_LOCK,
+        AllianceFlipUtil.apply(Rotation2d.fromDegrees(90)));
+    feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+    intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
+    flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
+    hood.setWantedState(Hood.HoodWantedState.STOW);
+  }
+
+  public void aligningRight() {
+    drivetrain.setWantedState(
+        CommandSwerveDrivetrain.WantedState.ROTATION_LOCK,
+        AllianceFlipUtil.apply(Rotation2d.fromDegrees(-90)));
+    feeder.setWantedState(Feeder.FeederWantedState.REVERSE);
+    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.INTAKE_FUEL);
+    intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
+    flywheels.setWantedState(Flywheels.FlywheelWantedState.IDLE);
+    hood.setWantedState(Hood.HoodWantedState.STOW);
+  }
+
   public void unjamming() {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
@@ -412,6 +460,20 @@ public class Superstructure extends SubsystemBase {
   public void preparingHubShot() {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
+    feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
+    indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
+    intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.DEPLOY);
+    flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
+    // if (isHoodUnsafe()) {
+    //   hood.setWantedState(Hood.HoodWantedState.STOW);
+    // } else {
+    hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
+    // }
+  }
+
+  public void preparingHubShotManual() {
+    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
     feeder.setWantedState(Feeder.FeederWantedState.STOPPED);
     indexer.setWantedState(Indexer.IndexerWantedState.REVERSE);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
@@ -474,6 +536,20 @@ public class Superstructure extends SubsystemBase {
   public void shootingHubAndAgitating() {
     drivetrain.setWantedState(
         CommandSwerveDrivetrain.WantedState.ROTATION_LOCK, this.adjustedShot.targetRotation());
+    feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
+    indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
+    intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
+    intakeWrist.setWantedState(IntakeWrist.IntakeWristWantedState.AGITATE_FUEL);
+    flywheels.setWantedState(Flywheels.FlywheelWantedState.SET_RPS, this.adjustedShot.shootSpeed());
+    // if (isHoodUnsafe()) {
+    //   hood.setWantedState(Hood.HoodWantedState.STOW);
+    // } else {
+    hood.setWantedState(Hood.HoodWantedState.SET_POSITION, this.adjustedShot.hoodAngle());
+    // }
+  }
+
+  public void shootingHubManual() {
+    drivetrain.setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP_DRIVE);
     feeder.setWantedState(Feeder.FeederWantedState.FEED_FUEL);
     indexer.setWantedState(Indexer.IndexerWantedState.TRANSFER_FUEL);
     intakeRollers.setWantedState(IntakeRollers.IntakeRollersWantedState.SHOOT_FUEL);
@@ -692,6 +768,10 @@ public class Superstructure extends SubsystemBase {
         && hood.atSetpoint()
         && drivetrain.isAtTargetRotation()
         && isWithinAllianceZone();
+  }
+
+  private boolean areSystemsReadyForManualShot() {
+    return flywheels.atSetpoint() && hood.atSetpoint();
   }
 
   public boolean isWithinAllianceZone() {
